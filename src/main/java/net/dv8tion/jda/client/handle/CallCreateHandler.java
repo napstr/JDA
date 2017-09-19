@@ -66,8 +66,9 @@ public class CallCreateHandler extends SocketHandler
             if (group.getCurrentCall() != null)
                 WebSocketClient.LOG.fatal("Received a CALL_CREATE for a Group that already has an active call cached! JSON: " + content);
             group.setCurrentCall(call);
-            group.getUserMap().forEachEntry((userId, user) ->
+            group.getUserMap().stream().forEach(user ->
             {
+                long userId = user.getIdLong();
                 CallUserImpl callUser = new CallUserImpl(call, user);
                 callUsers.put(userId, callUser);
 
@@ -80,8 +81,6 @@ public class CallCreateHandler extends SocketHandler
                         break;
                     }
                 }
-
-                return true;
             });
         }
         else

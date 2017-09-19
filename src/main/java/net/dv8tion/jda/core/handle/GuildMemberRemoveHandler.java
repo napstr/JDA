@@ -75,7 +75,7 @@ public class GuildMemberRemoveHandler extends SocketHandler
         //The user is not in a different guild that we share
         // The user also is not a friend of this account in the case that the logged in account is a client account.
         if (userId != api.getSelfUser().getIdLong() // don't remove selfUser from cache
-            && api.getGuildMap().valueCollection().stream().noneMatch(g -> ((GuildImpl) g).getMembersMap().containsKey(userId))
+            && api.getGuildMap().stream().noneMatch(g -> ((GuildImpl) g).getMembersMap().hasEntity(userId))
             && !(api.getAccountType() == AccountType.CLIENT && api.asClient().getFriendById(userId) != null))
         {
             UserImpl user = (UserImpl) api.getUserMap().remove(userId);

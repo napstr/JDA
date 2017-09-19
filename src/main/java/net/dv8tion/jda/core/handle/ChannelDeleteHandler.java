@@ -152,8 +152,9 @@ public class ChannelDeleteHandler extends SocketHandler
                     return null;
                 }
 
-                group.getUserMap().forEachEntry((userId, user) ->
+                group.getUserMap().stream().forEach(user ->
                 {
+                    long userId = user.getIdLong();
                     //User is fake, has no privateChannel, is not in a relationship, and is not in any other groups
                     // then we remove the fake user from the fake cache as it was only in this group
                     //Note: we getGroups() which gets all groups, however we already removed the current group above.
@@ -164,8 +165,6 @@ public class ChannelDeleteHandler extends SocketHandler
                     {
                         api.getFakeUserMap().remove(userId);
                     }
-
-                    return true;
                 });
 
                 api.getEventManager().handle(

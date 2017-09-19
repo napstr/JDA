@@ -16,6 +16,7 @@
 
 package net.dv8tion.jda.core.utils.cache.impl;
 
+import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.utils.Checks;
@@ -28,15 +29,15 @@ import java.util.List;
 
 public class MemberCacheViewImpl extends AbstractCacheView<Member> implements MemberCacheView
 {
-    public MemberCacheViewImpl()
+    public MemberCacheViewImpl(EntityProvider<Member> entityProvider)
     {
-        super(Member::getEffectiveName);
+        super(Member::getEffectiveName, entityProvider);
     }
 
     @Override
     public Member getElementById(long id)
     {
-        return elements.get(id);
+        return entityProvider.get(id);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     {
         Checks.notEmpty(name, "Name");
         List<Member> members = new LinkedList<>();
-        for (Member member : elements.valueCollection())
+        entityProvider.stream().forEach( member ->
         {
             final String nick = member.getUser().getName();
             if (ignoreCase)
@@ -57,7 +58,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
                 if (nick.equals(name))
                     members.add(member);
             }
-        }
+        });
         return Collections.unmodifiableList(members);
     }
 
@@ -65,14 +66,14 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     public List<Member> getElementsByNickname(String name, boolean ignoreCase)
     {
         List<Member> members = new LinkedList<>();
-        for (Member member : elements.valueCollection())
+        entityProvider.stream().forEach(member ->
         {
             final String nick = member.getNickname();
             if (nick == null)
             {
                 if (name == null)
                     members.add(member);
-                continue;
+                return; //continue the forEach lambda
             }
 
             if (ignoreCase)
@@ -85,7 +86,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
                 if (nick.equals(name))
                     members.add(member);
             }
-        }
+        });
         return Collections.unmodifiableList(members);
     }
 
@@ -94,7 +95,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     {
         Checks.notEmpty(name, "Name");
         List<Member> members = new LinkedList<>();
-        for (Member member : elements.valueCollection())
+        entityProvider.stream().forEach(member ->
         {
             final String nick = member.getEffectiveName();
             if (ignoreCase)
@@ -107,7 +108,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
                 if (nick.equals(name))
                     members.add(member);
             }
-        }
+        });
         return Collections.unmodifiableList(members);
     }
 
@@ -118,15 +119,15 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
         for (Role role : roles)
             Checks.notNull(role, "Roles");
         List<Member> members = new LinkedList<>();
-        memberLoop: for (Member member : elements.valueCollection())
+        entityProvider.stream().forEach(member ->
         {
             for (Role role : roles)
             {
                 if (!member.getRoles().contains(role))
-                    continue memberLoop;
+                    return; //continue the forEach lambda
             }
             members.add(member);
-        }
+        });
         return members;
     }
 
@@ -135,11 +136,11 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     {
         Checks.noneNull(roles, "Roles");
         List<Member> members = new LinkedList<>();
-        for (Member member : elements.valueCollection())
+        entityProvider.stream().forEach(member ->
         {
             if (member.getRoles().containsAll(roles))
                 members.add(member);
-        }
+        });
         return members;
     }
 }

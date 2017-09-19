@@ -22,6 +22,7 @@ import net.dv8tion.jda.client.entities.Friend;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.client.entities.Relationship;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
@@ -38,7 +39,7 @@ public class GroupImpl implements Group
     private final long id;
     private final JDAImpl api;
 
-    private final SnowflakeCacheViewImpl<User> userCache = new SnowflakeCacheViewImpl<>(User::getName);
+    private final SnowflakeCacheViewImpl<User> userCache;
 
     private Call currentCall;
     private User owner;
@@ -50,6 +51,7 @@ public class GroupImpl implements Group
     {
         this.id = id;
         this.api = api;
+        userCache = new SnowflakeCacheViewImpl<>(User::getName, api.getEntityProviderFactory().createEntityProvider(User.class));
     }
 
     @Override
@@ -185,7 +187,7 @@ public class GroupImpl implements Group
         return Long.hashCode(id);
     }
 
-    public TLongObjectMap<User> getUserMap()
+    public EntityProvider<User> getUserMap()
     {
         return userCache.getMap();
     }

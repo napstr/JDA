@@ -16,32 +16,34 @@
 
 package net.dv8tion.jda.core.utils.cache.impl;
 
+import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.entities.ISnowflake;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SortedSnowflakeCacheView<T extends ISnowflake & Comparable<T>> extends SnowflakeCacheViewImpl<T>
 {
     protected final Comparator<T> comparator;
 
-    public SortedSnowflakeCacheView(Comparator<T> comparator)
+    public SortedSnowflakeCacheView(EntityProvider<T> entityProvider, Comparator<T> comparator)
     {
-        this(null, comparator);
+        this(null, entityProvider, comparator);
     }
 
-    public SortedSnowflakeCacheView(Function<T, String> nameMapper, Comparator<T> comparator)
+    public SortedSnowflakeCacheView(Function<T, String> nameMapper, EntityProvider<T> entityProvider, Comparator<T> comparator)
     {
-        super(nameMapper);
+        super(nameMapper, entityProvider);
         this.comparator = comparator;
     }
 
     @Override
     public List<T> asList()
     {
-        List<T> list = new ArrayList<>(elements.valueCollection());
+        List<T> list = entityProvider.stream().collect(Collectors.toList());
         list.sort(comparator);
         return Collections.unmodifiableList(list);
     }

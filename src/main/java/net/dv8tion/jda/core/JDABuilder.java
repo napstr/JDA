@@ -18,6 +18,8 @@ package net.dv8tion.jda.core;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import net.dv8tion.jda.core.JDA.Status;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
+import net.dv8tion.jda.core.cache.EntityProviderFactory;
+import net.dv8tion.jda.core.cache.LocalEntityProviderFactory;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
@@ -66,6 +68,7 @@ public class JDABuilder
     protected boolean enableBulkDeleteSplitting = true;
     protected boolean autoReconnect = true;
     protected boolean idle = false;
+    protected EntityProviderFactory entityProviderFactory = new LocalEntityProviderFactory();
 
     /**
      * Creates a completely empty JDABuilder.
@@ -458,6 +461,13 @@ public class JDABuilder
         return this;
     }
 
+    //TODO docs
+    public JDABuilder setEntityProviderFactory(EntityProviderFactory entityProviderFactory) {
+        Checks.notNull(entityProviderFactory, "Entity Provider Factory");//TODO set it to null and see what happens?
+        this.entityProviderFactory = entityProviderFactory;
+        return this;
+    }
+
     /**
      * Builds a new {@link net.dv8tion.jda.core.JDA} instance and uses the provided token to start the login process.
      * <br>The login process runs in a different thread, so while this will return immediately, {@link net.dv8tion.jda.core.JDA} has not
@@ -485,7 +495,7 @@ public class JDABuilder
         OkHttpClient.Builder httpClientBuilder = this.httpClientBuilder == null ? new OkHttpClient.Builder() : this.httpClientBuilder;
         WebSocketFactory wsFactory = this.wsFactory == null ? new WebSocketFactory() : this.wsFactory;
         JDAImpl jda = new JDAImpl(accountType, httpClientBuilder, wsFactory, autoReconnect, enableVoice, enableShutdownHook,
-                enableBulkDeleteSplitting, corePoolSize, maxReconnectDelay);
+                enableBulkDeleteSplitting, corePoolSize, maxReconnectDelay, entityProviderFactory);
 
         if (eventManager != null)
             jda.setEventManager(eventManager);

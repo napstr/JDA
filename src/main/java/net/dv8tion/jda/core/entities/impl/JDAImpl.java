@@ -27,6 +27,8 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.audio.AudioWebSocket;
 import net.dv8tion.jda.core.audio.factory.DefaultSendFactory;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
+import net.dv8tion.jda.core.cache.EntityProvider;
+import net.dv8tion.jda.core.cache.EntityProviderFactory;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.StatusChangeEvent;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
@@ -62,12 +64,12 @@ public class JDAImpl implements JDA
 
     public final ScheduledThreadPoolExecutor pool;
 
-    protected final SnowflakeCacheViewImpl<User> userCache = new SnowflakeCacheViewImpl<>(User::getName);
-    protected final SnowflakeCacheViewImpl<Guild> guildCache = new SnowflakeCacheViewImpl<>(Guild::getName);
-    protected final SnowflakeCacheViewImpl<Category> categories = new SnowflakeCacheViewImpl<>(Channel::getName);
-    protected final SnowflakeCacheViewImpl<TextChannel> textChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName);
-    protected final SnowflakeCacheViewImpl<VoiceChannel> voiceChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName);
-    protected final SnowflakeCacheViewImpl<PrivateChannel> privateChannelCache = new SnowflakeCacheViewImpl<>(MessageChannel::getName);
+    protected final SnowflakeCacheViewImpl<User> userCache;
+    protected final SnowflakeCacheViewImpl<Guild> guildCache;
+    protected final SnowflakeCacheViewImpl<Category> categories;
+    protected final SnowflakeCacheViewImpl<TextChannel> textChannelCache;
+    protected final SnowflakeCacheViewImpl<VoiceChannel> voiceChannelCache;
+    protected final SnowflakeCacheViewImpl<PrivateChannel> privateChannelCache;
 
     protected final TLongObjectMap<User> fakeUsers = MiscUtil.newLongMap();
     protected final TLongObjectMap<PrivateChannel> fakePrivateChannels = MiscUtil.newLongMap();
@@ -83,6 +85,7 @@ public class JDAImpl implements JDA
     protected final int maxReconnectDelay;
     protected final Thread shutdownHook;
     protected final EntityBuilder entityBuilder = new EntityBuilder(this);
+    protected final EntityProviderFactory entityProviderFactory;
     protected final EventCache eventCache = new EventCache();
     protected final GuildLock guildLock = new GuildLock(this);
     protected final Object akapLock = new Object();
@@ -103,7 +106,7 @@ public class JDAImpl implements JDA
     protected long ping = -1;
 
     public JDAImpl(AccountType accountType, OkHttpClient.Builder httpClientBuilder, WebSocketFactory wsFactory, boolean autoReconnect, boolean audioEnabled,
-            boolean useShutdownHook, boolean bulkDeleteSplittingEnabled, int corePoolSize, int maxReconnectDelay)
+            boolean useShutdownHook, boolean bulkDeleteSplittingEnabled, int corePoolSize, int maxReconnectDelay, EntityProviderFactory entityProviderFactory)
     {
         this.accountType = accountType;
         this.httpClientBuilder = httpClientBuilder;
@@ -114,6 +117,14 @@ public class JDAImpl implements JDA
         this.bulkDeleteSplittingEnabled = bulkDeleteSplittingEnabled;
         this.pool = new ScheduledThreadPoolExecutor(corePoolSize, new JDAThreadFactory());
         this.maxReconnectDelay = maxReconnectDelay;
+        this.entityProviderFactory = entityProviderFactory;
+
+        userCache = new SnowflakeCacheViewImpl<>(User::getName, entityProviderFactory.createEntityProvider(User.class));
+        guildCache = new SnowflakeCacheViewImpl<>(Guild::getName, entityProviderFactory.createEntityProvider(Guild.class));
+        categories = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(Category.class));
+        textChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(TextChannel.class));
+        voiceChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(VoiceChannel.class));
+        privateChannelCache = new SnowflakeCacheViewImpl<>(MessageChannel::getName, entityProviderFactory.createEntityProvider(PrivateChannel.class));
 
         this.presence = new PresenceImpl(this);
         this.requester = new Requester(this);
@@ -590,32 +601,36 @@ public class JDAImpl implements JDA
         return client;
     }
 
-    public TLongObjectMap<User> getUserMap()
+    public EntityProviderFactory getEntityProviderFactory() {
+        return entityProviderFactory;
+    }
+
+    public EntityProvider<User> getUserMap()
     {
         return userCache.getMap();
     }
 
-    public TLongObjectMap<Guild> getGuildMap()
+    public EntityProvider<Guild> getGuildMap()
     {
         return guildCache.getMap();
     }
 
-    public TLongObjectMap<Category> getCategoryMap()
+    public EntityProvider<Category> getCategoryMap()
     {
         return categories.getMap();
     }
 
-    public TLongObjectMap<TextChannel> getTextChannelMap()
+    public EntityProvider<TextChannel> getTextChannelMap()
     {
         return textChannelCache.getMap();
     }
 
-    public TLongObjectMap<VoiceChannel> getVoiceChannelMap()
+    public EntityProvider<VoiceChannel> getVoiceChannelMap()
     {
         return voiceChannelCache.getMap();
     }
 
-    public TLongObjectMap<PrivateChannel> getPrivateChannelMap()
+    public EntityProvider<PrivateChannel> getPrivateChannelMap()
     {
         return privateChannelCache.getMap();
     }

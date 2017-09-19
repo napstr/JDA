@@ -25,6 +25,7 @@ import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.audit.ActionType;
 import net.dv8tion.jda.core.audit.AuditLogChange;
 import net.dv8tion.jda.core.audit.AuditLogEntry;
+import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.entities.MessageEmbed.*;
 import net.dv8tion.jda.core.entities.impl.*;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
@@ -73,7 +74,7 @@ public class EntityBuilder
             selfUser = new SelfUserImpl(id, api);
             api.setSelfUser(selfUser);
         }
-        if (!api.getUserMap().containsKey(selfUser.getIdLong()))
+        if (!api.getUserMap().hasEntity(selfUser.getIdLong()))
         {
             api.getUserMap().put(selfUser.getIdLong(), selfUser);
         }
@@ -155,7 +156,7 @@ public class EntityBuilder
         if (!guild.isNull("emojis"))
         {
             JSONArray array = guild.getJSONArray("emojis");
-            TLongObjectMap<Emote> emoteMap = guildObj.getEmoteMap();
+            EntityProvider<Emote> emoteMap = guildObj.getEmoteMap();
             for (int i = 0; i < array.length(); i++)
             {
                 JSONObject object = array.getJSONObject(i);
@@ -914,7 +915,7 @@ public class EntityBuilder
             message.setMentionedRoles(new LinkedList<Role>(mentionedRoles.values()));
 
             List<TextChannel> mentionedChannels = new LinkedList<>();
-            TLongObjectMap<TextChannel> chanMap = ((GuildImpl) textChannel.getGuild()).getTextChannelsMap();
+            EntityProvider<TextChannel> chanMap = ((GuildImpl) textChannel.getGuild()).getTextChannelsMap();
             Matcher matcher = channelMentionPattern.matcher(content);
             while (matcher.find())
             {
@@ -1156,7 +1157,7 @@ public class EntityBuilder
             ((JDAClientImpl) api.asClient()).getGroupMap().put(groupId, group);
         }
 
-        TLongObjectMap<User> groupUsers = group.getUserMap();
+        EntityProvider<User> groupUsers = group.getUserMap();
         groupUsers.put(api.getSelfUser().getIdLong(), api.getSelfUser());
         for (int i = 0; i < recipients.length(); i++)
         {

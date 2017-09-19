@@ -21,6 +21,8 @@ import net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAc
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.Region;
+import net.dv8tion.jda.core.cache.EntityProvider;
+import net.dv8tion.jda.core.cache.EntityProviderFactory;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
 import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
@@ -57,14 +59,14 @@ public class GuildImpl implements Guild
     private final long id;
     private final JDAImpl api;
 
-    private final SortedSnowflakeCacheView<Category> categoryCache = new SortedSnowflakeCacheView<Category>(Channel::getName, Comparator.naturalOrder());
-    private final SortedSnowflakeCacheView<VoiceChannel> voiceChannelCache = new SortedSnowflakeCacheView<VoiceChannel>(Channel::getName, Comparator.naturalOrder());
-    private final SortedSnowflakeCacheView<TextChannel> textChannelCache = new SortedSnowflakeCacheView<TextChannel>(Channel::getName, Comparator.naturalOrder());
-    private final SortedSnowflakeCacheView<Role> roleCache = new SortedSnowflakeCacheView<Role>(Role::getName, Comparator.reverseOrder());
-    private final SnowflakeCacheViewImpl<Emote> emoteCache = new SnowflakeCacheViewImpl<>(Emote::getName);
-    private final MemberCacheViewImpl memberCache = new MemberCacheViewImpl();
+    private final SortedSnowflakeCacheView<Category> categoryCache;
+    private final SortedSnowflakeCacheView<VoiceChannel> voiceChannelCache;
+    private final SortedSnowflakeCacheView<TextChannel> textChannelCache;
+    private final SortedSnowflakeCacheView<Role> roleCache;
+    private final SnowflakeCacheViewImpl<Emote> emoteCache;
+    private final MemberCacheViewImpl memberCache;
 
-    private final TLongObjectMap<JSONObject> cachedPresences = MiscUtil.newLongMap();
+    private final EntityProvider<JSONObject> cachedPresences;
 
     private final Object mngLock = new Object();
     private volatile GuildManager manager;
@@ -91,6 +93,17 @@ public class GuildImpl implements Guild
     {
         this.id = id;
         this.api = api;
+
+        EntityProviderFactory epf = api.getEntityProviderFactory();
+
+        categoryCache = new SortedSnowflakeCacheView<Category>(Channel::getName, epf.createEntityProvider(Category.class), Comparator.naturalOrder());
+        voiceChannelCache = new SortedSnowflakeCacheView<VoiceChannel>(Channel::getName, epf.createEntityProvider(VoiceChannel.class), Comparator.naturalOrder());
+        textChannelCache = new SortedSnowflakeCacheView<TextChannel>(Channel::getName, epf.createEntityProvider(TextChannel.class), Comparator.naturalOrder());
+        roleCache = new SortedSnowflakeCacheView<Role>(Role::getName, epf.createEntityProvider(Role.class), Comparator.reverseOrder());
+        emoteCache = new SnowflakeCacheViewImpl<>(Emote::getName, epf.createEntityProvider(Emote.class));
+        memberCache = new MemberCacheViewImpl(epf.createEntityProvider(Member.class));
+
+        cachedPresences = epf.createEntityProvider(JSONObject.class);
     }
 
     @Override
@@ -196,7 +209,7 @@ public class GuildImpl implements Guild
     @Override
     public boolean isMember(User user)
     {
-        return memberCache.getMap().containsKey(user.getIdLong());
+        return memberCache.getMap().hasEntity(user.getIdLong());
     }
 
     @Override
@@ -323,7 +336,7 @@ public class GuildImpl implements Guild
     public TextChannel getDefaultChannel()
     {
         final Role role = getPublicRole();
-        return getTextChannelsMap().valueCollection().stream()
+        return getTextChannelsMap().stream()
                 .filter(c -> role.hasPermission(c, Permission.MESSAGE_READ))
                 .sorted(Comparator.naturalOrder())
                 .findFirst().orElse(null);
@@ -481,7 +494,7 @@ public class GuildImpl implements Guild
     public List<GuildVoiceState> getVoiceStates()
     {
         return Collections.unmodifiableList(
-                getMembersMap().valueCollection().stream().map(Member::getVoiceState).collect(Collectors.toList()));
+                getMembersMap().stream().map(Member::getVoiceState).collect(Collectors.toList()));
     }
 
     @Override
@@ -634,37 +647,37 @@ public class GuildImpl implements Guild
 
     // -- Map getters --
 
-    public TLongObjectMap<Category> getCategoriesMap()
+    public EntityProvider<Category> getCategoriesMap()
     {
         return categoryCache.getMap();
     }
 
-    public TLongObjectMap<TextChannel> getTextChannelsMap()
+    public EntityProvider<TextChannel> getTextChannelsMap()
     {
         return textChannelCache.getMap();
     }
 
-    public TLongObjectMap<VoiceChannel> getVoiceChannelsMap()
+    public EntityProvider<VoiceChannel> getVoiceChannelsMap()
     {
         return voiceChannelCache.getMap();
     }
 
-    public TLongObjectMap<Member> getMembersMap()
+    public EntityProvider<Member> getMembersMap()
     {
         return memberCache.getMap();
     }
 
-    public TLongObjectMap<Role> getRolesMap()
+    public EntityProvider<Role> getRolesMap()
     {
         return roleCache.getMap();
     }
 
-    public TLongObjectMap<Emote> getEmoteMap()
+    public EntityProvider<Emote> getEmoteMap()
     {
         return emoteCache.getMap();
     }
 
-    public TLongObjectMap<JSONObject> getCachedPresenceMap()
+    public EntityProvider<JSONObject> getCachedPresenceMap()
     {
         return cachedPresences;
     }

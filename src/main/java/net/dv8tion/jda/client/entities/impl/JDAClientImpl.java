@@ -22,6 +22,7 @@ import net.dv8tion.jda.client.entities.*;
 import net.dv8tion.jda.client.requests.restaction.ApplicationAction;
 import net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAction;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.entities.EntityBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
 public class JDAClientImpl implements JDAClient
 {
     protected final JDAImpl api;
-    protected final SnowflakeCacheViewImpl<Group> groups = new SnowflakeCacheViewImpl<>(Group::getName);
+    protected final SnowflakeCacheViewImpl<Group> groups;
     protected final TLongObjectMap<Relationship> relationships = MiscUtil.newLongMap();
     protected final TLongObjectMap<CallUser> callUsers = MiscUtil.newLongMap();
     protected UserSettingsImpl userSettings;
@@ -55,6 +56,7 @@ public class JDAClientImpl implements JDAClient
     {
         this.api = api;
         this.userSettings = new UserSettingsImpl(api);
+        this.groups = new SnowflakeCacheViewImpl<>(Group::getName, api.getEntityProviderFactory().createEntityProvider(Group.class));
     }
 
     @Override
@@ -210,7 +212,7 @@ public class JDAClientImpl implements JDAClient
         return userSettings;
     }
 
-    public TLongObjectMap<Group> getGroupMap()
+    public EntityProvider<Group> getGroupMap()
     {
         return groups.getMap();
     }

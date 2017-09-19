@@ -16,6 +16,7 @@
 
 package net.dv8tion.jda.core.utils.cache.impl;
 
+import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.entities.ISnowflake;
 import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 
@@ -23,14 +24,14 @@ import java.util.function.Function;
 
 public class SnowflakeCacheViewImpl<T extends ISnowflake> extends AbstractCacheView<T> implements SnowflakeCacheView<T>
 {
-    public SnowflakeCacheViewImpl(Function<T, String> nameMapper)
+    public SnowflakeCacheViewImpl(Function<T, String> nameMapper, EntityProvider<T> entityProvider)
     {
-        super(nameMapper);
+        super(nameMapper, entityProvider);
     }
 
     @Override
     public T getElementById(long id)
     {
-        return elements.get(id);
+        return entityProvider.get(id);
     }
 }

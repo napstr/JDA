@@ -27,6 +27,7 @@ import net.dv8tion.jda.client.entities.impl.JDAClientImpl;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.impl.GuildImpl;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.entities.impl.PrivateChannelImpl;
@@ -35,6 +36,8 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.GuildUnavailableEvent;
 import net.dv8tion.jda.core.managers.impl.AudioManagerImpl;
 import org.json.JSONObject;
+
+import java.util.stream.Collectors;
 
 public class GuildDeleteHandler extends SocketHandler
 {
@@ -89,7 +92,7 @@ public class GuildDeleteHandler extends SocketHandler
         //cleaning up all users that we do not share a guild with anymore
         // Anything left in memberIds will be removed from the main userMap
         //Use a new HashSet so that we don't actually modify the Member map so it doesn't affect Guild#getMembers for the leave event.
-        TLongSet memberIds = new TLongHashSet(guild.getMembersMap().keySet());
+        TLongSet memberIds = new TLongHashSet(guild.getMembersMap().stream().map(m -> m.getUser().getIdLong()).collect(Collectors.toSet()) );
         for (Guild guildI : api.getGuilds())
         {
             GuildImpl g = (GuildImpl) guildI;
@@ -98,7 +101,7 @@ public class GuildDeleteHandler extends SocketHandler
 
             for (TLongIterator it = memberIds.iterator(); it.hasNext();)
             {
-                if (g.getMembersMap().containsKey(it.next()))
+                if (g.getMembersMap().hasEntity(it.next()))
                     it.remove();
             }
         }
