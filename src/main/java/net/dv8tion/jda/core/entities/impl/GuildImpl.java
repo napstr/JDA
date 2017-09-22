@@ -23,7 +23,19 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.Region;
 import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.cache.EntityProviderFactory;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Category;
+import net.dv8tion.jda.core.entities.Channel;
+import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.EntityBuilder;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.GuildVoiceState;
+import net.dv8tion.jda.core.entities.Invite;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.entities.Webhook;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
 import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
@@ -40,7 +52,8 @@ import net.dv8tion.jda.core.requests.Route;
 import net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction;
 import net.dv8tion.jda.core.utils.Checks;
 import net.dv8tion.jda.core.utils.MiscUtil;
-import net.dv8tion.jda.core.utils.cache.*;
+import net.dv8tion.jda.core.utils.cache.MemberCacheView;
+import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 import net.dv8tion.jda.core.utils.cache.impl.MemberCacheViewImpl;
 import net.dv8tion.jda.core.utils.cache.impl.SnowflakeCacheViewImpl;
 import net.dv8tion.jda.core.utils.cache.impl.SortedSnowflakeCacheView;
@@ -51,7 +64,11 @@ import org.json.JSONObject;
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GuildImpl implements Guild
@@ -96,14 +113,26 @@ public class GuildImpl implements Guild
 
         EntityProviderFactory epf = api.getEntityProviderFactory();
 
-        categoryCache = new SortedSnowflakeCacheView<Category>(Channel::getName, epf.createEntityProvider(Category.class), Comparator.naturalOrder());
-        voiceChannelCache = new SortedSnowflakeCacheView<VoiceChannel>(Channel::getName, epf.createEntityProvider(VoiceChannel.class), Comparator.naturalOrder());
-        textChannelCache = new SortedSnowflakeCacheView<TextChannel>(Channel::getName, epf.createEntityProvider(TextChannel.class), Comparator.naturalOrder());
-        roleCache = new SortedSnowflakeCacheView<Role>(Role::getName, epf.createEntityProvider(Role.class), Comparator.reverseOrder());
-        emoteCache = new SnowflakeCacheViewImpl<>(Emote::getName, epf.createEntityProvider(Emote.class));
-        memberCache = new MemberCacheViewImpl(epf.createEntityProvider(Member.class));
+        String cachePrefix = String.format("jda:cache:shard%sof%s:guild%s:",
+            api.getShardInfo().getShardId(), api.getShardInfo().getShardTotal(), id);
 
-        cachedPresences = epf.createEntityProvider(JSONObject.class);
+        categoryCache = new SortedSnowflakeCacheView<Category>(Channel::getName,
+            epf.createEntityProvider(cachePrefix + Category.class.getSimpleName()),
+            Comparator.naturalOrder());
+        voiceChannelCache = new SortedSnowflakeCacheView<VoiceChannel>(Channel::getName,
+            epf.createEntityProvider(cachePrefix + VoiceChannel.class.getSimpleName()),
+            Comparator.naturalOrder());
+        textChannelCache = new SortedSnowflakeCacheView<TextChannel>(Channel::getName,
+            epf.createEntityProvider(cachePrefix + TextChannel.class.getSimpleName()),
+            Comparator.naturalOrder());
+        roleCache = new SortedSnowflakeCacheView<Role>(Role::getName,
+            epf.createEntityProvider(cachePrefix + Role.class.getSimpleName()),
+            Comparator.reverseOrder());
+        emoteCache = new SnowflakeCacheViewImpl<>(Emote::getName,
+            epf.createEntityProvider(cachePrefix + Emote.class.getSimpleName()));
+        memberCache = new MemberCacheViewImpl(epf.createEntityProvider(cachePrefix + Member.class.getSimpleName()));
+
+        cachedPresences = epf.createEntityProvider(cachePrefix + JSONObject.class.getSimpleName());
     }
 
     @Override

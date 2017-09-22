@@ -51,7 +51,8 @@ public class GroupImpl implements Group
     {
         this.id = id;
         this.api = api;
-        userCache = new SnowflakeCacheViewImpl<>(User::getName, api.getEntityProviderFactory().createEntityProvider(User.class));
+        userCache = new SnowflakeCacheViewImpl<>(User::getName,
+            api.getEntityProviderFactory().createEntityProvider("jda:cache:guild" + id + ":" + User.class.getSimpleName()));
     }
 
     @Override

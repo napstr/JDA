@@ -6,5 +6,5 @@ package net.dv8tion.jda.core.cache;
 public interface EntityProviderFactory {
 
     //todo add a scope
-    <T> EntityProvider<T> createEntityProvider(Class<T> clazz);
+    <T> EntityProvider<T> createEntityProvider(String scope);
 }

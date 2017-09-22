@@ -29,7 +29,18 @@ import net.dv8tion.jda.core.audio.factory.DefaultSendFactory;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
 import net.dv8tion.jda.core.cache.EntityProvider;
 import net.dv8tion.jda.core.cache.EntityProviderFactory;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Category;
+import net.dv8tion.jda.core.entities.Channel;
+import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.EntityBuilder;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.PrivateChannel;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.SelfUser;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.StatusChangeEvent;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -40,7 +51,14 @@ import net.dv8tion.jda.core.managers.AudioManager;
 import net.dv8tion.jda.core.managers.Presence;
 import net.dv8tion.jda.core.managers.impl.AudioManagerImpl;
 import net.dv8tion.jda.core.managers.impl.PresenceImpl;
-import net.dv8tion.jda.core.requests.*;
+import net.dv8tion.jda.core.requests.GuildLock;
+import net.dv8tion.jda.core.requests.Request;
+import net.dv8tion.jda.core.requests.Requester;
+import net.dv8tion.jda.core.requests.Response;
+import net.dv8tion.jda.core.requests.RestAction;
+import net.dv8tion.jda.core.requests.Route;
+import net.dv8tion.jda.core.requests.SessionReconnectQueue;
+import net.dv8tion.jda.core.requests.WebSocketClient;
 import net.dv8tion.jda.core.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.core.utils.Checks;
 import net.dv8tion.jda.core.utils.MiscUtil;
@@ -52,7 +70,11 @@ import okhttp3.OkHttpClient;
 import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -106,7 +128,8 @@ public class JDAImpl implements JDA
     protected long ping = -1;
 
     public JDAImpl(AccountType accountType, OkHttpClient.Builder httpClientBuilder, WebSocketFactory wsFactory, boolean autoReconnect, boolean audioEnabled,
-            boolean useShutdownHook, boolean bulkDeleteSplittingEnabled, int corePoolSize, int maxReconnectDelay, EntityProviderFactory entityProviderFactory)
+            boolean useShutdownHook, boolean bulkDeleteSplittingEnabled, int corePoolSize, int maxReconnectDelay, EntityProviderFactory entityProviderFactory,
+            ShardInfo shardInfo)
     {
         this.accountType = accountType;
         this.httpClientBuilder = httpClientBuilder;
@@ -119,12 +142,17 @@ public class JDAImpl implements JDA
         this.maxReconnectDelay = maxReconnectDelay;
         this.entityProviderFactory = entityProviderFactory;
 
-        userCache = new SnowflakeCacheViewImpl<>(User::getName, entityProviderFactory.createEntityProvider(User.class));
-        guildCache = new SnowflakeCacheViewImpl<>(Guild::getName, entityProviderFactory.createEntityProvider(Guild.class));
-        categories = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(Category.class));
-        textChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(TextChannel.class));
-        voiceChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(VoiceChannel.class));
-        privateChannelCache = new SnowflakeCacheViewImpl<>(MessageChannel::getName, entityProviderFactory.createEntityProvider(PrivateChannel.class));
+        String cachePrefix = "jda:cache:";
+        if (shardInfo != null) {
+            cachePrefix += String.format("shard%sof%s:", shardInfo.getShardId(), shardInfo.getShardTotal());
+        }
+
+        userCache = new SnowflakeCacheViewImpl<>(User::getName, entityProviderFactory.createEntityProvider(cachePrefix + User.class.getSimpleName()));
+        guildCache = new SnowflakeCacheViewImpl<>(Guild::getName, entityProviderFactory.createEntityProvider(cachePrefix + Guild.class.getSimpleName()));
+        categories = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(cachePrefix + Category.class.getSimpleName()));
+        textChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(cachePrefix + TextChannel.class.getSimpleName()));
+        voiceChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName, entityProviderFactory.createEntityProvider(cachePrefix + VoiceChannel.class.getSimpleName()));
+        privateChannelCache = new SnowflakeCacheViewImpl<>(MessageChannel::getName, entityProviderFactory.createEntityProvider(cachePrefix + PrivateChannel.class.getSimpleName()));
 
         this.presence = new PresenceImpl(this);
         this.requester = new Requester(this);

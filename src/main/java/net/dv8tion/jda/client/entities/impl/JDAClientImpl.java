@@ -18,7 +18,14 @@ package net.dv8tion.jda.client.entities.impl;
 
 import gnu.trove.map.TLongObjectMap;
 import net.dv8tion.jda.client.JDAClient;
-import net.dv8tion.jda.client.entities.*;
+import net.dv8tion.jda.client.entities.Application;
+import net.dv8tion.jda.client.entities.AuthorizedApplication;
+import net.dv8tion.jda.client.entities.CallUser;
+import net.dv8tion.jda.client.entities.Friend;
+import net.dv8tion.jda.client.entities.Group;
+import net.dv8tion.jda.client.entities.Relationship;
+import net.dv8tion.jda.client.entities.RelationshipType;
+import net.dv8tion.jda.client.entities.UserSettings;
 import net.dv8tion.jda.client.requests.restaction.ApplicationAction;
 import net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAction;
 import net.dv8tion.jda.core.JDA;
@@ -56,7 +63,7 @@ public class JDAClientImpl implements JDAClient
     {
         this.api = api;
         this.userSettings = new UserSettingsImpl(api);
-        this.groups = new SnowflakeCacheViewImpl<>(Group::getName, api.getEntityProviderFactory().createEntityProvider(Group.class));
+        this.groups = new SnowflakeCacheViewImpl<>(Group::getName, api.getEntityProviderFactory().createEntityProvider("jda:cache:" + Group.class.getSimpleName()));
     }
 
     @Override

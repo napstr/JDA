@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  */
 public interface EntityProvider<E> {
 
-    //possible weird Es found so far:
+    //possible weird cached Entities found so far:
     //JSONObject
 
 

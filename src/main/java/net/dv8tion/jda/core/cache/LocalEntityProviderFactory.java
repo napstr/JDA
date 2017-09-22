@@ -4,7 +4,7 @@ package net.dv8tion.jda.core.cache;
 public class LocalEntityProviderFactory implements EntityProviderFactory {
 
     @Override
-    public <T> EntityProvider<T> createEntityProvider(Class<T> clazz) {
+    public <T> EntityProvider<T> createEntityProvider(String scope) {
         return new LocalEntityProvider<>();
     }
 }

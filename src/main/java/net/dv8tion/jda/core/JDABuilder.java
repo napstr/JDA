@@ -495,7 +495,7 @@ public class JDABuilder
         OkHttpClient.Builder httpClientBuilder = this.httpClientBuilder == null ? new OkHttpClient.Builder() : this.httpClientBuilder;
         WebSocketFactory wsFactory = this.wsFactory == null ? new WebSocketFactory() : this.wsFactory;
         JDAImpl jda = new JDAImpl(accountType, httpClientBuilder, wsFactory, autoReconnect, enableVoice, enableShutdownHook,
-                enableBulkDeleteSplitting, corePoolSize, maxReconnectDelay, entityProviderFactory);
+                enableBulkDeleteSplitting, corePoolSize, maxReconnectDelay, entityProviderFactory, shardInfo);
 
         if (eventManager != null)
             jda.setEventManager(eventManager);
