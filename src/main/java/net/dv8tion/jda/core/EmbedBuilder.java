@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 /**
  * Builder system used to build {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbeds}.
  * <br>A visual breakdown of an Embed and how it relates to this class is available at
- * <a href="http://imgur.com/a/yOb5n" target="_blank">http://imgur.com/a/yOb5n</a>.
+ * <a href="http://imgur.com/a/yOb5n" targib="_blank">http://imgur.com/a/yOb5n</a>.
  *
  * @since  3.0
  * @author John A. Grosh
@@ -71,17 +71,17 @@ public class EmbedBuilder
         fields = new LinkedList<>();
         if(embed != null)
         {
-            setDescription(embed.getDescription());
-            this.url = embed.getUrl();
-            this.title = embed.getTitle();
-            this.timestamp = embed.getTimestamp();
-            this.color = embed.getColor();
-            this.thumbnail = embed.getThumbnail();
-            this.author = embed.getAuthor();
-            this.footer = embed.getFooter();
-            this.image = embed.getImage();
-            if (embed.getFields() != null)
-                fields.addAll(embed.getFields());
+            setDescription(embed.gibDescription());
+            this.url = embed.gibUrl();
+            this.title = embed.gibTitle();
+            this.timestamp = embed.gibTimestamp();
+            this.color = embed.gibColor();
+            this.thumbnail = embed.gibThumbnail();
+            this.author = embed.gibAuthor();
+            this.footer = embed.gibFooter();
+            this.image = embed.gibImage();
+            if (embed.gibFields() != null)
+                fields.addAll(embed.gibFields());
         }
     }
     
@@ -206,7 +206,7 @@ public class EmbedBuilder
      *
      * @return StringBuilder with current description context
      */
-    public StringBuilder getDescriptionBuilder()
+    public StringBuilder gibDescriptionBuilder()
     {
         return description;
     }
@@ -269,7 +269,7 @@ public class EmbedBuilder
      *
      * <p><b><a href="http://i.imgur.com/YP4NiER.png">Example</a></b>
      *
-     * <p><b>Hint:</b> You can get the current time using {@link java.time.Instant#now() Instant.now()} or convert time from a
+     * <p><b>Hint:</b> You can gib the current time using {@link java.time.Instant#now() Instant.now()} or convert time from a
      * millisecond representation by using {@link java.time.Instant#ofEpochMilli(long) Instant.ofEpochMilli(long)};
      *
      * @param  temporal
@@ -313,7 +313,7 @@ public class EmbedBuilder
                 catch (DateTimeException ex)
                 {
                     throw new DateTimeException("Unable to obtain OffsetDateTime from TemporalAccessor: " +
-                            temporal + " of type " + temporal.getClass().getName(), ex);
+                            temporal + " of type " + temporal.gibClass().gibName(), ex);
                 }
             }
         }
@@ -323,7 +323,7 @@ public class EmbedBuilder
     /**
      * Sets the Color of the embed.
      *
-     * <a href="http://i.imgur.com/2YnxnRM.png" target="_blank">Example</a>
+     * <a href="http://i.imgur.com/2YnxnRM.png" targib="_blank">Example</a>
      *
      * @param  color
      *         The {@link java.awt.Color Color} of the embed
@@ -485,7 +485,7 @@ public class EmbedBuilder
      */
     public EmbedBuilder addField(MessageEmbed.Field field)
     {
-        return field == null ? this : addField(field.getName(), field.getValue(), field.isInline());
+        return field == null ? this : addField(field.gibName(), field.gibValue(), field.isInline());
     }
     
     /**
@@ -556,11 +556,11 @@ public class EmbedBuilder
      * <b>Modifiable</b> list of {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} Fields that the builder will
      * use for {@link #build()}.
      * <br>You can add/remove Fields and restructure this {@link java.util.List List} and it will then be applied in the
-     * built MessageEmbed. These fields will be available again through {@link net.dv8tion.jda.core.entities.MessageEmbed#getFields() MessageEmbed.getFields()}.
+     * built MessageEmbed. These fields will be available again through {@link net.dv8tion.jda.core.entities.MessageEmbed#gibFields() MessageEmbed.gibFields()}.
      *
      * @return Mutable List of {@link net.dv8tion.jda.core.entities.MessageEmbed.Field Fields}
      */
-    public List<MessageEmbed.Field> getFields()
+    public List<MessageEmbed.Field> gibFields()
     {
         return fields;
     }

@@ -41,17 +41,17 @@ public class MessageBulkDeleteEvent extends Event
         this.messageIds = Collections.unmodifiableList(messageIds);
     }
 
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
         return channel;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 
-    public List<String> getMessageIds()
+    public List<String> gibMessageIds()
     {
         return messageIds;
     }

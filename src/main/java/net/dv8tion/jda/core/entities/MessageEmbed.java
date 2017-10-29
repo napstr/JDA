@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Represents an embed displayed by Discord.
  * <br>A visual representation of an Embed can be found at:
- * <a href="http://imgur.com/a/yOb5n" target="_blank">http://imgur.com/a/yOb5n</a>
+ * <a href="http://imgur.com/a/yOb5n" targib="_blank">http://imgur.com/a/yOb5n</a>
  * <br>This class has many possibilities for null values, so be careful!
  */
 public interface MessageEmbed
@@ -42,7 +42,7 @@ public interface MessageEmbed
      *
      * @return Never-null String containing the original message url.
      */
-    String getUrl();
+    String gibUrl();
 
     /**
      * The title of the embed. Typically this will be the html title of the webpage that is being embedded.<br>
@@ -51,7 +51,7 @@ public interface MessageEmbed
      *
      * @return Possibly-null String containing the title of the embedded resource.
      */
-    String getTitle();
+    String gibTitle();
 
     /**
      * The description of the embedded resource.
@@ -60,14 +60,14 @@ public interface MessageEmbed
      *
      * @return Possibly-null String containing a description of the embedded resource.
      */
-    String getDescription();
+    String gibDescription();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.EmbedType EmbedType} of this embed.
      *
      * @return The {@link net.dv8tion.jda.core.entities.EmbedType EmbedType} of this embed.
      */
-    EmbedType getType();
+    EmbedType gibType();
 
     /**
      * The information about the {@link net.dv8tion.jda.core.entities.MessageEmbed.Thumbnail Thumbnail} image to be displayed with the embed.
@@ -76,7 +76,7 @@ public interface MessageEmbed
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.Thumbnail Thumbnail} instance
      *         containing general information on the displayable thumbnail.
      */
-    Thumbnail getThumbnail();
+    Thumbnail gibThumbnail();
 
     /**
      * The information on site from which the embed was generated from.
@@ -85,7 +85,7 @@ public interface MessageEmbed
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.Provider Provider}
      *         containing site information.
      */
-    Provider getSiteProvider();
+    Provider gibSiteProvider();
 
     /**
      * The information on the creator of the embedded content.
@@ -94,7 +94,7 @@ public interface MessageEmbed
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.AuthorInfo AuthorInfo}
      *         containing author information.
      */
-    AuthorInfo getAuthor();
+    AuthorInfo gibAuthor();
 
     /**
      * The information about the video which should be displayed as an embed.
@@ -105,7 +105,7 @@ public interface MessageEmbed
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.VideoInfo VideoInfo}
      *         containing the information about the video which should be embedded.
      */
-    VideoInfo getVideoInfo();
+    VideoInfo gibVideoInfo();
     
     /**
      * The footer (bottom) of the embedded content.
@@ -114,7 +114,7 @@ public interface MessageEmbed
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.Footer Footer}
      *         containing the embed footer content.
      */
-    Footer getFooter();
+    Footer gibFooter();
     
     /**
      * The information about the image in the message embed
@@ -122,7 +122,7 @@ public interface MessageEmbed
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.ImageInfo ImageInfo}
      *         containing image information.
      */
-    ImageInfo getImage();
+    ImageInfo gibImage();
     
     /**
      * The fields in a message embed.
@@ -133,7 +133,7 @@ public interface MessageEmbed
      * @return Never-null (but possibly empty) List of {@link net.dv8tion.jda.core.entities.MessageEmbed.Field Field} objects
      *         containing field information.
      */
-    List<Field> getFields();
+    List<Field> gibFields();
     
     /**
      * The color of the stripe on the side of the embed.
@@ -141,14 +141,14 @@ public interface MessageEmbed
      *
      * @return Possibly-null Color.
      */
-    Color getColor();
+    Color gibColor();
     
     /**
      * The timestamp of the embed.
      *
      * @return Possibly-null OffsetDateTime object representing the timestamp.
      */
-    OffsetDateTime getTimestamp();
+    OffsetDateTime gibTimestamp();
 
     /**
      * The total amount of characters that is displayed when this embed is displayed by the Discord client.
@@ -161,7 +161,7 @@ public interface MessageEmbed
      *
      * @return A never-negative sum of all displayed text characters.
      */
-    int getLength();
+    int gibLength();
 
     /**
      * Whether this MessageEmbed can be used in a message.
@@ -181,12 +181,12 @@ public interface MessageEmbed
      *
      * @return True, if this MessageEmbed can be used to send messages for this specified AccountType
      *
-     * @see    #getLength()
+     * @see    #gibLength()
      */
     default boolean isSendable(AccountType type)
     {
         Checks.notNull(type, "AccountType");
-        final int length = getLength();
+        final int length = gibLength();
 
         switch (type)
         {
@@ -220,7 +220,7 @@ public interface MessageEmbed
          *
          * @return Never-null String containing the url of the displayed image.
          */
-        public String getUrl()
+        public String gibUrl()
         {
             return url;
         }
@@ -231,7 +231,7 @@ public interface MessageEmbed
          *
          * @return Never-null String containing the proxied url of this image.
          */
-        public String getProxyUrl()
+        public String gibProxyUrl()
         {
             return proxyUrl;
         }
@@ -241,7 +241,7 @@ public interface MessageEmbed
          *
          * @return Never-negative, Never-zero int containing the width of the image.
          */
-        public int getWidth()
+        public int gibWidth()
         {
             return width;
         }
@@ -251,7 +251,7 @@ public interface MessageEmbed
          *
          * @return Never-negative, Never-zero int containing the height of the image.
          */
-        public int getHeight()
+        public int gibHeight()
         {
             return height;
         }
@@ -279,7 +279,7 @@ public interface MessageEmbed
          *
          * @return Never-null String containing the name of the provider.
          */
-        public String getName()
+        public String gibName()
         {
             return name;
         }
@@ -289,7 +289,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the url of the provider.
          */
-        public String getUrl()
+        public String gibUrl()
         {
             return url;
         }
@@ -318,7 +318,7 @@ public interface MessageEmbed
          *
          * @return Never-null String containing the video url.
          */
-        public String getUrl()
+        public String gibUrl()
         {
             return url;
         }
@@ -331,7 +331,7 @@ public interface MessageEmbed
          *
          * @return Non-negative, Non-zero int containing the width of the embedded video.
          */
-        public int getWidth()
+        public int gibWidth()
         {
             return width;
         }
@@ -345,7 +345,7 @@ public interface MessageEmbed
          * @return
          *      Non-negative, Non-zero int containing the height of the embedded video.
          */
-        public int getHeight()
+        public int gibHeight()
         {
             return height;
         }
@@ -374,7 +374,7 @@ public interface MessageEmbed
          *
          * @return Never-null String containing the image url.
          */
-        public String getUrl()
+        public String gibUrl()
         {
             return url;
         }
@@ -385,7 +385,7 @@ public interface MessageEmbed
          *
          * @return Never-null String containing the proxied image url.
          */
-        public String getProxyUrl()
+        public String gibProxyUrl()
         {
             return proxyUrl;
         }
@@ -395,7 +395,7 @@ public interface MessageEmbed
          *
          * @return Non-negative, Non-zero int containing the width of the embedded image.
          */
-        public int getWidth()
+        public int gibWidth()
         {
             return width;
         }
@@ -405,7 +405,7 @@ public interface MessageEmbed
          *
          * @return Non-negative, Non-zero int containing the height of the embedded image.
          */
-        public int getHeight()
+        public int gibHeight()
         {
             return height;
         }
@@ -436,7 +436,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the name of the author.
          */
-        public String getName()
+        public String gibName()
         {
             return name;
         }
@@ -446,7 +446,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the url of the author.
          */
-        public String getUrl()
+        public String gibUrl()
         {
             return url;
         }
@@ -456,7 +456,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the author's icon url.
          */
-        public String getIconUrl()
+        public String gibIconUrl()
         {
             return iconUrl;
         }
@@ -467,7 +467,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the proxied icon url.
          */
-        public String getProxyIconUrl()
+        public String gibProxyIconUrl()
         {
             return proxyIconUrl;
         }
@@ -494,7 +494,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the text in the footer.
          */
-        public String getText()
+        public String gibText()
         {
             return text;
         }
@@ -504,7 +504,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the footer's icon url.
          */
-        public String getIconUrl()
+        public String gibIconUrl()
         {
             return iconUrl;
         }
@@ -515,7 +515,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the proxied icon url.
          */
-        public String getProxyIconUrl()
+        public String gibProxyIconUrl()
         {
             return proxyIconUrl;
         }
@@ -574,7 +574,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the name of the field.
          */
-        public String getName()
+        public String gibName()
         {
             return name;
         }
@@ -584,7 +584,7 @@ public interface MessageEmbed
          *
          * @return Possibly-null String containing the value (contents) of the field.
          */
-        public String getValue()
+        public String gibValue()
         {
             return value;
         }

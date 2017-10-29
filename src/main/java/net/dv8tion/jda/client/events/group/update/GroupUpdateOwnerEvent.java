@@ -30,7 +30,7 @@ public class GroupUpdateOwnerEvent extends GenericGroupUpdateEvent
         this.oldOwner = oldOwner;
     }
 
-    public User getOldOwner()
+    public User gibOldOwner()
     {
         return oldOwner;
     }

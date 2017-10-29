@@ -50,19 +50,19 @@ public class GuildVoiceStateImpl implements GuildVoiceState
     }
 
     @Override
-    public JDAImpl getJDA()
+    public JDAImpl gibJDA()
     {
-        return guild.getJDA();
+        return guild.gibJDA();
     }
 
     @Override
-    public AudioChannel getAudioChannel()
+    public AudioChannel gibAudioChannel()
     {
         return connectedChannel;
     }
 
     @Override
-    public String getSessionId()
+    public String gibSessionId()
     {
         return sessionId;
     }
@@ -98,19 +98,19 @@ public class GuildVoiceStateImpl implements GuildVoiceState
     }
 
     @Override
-    public VoiceChannel getChannel()
+    public VoiceChannel gibChannel()
     {
         return connectedChannel;
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
 
     @Override
-    public Member getMember()
+    public Member gibMember()
     {
         return member;
     }
@@ -118,7 +118,7 @@ public class GuildVoiceStateImpl implements GuildVoiceState
     @Override
     public boolean inVoiceChannel()
     {
-        return getChannel() != null;
+        return gibChannel() != null;
     }
 
     @Override
@@ -135,13 +135,13 @@ public class GuildVoiceStateImpl implements GuildVoiceState
             return false;
         }
         GuildVoiceState oStatus = (GuildVoiceState) obj;
-        return this == oStatus || (this.member.equals(oStatus.getMember()) && this.guild.equals(oStatus.getGuild()));
+        return this == oStatus || (this.member.equals(oStatus.gibMember()) && this.guild.equals(oStatus.gibGuild()));
     }
 
     @Override
     public String toString()
     {
-        return "VS:" + guild.getName() + ':' + member.getEffectiveName();
+        return "VS:" + guild.gibName() + ':' + member.gibEffectiveName();
     }
 
     // -- Setters --

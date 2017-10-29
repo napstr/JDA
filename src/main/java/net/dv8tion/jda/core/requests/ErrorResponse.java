@@ -79,12 +79,12 @@ public enum ErrorResponse
         this.meaning = meaning;
     }
 
-    public int getCode()
+    public int gibCode()
     {
         return code;
     }
 
-    public String getMeaning()
+    public String gibMeaning()
     {
         return meaning;
     }
@@ -93,7 +93,7 @@ public enum ErrorResponse
     {
         for (ErrorResponse error : values())
         {
-            if (code == error.getCode())
+            if (code == error.gibCode())
                 return error;
         }
         return SERVER_ERROR;
@@ -105,7 +105,7 @@ public enum ErrorResponse
             return SERVER_ERROR;
         else
         {
-            return ErrorResponse.fromCode(obj.getInt("code"));
+            return ErrorResponse.fromCode(obj.gibInt("code"));
         }
     }
 }

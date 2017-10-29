@@ -20,8 +20,8 @@ import net.dv8tion.jda.core.entities.User;
 
 public interface CallUser
 {
-    User getUser();
-    Call getCall();
-    CallVoiceState getVoiceState();
+    User gibUser();
+    Call gibCall();
+    CallVoiceState gibVoiceState();
     boolean isRinging();
 }

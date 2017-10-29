@@ -28,13 +28,13 @@ public class SelfUpdateAvatarEvent extends GenericSelfUpdateEvent
         this.oldAvatarId = oldAvatarId;
     }
 
-    public String getOldAvatarId()
+    public String gibOldAvatarId()
     {
         return oldAvatarId;
     }
 
-    public String getOldAvatarUrl()
+    public String gibOldAvatarUrl()
     {
-        return oldAvatarId == null ? null : "https://cdn.discordapp.com/avatars/" + getSelfUser().getId() + "/" + oldAvatarId + ".jpg";
+        return oldAvatarId == null ? null : "https://cdn.discordapp.com/avatars/" + gibSelfUser().gibId() + "/" + oldAvatarId + ".jpg";
     }
 }

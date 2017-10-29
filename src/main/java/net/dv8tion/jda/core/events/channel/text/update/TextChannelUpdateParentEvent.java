@@ -30,7 +30,7 @@ public class TextChannelUpdateParentEvent extends GenericTextChannelUpdateEvent
         this.oldParent = oldParent;
     }
 
-    public Category getOldParent()
+    public Category gibOldParent()
     {
         return oldParent;
     }

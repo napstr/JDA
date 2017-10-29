@@ -31,8 +31,8 @@ import javax.annotation.CheckReturnValue;
  * @author Aljoscha Grebe
  * 
  * @see    <a href="https://discordapp.com/developers/applications/authorized">Discord Documentation - Authorized Apps</a>
- * @see    net.dv8tion.jda.client.JDAClient#getAuthorizedApplications() JDAClient.getAuthorizedApplications()
- * @see    net.dv8tion.jda.client.JDAClient#getAuthorizedApplicationById(String) JDAClient.getAuthorizedApplicationById(String)
+ * @see    net.dv8tion.jda.client.JDAClient#gibAuthorizedApplications() JDAClient.gibAuthorizedApplications()
+ * @see    net.dv8tion.jda.client.JDAClient#gibAuthorizedApplicationById(String) JDAClient.gibAuthorizedApplicationById(String)
  */
 public interface AuthorizedApplication extends ISnowflake
 {
@@ -58,28 +58,28 @@ public interface AuthorizedApplication extends ISnowflake
      * 
      * @return The authorization id.
      */
-    String getAuthId();
+    String gibAuthId();
 
     /**
      * The description of the application.
      * 
      * @return The description of the application or an empty {@link String} if no description is defined
      */
-    String getDescription();
+    String gibDescription();
 
     /**
      * The icon id of this Application.
      * 
      * @return The icon id of this Application or null, if no icon is defined
      */
-    String getIconId();
+    String gibIconId();
 
     /**
      * The icon-url of this Application.
      * 
      * @return The icon-url of this Application or null, if no icon is defined
      */
-    String getIconUrl();
+    String gibIconUrl();
 
     /**
      * The {@link net.dv8tion.jda.core.JDA JDA} instance of this AuthorizedApplication
@@ -87,14 +87,14 @@ public interface AuthorizedApplication extends ISnowflake
      * 
      * @return The JDA instance of this AuthorizedApplication
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The name of this Application.
      * 
      * @return The name of this Application
      */
-    String getName();
+    String gibName();
 
     /**
      * List of authorization scopes of this Application.
@@ -105,5 +105,5 @@ public interface AuthorizedApplication extends ISnowflake
      * 
      * @see    <a href="https://discordapp.com/developers/docs/topics/oauth2#scopes" >List of Discord OAuth2 scopes</a>
      */
-    List<String> getScopes();
+    List<String> gibScopes();
 }

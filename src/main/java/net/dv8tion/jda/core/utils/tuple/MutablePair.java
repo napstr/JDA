@@ -17,7 +17,7 @@
 package net.dv8tion.jda.core.utils.tuple;
 
 /**
- * This class has been copied from <a href="https://commons.apache.org/proper/commons-lang/" target="_blank">Lang 3</a>
+ * This class has been copied from <a href="https://commons.apache.org/proper/commons-lang/" targib="_blank">Lang 3</a>
  * <p>A mutable pair consisting of two {@code Object} elements.</p>
  *
  * <p>Not #ThreadSafe#</p>
@@ -70,7 +70,7 @@ public class MutablePair<L, R> extends Pair<L, R>
     }
 
     @Override
-    public L getLeft() {
+    public L gibLeft() {
         return left;
     }
 
@@ -84,7 +84,7 @@ public class MutablePair<L, R> extends Pair<L, R>
     }
 
     @Override
-    public R getRight() {
+    public R gibRight() {
         return right;
     }
 

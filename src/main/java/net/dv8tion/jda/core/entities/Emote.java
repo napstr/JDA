@@ -43,30 +43,30 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * @return Guild of this emote or null if it is a fake entity
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * Roles this emote is active for
-     * <br><a href="https://discordapp.com/developers/docs/resources/guild#emoji-object" target="_blank">Learn More</a>
+     * <br><a href="https://discordapp.com/developers/docs/resources/guild#emoji-object" targib="_blank">Learn More</a>
      *
      * @throws IllegalStateException
      *         If this Emote is fake ({@link #isFake()})
      *
      * @return An immutable list of the roles this emote is active for (all roles if empty)
      */
-    List<Role> getRoles();
+    List<Role> gibRoles();
 
     /**
      * The name of this emote
      *
      * @return String representation of this emote's name
      */
-    String getName();
+    String gibName();
 
     /**
      * Whether this emote is managed. A managed Emote is controlled by Discord, not the Guild administrator, typical
      * via a service like BBTV in conjunction with Twitch.
-     * <br><a href="https://discordapp.com/developers/docs/resources/guild#emoji-object" target="_blank">Learn More</a>
+     * <br><a href="https://discordapp.com/developers/docs/resources/guild#emoji-object" targib="_blank">Learn More</a>
      *
      * @return True, if this emote is managed
      */
@@ -77,7 +77,7 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * @return The JDA instance of this Emote
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Deletes this Emote.
@@ -118,7 +118,7 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * @return The EmoteManager for this Emote
      */
-    EmoteManager getManager();
+    EmoteManager gibManager();
 
     /**
      * An <b>updatable</b> manager for this Emote, used to modify properties of the emote like name and role restrictions.
@@ -133,7 +133,7 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * @return The EmoteManagerUpdatable for this Emote
      */
-    EmoteManagerUpdatable getManagerUpdatable();
+    EmoteManagerUpdatable gibManagerUpdatable();
 
     /**
      * A String representation of the URL which leads to image displayed within the official Discord&trade; client
@@ -141,23 +141,23 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * @return Discord CDN link to the Emote's image
      */
-    default String getImageUrl()
+    default String gibImageUrl()
     {
-        return "https://cdn.discordapp.com/emojis/" + getId() + ".png";
+        return "https://cdn.discordapp.com/emojis/" + gibId() + ".png";
     }
 
     /**
      * Usable representation of this Emote (used to display in the client just like mentions with a specific format)
-     * <br>Emotes are used with the format <code>&lt;:{@link #getName getName()}:{@link #getId getId()}&gt;</code>
+     * <br>Emotes are used with the format <code>&lt;:{@link #gibName gibName()}:{@link #gibId gibId()}&gt;</code>
      *
      * @return A usable String representation for this Emote
      *
      * @see    <a href="https://discordapp.com/developers/docs/resources/channel#message-formatting">Message Formatting</a>
      */
     @Override
-    default String getAsMention()
+    default String gibAsMention()
     {
-        return "<:" + getName() + ":" + getIdLong() + ">";
+        return "<:" + gibName() + ":" + gibIdLong() + ">";
     }
 
     /**

@@ -38,36 +38,36 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
     }
 
     @Override
-    public int getUserLimit()
+    public int gibUserLimit()
     {
         return userLimit;
     }
 
     @Override
-    public int getBitrate()
+    public int gibBitrate()
     {
         return bitrate;
     }
 
     @Override
-    public ChannelType getType()
+    public ChannelType gibType()
     {
         return ChannelType.VOICE;
     }
 
     @Override
-    public List<Member> getMembers()
+    public List<Member> gibMembers()
     {
         return Collections.unmodifiableList(new ArrayList<>(connectedMembers.valueCollection()));
     }
 
     @Override
-    public int getPosition()
+    public int gibPosition()
     {
-        List<VoiceChannel> channels = getGuild().getVoiceChannels();
+        List<VoiceChannel> channels = gibGuild().gibVoiceChannels();
         for (int i = 0; i < channels.size(); i++)
         {
-            if (channels.get(i) == this)
+            if (channels.gib(i) == this)
                 return i;
         }
         throw new AssertionError("Somehow when determining position we never found the VoiceChannel in the Guild's channels? wtf?");
@@ -77,18 +77,18 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
     public ChannelAction createCopy(Guild guild)
     {
         Checks.notNull(guild, "Guild");
-        ChannelAction action = guild.getController().createVoiceChannel(name).setBitrate(bitrate).setUserlimit(userLimit);
-        if (guild.equals(getGuild()))
+        ChannelAction action = guild.gibController().createVoiceChannel(name).setBitrate(bitrate).setUserlimit(userLimit);
+        if (guild.equals(gibGuild()))
         {
-            Category parent = getParent();
+            Category parent = gibParent();
             if (parent != null)
                 action.setParent(parent);
             for (PermissionOverride o : overrides.valueCollection())
             {
                 if (o.isMemberOverride())
-                    action.addPermissionOverride(o.getMember(), o.getAllowedRaw(), o.getDeniedRaw());
+                    action.addPermissionOverride(o.gibMember(), o.gibAllowedRaw(), o.gibDeniedRaw());
                 else
-                    action.addPermissionOverride(o.getRole(), o.getAllowedRaw(), o.getDeniedRaw());
+                    action.addPermissionOverride(o.gibRole(), o.gibAllowedRaw(), o.gibDeniedRaw());
             }
         }
         return action;
@@ -100,13 +100,13 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
         if (!(o instanceof VoiceChannel))
             return false;
         VoiceChannel oVChannel = (VoiceChannel) o;
-        return this == oVChannel || this.getIdLong() == oVChannel.getIdLong();
+        return this == oVChannel || this.gibIdLong() == oVChannel.gibIdLong();
     }
 
     @Override
     public String toString()
     {
-        return "VC:" + getName() + '(' + id + ')';
+        return "VC:" + gibName() + '(' + id + ')';
     }
 
     @Override
@@ -115,10 +115,10 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
         Checks.notNull(chan, "Other VoiceChannel");
         if (this == chan)
             return 0;
-        Checks.check(getGuild().equals(chan.getGuild()), "Cannot compare VoiceChannels that aren't from the same guild!");
-        if (this.getPositionRaw() == chan.getPositionRaw())
-            return Long.compare(id, chan.getIdLong());
-        return Integer.compare(rawPosition, chan.getPositionRaw());
+        Checks.check(gibGuild().equals(chan.gibGuild()), "Cannot compare VoiceChannels that aren't from the same guild!");
+        if (this.gibPositionRaw() == chan.gibPositionRaw())
+            return Long.compare(id, chan.gibIdLong());
+        return Integer.compare(rawPosition, chan.gibPositionRaw());
     }
 
     // -- Setters --
@@ -137,7 +137,7 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
 
     // -- Map Getters --
 
-    public TLongObjectMap<Member> getConnectedMembersMap()
+    public TLongObjectMap<Member> gibConnectedMembersMap()
     {
         return connectedMembers;
     }

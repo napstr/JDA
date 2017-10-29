@@ -35,31 +35,31 @@ public class GuildBanHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long id = content.getLong("guild_id");
-        if (api.getGuildLock().isLocked(id))
+        final long id = content.gibLong("guild_id");
+        if (api.gibGuildLock().isLocked(id))
             return id;
 
-        JSONObject userJson = content.getJSONObject("user");
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(id);
+        JSONObject userJson = content.gibJSONObject("user");
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(id);
         if (guild == null)
         {
-            api.getEventCache().cache(EventCache.Type.GUILD, id, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.GUILD, id, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received Guild Member " + (banned ? "Ban" : "Unban") + " event for a Guild not yet cached.");
             return null;
         }
 
-        User user = api.getEntityBuilder().createFakeUser(userJson, false);
+        User user = api.gibEntityBuilder().createFakeUser(userJson, false);
 
         if (banned)
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildBanEvent(
                             api, responseNumber,
                             guild, user));
         }
         else
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUnbanEvent(
                             api, responseNumber,
                             guild, user));

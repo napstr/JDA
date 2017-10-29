@@ -29,7 +29,7 @@ import static net.dv8tion.jda.core.audio.AudioConnection.OPUS_FRAME_TIME_AMOUNT;
 
 /**
  * The default implementation of the {@link net.dv8tion.jda.core.audio.factory.IAudioSendSystem IAudioSendSystem}.
- * <br>This implementation uses a Java thread, named based on: {@link IPacketProvider#getIdentifier()} + " Sending Thread".
+ * <br>This implementation uses a Java thread, named based on: {@link IPacketProvider#gibIdentifier()} + " Sending Thread".
  */
 public class DefaultSendSystem implements IAudioSendSystem
 {
@@ -44,7 +44,7 @@ public class DefaultSendSystem implements IAudioSendSystem
     @Override
     public void start()
     {
-        final DatagramSocket udpSocket = packetProvider.getUdpSocket();
+        final DatagramSocket udpSocket = packetProvider.gibUdpSocket();
 
         sendThread = new Thread(AudioManagerImpl.AUDIO_THREADS, () ->
         {
@@ -54,7 +54,7 @@ public class DefaultSendSystem implements IAudioSendSystem
                 try
                 {
                     boolean changeTalking = (System.currentTimeMillis() - lastFrameSent) > OPUS_FRAME_TIME_AMOUNT;
-                    DatagramPacket packet = packetProvider.getNextPacket(changeTalking);
+                    DatagramPacket packet = packetProvider.gibNextPacket(changeTalking);
 
                     if (packet != null)
                         udpSocket.send(packet);
@@ -99,11 +99,11 @@ public class DefaultSendSystem implements IAudioSendSystem
         });
         sendThread.setUncaughtExceptionHandler((thread, throwable) ->
         {
-            SimpleLog.getLog(DefaultSendSystem.class).fatal(throwable);
+            SimpleLog.gibLog(DefaultSendSystem.class).fatal(throwable);
             start();
         });
         sendThread.setDaemon(true);
-        sendThread.setName(packetProvider.getIdentifier() + " Sending Thread");
+        sendThread.setName(packetProvider.gibIdentifier() + " Sending Thread");
         sendThread.setPriority((Thread.NORM_PRIORITY + Thread.MAX_PRIORITY) / 2);
         sendThread.start();
     }

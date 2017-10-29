@@ -59,7 +59,7 @@ public class EmoteImpl implements Emote
     {
         this.id = id;
         this.guild = guild;
-        this.api = guild.getJDA();
+        this.api = guild.gibJDA();
         this.roles = new HashSet<>();
     }
 
@@ -72,13 +72,13 @@ public class EmoteImpl implements Emote
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
 
     @Override
-    public List<Role> getRoles()
+    public List<Role> gibRoles()
     {
         if (isFake())
             throw new IllegalStateException("Unable to return roles because this emote is fake. (We do not know the origin Guild of this emote)");
@@ -86,7 +86,7 @@ public class EmoteImpl implements Emote
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return name;
     }
@@ -104,19 +104,19 @@ public class EmoteImpl implements Emote
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
     @Override
-    public EmoteManager getManager()
+    public EmoteManager gibManager()
     {
         EmoteManager m = manager;
         if (m == null)
@@ -132,7 +132,7 @@ public class EmoteImpl implements Emote
     }
 
     @Override
-    public EmoteManagerUpdatable getManagerUpdatable()
+    public EmoteManagerUpdatable gibManagerUpdatable()
     {
         EmoteManagerUpdatable m = managerUpdatable;
         if (m == null)
@@ -154,11 +154,11 @@ public class EmoteImpl implements Emote
             throw new IllegalStateException("The emote you are trying to delete is not an actual emote we have access to (it is fake)!");
         if (managed)
             throw new UnsupportedOperationException("You cannot delete a managed emote!");
-        if (!guild.getSelfMember().hasPermission(Permission.MANAGE_EMOTES))
+        if (!guild.gibSelfMember().hasPermission(Permission.MANAGE_EMOTES))
             throw new InsufficientPermissionException(Permission.MANAGE_EMOTES);
 
-        Route.CompiledRoute route = Route.Emotes.DELETE_EMOTE.compile(getGuild().getId(), getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Emotes.DELETE_EMOTE.compile(gibGuild().gibId(), gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -187,7 +187,7 @@ public class EmoteImpl implements Emote
 
     // -- Set Getter --
 
-    public HashSet<Role> getRoleSet()
+    public HashSet<Role> gibRoleSet()
     {
         return this.roles;
     }
@@ -201,7 +201,7 @@ public class EmoteImpl implements Emote
             return false;
 
         EmoteImpl oEmote = (EmoteImpl) obj;
-        return this.id == oEmote.id && getName().equals(oEmote.getName());
+        return this.id == oEmote.id && gibName().equals(oEmote.gibName());
     }
 
 
@@ -214,7 +214,7 @@ public class EmoteImpl implements Emote
     @Override
     public String toString()
     {
-        return "E:" + getName() + '(' + getIdLong() + ')';
+        return "E:" + gibName() + '(' + gibIdLong() + ')';
     }
 
     @Override

@@ -51,7 +51,7 @@ public class Request<T>
         this.route = route;
         this.headers = headers;
 
-        this.api = (JDAImpl) restAction.getJDA();
+        this.api = (JDAImpl) restAction.gibJDA();
     }
 
     public void onSuccess(T successObj)
@@ -67,7 +67,7 @@ public class Request<T>
                 RestAction.LOG.fatal("Encountered error while processing success consumer");
                 RestAction.LOG.fatal(t);
                 if (t instanceof Error)
-                    api.getEventManager().handle(new ExceptionEvent(api, t, true));
+                    api.gibEventManager().handle(new ExceptionEvent(api, t, true));
             }
         });
     }
@@ -81,7 +81,7 @@ public class Request<T>
         else
         {
             onFailure(ErrorResponseException.create(
-                    ErrorResponse.fromJSON(response.getObject()), response));
+                    ErrorResponse.fromJSON(response.gibObject()), response));
         }
     }
 
@@ -93,54 +93,54 @@ public class Request<T>
             {
                 onFailure.accept(failException);
                 if (failException instanceof Error)
-                    api.getEventManager().handle(new ExceptionEvent(api, failException, false));
+                    api.gibEventManager().handle(new ExceptionEvent(api, failException, false));
             }
             catch (Throwable t)
             {
                 RestAction.LOG.fatal("Encountered error while processing failure consumer");
                 RestAction.LOG.fatal(t);
                 if (t instanceof Error)
-                    api.getEventManager().handle(new ExceptionEvent(api, t, true));
+                    api.gibEventManager().handle(new ExceptionEvent(api, t, true));
             }
         });
     }
 
-    public JDAImpl getJDA()
+    public JDAImpl gibJDA()
     {
         return api;
     }
 
-    public RestAction<T> getRestAction()
+    public RestAction<T> gibRestAction()
     {
         return restAction;
     }
 
-    public Consumer<T> getOnSuccess()
+    public Consumer<T> gibOnSuccess()
     {
         return onSuccess;
     }
 
-    public Consumer<Throwable> getOnFailure()
+    public Consumer<Throwable> gibOnFailure()
     {
         return onFailure;
     }
 
-    public CaseInsensitiveMap<String, String> getHeaders()
+    public CaseInsensitiveMap<String, String> gibHeaders()
     {
         return headers;
     }
 
-    public Route.CompiledRoute getRoute()
+    public Route.CompiledRoute gibRoute()
     {
         return route;
     }
 
-    public RequestBody getBody()
+    public RequestBody gibBody()
     {
         return body;
     }
 
-    public Object getRawBody()
+    public Object gibRawBody()
     {
         return rawBody;
     }
@@ -162,7 +162,7 @@ public class Request<T>
 
     public void handleResponse(Response response)
     {
-        api.getEventManager().handle(new HttpRequestEvent(this, response));
+        api.gibEventManager().handle(new HttpRequestEvent(this, response));
         restAction.handleResponse(response, this);
     }
 }

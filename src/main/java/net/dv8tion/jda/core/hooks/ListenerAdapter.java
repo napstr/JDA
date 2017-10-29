@@ -103,7 +103,7 @@ import net.dv8tion.jda.core.events.user.*;
  *    {@literal @Override}
  *     public void onMessageReceived(MessageReceivedEvent event)
  *     {
- *         System.out.printf("[%s]: %s\n", event.getAuthor().getName(), event.getMessage().getContent());
+ *         System.out.printf("[%s]: %s\n", event.gibAuthor().gibName(), event.gibMessage().gibContent());
  *     }
  * }</code></pre>
  *
@@ -657,7 +657,7 @@ public abstract class ListenerAdapter implements EventListener
         else if (event instanceof GenericEmoteEvent)
             onGenericEmote((GenericEmoteEvent) event);
 
-        if (event.getJDA().getAccountType() == AccountType.CLIENT)
+        if (event.gibJDA().gibAccountType() == AccountType.CLIENT)
         {
             //Relationship Events
             if (event instanceof FriendAddedEvent)

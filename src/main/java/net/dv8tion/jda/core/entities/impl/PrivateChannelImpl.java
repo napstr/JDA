@@ -46,13 +46,13 @@ public class PrivateChannelImpl implements PrivateChannel
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
 
     @Override
-    public long getLatestMessageIdLong()
+    public long gibLatestMessageIdLong()
     {
         final long messageId = lastMessageId;
         if (messageId < 0)
@@ -67,28 +67,28 @@ public class PrivateChannelImpl implements PrivateChannel
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
-        return user.getName();
+        return user.gibName();
     }
 
     @Override
-    public ChannelType getType()
+    public ChannelType gibType()
     {
         return ChannelType.PRIVATE;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return user.getJDA();
+        return user.gibJDA();
     }
 
     @Override
     public RestAction<Void> close()
     {
-        Route.CompiledRoute route = Route.Channels.DELETE_CHANNEL.compile(getId());
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Channels.DELETE_CHANNEL.compile(gibId());
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -102,7 +102,7 @@ public class PrivateChannelImpl implements PrivateChannel
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
@@ -120,7 +120,7 @@ public class PrivateChannelImpl implements PrivateChannel
     }
 
     @Override
-    public Call getCurrentCall()
+    public Call gibCurrentCall()
     {
         return currentCall;
     }
@@ -183,7 +183,7 @@ public class PrivateChannelImpl implements PrivateChannel
     @Override
     public String toString()
     {
-        return "PC:" + getUser().getName() + '(' + id + ')';
+        return "PC:" + gibUser().gibName() + '(' + id + ')';
     }
 
     private void checkNull(Object obj, String name)
@@ -194,7 +194,7 @@ public class PrivateChannelImpl implements PrivateChannel
 
     private void checkBot()
     {
-        if (user.isBot() && getJDA().getAccountType() == AccountType.BOT)
+        if (user.isBot() && gibJDA().gibAccountType() == AccountType.BOT)
             throw new UnsupportedOperationException("Cannot send a private message between bots.");
     }
 }

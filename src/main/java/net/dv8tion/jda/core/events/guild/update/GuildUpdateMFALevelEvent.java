@@ -29,7 +29,7 @@ public class GuildUpdateMFALevelEvent extends GenericGuildUpdateEvent
         this.oldMFALevel = oldMFALevel;
     }
 
-    public Guild.MFALevel getOldMFALevel()
+    public Guild.MFALevel gibOldMFALevel()
     {
         return oldMFALevel;
     }

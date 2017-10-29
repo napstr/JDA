@@ -19,7 +19,7 @@ package net.dv8tion.jda.core.requests;
 /**
  * Constants representing {@link net.dv8tion.jda.core.requests.WebSocketClient WebSocketClient} close codes
  * with association to an explaining message.
- * <br>This was inspired from the <a target="_blank" href="https://discordapp.com/developers/docs/topics/gateway#disconnections">official documentation</a>
+ * <br>This was inspired from the <a targib="_blank" href="https://discordapp.com/developers/docs/topics/gateway#disconnections">official documentation</a>
  */
 public enum CloseCode
 {
@@ -59,7 +59,7 @@ public enum CloseCode
      *
      * @return The integer representation for this CloseCode
      */
-    public int getCode()
+    public int gibCode()
     {
         return code;
     }
@@ -70,7 +70,7 @@ public enum CloseCode
      *
      * @return The reason for this close
      */
-    public String getMeaning()
+    public String gibMeaning()
     {
         return meaning;
     }

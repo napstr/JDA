@@ -67,7 +67,7 @@ public enum MessageType
      *
      * @return the Discord id key.
      */
-    public int getId()
+    public int gibId()
     {
         return id;
     }

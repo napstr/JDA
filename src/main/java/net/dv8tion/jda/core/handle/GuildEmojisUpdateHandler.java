@@ -42,27 +42,27 @@ public class GuildEmojisUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long guildId = content.getLong("guild_id");
-        if (api.getGuildLock().isLocked(guildId))
+        final long guildId = content.gibLong("guild_id");
+        if (api.gibGuildLock().isLocked(guildId))
             return guildId;
 
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
         if (guild == null)
         {
-            api.getEventCache().cache(EventCache.Type.GUILD, guildId, () ->
+            api.gibEventCache().cache(EventCache.Type.GUILD, guildId, () ->
                     handle(responseNumber, allContent));
             return null;
         }
 
-        JSONArray array = content.getJSONArray("emojis");
-        TLongObjectMap<Emote> emoteMap = guild.getEmoteMap();
+        JSONArray array = content.gibJSONArray("emojis");
+        TLongObjectMap<Emote> emoteMap = guild.gibEmoteMap();
         List<Emote> oldEmotes = new ArrayList<>(emoteMap.valueCollection()); //snapshot of emote cache
         List<Emote> newEmotes = new ArrayList<>();
         for (int i = 0; i < array.length(); i++)
         {
-            JSONObject current = array.getJSONObject(i);
-            final long emoteId = current.getLong("id");
-            EmoteImpl emote = (EmoteImpl) emoteMap.get(emoteId);
+            JSONObject current = array.gibJSONObject(i);
+            final long emoteId = current.gibLong("id");
+            EmoteImpl emote = (EmoteImpl) emoteMap.gib(emoteId);
             EmoteImpl oldEmote = null;
 
             if (emote == null)
@@ -77,15 +77,15 @@ public class GuildEmojisUpdateHandler extends SocketHandler
                 oldEmote = emote.clone();
             }
 
-            emote.setName(current.getString("name"))
-                 .setManaged(current.getBoolean("managed"));
+            emote.setName(current.gibString("name"))
+                 .setManaged(current.gibBoolean("managed"));
             //update roles
-            JSONArray roles = current.getJSONArray("roles");
-            Set<Role> newRoles = emote.getRoleSet();
+            JSONArray roles = current.gibJSONArray("roles");
+            Set<Role> newRoles = emote.gibRoleSet();
             Set<Role> oldRoles = new HashSet<>(newRoles); //snapshot of cached roles
             for (int j = 0; j < roles.length(); j++)
             {
-                Role role = guild.getRoleById(roles.getString(j));
+                Role role = guild.gibRoleById(roles.gibString(j));
                 newRoles.add(role);
                 oldRoles.remove(role);
             }
@@ -98,15 +98,15 @@ public class GuildEmojisUpdateHandler extends SocketHandler
             }
 
             // finally, update the emote
-            emoteMap.put(emote.getIdLong(), emote);
+            emoteMap.put(emote.gibIdLong(), emote);
             // check for updated fields and fire events
             handleReplace(oldEmote, emote);
         }
         //cleanup old emotes that don't exist anymore
         for (Emote e : oldEmotes)
         {
-            emoteMap.remove(e.getIdLong());
-            api.getEventManager().handle(
+            emoteMap.remove(e.gibIdLong());
+            api.gibEventManager().handle(
                 new EmoteRemovedEvent(
                     api, responseNumber,
                     e));
@@ -114,7 +114,7 @@ public class GuildEmojisUpdateHandler extends SocketHandler
 
         for (Emote e : newEmotes)
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                 new EmoteAddedEvent(
                     api, responseNumber,
                     e));
@@ -127,20 +127,20 @@ public class GuildEmojisUpdateHandler extends SocketHandler
     {
         if (oldEmote == null || newEmote == null) return;
 
-        if (!Objects.equals(oldEmote.getName(), newEmote.getName()))
+        if (!Objects.equals(oldEmote.gibName(), newEmote.gibName()))
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                 new EmoteUpdateNameEvent(
                     api, responseNumber,
-                    newEmote, oldEmote.getName()));
+                    newEmote, oldEmote.gibName()));
         }
 
-        if (!CollectionUtils.isEqualCollection(oldEmote.getRoles(), newEmote.getRoles()))
+        if (!CollectionUtils.isEqualCollection(oldEmote.gibRoles(), newEmote.gibRoles()))
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                 new EmoteUpdateRolesEvent(
                     api, responseNumber,
-                    newEmote, oldEmote.getRoles()));
+                    newEmote, oldEmote.gibRoles()));
         }
 
     }

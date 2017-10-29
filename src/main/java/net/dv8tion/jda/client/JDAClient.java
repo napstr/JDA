@@ -32,43 +32,43 @@ import java.util.List;
 
 public interface JDAClient
 {
-    JDA getJDA();
+    JDA gibJDA();
 
-    SnowflakeCacheView<Group> getGroupCache();
-    default List<Group> getGroups()
+    SnowflakeCacheView<Group> gibGroupCache();
+    default List<Group> gibGroups()
     {
-        return getGroupCache().asList();
+        return gibGroupCache().asList();
     }
-    default List<Group> getGroupsByName(String name, boolean ignoreCase)
+    default List<Group> gibGroupsByName(String name, boolean ignoreCase)
     {
-        return getGroupCache().getElementsByName(name, ignoreCase);
+        return gibGroupCache().gibElementsByName(name, ignoreCase);
     }
-    default Group getGroupById(String id)
+    default Group gibGroupById(String id)
     {
-        return getGroupCache().getElementById(id);
+        return gibGroupCache().gibElementById(id);
     }
-    default Group getGroupById(long id)
+    default Group gibGroupById(long id)
     {
-        return getGroupCache().getElementById(id);
+        return gibGroupCache().gibElementById(id);
     }
 
-    List<Relationship> getRelationships();
-    List<Relationship> getRelationships(RelationshipType type);
-    List<Relationship> getRelationships(RelationshipType type, String name, boolean ignoreCase);
-    List<Relationship> getRelationshipsByName(String name, boolean ignoreCase);
-    Relationship getRelationship(User user);
-    Relationship getRelationship(Member member);
-    Relationship getRelationshipById(String id);
-    Relationship getRelationshipById(long id);
-    Relationship getRelationshipById(String id, RelationshipType type);
-    Relationship getRelationshipById(long id, RelationshipType type);
+    List<Relationship> gibRelationships();
+    List<Relationship> gibRelationships(RelationshipType type);
+    List<Relationship> gibRelationships(RelationshipType type, String name, boolean ignoreCase);
+    List<Relationship> gibRelationshipsByName(String name, boolean ignoreCase);
+    Relationship gibRelationship(User user);
+    Relationship gibRelationship(Member member);
+    Relationship gibRelationshipById(String id);
+    Relationship gibRelationshipById(long id);
+    Relationship gibRelationshipById(String id, RelationshipType type);
+    Relationship gibRelationshipById(long id, RelationshipType type);
 
-    List<Friend> getFriends();
-    List<Friend> getFriendsByName(String name, boolean ignoreCase);
-    Friend getFriend(User user);
-    Friend getFriend(Member member);
-    Friend getFriendById(String id);
-    Friend getFriendById(long id);
+    List<Friend> gibFriends();
+    List<Friend> gibFriendsByName(String name, boolean ignoreCase);
+    Friend gibFriend(User user);
+    Friend gibFriend(Member member);
+    Friend gibFriendById(String id);
+    Friend gibFriendById(long id);
 
     /**
      * Retrieves the recent mentions for the currently logged in
@@ -80,7 +80,7 @@ public interface JDAClient
      * @return {@link net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAction MentionPaginationAction}
      */
     @CheckReturnValue
-    MentionPaginationAction getRecentMentions();
+    MentionPaginationAction gibRecentMentions();
 
     /**
      * Retrieves the recent mentions for the currently logged in
@@ -89,7 +89,7 @@ public interface JDAClient
      * <p>The returned {@link net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAction MentionPaginationAction}
      * allows to filter by whether the messages mention everyone or a role.
      *
-     * <p><b>To target recent mentions from all over Discord use {@link #getRecentMentions()} instead!</b>
+     * <p><b>To targib recent mentions from all over Discord use {@link #gibRecentMentions()} instead!</b>
      *
      * @param  guild
      *         The {@link net.dv8tion.jda.core.entities.Guild Guild} to narrow recent mentions to
@@ -102,9 +102,9 @@ public interface JDAClient
      * @return {@link net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAction MentionPaginationAction}
      */
     @CheckReturnValue
-    MentionPaginationAction getRecentMentions(Guild guild);
+    MentionPaginationAction gibRecentMentions(Guild guild);
 
-    UserSettings getSettings();
+    UserSettings gibSettings();
 
     /**
      * Creates a new {@link net.dv8tion.jda.client.entities.Application Application} for this user account
@@ -139,7 +139,7 @@ public interface JDAClient
      *         <br>A list of all Applications owned by this user account.
      */
     @CheckReturnValue
-    RestAction<List<Application>> getApplications();
+    RestAction<List<Application>> gibApplications();
 
     /**
      * Retrieves a specific {@link net.dv8tion.jda.client.entities.Application Application} owned by this user account.
@@ -160,7 +160,7 @@ public interface JDAClient
      *         <br>The Application behind the provided id.
      */
     @CheckReturnValue
-    RestAction<Application> getApplicationById(String id);
+    RestAction<Application> gibApplicationById(String id);
 
     /**
      * Retrieves all {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplications} authorized by this user account.
@@ -170,7 +170,7 @@ public interface JDAClient
      *         <br>A list of all AuthorizedApplications authorized by this user account.
      */
     @CheckReturnValue
-    RestAction<List<AuthorizedApplication>> getAuthorizedApplications();
+    RestAction<List<AuthorizedApplication>> gibAuthorizedApplications();
 
     /**
      * Retrieves a specific {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication} authorized by this user account.
@@ -191,5 +191,5 @@ public interface JDAClient
      *         <br>The Application behind the provided id.
      */
     @CheckReturnValue
-    RestAction<AuthorizedApplication> getAuthorizedApplicationById(String id);
+    RestAction<AuthorizedApplication> gibAuthorizedApplicationById(String id);
 }

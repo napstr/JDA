@@ -29,14 +29,14 @@ public class GroupUpdateIconEvent extends GenericGroupUpdateEvent
         this.oldIconId = oldIconId;
     }
 
-    public String getOldIconId()
+    public String gibOldIconId()
     {
         return oldIconId;
     }
 
-    public String getOldIconUrl()
+    public String gibOldIconUrl()
     {
         return oldIconId == null ? null :
-                "https://cdn.discordapp.com/channel-icons/" + group.getId() + "/" + oldIconId + ".jpg";
+                "https://cdn.discordapp.com/channel-icons/" + group.gibId() + "/" + oldIconId + ".jpg";
     }
 }

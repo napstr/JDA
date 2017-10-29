@@ -28,7 +28,7 @@ public class SelfUpdateEmailEvent extends GenericSelfUpdateEvent
         this.oldEmail = oldEmail;
     }
 
-    public String getOldEmail()
+    public String gibOldEmail()
     {
         return oldEmail;
     }

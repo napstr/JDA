@@ -41,7 +41,7 @@ public class EmoteManager
      * Creates a new EmoteManager instance
      *
      * @param  emote
-     *         The target {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
+     *         The targib {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
      *
      * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
      *         If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
@@ -58,32 +58,32 @@ public class EmoteManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return updatable.getJDA();
+        return updatable.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Emote Emote} is in.
-     * <br>This is logically the same as calling {@code getEmote().getGuild()}
+     * <br>This is logically the same as calling {@code gibEmote().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return updatable.getGuild();
+        return updatable.gibGuild();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.Emote Emote}
+     * The targib {@link net.dv8tion.jda.core.entities.Emote Emote}
      * that will be modified by this Manager
      *
-     * @return The target Emote
+     * @return The targib Emote
      */
-    public Emote getEmote()
+    public Emote gibEmote()
     {
-        return updatable.getEmote();
+        return updatable.gibEmote();
     }
 
     /**
@@ -105,13 +105,13 @@ public class EmoteManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link EmoteManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.EmoteManagerUpdatable#getNameField()
+     * @see    net.dv8tion.jda.client.managers.EmoteManagerUpdatable#gibNameField()
      * @see    net.dv8tion.jda.client.managers.EmoteManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setName(String name)
     {
-        return updatable.getNameField().setValue(name).update();
+        return updatable.gibNameField().setValue(name).update();
     }
 
     /**
@@ -134,12 +134,12 @@ public class EmoteManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link EmoteManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.EmoteManagerUpdatable#getRolesField()
+     * @see    net.dv8tion.jda.client.managers.EmoteManagerUpdatable#gibRolesField()
      * @see    net.dv8tion.jda.client.managers.EmoteManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setRoles(Set<Role> roles)
     {
-        return updatable.getRolesField().setValue(roles).update();
+        return updatable.gibRolesField().setValue(roles).update();
     }
 }

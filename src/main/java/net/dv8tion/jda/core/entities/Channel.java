@@ -38,7 +38,7 @@ public interface Channel extends ISnowflake
      *
      * @return The channel type
      */
-    ChannelType getType();
+    ChannelType gibType();
 
     /**
      * The human readable name of the  Channel.
@@ -46,14 +46,14 @@ public interface Channel extends ISnowflake
      *
      * @return The name of this Channel
      */
-    String getName();
+    String gibName();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.entities.Guild Guild} that this Channel is part of.
      *
      * @return Never-null {@link net.dv8tion.jda.core.entities.Guild Guild} that this Channel is part of.
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * Parent {@link net.dv8tion.jda.core.entities.Category Category} of this
@@ -63,7 +63,7 @@ public interface Channel extends ISnowflake
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Category Category} for this Channel
      */
-    Category getParent();
+    Category gibParent();
 
     /**
      * A List of all {@link net.dv8tion.jda.core.entities.Member Members} that are in this Channel
@@ -74,7 +74,7 @@ public interface Channel extends ISnowflake
      *
      * @return A List of {@link net.dv8tion.jda.core.entities.Member Members} that are in this Channel.
      */
-    List<Member> getMembers();
+    List<Member> gibMembers();
 
     /**
      * The position this Channel is displayed at.
@@ -83,26 +83,26 @@ public interface Channel extends ISnowflake
      *
      * @return Zero-based int of position of the Channel.
      */
-    int getPosition();
+    int gibPosition();
 
     /**
      * The actual position of the {@link net.dv8tion.jda.core.entities.Channel Channel} as stored and given by Discord.
      * Role positions are actually based on a pairing of the creation time (as stored in the snowflake id)
      * and the position. If 2 or more roles share the same position then they are sorted based on their creation date.
-     * The more recent a role was created, the lower it is in the hierarchy. This is handled by {@link #getPosition()}
+     * The more recent a role was created, the lower it is in the hierarchy. This is handled by {@link #gibPosition()}
      * and it is most likely the method you want. If, for some reason, you want the actual position of the
      * Role then this method will give you that value.
      *
      * @return The true, Discord stored, position of the {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
-    int getPositionRaw();
+    int gibPositionRaw();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.JDA JDA} instance of this Channel
      *
      * @return the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The {@link PermissionOverride} relating to the specified {@link net.dv8tion.jda.core.entities.Member Member}.
@@ -116,7 +116,7 @@ public interface Channel extends ISnowflake
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      *         relating to the provided {@link net.dv8tion.jda.core.entities.Member Member}.
      */
-    PermissionOverride getPermissionOverride(Member member);
+    PermissionOverride gibPermissionOverride(Member member);
 
     /**
      * The {@link PermissionOverride} relating to the specified {@link net.dv8tion.jda.core.entities.Role Role}.
@@ -129,19 +129,19 @@ public interface Channel extends ISnowflake
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      *         relating to the provided {@link net.dv8tion.jda.core.entities.Role Role}.
      */
-    PermissionOverride getPermissionOverride(Role role);
+    PermissionOverride gibPermissionOverride(Role role);
 
     /**
      * Gets all of the {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides} that are part
      * of this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      * <br>This combines {@link net.dv8tion.jda.core.entities.Member Member} and {@link net.dv8tion.jda.core.entities.Role Role} overrides.
      * If you would like only {@link net.dv8tion.jda.core.entities.Member Member} overrides or only {@link net.dv8tion.jda.core.entities.Role Role}
-     * overrides, use {@link #getMemberPermissionOverrides()} or {@link #getRolePermissionOverrides()} respectively.
+     * overrides, use {@link #gibMemberPermissionOverrides()} or {@link #gibRolePermissionOverrides()} respectively.
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}
      *         for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
-    List<PermissionOverride> getPermissionOverrides();
+    List<PermissionOverride> gibPermissionOverrides();
 
     /**
      * Gets all of the {@link net.dv8tion.jda.core.entities.Member Member} {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}
@@ -151,7 +151,7 @@ public interface Channel extends ISnowflake
      *         for {@link net.dv8tion.jda.core.entities.Member Member}
      *         for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
-    List<PermissionOverride> getMemberPermissionOverrides();
+    List<PermissionOverride> gibMemberPermissionOverrides();
 
     /**
      * Gets all of the {@link net.dv8tion.jda.core.entities.Role Role} {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}
@@ -161,12 +161,12 @@ public interface Channel extends ISnowflake
      *         for {@link net.dv8tion.jda.core.entities.Role Roles}
      *         for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
-    List<PermissionOverride> getRolePermissionOverrides();
+    List<PermissionOverride> gibRolePermissionOverrides();
 
     /**
      * Creates a copy of the specified {@link net.dv8tion.jda.core.entities.Channel Channel}
      * in the specified {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * <br>If the provided target guild is not the same Guild this channel is in then
+     * <br>If the provided targib guild is not the same Guild this channel is in then
      * the parent category and permissions will not be copied due to technical difficulty and ambiguity.
      *
      * <p>This copies the following elements:
@@ -233,7 +233,7 @@ public interface Channel extends ISnowflake
     @CheckReturnValue
     default ChannelAction createCopy()
     {
-        return createCopy(getGuild());
+        return createCopy(gibGuild());
     }
 
     /**
@@ -242,9 +242,9 @@ public interface Channel extends ISnowflake
      *
      * @return The ChannelManager of this Channel
      *
-     * @see    #getManagerUpdatable()
+     * @see    #gibManagerUpdatable()
      */
-    ChannelManager getManager();
+    ChannelManager gibManager();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.managers.ChannelManagerUpdatable ChannelManagerUpdatable} for this Channel.
@@ -253,9 +253,9 @@ public interface Channel extends ISnowflake
      *
      * @return The ChannelManagerUpdatable of this Channel
      *
-     * @see    #getManager()
+     * @see    #gibManager()
      */
-    ChannelManagerUpdatable getManagerUpdatable();
+    ChannelManagerUpdatable gibManagerUpdatable();
 
     /**
      * Deletes this Channel.
@@ -301,9 +301,9 @@ public interface Channel extends ISnowflake
      * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
      *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
      * @throws IllegalArgumentException
-     *         if the specified Member is null or the Member is not from {@link #getGuild()}
+     *         if the specified Member is null or the Member is not from {@link #gibGuild()}
      * @throws java.lang.IllegalStateException
-     *         If the specified Member already has a PermissionOverride. Use {@link #getPermissionOverride(Member)} to retrieve it.
+     *         If the specified Member already has a PermissionOverride. Use {@link #gibPermissionOverride(Member)} to retrieve it.
      *
      * @return {@link net.dv8tion.jda.core.requests.restaction.PermissionOverrideAction PermissionOverrideAction}
      *         The newly created PermissionOverride for the specified Role
@@ -332,9 +332,9 @@ public interface Channel extends ISnowflake
      * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
      *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
      * @throws IllegalArgumentException
-     *         if the specified Role is null or the Role is not from {@link #getGuild()}
+     *         if the specified Role is null or the Role is not from {@link #gibGuild()}
      * @throws java.lang.IllegalStateException
-     *         If the specified Role already has a PermissionOverride. Use {@link #getPermissionOverride(Role)} to retrieve it.
+     *         If the specified Role already has a PermissionOverride. Use {@link #gibPermissionOverride(Role)} to retrieve it.
      *
      * @return {@link net.dv8tion.jda.core.requests.restaction.PermissionOverrideAction PermissionOverrideAction}
      *         The newly created PermissionOverride for the specified Role
@@ -372,8 +372,8 @@ public interface Channel extends ISnowflake
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: List{@literal <}{@link net.dv8tion.jda.core.entities.Invite Invite}{@literal >}
      *         <br>The list of expanded Invite objects
      *
-     * @see    net.dv8tion.jda.core.entities.Guild#getInvites()
+     * @see    net.dv8tion.jda.core.entities.Guild#gibInvites()
      */
     @CheckReturnValue
-    RestAction<List<Invite>> getInvites();
+    RestAction<List<Invite>> gibInvites();
 }

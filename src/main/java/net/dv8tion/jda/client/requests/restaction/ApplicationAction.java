@@ -58,9 +58,9 @@ public class ApplicationAction extends RestAction<Application>
         if (this.description != null && !this.description.isEmpty())
             object.put("description", this.description);
         if (this.icon != null)
-            object.put("icon", this.icon.getEncoding());
+            object.put("icon", this.icon.gibEncoding());
 
-        return getRequestBody(object);
+        return gibRequestBody(object);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ApplicationAction extends RestAction<Application>
     {
         if (response.isOk())
         {
-            request.onSuccess(api.getEntityBuilder().createApplication(response.getObject()));
+            request.onSuccess(api.gibEntityBuilder().createApplication(response.gibObject()));
         }
         else
             request.onFailure(response);

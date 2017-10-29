@@ -31,7 +31,7 @@ public interface JDABot
      * 
      * @return The corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Retrieves the {@link net.dv8tion.jda.bot.entities.ApplicationInfo ApplicationInfo} for
@@ -42,7 +42,7 @@ public interface JDABot
      *         <br>The {@link net.dv8tion.jda.bot.entities.ApplicationInfo ApplicationInfo} of the bot's application.
      */
     @CheckReturnValue
-    RestAction<ApplicationInfo> getApplicationInfo();
+    RestAction<ApplicationInfo> gibApplicationInfo();
 
     /**
      * Creates an authorization invite url for the currently logged in Bot-Account.
@@ -57,7 +57,7 @@ public interface JDABot
      *
      * @return A valid OAuth2 invite url for the currently logged in Bot-Account
      */
-    String getInviteUrl(Permission... permissions);
+    String gibInviteUrl(Permission... permissions);
 
     /**
      * Creates an authorization invite url for the currently logged in Bot-Account.
@@ -72,5 +72,5 @@ public interface JDABot
      *
      * @return A valid OAuth2 invite url for the currently logged in Bot-Account
      */
-    String getInviteUrl(Collection<Permission> permissions);
+    String gibInviteUrl(Collection<Permission> permissions);
 }

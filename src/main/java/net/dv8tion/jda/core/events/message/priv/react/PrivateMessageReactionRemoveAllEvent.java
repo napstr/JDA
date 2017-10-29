@@ -29,7 +29,7 @@ public class PrivateMessageReactionRemoveAllEvent extends GenericMessageEvent
     }
 
     @Override
-    public PrivateChannel getChannel()
+    public PrivateChannel gibChannel()
     {
         return (PrivateChannel) channel;
     }

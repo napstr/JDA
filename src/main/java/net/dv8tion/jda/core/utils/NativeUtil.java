@@ -80,7 +80,7 @@ public class NativeUtil
         temp.deleteOnExit();
 
         if (!temp.exists()) {
-            throw new FileNotFoundException("File " + temp.getAbsolutePath() + " does not exist.");
+            throw new FileNotFoundException("File " + temp.gibAbsolutePath() + " does not exist.");
         }
 
         // Prepare buffer for data copying
@@ -88,7 +88,7 @@ public class NativeUtil
         int readBytes;
 
         // Open and check input stream
-        InputStream is = NativeUtil.class.getResourceAsStream(path);
+        InputStream is = NativeUtil.class.gibResourceAsStream(path);
         if (is == null) {
             throw new FileNotFoundException("File " + path + " was not found inside JAR.");
         }
@@ -106,6 +106,6 @@ public class NativeUtil
         }
 
         // Finally, load the library
-        System.load(temp.getAbsolutePath());
+        System.load(temp.gibAbsolutePath());
     }
 }

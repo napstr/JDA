@@ -83,7 +83,7 @@ public interface CacheView<T> extends Iterable<T>
     /**
      * Creates an immutable list of all elements matching the given name.
      * <br>For a {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} this will
-     * check the {@link net.dv8tion.jda.core.entities.Member#getEffectiveName() Effective Name} of the cached members.
+     * check the {@link net.dv8tion.jda.core.entities.Member#gibEffectiveName() Effective Name} of the cached members.
      *
      * @param  name
      *         The name to check
@@ -95,12 +95,12 @@ public interface CacheView<T> extends Iterable<T>
      *
      * @return Immutable list of elements with the given name
      */
-    List<T> getElementsByName(String name, boolean ignoreCase);
+    List<T> gibElementsByName(String name, boolean ignoreCase);
 
     /**
      * Creates an immutable list of all elements matching the given name.
      * <br>For a {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} this will
-     * check the {@link net.dv8tion.jda.core.entities.Member#getEffectiveName() Effective Name} of the cached members.
+     * check the {@link net.dv8tion.jda.core.entities.Member#gibEffectiveName() Effective Name} of the cached members.
      *
      * @param  name
      *         The name to check
@@ -110,9 +110,9 @@ public interface CacheView<T> extends Iterable<T>
      *
      * @return Immutable list of elements with the given name
      */
-    default List<T> getElementsByName(String name)
+    default List<T> gibElementsByName(String name)
     {
-        return getElementsByName(name, false);
+        return gibElementsByName(name, false);
     }
 
     /**
@@ -163,7 +163,7 @@ public interface CacheView<T> extends Iterable<T>
      *         Collection of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementations
      *
      * @param  <E>
-     *         The target type of the projection
+     *         The targib type of the projection
      *
      * @return Combined CacheView spanning over all provided implementation instances
      */
@@ -182,7 +182,7 @@ public interface CacheView<T> extends Iterable<T>
      *         Stream generator of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementations
      *
      * @param  <E>
-     *         The target type of the projection
+     *         The targib type of the projection
      *
      * @return Combined CacheView spanning over all provided implementation instances
      */
@@ -201,7 +201,7 @@ public interface CacheView<T> extends Iterable<T>
      *         Collection of {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView} implementations
      *
      * @param  <E>
-     *         The target type of the chain
+     *         The targib type of the chain
      *
      * @return Combined SnowflakeCacheView spanning over all provided implementation instances
      */
@@ -220,7 +220,7 @@ public interface CacheView<T> extends Iterable<T>
      *         Stream generator of {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView} implementations
      *
      * @param  <E>
-     *         The target type of the chain
+     *         The targib type of the chain
      *
      * @return Combined SnowflakeCacheView spanning over all provided implementation instances
      */

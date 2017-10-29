@@ -25,11 +25,11 @@ import javax.annotation.CheckReturnValue;
 
 public interface Friend extends Relationship
 {
-    OnlineStatus getOnlineStatus();
+    OnlineStatus gibOnlineStatus();
 
-    OffsetDateTime getOnlineStatusModifiedTime();
+    OffsetDateTime gibOnlineStatusModifiedTime();
 
-    Game getGame();
+    Game gibGame();
 
     @CheckReturnValue
     RestAction removeFriend();

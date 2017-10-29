@@ -27,7 +27,7 @@ public class UserUnblockedEvent extends GenericRelationshipRemoveEvent
         super(api, responseNumber, relationship);
     }
 
-    public BlockedUser getPreviouslyBlockedUser()
+    public BlockedUser gibPreviouslyBlockedUser()
     {
         return (BlockedUser) relationship;
     }

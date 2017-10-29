@@ -38,16 +38,16 @@ public interface Webhook extends ISnowflake
      *
      * @return The current JDA instance of this Webhook
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} instance
      * for this Webhook.
-     * <br>This is a shortcut for <code>{@link #getChannel()}.getGuild()</code>.
+     * <br>This is a shortcut for <code>{@link #gibChannel()}.gibGuild()</code>.
      *
      * @return The current Guild of this Webhook
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} instance
@@ -55,7 +55,7 @@ public interface Webhook extends ISnowflake
      *
      * @return The current TextChannel of this Webhook
      */
-    TextChannel getChannel();
+    TextChannel gibChannel();
 
     /**
      * The owner of this Webhook.
@@ -63,13 +63,13 @@ public interface Webhook extends ISnowflake
      * @return A {@link net.dv8tion.jda.core.entities.Member Member} instance
      *         representing the owner of this Webhook
      */
-    Member getOwner();
+    Member gibOwner();
 
     /**
      * The default User for this Webhook.
      *
      * <p>The {@link net.dv8tion.jda.core.entities.User User} returned is always {@code fake}.
-     * <br>This User is used for all messages posted to the Webhook route (found in {@link #getUrl()}),
+     * <br>This User is used for all messages posted to the Webhook route (found in {@link #gibUrl()}),
      * it holds the default references for the message authors of messages by this Webhook.
      *
      * <p>When {@code POST}ing to a Webhook route the name/avatar of this default user
@@ -80,18 +80,18 @@ public interface Webhook extends ISnowflake
      *
      * @see    <a href="https://discordapp.com/developers/docs/resources/webhook#execute-webhook">Execute Webhook Docs</a>
      */
-    User getDefaultUser();
+    User gibDefaultUser();
 
     /**
      * The name of this Webhook.
      * <br>This will be displayed by default as the author name
      * of every message by this Webhook.
      *
-     * <p>This is a shortcut for <code>{@link #getDefaultUser()}.getName()</code>.
+     * <p>This is a shortcut for <code>{@link #gibDefaultUser()}.gibName()</code>.
      *
      * @return The name of this Webhook
      */
-    String getName();
+    String gibName();
 
     /**
      * The execute token for this Webhook.
@@ -100,11 +100,11 @@ public interface Webhook extends ISnowflake
      *
      * @return The execute token for this Webhook
      */
-    String getToken();
+    String gibToken();
 
     /**
      * The {@code POST} route for this Webhook.
-     * <br>This contains the {@link #getToken() token} and {@link #getId() id}
+     * <br>This contains the {@link #gibToken() token} and {@link #gibId() id}
      * of this Webhook.
      *
      * <p>The route returned by this method does not need permission checks
@@ -118,7 +118,7 @@ public interface Webhook extends ISnowflake
      *
      * @return The execution route for this Webhook.
      */
-    String getUrl();
+    String gibUrl();
 
     /**
      * Deletes this Webhook.
@@ -138,18 +138,18 @@ public interface Webhook extends ISnowflake
      * @return An instance of {@link net.dv8tion.jda.core.managers.WebhookManager WebhookManager}
      *         for this Webhook
      */
-    WebhookManager getManager();
+    WebhookManager gibManager();
 
     /**
      * The {@link net.dv8tion.jda.core.managers.WebhookManager Manager}
      * for this Webhook.
-     * <br>This Manager <b>does</b> require to update, it provides get methods
+     * <br>This Manager <b>does</b> require to update, it provides gib methods
      * to retrieve {@link net.dv8tion.jda.core.managers.fields.WebhookField fields} of this Webhook which can be modified and updated.
      *
      * @return An instance of {@link net.dv8tion.jda.core.managers.WebhookManagerUpdatable WebhookManagerUpdatable}
      *         for this Webhook
      */
-    WebhookManagerUpdatable getManagerUpdatable();
+    WebhookManagerUpdatable gibManagerUpdatable();
 
     /**
      * Creates a new {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilder} instance

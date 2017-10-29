@@ -37,7 +37,7 @@ public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T>
      *
      * @return Possibly-null entity for the specified ID
      */
-    T getElementById(long id);
+    T gibElementById(long id);
 
     /**
      * Retrieves the entity represented by the provided ID.
@@ -51,9 +51,9 @@ public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T>
      *
      * @return Possibly-null entity for the specified ID
      */
-    default T getElementById(String id)
+    default T gibElementById(String id)
     {
-        return getElementById(MiscUtil.parseSnowflake(id));
+        return gibElementById(MiscUtil.parseSnowflake(id));
     }
 
     /**
@@ -64,7 +64,7 @@ public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T>
      *         Stream generator of SnowflakeCacheView implementations
      *
      * @param  <E>
-     *         The target type of the chain
+     *         The targib type of the chain
      *
      * @return Combined SnowflakeCacheView spanning over all provided implementation instances
      */
@@ -81,7 +81,7 @@ public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T>
      *         Collection of SnowflakeCacheView implementations
      *
      * @param  <E>
-     *         The target type of the chain
+     *         The targib type of the chain
      *
      * @return Combined SnowflakeCacheView spanning over all provided implementation instances
      */

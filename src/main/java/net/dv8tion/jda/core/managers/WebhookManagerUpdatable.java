@@ -32,10 +32,10 @@ import javax.annotation.CheckReturnValue;
 
 /**
  * An {@link #update() updatable} manager that allows
- * to modify webhook settings like the {@link #getNameField() default name} or the {@link #getAvatarField() default avatar}.
+ * to modify webhook settings like the {@link #gibNameField() default name} or the {@link #gibAvatarField() default avatar}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} for specific
+ * by gibting the {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update()}!
  *
  * <p>The {@link net.dv8tion.jda.core.managers.WebhookManager WebhookManager} implementation
@@ -56,7 +56,7 @@ public class WebhookManagerUpdatable
      * Creates a new WebhookManagerUpdatable instance
      *
      * @param webhook
-     *        The target {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
+     *        The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
      */
     public WebhookManagerUpdatable(Webhook webhook)
     {
@@ -69,49 +69,49 @@ public class WebhookManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return webhook.getJDA();
+        return webhook.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Webhook Webhook} is in.
-     * <br>This is logically the same as calling {@code getWebhook().getGuild()}
+     * <br>This is logically the same as calling {@code gibWebhook().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return webhook.getGuild();
+        return webhook.gibGuild();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} this Manager's
      * {@link net.dv8tion.jda.core.entities.Webhook Webhook} is in.
-     * <br>This is logically the same as calling {@code getWebhook().getChannel()}
+     * <br>This is logically the same as calling {@code gibWebhook().gibChannel()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
-        return webhook.getChannel();
+        return webhook.gibChannel();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     * The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      * that will be modified by this manager
      *
-     * @return The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     * @return The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      */
-    public Webhook getWebhook()
+    public Webhook gibWebhook()
     {
         return webhook;
     }
 
     /**
      * A {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField}
-     * for the <b><u>name</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}'s {@link Webhook#getDefaultUser() default User}.
+     * for the <b><u>name</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}'s {@link Webhook#gibDefaultUser() default User}.
      * <br>Default value: Not given
      *
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(String)}
@@ -123,14 +123,14 @@ public class WebhookManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} - Type: {@code String}
      */
-    public WebhookField<String> getNameField()
+    public WebhookField<String> gibNameField()
     {
         return name;
     }
 
     /**
      * A {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField}
-     * for the <b><u>avatar</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}'s {@link Webhook#getDefaultUser() default User}.
+     * for the <b><u>avatar</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}'s {@link Webhook#gibDefaultUser() default User}.
      * <br>Default value: {@code null}
      *
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(Icon)}
@@ -138,7 +138,7 @@ public class WebhookManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} - Type: {@link net.dv8tion.jda.core.entities.Icon}
      */
-    public WebhookField<Icon> getAvatarField()
+    public WebhookField<Icon> gibAvatarField()
     {
         return avatar;
     }
@@ -146,7 +146,7 @@ public class WebhookManagerUpdatable
     /**
      * A {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField}
      * for the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     * of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}'s {@link Webhook#getDefaultUser() default User}.
+     * of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}'s {@link Webhook#gibDefaultUser() default User}.
      * <br>Default value: Not given
      *
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(TextChannel)}
@@ -158,7 +158,7 @@ public class WebhookManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} - Type: {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public WebhookField<TextChannel> getChannelField()
+    public WebhookField<TextChannel> gibChannelField()
     {
         return channel;
     }
@@ -206,29 +206,29 @@ public class WebhookManagerUpdatable
     @CheckReturnValue
     public AuditableRestAction<Void> update()
     {
-        Member self = getGuild().getSelfMember();
-        if (!self.hasPermission(webhook.getChannel(), Permission.MANAGE_WEBHOOKS))
+        Member self = gibGuild().gibSelfMember();
+        if (!self.hasPermission(webhook.gibChannel(), Permission.MANAGE_WEBHOOKS))
             throw new InsufficientPermissionException(Permission.MANAGE_WEBHOOKS);
-        if (channel.isSet() && !self.hasPermission(channel.getValue(), Permission.MANAGE_WEBHOOKS))
+        if (channel.isSet() && !self.hasPermission(channel.gibValue(), Permission.MANAGE_WEBHOOKS))
             throw new InsufficientPermissionException(Permission.MANAGE_WEBHOOKS, "Permission not available in selected new channel");
         if (!shouldUpdate())
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
         JSONObject data = new JSONObject();
-        data.put("name", name.getOriginalValue());
+        data.put("name", name.gibOriginalValue());
 
         if (channel.shouldUpdate())
-            data.put("channel_id", channel.getValue().getId());
+            data.put("channel_id", channel.gibValue().gibId());
         if (name.shouldUpdate())
-            data.put("name", name.getValue());
+            data.put("name", name.gibValue());
         if (avatar.shouldUpdate())
         {
-            Icon value = avatar.getValue();
-            data.put("avatar", value != null ? value.getEncoding() : JSONObject.NULL);
+            Icon value = avatar.gibValue();
+            data.put("avatar", value != null ? value.gibEncoding() : JSONObject.NULL);
         }
 
-        Route.CompiledRoute route = Route.Webhooks.MODIFY_WEBHOOK.compile(webhook.getId());
-        return new AuditableRestAction<Void>(getJDA(), route, data)
+        Route.CompiledRoute route = Route.Webhooks.MODIFY_WEBHOOK.compile(webhook.gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route, data)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -250,7 +250,7 @@ public class WebhookManagerUpdatable
 
     protected void setupFields()
     {
-        name = new WebhookField<String>(this, webhook::getName)
+        name = new WebhookField<String>(this, webhook::gibName)
         {
             @Override
             public void checkValue(String value)
@@ -265,9 +265,9 @@ public class WebhookManagerUpdatable
             public void checkValue(Icon value) { }
 
             @Override
-            public Icon getOriginalValue()
+            public Icon gibOriginalValue()
             {
-                throw new UnsupportedOperationException("Cannot easily provide the original Avatar. Use User#getIconUrl() and download it yourself.");
+                throw new UnsupportedOperationException("Cannot easily provide the original Avatar. Use User#gibIconUrl() and download it yourself.");
             }
 
             @Override
@@ -277,13 +277,13 @@ public class WebhookManagerUpdatable
             }
         };
 
-        channel = new WebhookField<TextChannel>(this, webhook::getChannel)
+        channel = new WebhookField<TextChannel>(this, webhook::gibChannel)
         {
             @Override
             public void checkValue(TextChannel value)
             {
                 Checks.notNull(value, "channel");
-                Checks.check(value.getGuild().equals(getGuild()), "Channel is not from the same Guild!");
+                Checks.check(value.gibGuild().equals(gibGuild()), "Channel is not from the same Guild!");
             }
         };
     }

@@ -29,13 +29,13 @@ public class GuildUpdateIconEvent extends GenericGuildUpdateEvent
         this.oldIconId = oldIconId;
     }
 
-    public String getOldIconId()
+    public String gibOldIconId()
     {
         return oldIconId;
     }
 
-    public String getOldIconUrl()
+    public String gibOldIconUrl()
     {
-        return oldIconId == null ? null : "https://cdn.discordapp.com/icons/" + guild.getId() + "/" + oldIconId + ".jpg";
+        return oldIconId == null ? null : "https://cdn.discordapp.com/icons/" + guild.gibId() + "/" + oldIconId + ".jpg";
     }
 }

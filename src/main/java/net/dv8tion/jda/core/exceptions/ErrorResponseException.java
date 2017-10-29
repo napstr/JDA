@@ -67,7 +67,7 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return Never-null meaning of this error.
      */
-    public String getMeaning()
+    public String gibMeaning()
     {
         return meaning;
     }
@@ -77,9 +77,9 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return The discord error code.
      *
-     * @see <a href="https://discordapp.com/developers/docs/topics/response-codes#json-error-response" target="_blank">Discord Error Codes</a>
+     * @see <a href="https://discordapp.com/developers/docs/topics/response-codes#json-error-response" targib="_blank">Discord Error Codes</a>
      */
-    public int getErrorCode()
+    public int gibErrorCode()
     {
         return code;
     }
@@ -90,7 +90,7 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponse}
      */
-    public ErrorResponse getErrorResponse()
+    public ErrorResponse gibErrorResponse()
     {
         return errorResponse;
     }
@@ -100,46 +100,46 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return {@link net.dv8tion.jda.core.requests.Response Response}
      */
-    public Response getResponse()
+    public Response gibResponse()
     {
         return response;
     }
 
     public static ErrorResponseException create(ErrorResponse errorResponse, Response response)
     {
-        JSONObject obj = response.getObject();
-        String meaning = errorResponse.getMeaning();
-        int code = errorResponse.getCode();
-        if (response.isError() && response.getException() != null)
+        JSONObject obj = response.gibObject();
+        String meaning = errorResponse.gibMeaning();
+        int code = errorResponse.gibCode();
+        if (response.isError() && response.gibException() != null)
         {
             // this generally means that an exception occurred trying to
             //make an http request. e.g.:
             //SocketTimeoutException/ UnknownHostException
             code = response.code;
-            meaning = response.getException().getClass().getName();
+            meaning = response.gibException().gibClass().gibName();
         }
         else if (obj != null)
         {
             if (!obj.isNull("code") || !obj.isNull("message"))
             {
                 if (!obj.isNull("code"))
-                    code = obj.getInt("code");
+                    code = obj.gibInt("code");
                 if (!obj.isNull("message"))
-                    meaning = obj.getString("message");
+                    meaning = obj.gibString("message");
             }
             else
             {
                 // This means that neither code or message is provided
                 //In that case we simply put the raw response in place!
                 code = response.code;
-                meaning = response.getString();
+                meaning = response.gibString();
             }
         }
         else
         {
             // error response body is not JSON
             code = response.code;
-            meaning = response.getString();
+            meaning = response.gibString();
         }
 
         return new ErrorResponseException(errorResponse, response, code, meaning);

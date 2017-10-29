@@ -37,32 +37,32 @@ public class ChannelRecipientAddHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long groupId = content.getLong("channel_id");
-        JSONObject userJson = content.getJSONObject("user");
+        final long groupId = content.gibLong("channel_id");
+        JSONObject userJson = content.gibJSONObject("user");
 
-        GroupImpl group = (GroupImpl) api.asClient().getGroupById(groupId);
+        GroupImpl group = (GroupImpl) api.asClient().gibGroupById(groupId);
         if (group == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CHANNEL_RECIPIENT_ADD for a group that is not yet cached! JSON: " + content);
             return null;
         }
 
-        User user = api.getEntityBuilder().createFakeUser(userJson, true);
-        group.getUserMap().put(user.getIdLong(), user);
+        User user = api.gibEntityBuilder().createFakeUser(userJson, true);
+        group.gibUserMap().put(user.gibIdLong(), user);
 
-        CallImpl call = (CallImpl) group.getCurrentCall();
+        CallImpl call = (CallImpl) group.gibCurrentCall();
         if (call != null)
         {
-            call.getCallUserMap().put(user.getIdLong(), new CallUserImpl(call, user));
+            call.gibCallUserMap().put(user.gibIdLong(), new CallUserImpl(call, user));
         }
 
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new GroupUserJoinEvent(
                         api, responseNumber,
                         group, user));
 
-        api.getEventCache().playbackCache(EventCache.Type.USER, user.getIdLong());
+        api.gibEventCache().playbackCache(EventCache.Type.USER, user.gibIdLong());
         return null;
     }
 }

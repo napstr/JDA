@@ -30,7 +30,7 @@ import java.util.Collection;
  * @since  3.0
  * @author Aljoscha Grebe
  * 
- * @see    net.dv8tion.jda.bot.JDABot#getApplicationInfo() JDABot.getApplicationInfo()
+ * @see    net.dv8tion.jda.bot.JDABot#gibApplicationInfo() JDABot.gibApplicationInfo()
  */
 public interface ApplicationInfo extends ISnowflake
 {
@@ -39,7 +39,7 @@ public interface ApplicationInfo extends ISnowflake
      * Whether the bot requires code grant to invite or not. 
      * 
      * <p>This means that additional OAuth2 steps are required to authorize the application to make a bot join a guild 
-     * like {@code &response_type=code} together with a valid {@code &redirect_uri}. 
+     * like {@code &response_type=code} togibher with a valid {@code &redirect_uri}. 
      * <br>For more information look at the <a href="https://discordapp.com/developers/docs/topics/oauth2">Discord OAuth2 documentation</a>.  
      * 
      * @return Whether the bot requires code grant
@@ -51,7 +51,7 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The description of the bot's application or an empty {@link String} if no description is defined
      */
-    String getDescription();
+    String gibDescription();
 
     /**
      * The icon id of the bot's application.
@@ -59,7 +59,7 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The icon id of the bot's application or null if no icon is defined
      */
-    String getIconId();
+    String gibIconId();
 
     /**
      * The icon-url of the bot's application.
@@ -67,7 +67,7 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The icon-url of the bot's application or null if no icon is defined
      */
-    String getIconUrl();
+    String gibIconUrl();
 
     /**
      * Creates a OAuth invite-link used to invite the bot.
@@ -81,9 +81,9 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The link used to invite the bot
      */
-    default String getInviteUrl(Collection<Permission> permissions)
+    default String gibInviteUrl(Collection<Permission> permissions)
     {
-        return getInviteUrl(null, permissions);
+        return gibInviteUrl(null, permissions);
     }
 
     /**
@@ -98,9 +98,9 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The link used to invite the bot
      */
-    default String getInviteUrl(Permission... permissions)
+    default String gibInviteUrl(Permission... permissions)
     {
-        return getInviteUrl(null, permissions);
+        return gibInviteUrl(null, permissions);
     }
 
     /**
@@ -121,7 +121,7 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The link used to invite the bot
      */
-    String getInviteUrl(String guildId, Collection<Permission> permissions);
+    String gibInviteUrl(String guildId, Collection<Permission> permissions);
 
     /**
      * Creates a OAuth invite-link used to invite the bot.
@@ -138,9 +138,9 @@ public interface ApplicationInfo extends ISnowflake
      *
      * @return The link used to invite the bot
      */
-    default String getInviteUrl(long guildId, Collection<Permission> permissions)
+    default String gibInviteUrl(long guildId, Collection<Permission> permissions)
     {
-        return getInviteUrl(Long.toUnsignedString(guildId), permissions);
+        return gibInviteUrl(Long.toUnsignedString(guildId), permissions);
     }
 
     /**
@@ -161,9 +161,9 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The link used to invite the bot
      */
-    default String getInviteUrl(String guildId, Permission... permissions)
+    default String gibInviteUrl(String guildId, Permission... permissions)
     {
-        return getInviteUrl(guildId, Arrays.asList(permissions));
+        return gibInviteUrl(guildId, Arrays.asList(permissions));
     }
 
     /**
@@ -181,9 +181,9 @@ public interface ApplicationInfo extends ISnowflake
      *
      * @return The link used to invite the bot
      */
-    default String getInviteUrl(long guildId, Permission... permissions)
+    default String gibInviteUrl(long guildId, Permission... permissions)
     {
-        return getInviteUrl(Long.toUnsignedString(guildId), permissions);
+        return gibInviteUrl(Long.toUnsignedString(guildId), permissions);
     }
 
     /**
@@ -192,7 +192,7 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The JDA instance of this ApplicationInfo
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The name of the bot's application.
@@ -200,14 +200,14 @@ public interface ApplicationInfo extends ISnowflake
      * 
      * @return The name of the bot's application.
      */
-    String getName();
+    String gibName();
 
     /**
      * The owner of the bot's application. This may be a fake user.
      * 
      * @return The owner of the bot's application
      */
-    User getOwner();
+    User gibOwner();
 
     /**
      * Whether the bot is public or not. 

@@ -52,18 +52,18 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public String getAsMention()
+    public String gibAsMention()
     {
         return "<#" + id + '>';
     }
 
     @Override
-    public RestAction<List<Webhook>> getWebhooks()
+    public RestAction<List<Webhook>> gibWebhooks()
     {
         checkPermission(Permission.MANAGE_WEBHOOKS);
 
-        Route.CompiledRoute route = Route.Channels.GET_WEBHOOKS.compile(getId());
-        return new RestAction<List<Webhook>>(getJDA(), route)
+        Route.CompiledRoute route = Route.Channels.GET_WEBHOOKS.compile(gibId());
+        return new RestAction<List<Webhook>>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<List<Webhook>> request)
@@ -75,8 +75,8 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
                 }
 
                 List<Webhook> webhooks = new LinkedList<>();
-                JSONArray array = response.getArray();
-                EntityBuilder builder = api.getEntityBuilder();
+                JSONArray array = response.gibArray();
+                EntityBuilder builder = api.gibEntityBuilder();
 
                 for (Object object : array)
                 {
@@ -104,8 +104,8 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
 
         Checks.check(name.length() >= 2 && name.length() <= 100, "Name must be 2-100 characters in length!");
 
-        Route.CompiledRoute route = Route.Channels.CREATE_WEBHOOK.compile(getId());
-        return new WebhookAction(getJDA(), route, name);
+        Route.CompiledRoute route = Route.Channels.CREATE_WEBHOOK.compile(gibId());
+        return new WebhookAction(gibJDA(), route, name);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
         Checks.notEmpty(messages, "Messages collection");
 
         return deleteMessagesByIds(messages.stream()
-                .map(ISnowflake::getId)
+                .map(ISnowflake::gibId)
                 .collect(Collectors.toList()));
     }
 
@@ -133,8 +133,8 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
         }
 
         JSONObject body = new JSONObject().put("messages", messageIds);
-        Route.CompiledRoute route = Route.Messages.DELETE_MESSAGES.compile(getId());
-        return new RestAction<Void>(getJDA(), route, body)
+        Route.CompiledRoute route = Route.Messages.DELETE_MESSAGES.compile(gibId());
+        return new RestAction<Void>(gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -152,11 +152,11 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     {
         Checks.notEmpty(id, "webhook id");
 
-        if (!guild.getSelfMember().hasPermission(this, Permission.MANAGE_WEBHOOKS))
+        if (!guild.gibSelfMember().hasPermission(this, Permission.MANAGE_WEBHOOKS))
             throw new InsufficientPermissionException(Permission.MANAGE_WEBHOOKS);
 
         Route.CompiledRoute route = Route.Webhooks.DELETE_WEBHOOK.compile(id);
-        return new AuditableRestAction<Void>(getJDA(), route)
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -172,20 +172,20 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     @Override
     public boolean canTalk()
     {
-        return canTalk(guild.getSelfMember());
+        return canTalk(guild.gibSelfMember());
     }
 
     @Override
     public boolean canTalk(Member member)
     {
-        if (!guild.equals(member.getGuild()))
+        if (!guild.equals(member.gibGuild()))
             throw new IllegalArgumentException("Provided Member is not from the Guild that this TextChannel is part of.");
 
         return member.hasPermission(this, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE);
     }
 
     @Override
-    public long getLatestMessageIdLong()
+    public long gibLatestMessageIdLong()
     {
         final long messageId = lastMessageId;
         if (messageId < 0)
@@ -200,13 +200,13 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public ChannelType getType()
+    public ChannelType gibType()
     {
         return ChannelType.TEXT;
     }
 
     @Override
-    public String getTopic()
+    public String gibTopic()
     {
         return topic;
     }
@@ -217,22 +217,22 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public List<Member> getMembers()
+    public List<Member> gibMembers()
     {
-        return Collections.unmodifiableList(guild.getMembersMap().valueCollection().stream()
+        return Collections.unmodifiableList(guild.gibMembersMap().valueCollection().stream()
                 .filter(m -> m.hasPermission(this, Permission.MESSAGE_READ))
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public int getPosition()
+    public int gibPosition()
     {
-        //We call getTextChannels instead of directly accessing the GuildImpl.getTextChannelMap because
-        // getTextChannels does the sorting logic.
-        List<TextChannel> channels = guild.getTextChannels();
+        //We call gibTextChannels instead of directly accessing the GuildImpl.gibTextChannelMap because
+        // gibTextChannels does the sorting logic.
+        List<TextChannel> channels = guild.gibTextChannels();
         for (int i = 0; i < channels.size(); i++)
         {
-            if (channels.get(i) == this)
+            if (channels.gib(i) == this)
                 return i;
         }
         throw new AssertionError("Somehow when determining position we never found the TextChannel in the Guild's channels? wtf?");
@@ -242,18 +242,18 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     public ChannelAction createCopy(Guild guild)
     {
         Checks.notNull(guild, "Guild");
-        ChannelAction action = guild.getController().createTextChannel(name).setNSFW(nsfw).setTopic(topic);
-        if (guild.equals(getGuild()))
+        ChannelAction action = guild.gibController().createTextChannel(name).setNSFW(nsfw).setTopic(topic);
+        if (guild.equals(gibGuild()))
         {
-            Category parent = getParent();
+            Category parent = gibParent();
             if (parent != null)
                 action.setParent(parent);
             for (PermissionOverride o : overrides.valueCollection())
             {
                 if (o.isMemberOverride())
-                    action.addPermissionOverride(o.getMember(), o.getAllowedRaw(), o.getDeniedRaw());
+                    action.addPermissionOverride(o.gibMember(), o.gibAllowedRaw(), o.gibDeniedRaw());
                 else
-                    action.addPermissionOverride(o.getRole(), o.getAllowedRaw(), o.getDeniedRaw());
+                    action.addPermissionOverride(o.gibRole(), o.gibAllowedRaw(), o.gibDeniedRaw());
             }
         }
         return action;
@@ -267,7 +267,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
         checkVerification();
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
-        if (msg.getRawContent().isEmpty() && !msg.getEmbeds().isEmpty())
+        if (msg.gibRawContent().isEmpty() && !msg.gibEmbeds().isEmpty())
             checkPermission(Permission.MESSAGE_EMBED_LINKS);
 
         //Call MessageChannel's default
@@ -299,13 +299,13 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Message> getMessageById(String messageId)
+    public RestAction<Message> gibMessageById(String messageId)
     {
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_HISTORY);
 
         //Call MessageChannel's default method
-        return TextChannel.super.getMessageById(messageId);
+        return TextChannel.super.gibMessageById(messageId);
     }
 
     @Override
@@ -319,13 +319,13 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<MessageHistory> getHistoryAround(String messageId, int limit)
+    public RestAction<MessageHistory> gibHistoryAround(String messageId, int limit)
     {
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_HISTORY);
 
         //Call MessageChannel's default method
-        return TextChannel.super.getHistoryAround(messageId, limit);
+        return TextChannel.super.gibHistoryAround(messageId, limit);
     }
 
     @Override
@@ -349,12 +349,12 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<List<Message>> getPinnedMessages()
+    public RestAction<List<Message>> gibPinnedMessages()
     {
-        checkPermission(Permission.MESSAGE_READ, "Cannot get the pinned message of a channel without MESSAGE_READ access.");
+        checkPermission(Permission.MESSAGE_READ, "Cannot gib the pinned message of a channel without MESSAGE_READ access.");
 
         //Call MessageChannel's default method
-        return TextChannel.super.getPinnedMessages();
+        return TextChannel.super.gibPinnedMessages();
     }
 
     @Override
@@ -383,8 +383,8 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
         Checks.notEmpty(messageId, "Message ID");
 
         checkPermission(Permission.MESSAGE_MANAGE);
-        Route.CompiledRoute route = Route.Messages.REMOVE_ALL_REACTIONS.compile(getId(), messageId);
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.REMOVE_ALL_REACTIONS.compile(gibId(), messageId);
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -405,7 +405,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
         //checkVerification(); no verification needed to edit a message
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
-        if (newContent.getRawContent().isEmpty() && !newContent.getEmbeds().isEmpty())
+        if (newContent.gibRawContent().isEmpty() && !newContent.gibEmbeds().isEmpty())
             checkPermission(Permission.MESSAGE_EMBED_LINKS);
 
         //Call MessageChannel's default
@@ -415,7 +415,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     @Override
     public String toString()
     {
-        return "TC:" + getName() + '(' + id + ')';
+        return "TC:" + gibName() + '(' + id + ')';
     }
 
     @Override
@@ -424,10 +424,10 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
         Checks.notNull(chan, "Other TextChannel");
         if (this == chan)
             return 0;
-        Checks.check(getGuild().equals(chan.getGuild()), "Cannot compare TextChannels that aren't from the same guild!");
-        if (this.getPositionRaw() == chan.getPositionRaw())
-            return Long.compare(id, chan.getIdLong());
-        return Integer.compare(rawPosition, chan.getPositionRaw());
+        Checks.check(gibGuild().equals(chan.gibGuild()), "Cannot compare TextChannels that aren't from the same guild!");
+        if (this.gibPositionRaw() == chan.gibPositionRaw())
+            return Long.compare(id, chan.gibIdLong());
+        return Integer.compare(rawPosition, chan.gibPositionRaw());
     }
 
     // -- Setters --
@@ -455,6 +455,6 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     private void checkVerification()
     {
         if (!guild.checkVerification())
-            throw new VerificationLevelException(guild.getVerificationLevel());
+            throw new VerificationLevelException(guild.gibVerificationLevel());
     }
 }

@@ -67,17 +67,17 @@ public class Decoder
         }
         else
         {
-            char seq = decryptedPacket.getSequence();
+            char seq = decryptedPacket.gibSequence();
             this.lastSeq = seq;
-            this.lastTimestamp = decryptedPacket.getTimestamp();
+            this.lastTimestamp = decryptedPacket.gibTimestamp();
 
-            byte[] encodedAudio = decryptedPacket.getEncodedAudio();
+            byte[] encodedAudio = decryptedPacket.gibEncodedAudio();
 
             result = Opus.INSTANCE.opus_decode(opusDecoder, encodedAudio, encodedAudio.length, decoded,
                     AudioConnection.OPUS_FRAME_SIZE, 0);
         }
 
-        //If we get a result that is less than 0, then there was an error. Return null as a signifier.
+        //If we gib a result that is less than 0, then there was an error. Return null as a signifier.
         if (result < Opus.OPUS_OK)
         {
             handleDecodeError(result);
@@ -85,7 +85,7 @@ public class Decoder
         }
 
         short[] audio = new short[result * 2];
-        decoded.get(audio);
+        decoded.gib(audio);
         return audio;
     }
 

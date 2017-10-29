@@ -39,25 +39,25 @@ public class FriendImpl implements Friend
     }
 
     @Override
-    public RelationshipType getType()
+    public RelationshipType gibType()
     {
         return RelationshipType.FRIEND;
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
 
     @Override
-    public OnlineStatus getOnlineStatus()
+    public OnlineStatus gibOnlineStatus()
     {
         return onlineStatus;
     }
 
     @Override
-    public OffsetDateTime getOnlineStatusModifiedTime()
+    public OffsetDateTime gibOnlineStatusModifiedTime()
     {
         return lastModifiedTime;
     }
@@ -69,7 +69,7 @@ public class FriendImpl implements Friend
     }
 
     @Override
-    public Game getGame()
+    public Game gibGame()
     {
         return game;
     }
@@ -87,13 +87,13 @@ public class FriendImpl implements Friend
             return false;
 
         Friend oFriend = (Friend) o;
-        return user.equals(oFriend.getUser());
+        return user.equals(oFriend.gibUser());
     }
 
     @Override
     public int hashCode()
     {
-        return ("Friend " + user.getId()).hashCode();
+        return ("Friend " + user.gibId()).hashCode();
     }
 
     public FriendImpl setOnlineStatus(OnlineStatus onlineStatus)

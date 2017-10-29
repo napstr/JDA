@@ -85,9 +85,9 @@ public class WebhookAction extends AuditableRestAction<Webhook>
     {
         JSONObject object = new JSONObject();
         object.put("name",   name);
-        object.put("avatar", avatar != null ? avatar.getEncoding() : JSONObject.NULL);
+        object.put("avatar", avatar != null ? avatar.gibEncoding() : JSONObject.NULL);
 
-        return getRequestBody(object);
+        return gibRequestBody(object);
     }
 
     @Override
@@ -98,8 +98,8 @@ public class WebhookAction extends AuditableRestAction<Webhook>
             request.onFailure(response);
             return;
         }
-        JSONObject json = response.getObject();
-        Webhook webhook = api.getEntityBuilder().createWebhook(json);
+        JSONObject json = response.gibObject();
+        Webhook webhook = api.gibEntityBuilder().createWebhook(json);
 
         request.onSuccess(webhook);
     }

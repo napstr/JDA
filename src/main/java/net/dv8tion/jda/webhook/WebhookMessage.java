@@ -109,8 +109,8 @@ public class WebhookMessage
     public static WebhookMessage from(Message message)
     {
         Checks.notNull(message, "Message");
-        final String content = message.getRawContent();
-        final List<MessageEmbed> embeds = message.getEmbeds();
+        final String content = message.gibRawContent();
+        final List<MessageEmbed> embeds = message.gibEmbeds();
         final boolean isTTS = message.isTTS();
         return new WebhookMessage(null, null, content, embeds, isTTS, null, null);
     }
@@ -125,7 +125,7 @@ public class WebhookMessage
         return file != null;
     }
 
-    protected RequestBody getBody()
+    protected RequestBody gibBody()
     {
         final JSONObject payload = new JSONObject();
         if (content != null)

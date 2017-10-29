@@ -40,22 +40,22 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The WidgetUtil is a class for interacting with various facets of Discord's
- * guild widgets
+ * The WidgibUtil is a class for interacting with various facets of Discord's
+ * guild widgibs
  *
  * @since  3.0
  * @author John A. Grosh
  */
-public class WidgetUtil 
+public class WidgibUtil 
 {
-    public static final String WIDGET_PNG = Requester.DISCORD_API_PREFIX + "guilds/%s/widget.png?style=%s";
-    public static final String WIDGET_URL = Requester.DISCORD_API_PREFIX + "guilds/%s/widget.json";
-    public static final String WIDGET_HTML = "<iframe src=\"https://discordapp.com/widget?id=%s&theme=%s\" width=\"%d\" height=\"%d\" allowtransparency=\"true\" frameborder=\"0\"></iframe>";
+    public static final String WIDGET_PNG = Requester.DISCORD_API_PREFIX + "guilds/%s/widgib.png?style=%s";
+    public static final String WIDGET_URL = Requester.DISCORD_API_PREFIX + "guilds/%s/widgib.json";
+    public static final String WIDGET_HTML = "<iframe src=\"https://discordapp.com/widgib?id=%s&theme=%s\" width=\"%d\" height=\"%d\" allowtransparency=\"true\" frameborder=\"0\"></iframe>";
     
     /**
      * Gets the banner image for the specified guild of the specified type.
      * <br>This banner will only be available if the guild in question has the
-     * Widget enabled.
+     * Widgib enabled.
      * 
      * @param  guild
      *         The guild
@@ -64,16 +64,16 @@ public class WidgetUtil
      *
      * @return A String containing the URL of the banner image
      */
-    public static String getWidgetBanner(Guild guild, BannerType type)
+    public static String gibWidgibBanner(Guild guild, BannerType type)
     {
         Checks.notNull(guild, "Guild");
-        return getWidgetBanner(guild.getId(), type);
+        return gibWidgibBanner(guild.gibId(), type);
     }
     
     /**
      * Gets the banner image for the specified guild of the specified type.
      * <br>This banner will only be available if the guild in question has the
-     * Widget enabled. Additionally, this method can be used independently of
+     * Widgib enabled. Additionally, this method can be used independently of
      * being on the guild in question.
      * 
      * @param  guildId
@@ -83,7 +83,7 @@ public class WidgetUtil
      *
      * @return A String containing the URL of the banner image
      */
-    public static String getWidgetBanner(String guildId, BannerType type)
+    public static String gibWidgibBanner(String guildId, BannerType type)
     {
         Checks.notNull(guildId, "GuildId");
         Checks.notNull(type, "BannerType");
@@ -91,31 +91,31 @@ public class WidgetUtil
     }
     
     /**
-     * Gets the pre-made HTML Widget for the specified guild using the specified
-     * settings. The widget will only display correctly if the guild in question
-     * has the Widget enabled.
+     * Gets the pre-made HTML Widgib for the specified guild using the specified
+     * settings. The widgib will only display correctly if the guild in question
+     * has the Widgib enabled.
      * 
      * @param  guild
      *         the guild
      * @param  theme
      *         the theme, light or dark
      * @param  width
-     *         the width of the widget
+     *         the width of the widgib
      * @param  height
-     *         the height of the widget
+     *         the height of the widgib
      *
-     * @return a String containing the pre-made widget with the supplied settings
+     * @return a String containing the pre-made widgib with the supplied settings
      */
-    public static String getPremadeWidgetHtml(Guild guild, WidgetTheme theme, int width, int height)
+    public static String gibPremadeWidgibHtml(Guild guild, WidgibTheme theme, int width, int height)
     {
         Checks.notNull(guild, "Guild");
-        return getPremadeWidgetHtml(guild.getId(), theme, width, height);
+        return gibPremadeWidgibHtml(guild.gibId(), theme, width, height);
     }
     
     /**
-     * Gets the pre-made HTML Widget for the specified guild using the specified
-     * settings. The widget will only display correctly if the guild in question
-     * has the Widget enabled. Additionally, this method can be used independently
+     * Gets the pre-made HTML Widgib for the specified guild using the specified
+     * settings. The widgib will only display correctly if the guild in question
+     * has the Widgib enabled. Additionally, this method can be used independently
      * of being on the guild in question.
      * 
      * @param  guildId
@@ -123,29 +123,29 @@ public class WidgetUtil
      * @param  theme
      *         the theme, light or dark
      * @param  width
-     *         the width of the widget
+     *         the width of the widgib
      * @param  height
-     *         the height of the widget
+     *         the height of the widgib
      *
-     * @return a String containing the pre-made widget with the supplied settings
+     * @return a String containing the pre-made widgib with the supplied settings
      */
-    public static String getPremadeWidgetHtml(String guildId, WidgetTheme theme, int width, int height)
+    public static String gibPremadeWidgibHtml(String guildId, WidgibTheme theme, int width, int height)
     {
         Checks.notNull(guildId, "GuildId");
-        Checks.notNull(theme, "WidgetTheme");
+        Checks.notNull(theme, "WidgibTheme");
         Checks.notNegative(width, "Width");
         Checks.notNegative(height, "Height");
         return String.format(WIDGET_HTML, guildId, theme.name().toLowerCase(), width, height);
     }
     
     /**
-     * Makes a GET request to get the information for a Guild's widget. This
-     * widget (if available) contains information about the guild, including the
+     * Makes a GET request to gib the information for a Guild's widgib. This
+     * widgib (if available) contains information about the guild, including the
      * Guild's name, an invite code (if set), a list of voice channels, and a
      * list of online members (plus the voice states of any members in voice
      * channels).
      *
-     * <p>This Widget can be obtained from any valid guild ID that has
+     * <p>This Widgib can be obtained from any valid guild ID that has
      * it enabled; no accounts need to be on the server to access this information.
      * 
      * @param  guildId
@@ -157,25 +157,25 @@ public class WidgetUtil
      *         If the provided {@code guildId} cannot be parsed by {@link Long#parseLong(String)}
      *
      * @return {@code null} if the provided guild ID is not a valid Discord guild ID
-     *         <br>a Widget object with null fields and isAvailable() returning
+     *         <br>a Widgib object with null fields and isAvailable() returning
      *         false if the guild ID is valid but the guild in question does not
-     *         have the widget enabled
-     *         <br>a filled-in Widget object if the guild ID is valid and the guild
-     *         in question has the widget enabled.
+     *         have the widgib enabled
+     *         <br>a filled-in Widgib object if the guild ID is valid and the guild
+     *         in question has the widgib enabled.
      */
-    public static Widget getWidget(String guildId) throws RateLimitedException
+    public static Widgib gibWidgib(String guildId) throws RateLimitedException
     {
-        return getWidget(MiscUtil.parseSnowflake(guildId));
+        return gibWidgib(MiscUtil.parseSnowflake(guildId));
     }
 
     /**
-     * Makes a GET request to get the information for a Guild's widget. This
-     * widget (if available) contains information about the guild, including the
+     * Makes a GET request to gib the information for a Guild's widgib. This
+     * widgib (if available) contains information about the guild, including the
      * Guild's name, an invite code (if set), a list of voice channels, and a
      * list of online members (plus the voice states of any members in voice
      * channels).
      *
-     * <p>This Widget can be obtained from any valid guild ID that has
+     * <p>This Widgib can be obtained from any valid guild ID that has
      * it enabled; no accounts need to be on the server to access this information.
      *
      * @param  guildId
@@ -185,13 +185,13 @@ public class WidgetUtil
      *         If the request was rate limited, <b>respect the timeout</b>!
      *
      * @return {@code null} if the provided guild ID is not a valid Discord guild ID
-     *         <br>a Widget object with null fields and isAvailable() returning
+     *         <br>a Widgib object with null fields and isAvailable() returning
      *         false if the guild ID is valid but the guild in question does not
-     *         have the widget enabled
-     *         <br>a filled-in Widget object if the guild ID is valid and the guild
-     *         in question has the widget enabled.
+     *         have the widgib enabled
+     *         <br>a filled-in Widgib object if the guild ID is valid and the guild
+     *         in question has the widgib enabled.
      */
-    public static Widget getWidget(long guildId) throws RateLimitedException
+    public static Widgib gibWidgib(long guildId) throws RateLimitedException
     {
         Checks.notNull(guildId, "GuildId");
 
@@ -207,7 +207,7 @@ public class WidgetUtil
         try (Response response = client.newCall(request).execute())
         {
             final int code = response.code();
-            InputStream data = Requester.getBody(response);
+            InputStream data = Requester.gibBody(response);
 
             switch (code)
             {
@@ -215,7 +215,7 @@ public class WidgetUtil
                 {
                     try (InputStream stream = data)
                     {
-                        return new Widget(new JSONObject(new JSONTokener(stream)));
+                        return new Widgib(new JSONObject(new JSONTokener(stream)));
                     }
                     catch (IOException e)
                     {
@@ -225,14 +225,14 @@ public class WidgetUtil
                 case 400: // not valid snowflake
                 case 404: // guild not found
                     return null;
-                case 403: // widget disabled
-                    return new Widget(guildId);
+                case 403: // widgib disabled
+                    return new Widgib(guildId);
                 case 429: // ratelimited
                 {
                     long retryAfter;
                     try (InputStream stream = data)
                     {
-                        retryAfter = new JSONObject(new JSONTokener(stream)).getLong("retry_after");
+                        retryAfter = new JSONObject(new JSONTokener(stream)).gibLong("retry_after");
                     }
                     catch (Exception e)
                     {
@@ -267,15 +267,15 @@ public class WidgetUtil
     }
     
     /**
-     * Represents the color scheme of the widget
+     * Represents the color scheme of the widgib
      * <br>These color themes match Discord's dark and light themes
      */
-    public enum WidgetTheme
+    public enum WidgibTheme
     {
         LIGHT, DARK
     }
     
-    public static class Widget implements ISnowflake
+    public static class Widgib implements ISnowflake
     {
         private final boolean isAvailable;
         private final long id;
@@ -285,9 +285,9 @@ public class WidgetUtil
         private final TLongObjectMap<Member> members;
         
         /**
-         * Constructs an unavailable Widget
+         * Constructs an unavailable Widgib
          */
-        private Widget(long guildId)
+        private Widgib(long guildId)
         {
             isAvailable = false;
             id = guildId;
@@ -298,58 +298,58 @@ public class WidgetUtil
         }
         
         /**
-         * Constructs an available Widget
+         * Constructs an available Widgib
          *
          * @param json
-         *        The {@link org.json.JSONObject JSONObject} to construct the Widget from
+         *        The {@link org.json.JSONObject JSONObject} to construct the Widgib from
          */
-        private Widget(JSONObject json)
+        private Widgib(JSONObject json)
         {
-            String inviteCode = json.isNull("instant_invite") ? null : json.getString("instant_invite");
+            String inviteCode = json.isNull("instant_invite") ? null : json.gibString("instant_invite");
             if (inviteCode != null)
                 inviteCode = inviteCode.substring(inviteCode.lastIndexOf("/") + 1);
             
             isAvailable = true;
-            id = json.getLong("id");
-            name = json.getString("name");
+            id = json.gibLong("id");
+            name = json.gibString("name");
             invite = inviteCode;
             channels = MiscUtil.newLongMap();
             members = MiscUtil.newLongMap();
             
-            JSONArray channelsJson = json.getJSONArray("channels");
+            JSONArray channelsJson = json.gibJSONArray("channels");
             for (int i = 0; i < channelsJson.length(); i++)
             {
-                JSONObject channel = channelsJson.getJSONObject(i);
-                channels.put(channel.getLong("id"), new VoiceChannel(channel, this));
+                JSONObject channel = channelsJson.gibJSONObject(i);
+                channels.put(channel.gibLong("id"), new VoiceChannel(channel, this));
             }
             
-            JSONArray membersJson = json.getJSONArray("members");
+            JSONArray membersJson = json.gibJSONArray("members");
             for (int i = 0; i<membersJson.length(); i++)
             {
-                JSONObject memberJson = membersJson.getJSONObject(i);
+                JSONObject memberJson = membersJson.gibJSONObject(i);
                 Member member = new Member(memberJson, this);
                 if (!memberJson.isNull("channel_id")) // voice state
                 {
-                    VoiceChannel channel = channels.get(memberJson.getLong("channel_id"));
+                    VoiceChannel channel = channels.gib(memberJson.gibLong("channel_id"));
                     member.setVoiceState(new VoiceState(channel, 
-                            memberJson.getBoolean("mute"), 
-                            memberJson.getBoolean("deaf"), 
-                            memberJson.getBoolean("suppress"), 
-                            memberJson.getBoolean("self_mute"), 
-                            memberJson.getBoolean("self_deaf"),
+                            memberJson.gibBoolean("mute"), 
+                            memberJson.gibBoolean("deaf"), 
+                            memberJson.gibBoolean("suppress"), 
+                            memberJson.gibBoolean("self_mute"), 
+                            memberJson.gibBoolean("self_deaf"),
                             member,
                             this));
                     channel.addMember(member);
                 }
-                members.put(member.getIdLong(), member);
+                members.put(member.gibIdLong(), member);
             }
         }
         
         /**
-         * Shows whether or not the widget for a guild is available. If this
+         * Shows whether or not the widgib for a guild is available. If this
          * method returns false, all other values will be null
          * 
-         * @return True, if the widget is available, false otherwise
+         * @return True, if the widgib is available, false otherwise
          */
         public boolean isAvailable()
         {
@@ -357,7 +357,7 @@ public class WidgetUtil
         }
 
         @Override
-        public long getIdLong()
+        public long gibIdLong()
         {
             return id;
         }
@@ -366,11 +366,11 @@ public class WidgetUtil
          * Gets the name of the guild
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
          * @return the name of the guild
          */
-        public String getName()
+        public String gibName()
         {
             checkAvailable();
 
@@ -379,14 +379,14 @@ public class WidgetUtil
         
         /**
          * Gets an invite code for the guild, or null if no invite channel is
-         * enabled in the widget
+         * enabled in the widgib
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
-         * @return an invite code for the guild, if widget invites are enabled
+         * @return an invite code for the guild, if widgib invites are enabled
          */
-        public String getInviteCode()
+        public String gibInviteCode()
         {
             checkAvailable();
 
@@ -397,11 +397,11 @@ public class WidgetUtil
          * Gets the list of voice channels in the guild
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
          * @return the list of voice channels in the guild
          */
-        public List<VoiceChannel> getVoiceChannels()
+        public List<VoiceChannel> gibVoiceChannels()
         {
             checkAvailable();
 
@@ -415,17 +415,17 @@ public class WidgetUtil
          *         the ID of the voice channel
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          * @throws NumberFormatException
          *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
          *
          * @return possibly-null VoiceChannel with the given ID. 
          */
-        public VoiceChannel getVoiceChannelById(String id)
+        public VoiceChannel gibVoiceChannelById(String id)
         {
             checkAvailable();
 
-            return channels.get(MiscUtil.parseSnowflake(id));
+            return channels.gib(MiscUtil.parseSnowflake(id));
         }
 
         /**
@@ -435,26 +435,26 @@ public class WidgetUtil
          *         the ID of the voice channel
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
          * @return possibly-null VoiceChannel with the given ID.
          */
-        public VoiceChannel getVoiceChannelById(long id)
+        public VoiceChannel gibVoiceChannelById(long id)
         {
             checkAvailable();
 
-            return channels.get(id);
+            return channels.gib(id);
         }
         
         /**
          * Gets a list of online members in the guild
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
          * @return the list of members
          */
-        public List<Member> getMembers()
+        public List<Member> gibMembers()
         {
             checkAvailable();
 
@@ -470,15 +470,15 @@ public class WidgetUtil
          * @throws NumberFormatException
          *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
          * @return possibly-null Member with the given ID. 
          */
-        public Member getMemberById(String id)
+        public Member gibMemberById(String id)
         {
             checkAvailable();
 
-            return members.get(MiscUtil.parseSnowflake(id));
+            return members.gib(MiscUtil.parseSnowflake(id));
         }
 
         /**
@@ -488,15 +488,15 @@ public class WidgetUtil
          *         the ID of the member
          *
          * @throws IllegalStateException
-         *         If the widget is not {@link #isAvailable() available}
+         *         If the widgib is not {@link #isAvailable() available}
          *
          * @return possibly-null Member with the given ID.
          */
-        public Member getMemberById(long id)
+        public Member gibMemberById(long id)
         {
             checkAvailable();
 
-            return members.get(id);
+            return members.gib(id);
         }
 
         @Override
@@ -506,22 +506,22 @@ public class WidgetUtil
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof Widget))
+            if (!(obj instanceof Widgib))
                 return false;
-            Widget oWidget = (Widget) obj;
-            return this == oWidget || this.id == oWidget.getIdLong();
+            Widgib oWidgib = (Widgib) obj;
+            return this == oWidgib || this.id == oWidgib.gibIdLong();
         }
         
         @Override
         public String toString()
         {
-            return "W:" + (isAvailable() ? getName() : "") + '(' + id + ')';
+            return "W:" + (isAvailable() ? gibName() : "") + '(' + id + ')';
         }
 
         private void checkAvailable()
         {
             if (!isAvailable)
-                throw new IllegalStateException("The widget for this Guild is unavailable!");
+                throw new IllegalStateException("The widgib for this Guild is unavailable!");
         }
         
         
@@ -536,22 +536,22 @@ public class WidgetUtil
             private final String nickname;
             private final OnlineStatus status;
             private final Game game;
-            private final Widget widget;
+            private final Widgib widgib;
             private VoiceState state;
             
-            private Member(JSONObject json, Widget widget)
+            private Member(JSONObject json, Widgib widgib)
             {
-                this.widget = widget;
-                this.bot = !json.isNull("bot") && json.getBoolean("bot");
-                this.id = json.getLong("id");
-                this.username = json.getString("username");
-                this.discriminator = json.getString("discriminator");
-                this.avatar = json.isNull("avatar") ? null : json.getString("avatar");
-                this.nickname = json.isNull("nick") ? null : json.getString("nick");
-                this.status = OnlineStatus.fromKey(json.getString("status"));
+                this.widgib = widgib;
+                this.bot = !json.isNull("bot") && json.gibBoolean("bot");
+                this.id = json.gibLong("id");
+                this.username = json.gibString("username");
+                this.discriminator = json.gibString("discriminator");
+                this.avatar = json.isNull("avatar") ? null : json.gibString("avatar");
+                this.nickname = json.isNull("nick") ? null : json.gibString("nick");
+                this.status = OnlineStatus.fromKey(json.gibString("status"));
                 this.game = json.isNull("game") ? null : 
-                            json.getJSONObject("game").isNull("name") || json.getJSONObject("game").getString("name").isEmpty() ? null :
-                            Game.of(json.getJSONObject("game").getString("name"));
+                            json.gibJSONObject("game").isNull("name") || json.gibJSONObject("game").gibString("name").isEmpty() ? null :
+                            Game.of(json.gibJSONObject("game").gibString("name"));
             }
             
             private void setVoiceState(VoiceState voiceState)
@@ -574,21 +574,21 @@ public class WidgetUtil
              * 
              * @return the username of the member
              */
-            public String getName()
+            public String gibName()
             {
                 return username;
             }
 
             @Override
-            public long getIdLong()
+            public long gibIdLong()
             {
                 return id;
             }
 
             @Override
-            public String getAsMention()
+            public String gibAsMention()
             {
-                return "<@" + getId() + ">";
+                return "<@" + gibId() + ">";
             }
             
             /**
@@ -596,7 +596,7 @@ public class WidgetUtil
              * 
              * @return the never-null discriminator of the member
              */
-            public String getDiscriminator()
+            public String gibDiscriminator()
             {
                 return discriminator;
             }
@@ -608,7 +608,7 @@ public class WidgetUtil
              * @return possibly-null String containing the avatar hash of the
              *         member
              */
-            public String getAvatarId()
+            public String gibAvatarId()
             {
                 return avatar;
             }
@@ -620,10 +620,10 @@ public class WidgetUtil
              * @return possibly-null String containing the avatar url of the
              *         member
              */
-            public String getAvatarUrl()
+            public String gibAvatarUrl()
             {
-                return getAvatarId() == null ? null : "https://cdn.discordapp.com/avatars/" + getId() + "/" + getAvatarId()
-                        + (getAvatarId().startsWith("a_") ? ".gif" : ".png");
+                return gibAvatarId() == null ? null : "https://cdn.discordapp.com/avatars/" + gibId() + "/" + gibAvatarId()
+                        + (gibAvatarId().startsWith("a_") ? ".gif" : ".png");
             }
 
             /**
@@ -632,9 +632,9 @@ public class WidgetUtil
              * @return never-null String containing the asset id of the member's
              *         default avatar
              */
-            public String getDefaultAvatarId()
+            public String gibDefaultAvatarId()
             {
-                return UserImpl.DefaultAvatar.values()[Integer.parseInt(getDiscriminator()) % UserImpl.DefaultAvatar.values().length].toString();
+                return UserImpl.DefaultAvatar.values()[Integer.parseInt(gibDiscriminator()) % UserImpl.DefaultAvatar.values().length].toString();
             }
 
             /**
@@ -643,9 +643,9 @@ public class WidgetUtil
              * @return never-null String containing the url of the member's
              *         default avatar
              */
-            public String getDefaultAvatarUrl()
+            public String gibDefaultAvatarUrl()
             {
-                return "https://discordapp.com/assets/" + getDefaultAvatarId() + ".png";
+                return "https://discordapp.com/assets/" + gibDefaultAvatarId() + ".png";
             }
 
             /**
@@ -655,9 +655,9 @@ public class WidgetUtil
             * 
             * @return Never-null String containing the member's effective avatar url.
             */
-            public String getEffectiveAvatarUrl()
+            public String gibEffectiveAvatarUrl()
             {
-                return getAvatarUrl() == null ? getDefaultAvatarUrl() : getAvatarUrl();
+                return gibAvatarUrl() == null ? gibDefaultAvatarUrl() : gibAvatarUrl();
             }
             
             /**
@@ -666,7 +666,7 @@ public class WidgetUtil
              * 
              * @return possibly-null String containing the nickname of the member
              */
-            public String getNickname()
+            public String gibNickname()
             {
                 return nickname;
             }
@@ -677,18 +677,18 @@ public class WidgetUtil
              * 
              * @return never-null String containing the member's effective (visible) name
              */
-            public String getEffectiveName()
+            public String gibEffectiveName()
             {
                 return nickname == null ? username : nickname;
             }
             
             /**
-             * Gets the online status of the member. The widget does not show
+             * Gets the online status of the member. The widgib does not show
              * offline members, so this status should never be offline
              * 
              * @return the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus} of the member
              */
-            public OnlineStatus getOnlineStatus()
+            public OnlineStatus gibOnlineStatus()
             {
                 return status;
             }
@@ -701,7 +701,7 @@ public class WidgetUtil
             * @return Possibly-null {@link net.dv8tion.jda.core.entities.Game Game} containing the game
             *         that the member is currently playing.
             */
-            public Game getGame()
+            public Game gibGame()
             {
                 return game;
             }
@@ -712,24 +712,24 @@ public class WidgetUtil
              * 
              * @return never-null VoiceState of the member
              */
-            public VoiceState getVoiceState()
+            public VoiceState gibVoiceState()
             {
-                return state == null ? new VoiceState(this, widget) : state;
+                return state == null ? new VoiceState(this, widgib) : state;
             }
 
             /**
-             * Gets the widget that to which this member belongs
+             * Gets the widgib that to which this member belongs
              * 
-             * @return the Widget that holds this member
+             * @return the Widgib that holds this member
              */
-            public Widget getWidget()
+            public Widgib gibWidgib()
             {
-                return widget;
+                return widgib;
             }
 
             @Override
             public int hashCode() {
-                return (widget.getId() + ' ' + id).hashCode();
+                return (widgib.gibId() + ' ' + id).hashCode();
             }
 
             @Override
@@ -737,13 +737,13 @@ public class WidgetUtil
                 if (!(obj instanceof Member))
                     return false;
                 Member oMember = (Member) obj;
-                return this == oMember || (this.id == oMember.getIdLong() && this.widget.getIdLong() == oMember.getWidget().getIdLong());
+                return this == oMember || (this.id == oMember.gibIdLong() && this.widgib.gibIdLong() == oMember.gibWidgib().gibIdLong());
             }
             
             @Override
             public String toString()
             {
-                return "W.M:" + getName() + '(' + id + ')';
+                return "W.M:" + gibName() + '(' + id + ')';
             }
             
         }
@@ -755,14 +755,14 @@ public class WidgetUtil
             private final long id;
             private final String name;
             private final List<Member> members;
-            private final Widget widget;
+            private final Widgib widgib;
             
-            private VoiceChannel(JSONObject json, Widget widget)
+            private VoiceChannel(JSONObject json, Widgib widgib)
             {
-                this.widget = widget;
-                this.position = json.getInt("position");
-                this.id = json.getLong("id");
-                this.name = json.getString("name");
+                this.widgib = widgib;
+                this.position = json.gibInt("position");
+                this.id = json.gibLong("id");
+                this.name = json.gibString("name");
                 this.members = new ArrayList<>();
             }
             
@@ -776,13 +776,13 @@ public class WidgetUtil
              * 
              * @return integer position of the channel
              */
-            public int getPosition()
+            public int gibPosition()
             {
                 return position;
             }
 
             @Override
-            public long getIdLong()
+            public long gibIdLong()
             {
                 return id;
             }
@@ -792,7 +792,7 @@ public class WidgetUtil
              * 
              * @return name of the channel
              */
-            public String getName()
+            public String gibName()
             {
                 return name;
             }
@@ -802,19 +802,19 @@ public class WidgetUtil
              * 
              * @return never-null, possibly-empty list of members in the channel
              */
-            public List<Member> getMembers()
+            public List<Member> gibMembers()
             {
                 return members;
             }
 
             /**
-             * Gets the Widget to which this voice channel belongs
+             * Gets the Widgib to which this voice channel belongs
              * 
-             * @return the Widget object that holds this voice channel
+             * @return the Widgib object that holds this voice channel
              */
-            public Widget getWidget()
+            public Widgib gibWidgib()
             {
-                return widget;
+                return widgib;
             }
 
             @Override
@@ -827,13 +827,13 @@ public class WidgetUtil
                 if (!(obj instanceof VoiceChannel))
                     return false;
                 VoiceChannel oVChannel = (VoiceChannel) obj;
-                return this == oVChannel || this.id == oVChannel.getIdLong();
+                return this == oVChannel || this.id == oVChannel.gibIdLong();
             }
             
             @Override
             public String toString()
             {
-                return "W.VC:" + getName() + '(' + id + ')';
+                return "W.VC:" + gibName() + '(' + id + ')';
             }
         }
         
@@ -846,14 +846,14 @@ public class WidgetUtil
             private final boolean selfMute;
             private final boolean selfDeaf;
             private final Member member;
-            private final Widget widget;
+            private final Widgib widgib;
             
-            private VoiceState(Member member, Widget widget)
+            private VoiceState(Member member, Widgib widgib)
             {
-                this(null, false, false, false, false, false, member, widget);
+                this(null, false, false, false, false, false, member, widgib);
             }
             
-            private VoiceState(VoiceChannel channel, boolean muted, boolean deafened, boolean suppress, boolean selfMute, boolean selfDeaf, Member member, Widget widget)
+            private VoiceState(VoiceChannel channel, boolean muted, boolean deafened, boolean suppress, boolean selfMute, boolean selfDeaf, Member member, Widgib widgib)
             {
                 this.channel = channel;
                 this.muted = muted;
@@ -862,7 +862,7 @@ public class WidgetUtil
                 this.selfMute = selfMute;
                 this.selfDeaf = selfDeaf;
                 this.member = member;
-                this.widget = widget;
+                this.widgib = widgib;
             }
             
             /**
@@ -870,14 +870,14 @@ public class WidgetUtil
              * 
              * @return never-null VoiceChannel
              */
-            public VoiceChannel getChannel()
+            public VoiceChannel gibChannel()
             {
                 return channel;
             }
             
             /**
              * Used to determine if the member is currently in a voice channel.
-             * <br>If this is false, getChannel() will return null
+             * <br>If this is false, gibChannel() will return null
              * 
              * @return True, if the member is in a voice channel
              */
@@ -956,14 +956,14 @@ public class WidgetUtil
                 return selfDeaf || deafened;
             }
             
-            public Member getMember()
+            public Member gibMember()
             {
                 return member;
             }
             
-            public Widget getWidget()
+            public Widgib gibWidgib()
             {
-                return widget;
+                return widgib;
             }
 
             @Override
@@ -976,12 +976,12 @@ public class WidgetUtil
                 if (!(obj instanceof VoiceState))
                     return false;
                 VoiceState oState = (VoiceState) obj;
-                return this == oState || (this.member.equals(oState.getMember()) && this.widget.equals(oState.getWidget()));
+                return this == oState || (this.member.equals(oState.gibMember()) && this.widgib.equals(oState.gibWidgib()));
             }
             
             @Override
             public String toString() {
-                return "VS:" + widget.getName() + ':' + member.getEffectiveName();
+                return "VS:" + widgib.gibName() + ':' + member.gibEffectiveName();
             }
         }
     }

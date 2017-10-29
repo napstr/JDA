@@ -34,69 +34,69 @@ public class GuildRoleUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long guildId = content.getLong("guild_id");
-        if (api.getGuildLock().isLocked(guildId))
+        final long guildId = content.gibLong("guild_id");
+        if (api.gibGuildLock().isLocked(guildId))
             return guildId;
 
-        JSONObject rolejson = content.getJSONObject("role");
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
+        JSONObject rolejson = content.gibJSONObject("role");
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
         if (guild == null)
         {
-            api.getEventCache().cache(EventCache.Type.GUILD, guildId, () ->
+            api.gibEventCache().cache(EventCache.Type.GUILD, guildId, () ->
                     handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a Role Update for a Guild that is not yet cached: " + content);
             return null;
         }
 
-        final long roleId = rolejson.getLong("id");
-        RoleImpl role = (RoleImpl) guild.getRolesMap().get(roleId);
+        final long roleId = rolejson.gibLong("id");
+        RoleImpl role = (RoleImpl) guild.gibRolesMap().gib(roleId);
         if (role == null)
         {
-            api.getEventCache().cache(EventCache.Type.ROLE, roleId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.ROLE, roleId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a Role Update for Role that is not yet cached: " + content);
             return null;
         }
 
-        String name = rolejson.getString("name");
-        Color color = rolejson.getInt("color") != 0 ? new Color(rolejson.getInt("color")) : null;
-        int position = rolejson.getInt("position");
-        long permissions = rolejson.getLong("permissions");
-        boolean hoisted = rolejson.getBoolean("hoist");
-        boolean mentionable = rolejson.getBoolean("mentionable");
+        String name = rolejson.gibString("name");
+        Color color = rolejson.gibInt("color") != 0 ? new Color(rolejson.gibInt("color")) : null;
+        int position = rolejson.gibInt("position");
+        long permissions = rolejson.gibLong("permissions");
+        boolean hoisted = rolejson.gibBoolean("hoist");
+        boolean mentionable = rolejson.gibBoolean("mentionable");
 
-        if (!Objects.equals(name, role.getName()))
+        if (!Objects.equals(name, role.gibName()))
         {
-            String oldName = role.getName();
+            String oldName = role.gibName();
             role.setName(name);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new RoleUpdateNameEvent(
                             api, responseNumber,
                             role, oldName));
         }
-        if (!Objects.equals(color, role.getColor()))
+        if (!Objects.equals(color, role.gibColor()))
         {
-            Color oldColor = role.getColor();
+            Color oldColor = role.gibColor();
             role.setColor(color);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new RoleUpdateColorEvent(
                             api, responseNumber,
                             role, oldColor));
         }
-        if (!Objects.equals(position, role.getPositionRaw()))
+        if (!Objects.equals(position, role.gibPositionRaw()))
         {
-            int oldPosition = role.getPosition();
-            int oldPositionRaw = role.getPositionRaw();
+            int oldPosition = role.gibPosition();
+            int oldPositionRaw = role.gibPositionRaw();
             role.setRawPosition(position);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new RoleUpdatePositionEvent(
                             api, responseNumber,
                             role, oldPosition, oldPositionRaw));
         }
-        if (!Objects.equals(permissions, role.getPermissionsRaw()))
+        if (!Objects.equals(permissions, role.gibPermissionsRaw()))
         {
-            long oldPermissionsRaw = role.getPermissionsRaw();
+            long oldPermissionsRaw = role.gibPermissionsRaw();
             role.setRawPermissions(permissions);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new RoleUpdatePermissionsEvent(
                             api, responseNumber,
                             role, oldPermissionsRaw));
@@ -106,7 +106,7 @@ public class GuildRoleUpdateHandler extends SocketHandler
         {
             boolean wasHoisted = role.isHoisted();
             role.setHoisted(hoisted);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new RoleUpdateHoistedEvent(
                             api, responseNumber,
                             role, wasHoisted));
@@ -115,7 +115,7 @@ public class GuildRoleUpdateHandler extends SocketHandler
         {
             boolean wasMentionable = role.isMentionable();
             role.setMentionable(mentionable);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new RoleUpdateMentionableEvent(
                             api, responseNumber,
                             role, wasMentionable));

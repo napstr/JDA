@@ -37,13 +37,13 @@ public abstract class GenericTextChannelEvent extends Event
         this.channel = channel;
     }
 
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
         return channel;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 }

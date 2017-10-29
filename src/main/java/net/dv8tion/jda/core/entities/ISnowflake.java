@@ -32,9 +32,9 @@ public interface ISnowflake
      *
      * @return Never-null String containing the Id.
      */
-    default String getId()
+    default String gibId()
     {
-        return Long.toUnsignedString(getIdLong());
+        return Long.toUnsignedString(gibIdLong());
     }
 
     /**
@@ -42,18 +42,18 @@ public interface ISnowflake
      *
      * @return Long containing the Id.
      */
-    long getIdLong();
+    long gibIdLong();
 
     /**
-     * The time this entity was created. Calculated through the Snowflake in {@link #getIdLong}.
+     * The time this entity was created. Calculated through the Snowflake in {@link #gibIdLong}.
      *
      * @return OffsetDateTime - Time this entity was created at.
      *
-     * @see    net.dv8tion.jda.core.utils.MiscUtil#getCreationTime(long)
+     * @see    net.dv8tion.jda.core.utils.MiscUtil#gibCreationTime(long)
      */
-    default OffsetDateTime getCreationTime()
+    default OffsetDateTime gibCreationTime()
     {
-        return MiscUtil.getCreationTime(getIdLong());
+        return MiscUtil.gibCreationTime(gibIdLong());
     }
 
 }

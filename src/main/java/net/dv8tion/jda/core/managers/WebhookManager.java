@@ -39,7 +39,7 @@ public class WebhookManager
      * Creates a new WebhookManager instance
      *
      * @param webhook
-     *        The target {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
+     *        The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
      */
     public WebhookManager(Webhook webhook)
     {
@@ -51,49 +51,49 @@ public class WebhookManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return manager.getJDA();
+        return manager.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Webhook Webhook} is in.
-     * <br>This is logically the same as calling {@code getWebhook().getGuild()}
+     * <br>This is logically the same as calling {@code gibWebhook().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return getWebhook().getGuild();
+        return gibWebhook().gibGuild();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} this Manager's
      * {@link net.dv8tion.jda.core.entities.Webhook Webhook} is in.
-     * <br>This is logically the same as calling {@code getWebhook().getChannel()}
+     * <br>This is logically the same as calling {@code gibWebhook().gibChannel()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
-        return getWebhook().getChannel();
+        return gibWebhook().gibChannel();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     * The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      * that will be modified by this manager
      *
-     * @return The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     * @return The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      */
-    public Webhook getWebhook()
+    public Webhook gibWebhook()
     {
-        return manager.getWebhook();
+        return manager.gibWebhook();
     }
 
     /**
      * Sets the <b><u>default name</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
-     * <br>Wraps {@link WebhookManagerUpdatable#getNameField()}
+     * <br>Wraps {@link WebhookManagerUpdatable#gibNameField()}
      *
      * <p>A webhook name <b>must not</b> be {@code null}!
      *
@@ -108,18 +108,18 @@ public class WebhookManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link WebhookManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#getNameField()
+     * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#gibNameField()
      * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setName(String name)
     {
-        return manager.getNameField().setValue(name).update();
+        return manager.gibNameField().setValue(name).update();
     }
 
     /**
      * Sets the <b><u>default avatar</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.WebhookManagerUpdatable#getAvatarField()}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.WebhookManagerUpdatable#gibAvatarField()}
      *
      * @param  icon
      *         The new default avatar {@link net.dv8tion.jda.core.entities.Icon Icon}
@@ -131,18 +131,18 @@ public class WebhookManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link WebhookManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#getAvatarField()
+     * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#gibAvatarField()
      * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setAvatar(Icon icon)
     {
-        return manager.getAvatarField().setValue(icon).update();
+        return manager.gibAvatarField().setValue(icon).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
-     * <br>Wraps {@link WebhookManagerUpdatable#getChannelField()}
+     * <br>Wraps {@link WebhookManagerUpdatable#gibChannelField()}
      *
      * <p>A webhook channel <b>must not</b> be {@code null} and <b>must</b> be in the same {@link net.dv8tion.jda.core.entities.Guild Guild}!
      *
@@ -159,13 +159,13 @@ public class WebhookManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link WebhookManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#getChannelField()
+     * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#gibChannelField()
      * @see    net.dv8tion.jda.core.managers.WebhookManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setChannel(TextChannel channel)
     {
-        return manager.getChannelField().setValue(channel).update();
+        return manager.gibChannelField().setValue(channel).update();
     }
 
 }

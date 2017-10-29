@@ -46,7 +46,7 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryUpdateEvent
      *
      * @return Immutable list of permission holders affected by this event
      */
-    public List<IPermissionHolder> getChangedPermissionHolders()
+    public List<IPermissionHolder> gibChangedPermissionHolders()
     {
         return changed;
     }
@@ -56,7 +56,7 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryUpdateEvent
      *
      * @return Immutable list of affected roles
      */
-    public List<Role> getChangedRoles()
+    public List<Role> gibChangedRoles()
     {
         return changed.stream()
             .filter(it -> it instanceof Role)
@@ -69,7 +69,7 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryUpdateEvent
      *
      * @return Immutable list of affected members
      */
-    public List<Member> getMembersWithPermissionChanges()
+    public List<Member> gibMembersWithPermissionChanges()
     {
         return changed.stream()
             .filter(it -> it instanceof Member)

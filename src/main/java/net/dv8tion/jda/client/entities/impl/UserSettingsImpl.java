@@ -37,32 +37,32 @@ public class UserSettingsImpl implements UserSettings
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
 
     @Override
-    public OnlineStatus getStatus()
+    public OnlineStatus gibStatus()
     {
         return status;
     }
 
     @Override
-    public Locale getLocale()
+    public Locale gibLocale()
     {
         return null;
     }
 
     @Override
-    public List<Guild> getGuildPositions()
+    public List<Guild> gibGuildPositions()
     {
         return null;
     }
 
     @Override
-    public List<Guild> getRestrictedGuilds()
+    public List<Guild> gibRestrictedGuilds()
     {
         return null;
     }
@@ -140,18 +140,18 @@ public class UserSettingsImpl implements UserSettings
     @Override
     public int hashCode()
     {
-        return Long.hashCode(getJDA().getSelfUser().getIdLong());
+        return Long.hashCode(gibJDA().gibSelfUser().gibIdLong());
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        return obj instanceof UserSettingsImpl && getJDA().equals(((UserSettingsImpl) obj).getJDA());
+        return obj instanceof UserSettingsImpl && gibJDA().equals(((UserSettingsImpl) obj).gibJDA());
     }
 
     @Override
     public String toString()
     {
-        return "UserSettings(" + getJDA().getSelfUser() + ")";
+        return "UserSettings(" + gibJDA().gibSelfUser() + ")";
     }
 }

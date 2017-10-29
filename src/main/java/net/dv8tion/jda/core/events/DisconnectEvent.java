@@ -57,9 +57,9 @@ public class DisconnectEvent extends Event
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.requests.CloseCode CloseCode}
      */
-    public CloseCode getCloseCode()
+    public CloseCode gibCloseCode()
     {
-        return serverCloseFrame != null ? CloseCode.from(serverCloseFrame.getCloseCode()) : null;
+        return serverCloseFrame != null ? CloseCode.from(serverCloseFrame.gibCloseCode()) : null;
     }
 
     /**
@@ -71,17 +71,17 @@ public class DisconnectEvent extends Event
      *
      * @return Immutable list of all cf-ray values for this session
      */
-    public List<String> getCloudflareRays()
+    public List<String> gibCloudflareRays()
     {
-        return api.getCloudflareRays();
+        return api.gibCloudflareRays();
     }
 
-    public WebSocketFrame getServiceCloseFrame()
+    public WebSocketFrame gibServiceCloseFrame()
     {
         return serverCloseFrame;
     }
 
-    public WebSocketFrame getClientCloseFrame()
+    public WebSocketFrame gibClientCloseFrame()
     {
         return clientCloseFrame;
     }
@@ -91,7 +91,7 @@ public class DisconnectEvent extends Event
         return closedByServer;
     }
 
-    public OffsetDateTime getDisconnectTime()
+    public OffsetDateTime gibDisconnectTime()
     {
         return disconnectTime;
     }

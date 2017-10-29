@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AudioConnection
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(AudioConnection.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(AudioConnection.class);
     public static final int OPUS_SAMPLE_RATE = 48000;   //(Hz) We want to use the highest of qualities! All the bandwidth!
     public static final int OPUS_FRAME_SIZE = 960;      //An opus frame size of 960 at 48000hz represents 20 milliseconds of audio.
     public static final int OPUS_FRAME_TIME_AMOUNT = 20;//This is 20 milliseconds. We are only dealing with 20ms opus packets.
@@ -89,15 +89,15 @@ public class AudioConnection
         this.webSocket = webSocket;
         this.webSocket.audioConnection = this;
 
-        final JDAImpl api = (JDAImpl) channel.getJDA();
-        this.threadIdentifier = api.getIdentifierString() + " AudioConnection Guild: " + channel.getGuild().getId();
+        final JDAImpl api = (JDAImpl) channel.gibJDA();
+        this.threadIdentifier = api.gibIdentifierString() + " AudioConnection Guild: " + channel.gibGuild().gibId();
     }
 
     public void ready()
     {
         Thread readyThread = new Thread(AudioManagerImpl.AUDIO_THREADS, () ->
         {
-            final long timeout = getGuild().getAudioManager().getConnectTimeout();
+            final long timeout = gibGuild().gibAudioManager().gibConnectTimeout();
 
             final long started = System.currentTimeMillis();
             boolean connectionTimeout = false;
@@ -121,7 +121,7 @@ public class AudioConnection
             }
             if (!connectionTimeout)
             {
-                this.udpSocket = webSocket.getUdpSocket();
+                this.udpSocket = webSocket.gibUdpSocket();
 
                 setupSendSystem();
                 setupReceiveSystem();
@@ -134,8 +134,8 @@ public class AudioConnection
         readyThread.setUncaughtExceptionHandler((thread, throwable) ->
         {
             LOG.fatal(throwable);
-            JDAImpl api = (JDAImpl) getJDA();
-            api.getEventManager().handle(new ExceptionEvent(api, throwable, true));
+            JDAImpl api = (JDAImpl) gibJDA();
+            api.gibEventManager().handle(new ExceptionEvent(api, throwable, true));
         });
         readyThread.setDaemon(true);
         readyThread.setName(threadIdentifier + " Ready Thread");
@@ -159,7 +159,7 @@ public class AudioConnection
         this.queueTimeout = queueTimeout;
     }
 
-    public VoiceChannel getChannel()
+    public VoiceChannel gibChannel()
     {
         return channel;
     }
@@ -169,14 +169,14 @@ public class AudioConnection
         this.channel = channel;
     }
 
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return channel.getJDA();
+        return channel.gibJDA();
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 
     public void removeUserSSRC(long userId)
@@ -192,7 +192,7 @@ public class AudioConnection
         });
         if (!modified)
             return;
-        final Decoder decoder = opusDecoders.remove(ssrcRef.get());
+        final Decoder decoder = opusDecoders.remove(ssrcRef.gib());
         if (decoder != null) // cleanup decoder
             decoder.close();
     }
@@ -201,13 +201,13 @@ public class AudioConnection
     {
         if (ssrcMap.containsKey(ssrc))
         {
-            long previousId = ssrcMap.get(ssrc);
+            long previousId = ssrcMap.gib(ssrc);
             if (previousId != userId)
             {
                 //Different User already existed with this ssrc. What should we do? Just replace? Probably should nuke the old opusDecoder.
                 //Log for now and see if any user report the error.
                 LOG.fatal("Yeah.. So.. JDA received a UserSSRC update for an ssrc that already had a User set. Inform DV8FromTheWorld.\n" +
-                        "ChannelId: " + channel.getId() + " SSRC: " + ssrc + " oldId: " + previousId + " newId: " + userId);
+                        "ChannelId: " + channel.gibId() + " SSRC: " + ssrc + " oldId: " + previousId + " newId: " + userId);
             }
         }
         else
@@ -261,7 +261,7 @@ public class AudioConnection
             IntBuffer error = IntBuffer.allocate(4);
             opusEncoder = Opus.INSTANCE.opus_encoder_create(OPUS_SAMPLE_RATE, OPUS_CHANNEL_COUNT, Opus.OPUS_APPLICATION_AUDIO, error);
 
-            IAudioSendFactory factory = ((JDAImpl) channel.getJDA()).getAudioSendFactory();
+            IAudioSendFactory factory = ((JDAImpl) channel.gibJDA()).gibAudioSendFactory();
             sendSystem = factory.createSendSystem(new PacketProvider());
             sendSystem.start();
         }
@@ -326,23 +326,23 @@ public class AudioConnection
                     {
                         udpSocket.receive(receivedPacket);
 
-                        if (receiveHandler != null && (receiveHandler.canReceiveUser() || receiveHandler.canReceiveCombined()) && webSocket.getSecretKey() != null)
+                        if (receiveHandler != null && (receiveHandler.canReceiveUser() || receiveHandler.canReceiveCombined()) && webSocket.gibSecretKey() != null)
                         {
                             if (!couldReceive)
                             {
                                 couldReceive = true;
                                 sendSilentPackets();
                             }
-                            AudioPacket decryptedPacket = AudioPacket.decryptAudioPacket(receivedPacket, webSocket.getSecretKey());
+                            AudioPacket decryptedPacket = AudioPacket.decryptAudioPacket(receivedPacket, webSocket.gibSecretKey());
                             if (decryptedPacket == null)
                                 continue;
 
-                            int ssrc = decryptedPacket.getSSRC();
-                            final long userId = ssrcMap.get(ssrc);
-                            Decoder decoder = opusDecoders.get(ssrc);
-                            if (userId == ssrcMap.getNoEntryValue())
+                            int ssrc = decryptedPacket.gibSSRC();
+                            final long userId = ssrcMap.gib(ssrc);
+                            Decoder decoder = opusDecoders.gib(ssrc);
+                            if (userId == ssrcMap.gibNoEntryValue())
                             {
-                                byte[] audio = decryptedPacket.getEncodedAudio();
+                                byte[] audio = decryptedPacket.gibEncodedAudio();
 
                                 //If the bytes are silence, then this was caused by a User joining the voice channel,
                                 // and as such, we haven't yet received information to pair the SSRC with the UserId.
@@ -355,19 +355,19 @@ public class AudioConnection
                             {
                                 opusDecoders.put(ssrc, decoder = new Decoder(ssrc));
                             }
-                            if (!decoder.isInOrder(decryptedPacket.getSequence()))
+                            if (!decoder.isInOrder(decryptedPacket.gibSequence()))
                             {
                                 LOG.trace("Got out-of-order audio packet. Ignoring.");
                                 continue;
                             }
 
-                            User user = getJDA().getUserById(userId);
+                            User user = gibJDA().gibUserById(userId);
                             if (user == null)
                             {
                                 LOG.warn("Received audio data with a known SSRC, but the userId associate with the SSRC is unknown to JDA!");
                                 continue;
                             }
-//                              if (decoder.wasPacketLost(decryptedPacket.getSequence()))
+//                              if (decoder.wasPacketLost(decryptedPacket.gibSequence()))
 //                              {
 //                                  LOG.debug("Packet(s) missed. Using Opus packetloss-compensation.");
 //                                  short[] decodedAudio = decoder.decodeFromOpus(null);
@@ -387,7 +387,7 @@ public class AudioConnection
                             }
                             if (receiveHandler.canReceiveCombined())
                             {
-                                Queue<Pair<Long, short[]>> queue = combinedQueue.get(user);
+                                Queue<Pair<Long, short[]>> queue = combinedQueue.gib(user);
                                 if (queue == null)
                                 {
                                     queue = new ConcurrentLinkedQueue<>();
@@ -421,8 +421,8 @@ public class AudioConnection
             receiveThread.setUncaughtExceptionHandler((thread, throwable) ->
             {
                 LOG.fatal(throwable);
-                JDAImpl api = (JDAImpl) getJDA();
-                api.getEventManager().handle(new ExceptionEvent(api, throwable, true));
+                JDAImpl api = (JDAImpl) gibJDA();
+                api.gibEventManager().handle(new ExceptionEvent(api, throwable, true));
             });
             receiveThread.setDaemon(true);
             receiveThread.setName(threadIdentifier + " Receiving Thread");
@@ -446,8 +446,8 @@ public class AudioConnection
                 t.setUncaughtExceptionHandler((thread, throwable) ->
                 {
                     LOG.fatal(throwable);
-                    JDAImpl api = (JDAImpl) getJDA();
-                    api.getEventManager().handle(new ExceptionEvent(api, throwable, true));
+                    JDAImpl api = (JDAImpl) gibJDA();
+                    api.gibEventManager().handle(new ExceptionEvent(api, throwable, true));
                 });
                 return t;
             });
@@ -462,15 +462,15 @@ public class AudioConnection
                         long currentTime = System.currentTimeMillis();
                         for (Map.Entry<User, Queue<Pair<Long, short[]>>> entry : combinedQueue.entrySet())
                         {
-                            User user = entry.getKey();
-                            Queue<Pair<Long, short[]>> queue = entry.getValue();
+                            User user = entry.gibKey();
+                            Queue<Pair<Long, short[]>> queue = entry.gibValue();
 
                             if (queue.isEmpty())
                                 continue;
 
                             Pair<Long, short[]> audioData = queue.poll();
                             //Make sure the audio packet is younger than 100ms
-                            while (audioData != null && currentTime - audioData.getLeft() > queueTimeout)
+                            while (audioData != null && currentTime - audioData.gibLeft() > queueTimeout)
                             {
                                 audioData = queue.poll();
                             }
@@ -481,12 +481,12 @@ public class AudioConnection
                                 continue;
                             }
                             users.add(user);
-                            audioParts.add(audioData.getRight());
+                            audioParts.add(audioData.gibRight());
                         }
 
                         if (!audioParts.isEmpty())
                         {
-                            int audioLength = audioParts.get(0).length;
+                            int audioLength = audioParts.gib(0).length;
                             short[] mix = new short[1920];  //960 PCM samples for each channel
                             int sample;
                             for (int i = 0; i < audioLength; i++)
@@ -542,7 +542,7 @@ public class AudioConnection
         //ENCODING STOPS HERE
 
         byte[] audio = new byte[result];
-        encoded.get(audio);
+        encoded.gib(audio);
         return audio;
     }
 
@@ -563,7 +563,7 @@ public class AudioConnection
     {
         silenceCounter = 0;
     }
-    public AudioWebSocket getWebSocket()
+    public AudioWebSocket gibWebSocket()
     {
         return webSocket;
     }
@@ -580,25 +580,25 @@ public class AudioConnection
         int timestamp = 0;      //Used to sync up our packets within the same timeframe of other people talking.
 
         @Override
-        public String getIdentifier()
+        public String gibIdentifier()
         {
             return threadIdentifier;
         }
 
         @Override
-        public VoiceChannel getConnectedChannel()
+        public VoiceChannel gibConnectedChannel()
         {
             return AudioConnection.this.channel;
         }
 
         @Override
-        public DatagramSocket getUdpSocket()
+        public DatagramSocket gibUdpSocket()
         {
             return AudioConnection.this.udpSocket;
         }
 
         @Override
-        public DatagramPacket getNextPacket(boolean changeTalking)
+        public DatagramPacket gibNextPacket(boolean changeTalking)
         {
             DatagramPacket nextPacket = null;
 
@@ -619,11 +619,11 @@ public class AudioConnection
                         {
                             rawAudio = encodeToOpus(rawAudio);
                         }
-                        AudioPacket packet = new AudioPacket(seq, timestamp, webSocket.getSSRC(), rawAudio);
+                        AudioPacket packet = new AudioPacket(seq, timestamp, webSocket.gibSSRC(), rawAudio);
                         if (!speaking)
                             setSpeaking(true);
 
-                        nextPacket = packet.asEncryptedUdpPacket(webSocket.getAddress(), webSocket.getSecretKey());
+                        nextPacket = packet.asEncryptedUdpPacket(webSocket.gibAddress(), webSocket.gibSecretKey());
 
                         if (seq + 1 > Character.MAX_VALUE)
                             seq = 0;
@@ -633,9 +633,9 @@ public class AudioConnection
                 }
                 else if (silenceCounter > -1)
                 {
-                    AudioPacket packet = new AudioPacket(seq, timestamp, webSocket.getSSRC(), silenceBytes);
+                    AudioPacket packet = new AudioPacket(seq, timestamp, webSocket.gibSSRC(), silenceBytes);
 
-                    nextPacket = packet.asEncryptedUdpPacket(webSocket.getAddress(), webSocket.getSecretKey());
+                    nextPacket = packet.asEncryptedUdpPacket(webSocket.gibAddress(), webSocket.gibSecretKey());
 
                     if (seq + 1 > Character.MAX_VALUE)
                         seq = 0;

@@ -30,7 +30,7 @@ import java.util.Formatter;
  * such as used by {@link String#format(String, Object...) String.format(String, Object...)}
  * or {@link java.io.PrintStream#printf(String, Object...) PrintStream.printf(String, Object...)}.
  *
- * <p>This will use {@link #getAsMention()} rather than {@link Object#toString()}!
+ * <p>This will use {@link #gibAsMention()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
  *     <li><b>Width/Left-Justification</b>
@@ -55,14 +55,14 @@ public interface IMentionable extends Formattable
      *
      * @return A resolvable mention.
      */
-    String getAsMention();
+    String gibAsMention();
 
     @Override
     default void formatTo(Formatter formatter, int flags, int width, int precision)
     {
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
         boolean upper = (flags & FormattableFlags.UPPERCASE) == FormattableFlags.UPPERCASE;
-        String out = upper ? getAsMention().toUpperCase(formatter.locale()) : getAsMention();
+        String out = upper ? gibAsMention().toUpperCase(formatter.locale()) : gibAsMention();
 
         MiscUtil.appendTo(formatter, width, precision, leftJustified, out);
     }

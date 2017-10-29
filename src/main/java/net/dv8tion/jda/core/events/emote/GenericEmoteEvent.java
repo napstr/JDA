@@ -32,12 +32,12 @@ public class GenericEmoteEvent extends Event
         this.emote = emote;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return emote.getGuild();
+        return emote.gibGuild();
     }
 
-    public Emote getEmote()
+    public Emote gibEmote()
     {
         return emote;
     }

@@ -27,17 +27,17 @@ public abstract class GenericCallVoiceEvent extends GenericCallEvent
 
     public GenericCallVoiceEvent(JDA api, long responseNumber, CallUser cUser)
     {
-        super(api, responseNumber, cUser.getCall());
+        super(api, responseNumber, cUser.gibCall());
         this.cUser = cUser;
     }
 
-    public CallUser getCallUser()
+    public CallUser gibCallUser()
     {
         return cUser;
     }
 
-    public CallVoiceState getVoiceState()
+    public CallVoiceState gibVoiceState()
     {
-        return cUser.getVoiceState();
+        return cUser.gibVoiceState();
     }
 }

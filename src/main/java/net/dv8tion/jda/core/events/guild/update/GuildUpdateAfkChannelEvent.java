@@ -30,7 +30,7 @@ public class GuildUpdateAfkChannelEvent extends GenericGuildUpdateEvent
         this.oldAfkChannel = oldAfkChannel;
     }
 
-    public VoiceChannel getOldAfkChannel()
+    public VoiceChannel gibOldAfkChannel()
     {
         return oldAfkChannel;
     }

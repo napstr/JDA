@@ -29,29 +29,29 @@ public class GenericPrivateMessageReactionEvent extends GenericMessageEvent
 
     public GenericPrivateMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
     {
-        super(api, responseNumber, reaction.getMessageIdLong(), reaction.getChannel());
+        super(api, responseNumber, reaction.gibMessageIdLong(), reaction.gibChannel());
         this.issuer = user;
         this.reaction = reaction;
     }
 
     @Override
-    public PrivateChannel getChannel()
+    public PrivateChannel gibChannel()
     {
         return (PrivateChannel) channel;
     }
 
-    public User getUser()
+    public User gibUser()
     {
         return issuer;
     }
 
-    public MessageReaction getReaction()
+    public MessageReaction gibReaction()
     {
         return reaction;
     }
 
-    public MessageReaction.ReactionEmote getReactionEmote()
+    public MessageReaction.ReactionEmote gibReactionEmote()
     {
-        return reaction.getEmote();
+        return reaction.gibEmote();
     }
 }

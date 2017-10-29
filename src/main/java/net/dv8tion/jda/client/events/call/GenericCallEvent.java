@@ -32,7 +32,7 @@ public abstract class GenericCallEvent extends Event
         this.call = call;
     }
 
-    public Call getCall()
+    public Call gibCall()
     {
         return call;
     }
@@ -42,13 +42,13 @@ public abstract class GenericCallEvent extends Event
         return call.isGroupCall();
     }
 
-    public Group getGroup()
+    public Group gibGroup()
     {
-        return call.getGroup();
+        return call.gibGroup();
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        return call.getPrivateChannel();
+        return call.gibPrivateChannel();
     }
 }

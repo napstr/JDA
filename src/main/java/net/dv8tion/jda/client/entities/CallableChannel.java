@@ -25,5 +25,5 @@ public interface CallableChannel extends ISnowflake
 {
     @CheckReturnValue
     RestAction<Call> startCall();
-    Call getCurrentCall();
+    Call gibCurrentCall();
 }

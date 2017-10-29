@@ -48,7 +48,7 @@ public class ChannelUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        ChannelType type = ChannelType.fromId(content.getInt("type"));
+        ChannelType type = ChannelType.fromId(content.gibInt("type"));
         if (type == ChannelType.GROUP)
         {
             handleGroup(content);
@@ -58,36 +58,36 @@ public class ChannelUpdateHandler extends SocketHandler
         List<IPermissionHolder> changed = new ArrayList<>();
         List<IPermissionHolder> contained = new ArrayList<>();
 
-        final long channelId = content.getLong("id");
-        final Long parentId = content.isNull("parent_id") ? null : content.getLong("parent_id");
-        final int position = content.getInt("position");
-        final String name = content.getString("name");
-        final boolean nsfw = !content.isNull("nsfw") && content.getBoolean("nsfw");
-        JSONArray permOverwrites = content.getJSONArray("permission_overwrites");
+        final long channelId = content.gibLong("id");
+        final Long parentId = content.isNull("parent_id") ? null : content.gibLong("parent_id");
+        final int position = content.gibInt("position");
+        final String name = content.gibString("name");
+        final boolean nsfw = !content.isNull("nsfw") && content.gibBoolean("nsfw");
+        JSONArray permOverwrites = content.gibJSONArray("permission_overwrites");
         switch (type)
         {
             case TEXT:
             {
-                String topic = content.isNull("topic") ? null : content.getString("topic");
-                TextChannelImpl textChannel = (TextChannelImpl) api.getTextChannelMap().get(channelId);
+                String topic = content.isNull("topic") ? null : content.gibString("topic");
+                TextChannelImpl textChannel = (TextChannelImpl) api.gibTextChannelMap().gib(channelId);
                 if (textChannel == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_UPDATE attempted to update a TextChannel that does not exist. JSON: " + content);
                     return null;
                 }
 
                 //If any properties changed, update the values and fire the proper events.
-                final Category parent = textChannel.getParent();
-                final Long oldParent = parent == null ? null : parent.getIdLong();
-                final String oldName = textChannel.getName();
-                final String oldTopic = textChannel.getTopic();
-                final int oldPosition = textChannel.getPositionRaw();
+                final Category parent = textChannel.gibParent();
+                final Long oldParent = parent == null ? null : parent.gibIdLong();
+                final String oldName = textChannel.gibName();
+                final String oldTopic = textChannel.gibTopic();
+                final int oldPosition = textChannel.gibPositionRaw();
                 final boolean oldNsfw = textChannel.isNSFW();
                 if (!Objects.equals(oldName, name))
                 {
                     textChannel.setName(name);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new TextChannelUpdateNameEvent(
                                     api, responseNumber,
                                     textChannel, oldName));
@@ -95,7 +95,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (!Objects.equals(oldParent, parentId))
                 {
                     textChannel.setParent(parentId == null ? 0 : parentId);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                            new TextChannelUpdateParentEvent(
                                api, responseNumber,
                                textChannel, parent));
@@ -103,7 +103,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (!Objects.equals(oldTopic, topic))
                 {
                     textChannel.setTopic(topic);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new TextChannelUpdateTopicEvent(
                                     api, responseNumber,
                                     textChannel, oldTopic));
@@ -111,7 +111,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (oldPosition != position)
                 {
                     textChannel.setRawPosition(position);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new TextChannelUpdatePositionEvent(
                                     api, responseNumber,
                                     textChannel, oldPosition));
@@ -120,7 +120,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (oldNsfw != nsfw)
                 {
                     textChannel.setNSFW(nsfw);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new TextChannelUpdateNSFWEvent(
                                     api, responseNumber,
                                     textChannel, nsfw));
@@ -131,7 +131,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 //If this update modified permissions in any way.
                 if (!changed.isEmpty())
                 {
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new TextChannelUpdatePermissionsEvent(
                                     api, responseNumber,
                                     textChannel, changed));
@@ -140,26 +140,26 @@ public class ChannelUpdateHandler extends SocketHandler
             }
             case VOICE:
             {
-                VoiceChannelImpl voiceChannel = (VoiceChannelImpl) api.getVoiceChannelMap().get(channelId);
-                int userLimit = content.getInt("user_limit");
-                int bitrate = content.getInt("bitrate");
+                VoiceChannelImpl voiceChannel = (VoiceChannelImpl) api.gibVoiceChannelMap().gib(channelId);
+                int userLimit = content.gibInt("user_limit");
+                int bitrate = content.gibInt("bitrate");
                 if (voiceChannel == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_UPDATE attempted to update a VoiceChannel that does not exist. JSON: " + content);
                     return null;
                 }
                 //If any properties changed, update the values and fire the proper events.
-                final Category parent = voiceChannel.getParent();
-                final Long oldParent = parent == null ? null : parent.getIdLong();
-                final String oldName = voiceChannel.getName();
-                final int oldPosition = voiceChannel.getPositionRaw();
-                final int oldLimit = voiceChannel.getUserLimit();
-                final int oldBitrate = voiceChannel.getBitrate();
+                final Category parent = voiceChannel.gibParent();
+                final Long oldParent = parent == null ? null : parent.gibIdLong();
+                final String oldName = voiceChannel.gibName();
+                final int oldPosition = voiceChannel.gibPositionRaw();
+                final int oldLimit = voiceChannel.gibUserLimit();
+                final int oldBitrate = voiceChannel.gibBitrate();
                 if (!Objects.equals(oldName, name))
                 {
                     voiceChannel.setName(name);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new VoiceChannelUpdateNameEvent(
                                     api, responseNumber,
                                     voiceChannel, oldName));
@@ -167,7 +167,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (!Objects.equals(oldParent, parentId))
                 {
                     voiceChannel.setParent(parentId == null ? 0 : parentId);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new VoiceChannelUpdateParentEvent(
                                     api, responseNumber,
                                     voiceChannel, parent));
@@ -175,7 +175,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (oldPosition != position)
                 {
                     voiceChannel.setRawPosition(position);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new VoiceChannelUpdatePositionEvent(
                                     api, responseNumber,
                                     voiceChannel, oldPosition));
@@ -183,7 +183,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (oldLimit != userLimit)
                 {
                     voiceChannel.setUserLimit(userLimit);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new VoiceChannelUpdateUserLimitEvent(
                                     api, responseNumber,
                                     voiceChannel, oldLimit));
@@ -191,7 +191,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (oldBitrate != bitrate)
                 {
                     voiceChannel.setBitrate(bitrate);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new VoiceChannelUpdateBitrateEvent(
                                     api, responseNumber,
                                     voiceChannel, oldBitrate));
@@ -202,7 +202,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 //If this update modified permissions in any way.
                 if (!changed.isEmpty())
                 {
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new VoiceChannelUpdatePermissionsEvent(
                                     api, responseNumber,
                                     voiceChannel, changed));
@@ -211,14 +211,14 @@ public class ChannelUpdateHandler extends SocketHandler
             }
             case CATEGORY:
             {
-                CategoryImpl category = (CategoryImpl) api.getCategoryById(channelId);
-                final String oldName = category.getName();
-                final int oldPosition = category.getPositionRaw();
+                CategoryImpl category = (CategoryImpl) api.gibCategoryById(channelId);
+                final String oldName = category.gibName();
+                final int oldPosition = category.gibPositionRaw();
 
                 if (!Objects.equals(oldName, name))
                 {
                     category.setName(name);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new CategoryUpdateNameEvent(
                                 api, responseNumber,
                                 category, oldName));
@@ -226,7 +226,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 if (!Objects.equals(oldPosition, position))
                 {
                     category.setRawPosition(position);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new CategoryUpdatePositionEvent(
                                 api, responseNumber,
                                 category, oldPosition));
@@ -236,7 +236,7 @@ public class ChannelUpdateHandler extends SocketHandler
                 //If this update modified permissions in any way.
                 if (!changed.isEmpty())
                 {
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new CategoryUpdatePermissionsEvent(
                                 api, responseNumber,
                                 category, changed));
@@ -249,12 +249,12 @@ public class ChannelUpdateHandler extends SocketHandler
         return null;
     }
 
-    private long getIdLong(IPermissionHolder permHolder)
+    private long gibIdLong(IPermissionHolder permHolder)
     {
         if (permHolder instanceof Member)
-            return ((Member) permHolder).getUser().getIdLong();
+            return ((Member) permHolder).gibUser().gibIdLong();
         else
-            return ((Role) permHolder).getIdLong();
+            return ((Role) permHolder).gibIdLong();
     }
 
     private void applyPermissions(AbstractChannelImpl<?> channel, JSONObject content,
@@ -265,7 +265,7 @@ public class ChannelUpdateHandler extends SocketHandler
         //If a PermissionOverride was created or updated it stores it in the proper Map to be reported by the Event.
         for (int i = 0; i < permOverwrites.length(); i++)
         {
-            handlePermissionOverride(permOverwrites.getJSONObject(i), channel, content, changed, contained);
+            handlePermissionOverride(permOverwrites.gibJSONObject(i), channel, content, changed, contained);
         }
 
         //Check if any overrides were deleted because of this event.
@@ -273,16 +273,16 @@ public class ChannelUpdateHandler extends SocketHandler
         //Loop through all of the json defined overrides. If we find a match, remove the User or Role from our lists.
         //Any entries remaining in these lists after this for loop is over will be removed from the Channel's overrides.
         final TLongList toRemove = new TLongLinkedList();
-        final TLongObjectMap<PermissionOverride> overridesMap = channel.getOverrideMap();
+        final TLongObjectMap<PermissionOverride> overridesMap = channel.gibOverrideMap();
 
         TDecorators.wrap(overridesMap.keySet()).stream()
-            .map(id -> mapPermissionHolder(id, channel.getGuild()))
+            .map(id -> mapPermissionHolder(id, channel.gibGuild()))
             .filter(Objects::nonNull)
             .filter(permHolder -> !contained.contains(permHolder))
             .forEach(permHolder ->
             {
                 changed.add(permHolder);
-                toRemove.add(getIdLong(permHolder));
+                toRemove.add(gibIdLong(permHolder));
             });
 
         toRemove.forEach((id) ->
@@ -294,27 +294,27 @@ public class ChannelUpdateHandler extends SocketHandler
 
     private IPermissionHolder mapPermissionHolder(long id, Guild guild)
     {
-        final Role holder = guild.getRoleById(id);
-        return holder == null ? guild.getMemberById(id) : holder;
+        final Role holder = guild.gibRoleById(id);
+        return holder == null ? guild.gibMemberById(id) : holder;
     }
 
     private void handlePermissionOverride(JSONObject override, AbstractChannelImpl<?> channel, JSONObject content,
                                           List<IPermissionHolder> changedPermHolders, List<IPermissionHolder> containedPermHolders)
     {
-        final long id = override.getLong("id");
-        final long allow = override.getLong("allow");
-        final long deny = override.getLong("deny");
+        final long id = override.gibLong("id");
+        final long allow = override.gibLong("allow");
+        final long deny = override.gibLong("deny");
         final IPermissionHolder permHolder;
 
-        switch (override.getString("type"))
+        switch (override.gibString("type"))
         {
             case "role":
             {
-                permHolder = channel.getGuild().getRoleById(id);
+                permHolder = channel.gibGuild().gibRoleById(id);
 
                 if (permHolder == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.ROLE, id, () ->
+                    api.gibEventCache().cache(EventCache.Type.ROLE, id, () ->
                             handlePermissionOverride(override, channel, content, changedPermHolders, containedPermHolders));
                     EventCache.LOG.debug("CHANNEL_UPDATE attempted to create or update a PermissionOverride for a Role that doesn't exist! RoleId: " + id + " JSON: " + content);
                     return;
@@ -323,10 +323,10 @@ public class ChannelUpdateHandler extends SocketHandler
             }
             case "member":
             {
-                permHolder = channel.getGuild().getMemberById(id);
+                permHolder = channel.gibGuild().gibMemberById(id);
                 if (permHolder == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.USER, id, () ->
+                    api.gibEventCache().cache(EventCache.Type.USER, id, () ->
                             handlePermissionOverride(override, channel, content, changedPermHolders, containedPermHolders));
                     EventCache.LOG.debug("CHANNEL_UPDATE attempted to create or update a PermissionOverride for Member that doesn't exist in this Guild! MemberId: " + id + " JSON: " + content);
                     return;
@@ -337,14 +337,14 @@ public class ChannelUpdateHandler extends SocketHandler
                 throw new IllegalArgumentException("CHANNEL_UPDATE provided an unrecognized PermissionOverride type. JSON: " + content);
         }
 
-        PermissionOverrideImpl permOverride = (PermissionOverrideImpl) channel.getOverrideMap().get(id);
+        PermissionOverrideImpl permOverride = (PermissionOverrideImpl) channel.gibOverrideMap().gib(id);
 
         if (permOverride == null)    //Created
         {
-            api.getEntityBuilder().createPermissionOverride(override, channel);
+            api.gibEntityBuilder().createPermissionOverride(override, channel);
             changedPermHolders.add(permHolder);
         }
-        else if (permOverride.getAllowedRaw() != allow || permOverride.getDeniedRaw() != deny) //Updated
+        else if (permOverride.gibAllowedRaw() != allow || permOverride.gibDeniedRaw() != deny) //Updated
         {
             permOverride.setAllow(allow);
             permOverride.setDeny(deny);
@@ -355,23 +355,23 @@ public class ChannelUpdateHandler extends SocketHandler
 
     private void handleGroup(JSONObject content)
     {
-        final long groupId = content.getLong("id");
-        final long ownerId = content.getLong("owner_id");
-        final String name   = content.isNull("name") ? null : content.getString("name");
-        final String iconId = content.isNull("icon") ? null : content.getString("icon");
+        final long groupId = content.gibLong("id");
+        final long ownerId = content.gibLong("owner_id");
+        final String name   = content.isNull("name") ? null : content.gibString("name");
+        final String iconId = content.isNull("icon") ? null : content.gibString("icon");
 
-        GroupImpl group = (GroupImpl) api.asClient().getGroupById(groupId);
+        GroupImpl group = (GroupImpl) api.asClient().gibGroupById(groupId);
         if (group == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received CHANNEL_UPDATE for a group that was not yet cached. JSON: " + content);
             return;
         }
 
-        final User owner = group.getUserMap().get(ownerId);
-        final User oldOwner = group.getOwner();
-        final String oldName = group.getName();
-        final String oldIconId = group.getIconId();
+        final User owner = group.gibUserMap().gib(ownerId);
+        final User oldOwner = group.gibOwner();
+        final String oldName = group.gibName();
+        final String oldIconId = group.gibIconId();
 
         if (owner == null)
         {
@@ -382,7 +382,7 @@ public class ChannelUpdateHandler extends SocketHandler
             if (!Objects.equals(owner, oldOwner))
             {
                 group.setOwner(owner);
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new GroupUpdateOwnerEvent(
                                 api, responseNumber,
                                 group, oldOwner));
@@ -392,7 +392,7 @@ public class ChannelUpdateHandler extends SocketHandler
         if (!Objects.equals(name, oldName))
         {
             group.setName(name);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GroupUpdateNameEvent(
                             api, responseNumber,
                             group, oldName));
@@ -400,7 +400,7 @@ public class ChannelUpdateHandler extends SocketHandler
         if (!Objects.equals(iconId, oldIconId))
         {
             group.setIconId(iconId);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GroupUpdateIconEvent(
                             api, responseNumber,
                             group, oldIconId));

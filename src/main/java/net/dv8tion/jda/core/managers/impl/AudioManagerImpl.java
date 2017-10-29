@@ -67,11 +67,11 @@ public class AudioManagerImpl implements AudioManager
     public AudioManagerImpl(GuildImpl guild)
     {
         this.guild = guild;
-        this.api = this.guild.getJDA();
+        this.api = this.guild.gibJDA();
         init(); //Just to make sure that the audio libs have been initialized.
     }
 
-    public AudioConnection getAudioConnection()
+    public AudioConnection gibAudioConnection()
     {
         return audioConnection;
     }
@@ -83,13 +83,13 @@ public class AudioManagerImpl implements AudioManager
 
         if (!AUDIO_SUPPORTED)
             throw new UnsupportedOperationException("Sorry! Audio is disabled due to an internal JDA error! Contact Dev!");
-        if (!guild.equals(channel.getGuild()))
+        if (!guild.equals(channel.gibGuild()))
             throw new IllegalArgumentException("The provided VoiceChannel is not a part of the Guild that this AudioManager handles." +
                     "Please provide a VoiceChannel from the proper Guild");
         if (!guild.isAvailable())
             throw new GuildUnavailableException("Cannot open an Audio Connection with an unavailable guild. " +
                     "Please wait until this Guild is available to open a connection.");
-        final Member self = guild.getSelfMember();
+        final Member self = guild.gibSelfMember();
         if (!self.hasPermission(channel, Permission.VOICE_CONNECT) && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS))
             throw new InsufficientPermissionException(Permission.VOICE_CONNECT);
 
@@ -97,29 +97,29 @@ public class AudioManagerImpl implements AudioManager
         {
             //Start establishing connection, joining provided channel
             queuedAudioConnection = channel;
-            api.getClient().queueAudioConnect(channel);
+            api.gibClient().queueAudioConnect(channel);
         }
         else
         {
             //Connection is already established, move to specified channel
 
             //If we are already connected to this VoiceChannel, then do nothing.
-            if (channel.equals(audioConnection.getChannel()))
+            if (channel.equals(audioConnection.gibChannel()))
                 return;
 
-            final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
+            final int userLimit = channel.gibUserLimit(); // userLimit is 0 if no limit is set!
             if (!self.isOwner() && !self.hasPermission(Permission.ADMINISTRATOR))
             {
-                final long perms = PermissionUtil.getExplicitPermission(channel, self);
-                final long voicePerm = Permission.VOICE_MOVE_OTHERS.getRawValue();
+                final long perms = PermissionUtil.gibExplicitPermission(channel, self);
+                final long voicePerm = Permission.VOICE_MOVE_OTHERS.gibRawValue();
                 if (userLimit > 0                                               // If there is a userlimit
-                    && userLimit <= channel.getMembers().size()                 // if that userlimit is reached
+                    && userLimit <= channel.gibMembers().size()                 // if that userlimit is reached
                     && (perms & voicePerm) != voicePerm)                        // If we don't have voice move others permissions
                     throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS, // then throw exception!
                             "Unable to connect to VoiceChannel due to userlimit! Requires permission VOICE_MOVE_OTHERS to bypass");
             }
 
-            api.getClient().queueAudioConnect(channel);
+            api.gibClient().queueAudioConnect(channel);
             audioConnection.setChannel(channel);
         }
     }
@@ -138,19 +138,19 @@ public class AudioManagerImpl implements AudioManager
             if (audioConnection != null)
                 this.audioConnection.close(reason);
             else
-                this.api.getClient().queueAudioDisconnect(guild);
+                this.api.gibClient().queueAudioDisconnect(guild);
             this.audioConnection = null;
         }
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -162,15 +162,15 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public VoiceChannel getQueuedAudioConnection()
+    public VoiceChannel gibQueuedAudioConnection()
     {
         return queuedAudioConnection;
     }
 
     @Override
-    public VoiceChannel getConnectedChannel()
+    public VoiceChannel gibConnectedChannel()
     {
-        return audioConnection == null ? null : audioConnection.getChannel();
+        return audioConnection == null ? null : audioConnection.gibChannel();
     }
 
     @Override
@@ -186,7 +186,7 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public long getConnectTimeout()
+    public long gibConnectTimeout()
     {
         return timeout;
     }
@@ -200,7 +200,7 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public AudioSendHandler getSendingHandler()
+    public AudioSendHandler gibSendingHandler()
     {
         return sendHandler;
     }
@@ -214,7 +214,7 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public AudioReceiveHandler getReceiveHandler()
+    public AudioReceiveHandler gibReceiveHandler()
     {
         return receiveHandler;
     }
@@ -226,16 +226,16 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public ConnectionListener getConnectionListener()
+    public ConnectionListener gibConnectionListener()
     {
-        return connectionListener.getListener();
+        return connectionListener.gibListener();
     }
 
     @Override
-    public ConnectionStatus getConnectionStatus()
+    public ConnectionStatus gibConnectionStatus()
     {
         if (audioConnection != null)
-            return audioConnection.getWebSocket().getConnectionStatus();
+            return audioConnection.gibWebSocket().gibConnectionStatus();
         else
             return ConnectionStatus.NOT_CONNECTED;
     }
@@ -245,7 +245,7 @@ public class AudioManagerImpl implements AudioManager
     {
         this.shouldReconnect = shouldReconnect;
         if (audioConnection != null)
-            audioConnection.getWebSocket().setAutoReconnect(shouldReconnect);
+            audioConnection.gibWebSocket().setAutoReconnect(shouldReconnect);
     }
 
     @Override
@@ -287,7 +287,7 @@ public class AudioManagerImpl implements AudioManager
         return selfDeafened;
     }
 
-    public ConnectionListener getListenerProxy()
+    public ConnectionListener gibListenerProxy()
     {
         return connectionListener;
     }
@@ -306,7 +306,7 @@ public class AudioManagerImpl implements AudioManager
 
     public void prepareForRegionChange()
     {
-        VoiceChannel queuedChannel = audioConnection.getChannel();
+        VoiceChannel queuedChannel = audioConnection.gibChannel();
         closeAudioConnection(ConnectionStatus.AUDIO_REGION_CHANGE);
         this.queuedAudioConnection = queuedChannel;
     }
@@ -333,10 +333,10 @@ public class AudioManagerImpl implements AudioManager
     {
         if (isConnected() || isAttemptingToConnect())
         {
-            VoiceChannel channel = isConnected() ? getConnectedChannel() : getQueuedAudioConnection();
+            VoiceChannel channel = isConnected() ? gibConnectedChannel() : gibQueuedAudioConnection();
 
             //This is technically equivalent to an audio open/move packet.
-            api.getClient().queueAudioConnect(channel);
+            api.gibClient().queueAudioConnect(channel);
         }
     }
 

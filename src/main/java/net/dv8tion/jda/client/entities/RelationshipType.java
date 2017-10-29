@@ -32,7 +32,7 @@ public enum RelationshipType
         this.key = key;
     }
 
-    public int getKey()
+    public int gibKey()
     {
         return key;
     }
@@ -41,7 +41,7 @@ public enum RelationshipType
     {
         for (RelationshipType type : values())
         {
-            if (type.getKey() == key)
+            if (type.gibKey() == key)
                 return type;
         }
         return UNKNOWN;

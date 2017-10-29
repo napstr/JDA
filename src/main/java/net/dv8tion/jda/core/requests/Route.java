@@ -287,32 +287,32 @@ public class Route
             ratelimitRoute = route;
     }
 
-    public Method getMethod()
+    public Method gibMethod()
     {
         return method;
     }
 
-    public String getRoute()
+    public String gibRoute()
     {
         return route;
     }
 
-    public String getRatelimitRoute()
+    public String gibRatelimitRoute()
     {
         return ratelimitRoute;
     }
 
-    public final RateLimit getRatelimit()
+    public final RateLimit gibRatelimit()
     {
         return this.ratelimit;
     }
 
-    public String getCompilableRoute()
+    public String gibCompilableRoute()
     {
         return compilableRoute;
     }
 
-    public int getParamCount()
+    public int gibParamCount()
     {
         return paramCount;
     }
@@ -337,7 +337,7 @@ public class Route
             String[] majorParams = new String[majorParamIndexes.size()];
             for (int i = 0; i < majorParams.length; i++)
             {
-                majorParams[i] = params[majorParamIndexes.get(i)];
+                majorParams[i] = params[majorParamIndexes.gib(i)];
             }
             compiledRatelimitRoute = String.format(compiledRatelimitRoute, (Object[]) majorParams);
         }
@@ -400,22 +400,22 @@ public class Route
             return new CompiledRoute(baseRoute, ratelimitRoute, newRoute.toString(), true);
         }
 
-        public String getRatelimitRoute()
+        public String gibRatelimitRoute()
         {
             return ratelimitRoute;
         }
 
-        public String getCompiledRoute()
+        public String gibCompiledRoute()
         {
             return compiledRoute;
         }
 
-        public Route getBaseRoute()
+        public Route gibBaseRoute()
         {
             return baseRoute;
         }
 
-        public Method getMethod()
+        public Method gibMethod()
         {
             return baseRoute.method;
         }
@@ -434,7 +434,7 @@ public class Route
 
             CompiledRoute oCompiled = (CompiledRoute) o;
 
-            return baseRoute.equals(oCompiled.getBaseRoute()) && compiledRoute.equals(oCompiled.compiledRoute);
+            return baseRoute.equals(oCompiled.gibBaseRoute()) && compiledRoute.equals(oCompiled.compiledRoute);
         }
 
         @Override
@@ -455,12 +455,12 @@ public class Route
             this.resetTime = resetTime;
         }
 
-        public final int getUsageLimit()
+        public final int gibUsageLimit()
         {
             return this.usageLimit;
         }
 
-        public final int getResetTime()
+        public final int gibResetTime()
         {
             return this.resetTime;
         }

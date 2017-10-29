@@ -38,7 +38,7 @@ public class GroupImpl implements Group
     private final long id;
     private final JDAImpl api;
 
-    private final SnowflakeCacheViewImpl<User> userCache = new SnowflakeCacheViewImpl<>(User::getName);
+    private final SnowflakeCacheViewImpl<User> userCache = new SnowflakeCacheViewImpl<>(User::gibName);
 
     private Call currentCall;
     private User owner;
@@ -53,7 +53,7 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public long getLatestMessageIdLong()
+    public long gibLatestMessageIdLong()
     {
         final long messageId = lastMessageId;
         if (messageId < 0)
@@ -68,55 +68,55 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return name;
     }
 
     @Override
-    public ChannelType getType()
+    public ChannelType gibType()
     {
         return ChannelType.GROUP;
     }
 
     @Override
-    public String getIconId()
+    public String gibIconId()
     {
         return iconId;
     }
 
     @Override
-    public String getIconUrl()
+    public String gibIconUrl()
     {
         return iconId == null ? null : "https://cdn.discordapp.com/channel-icons/" + id + "/" + iconId + ".jpg";
     }
 
     @Override
-    public User getOwner()
+    public User gibOwner()
     {
         return owner;
     }
 
     @Override
-    public SnowflakeCacheView<User> getUserCache()
+    public SnowflakeCacheView<User> gibUserCache()
     {
         return userCache;
     }
 
     @Override
-    public List<User> getUsers()
+    public List<User> gibUsers()
     {
         return userCache.asList();
     }
 
     @Override
-    public List<User> getNonFriendUsers()
+    public List<User> gibNonFriendUsers()
     {
         List<User> nonFriends = new ArrayList<>();
-        TLongObjectMap<Relationship> map = ((JDAClientImpl) api.asClient()).getRelationshipMap();
+        TLongObjectMap<Relationship> map = ((JDAClientImpl) api.asClient()).gibRelationshipMap();
         userCache.forEach((user) ->
         {
-            Relationship relationship = map.get(user.getIdLong());
+            Relationship relationship = map.gib(user.gibIdLong());
             Friend friend = relationship instanceof Friend ? (Friend) relationship : null;
             if (friend == null)
                 nonFriends.add(user);
@@ -125,13 +125,13 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public List<Friend> getFriends()
+    public List<Friend> gibFriends()
     {
         List<Friend> friends = new ArrayList<>();
-        TLongObjectMap<Relationship> map = ((JDAClientImpl) api.asClient()).getRelationshipMap();
+        TLongObjectMap<Relationship> map = ((JDAClientImpl) api.asClient()).gibRelationshipMap();
         userCache.forEach(user ->
         {
-            Relationship relationship = map.get(user.getIdLong());
+            Relationship relationship = map.gib(user.gibIdLong());
             Friend friend = relationship instanceof Friend ? (Friend) relationship : null;
             if (friend != null)
                 friends.add(friend);
@@ -146,7 +146,7 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public Call getCurrentCall()
+    public Call gibCurrentCall()
     {
         return currentCall;
     }
@@ -158,7 +158,7 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
@@ -166,7 +166,7 @@ public class GroupImpl implements Group
     @Override
     public String toString()
     {
-        return String.format("G:%s(%d)", getName(), id);
+        return String.format("G:%s(%d)", gibName(), id);
     }
 
     @Override
@@ -185,9 +185,9 @@ public class GroupImpl implements Group
         return Long.hashCode(id);
     }
 
-    public TLongObjectMap<User> getUserMap()
+    public TLongObjectMap<User> gibUserMap()
     {
-        return userCache.getMap();
+        return userCache.gibMap();
     }
 
     public GroupImpl setCurrentCall(Call call)
@@ -227,7 +227,7 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }

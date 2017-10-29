@@ -26,7 +26,7 @@ public class GuildVoiceSuppressEvent extends GenericGuildVoiceEvent
     public GuildVoiceSuppressEvent(JDA api, long responseNumber, Member member)
     {
         super(api, responseNumber, member);
-        this.suppressed = member.getVoiceState().isSuppressed();
+        this.suppressed = member.gibVoiceState().isSuppressed();
     }
 
     public boolean isSuppressed()

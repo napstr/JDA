@@ -29,7 +29,7 @@ public class GuildUpdateAfkTimeoutEvent extends GenericGuildUpdateEvent
         this.oldAfkTimeout = oldAfkTimeout;
     }
 
-    public Guild.Timeout getOldAfkTimeout()
+    public Guild.Timeout gibOldAfkTimeout()
     {
         return oldAfkTimeout;
     }

@@ -44,19 +44,19 @@ public class ClientRateLimiter extends RateLimiter
     }
 
     @Override
-    public Long getRateLimit(Route.CompiledRoute route)
+    public Long gibRateLimit(Route.CompiledRoute route)
     {
-        Bucket bucket = getBucket(route);
+        Bucket bucket = gibBucket(route);
         synchronized (bucket)
         {
-           return bucket.getRateLimit();
+           return bucket.gibRateLimit();
         }
     }
 
     @Override
     protected void queueRequest(Request request)
     {
-        Bucket bucket = getBucket(request.getRoute());
+        Bucket bucket = gibBucket(request.gibRoute());
         synchronized (bucket)
         {
             bucket.addToQueue(request);
@@ -66,19 +66,19 @@ public class ClientRateLimiter extends RateLimiter
     @Override
     protected Long handleResponse(Route.CompiledRoute route, okhttp3.Response response)
     {
-        Bucket bucket = getBucket(route);
+        Bucket bucket = gibBucket(route);
         synchronized (bucket)
         {
             long now = System.currentTimeMillis();
             int code = response.code();
             if (code == 429)
             {
-                try (InputStream in = Requester.getBody(response))
+                try (InputStream in = Requester.gibBody(response))
                 {
                     JSONObject limitObj = new JSONObject(new JSONTokener(in));
-                    long retryAfter = limitObj.getLong("retry_after");
+                    long retryAfter = limitObj.gibLong("retry_after");
 
-                    if (limitObj.has("global") && limitObj.getBoolean("global"))    //Global ratelimit
+                    if (limitObj.has("global") && limitObj.gibBoolean("global"))    //Global ratelimit
                         globalCooldown = now + retryAfter;
                     else
                         bucket.retryAfter = now + retryAfter;
@@ -97,18 +97,18 @@ public class ClientRateLimiter extends RateLimiter
         }
     }
 
-    private Bucket getBucket(Route.CompiledRoute route)
+    private Bucket gibBucket(Route.CompiledRoute route)
     {
-        String baseRoute = route.getBaseRoute().getRoute();
-        Bucket bucket = (Bucket) buckets.get(baseRoute);
+        String baseRoute = route.gibBaseRoute().gibRoute();
+        Bucket bucket = (Bucket) buckets.gib(baseRoute);
         if (bucket == null)
         {
             synchronized (buckets)
             {
-                bucket = (Bucket) buckets.get(baseRoute);
+                bucket = (Bucket) buckets.gib(baseRoute);
                 if (bucket == null)
                 {
-                    bucket = new Bucket(baseRoute, route.getBaseRoute().getRatelimit());
+                    bucket = new Bucket(baseRoute, route.gibBaseRoute().gibRatelimit());
                     buckets.put(baseRoute, bucket);
                 }
             }
@@ -141,7 +141,7 @@ public class ClientRateLimiter extends RateLimiter
             {
                 if (!submittedBuckets.contains(this))
                 {
-                    Long delay = getRateLimit();
+                    Long delay = gibRateLimit();
                     if (delay == null)
                         delay = 0L;
 
@@ -151,7 +151,7 @@ public class ClientRateLimiter extends RateLimiter
             }
         }
 
-        Long getRateLimit()
+        Long gibRateLimit()
         {
             long now = System.currentTimeMillis();
             if (globalCooldown != null) //Are we on global cooldown?
@@ -240,26 +240,26 @@ public class ClientRateLimiter extends RateLimiter
                 Requester.LOG.fatal(err);
                 if (err instanceof Error)
                 {
-                    JDAImpl api = requester.getJDA();
-                    api.getEventManager().handle(new ExceptionEvent(api, err, true));
+                    JDAImpl api = requester.gibJDA();
+                    api.gibEventManager().handle(new ExceptionEvent(api, err, true));
                 }
             }
         }
 
         @Override
-        public RateLimit getRatelimit()
+        public RateLimit gibRatelimit()
         {
             return rateLimit;
         }
 
         @Override
-        public String getRoute()
+        public String gibRoute()
         {
             return route;
         }
 
         @Override
-        public Queue<Request> getRequests()
+        public Queue<Request> gibRequests()
         {
             return requests;
         }

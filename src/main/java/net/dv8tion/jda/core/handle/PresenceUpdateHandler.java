@@ -44,22 +44,22 @@ public class PresenceUpdateHandler extends SocketHandler
         //Do a pre-check to see if this is for a Guild, and if it is, if the guild is currently locked or not cached.
         if (!content.isNull("guild_id"))
         {
-            final long guildId = content.getLong("guild_id");
-            if (api.getGuildLock().isLocked(guildId))
+            final long guildId = content.gibLong("guild_id");
+            if (api.gibGuildLock().isLocked(guildId))
                 return guildId;
-            guild = (GuildImpl) api.getGuildById(guildId);
+            guild = (GuildImpl) api.gibGuildById(guildId);
             if (guild == null)
             {
-                api.getEventCache().cache(EventCache.Type.GUILD, guildId, () -> handle(responseNumber, allContent));
+                api.gibEventCache().cache(EventCache.Type.GUILD, guildId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a PRESENCE_UPDATE for a guild that is not yet cached! " +
-                    "GuildId: " + guildId + " UserId: " + content.getJSONObject("user").get("id"));
+                    "GuildId: " + guildId + " UserId: " + content.gibJSONObject("user").gib("id"));
                 return null;
             }
         }
 
-        JSONObject jsonUser = content.getJSONObject("user");
-        final long userId = jsonUser.getLong("id");
-        UserImpl user = (UserImpl) api.getUserMap().get(userId);
+        JSONObject jsonUser = content.gibJSONObject("user");
+        final long userId = jsonUser.gibLong("id");
+        UserImpl user = (UserImpl) api.gibUserMap().gib(userId);
 
         //If we do know about the user, lets update the user's specific info.
         // Afterwards, we will see if we already have them cached in the specific guild
@@ -70,27 +70,27 @@ public class PresenceUpdateHandler extends SocketHandler
         {
             if (jsonUser.has("username"))
             {
-                String name = jsonUser.getString("username");
-                String discriminator = jsonUser.get("discriminator").toString();
-                String avatarId = jsonUser.isNull("avatar") ? null : jsonUser.getString("avatar");
+                String name = jsonUser.gibString("username");
+                String discriminator = jsonUser.gib("discriminator").toString();
+                String avatarId = jsonUser.isNull("avatar") ? null : jsonUser.gibString("avatar");
 
-                if (!user.getName().equals(name))
+                if (!user.gibName().equals(name))
                 {
-                    String oldUsername = user.getName();
-                    String oldDiscriminator = user.getDiscriminator();
+                    String oldUsername = user.gibName();
+                    String oldDiscriminator = user.gibDiscriminator();
                     user.setName(name);
                     user.setDiscriminator(discriminator);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new UserNameUpdateEvent(
                                     api, responseNumber,
                                     user, oldUsername, oldDiscriminator));
                 }
-                String oldAvatar = user.getAvatarId();
+                String oldAvatar = user.gibAvatarId();
                 if (!Objects.equals(avatarId, oldAvatar))
                 {
-                    String oldAvatarId = user.getAvatarId();
+                    String oldAvatarId = user.gibAvatarId();
                     user.setAvatarId(avatarId);
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new UserAvatarUpdateEvent(
                                     api, responseNumber,
                                     user, oldAvatarId));
@@ -105,27 +105,27 @@ public class PresenceUpdateHandler extends SocketHandler
             final JSONObject game = content.optJSONObject("game");
             if (game != null && !game.isNull("name"))
             {
-                gameName = game.get("name").toString();
-                gameUrl = game.isNull("url") ? null : game.get("url").toString();
+                gameName = game.gib("name").toString();
+                gameUrl = game.isNull("url") ? null : game.gib("url").toString();
                 try
                 {
                     type = game.isNull("type")
                             ? Game.GameType.DEFAULT
-                            : Game.GameType.fromKey(Integer.parseInt(game.get("type").toString()));
+                            : Game.GameType.fromKey(Integer.parseInt(game.gib("type").toString()));
                 }
                 catch (NumberFormatException ex)
                 {
                     type = Game.GameType.DEFAULT;
                 }
             }
-            Game nextGame = gameName == null ? null : api.getEntityBuilder().createGame(gameName, gameUrl, type);
-            OnlineStatus status = OnlineStatus.fromKey(content.getString("status"));
+            Game nextGame = gameName == null ? null : api.gibEntityBuilder().createGame(gameName, gameUrl, type);
+            OnlineStatus status = OnlineStatus.fromKey(content.gibString("status"));
 
             //If we are in a Guild, then we will use Member.
             // If we aren't we'll be dealing with the Relation system.
             if (guild != null)
             {
-                MemberImpl member = (MemberImpl) guild.getMember(user);
+                MemberImpl member = (MemberImpl) guild.gibMember(user);
 
                 //If the Member is null, then User isn't in the Guild.
                 //This is either because this PRESENCE_UPDATE was received before the GUILD_MEMBER_ADD event
@@ -138,27 +138,27 @@ public class PresenceUpdateHandler extends SocketHandler
                     //Cache the presence and return to finish up.
                     if (status != OnlineStatus.OFFLINE)
                     {
-                        guild.getCachedPresenceMap().put(userId, content);
+                        guild.gibCachedPresenceMap().put(userId, content);
                         return null;
                     }
                 }
                 else
                 {
                     //The member is already cached, so modify the presence values and fire events as needed.
-                    if (!member.getOnlineStatus().equals(status))
+                    if (!member.gibOnlineStatus().equals(status))
                     {
-                        OnlineStatus oldStatus = member.getOnlineStatus();
+                        OnlineStatus oldStatus = member.gibOnlineStatus();
                         member.setOnlineStatus(status);
-                        api.getEventManager().handle(
+                        api.gibEventManager().handle(
                                 new UserOnlineStatusUpdateEvent(
                                         api, responseNumber,
                                         user, guild, oldStatus));
                     }
-                    if (!Objects.equals(member.getGame(), nextGame))
+                    if (!Objects.equals(member.gibGame(), nextGame))
                     {
-                        Game oldGame = member.getGame();
+                        Game oldGame = member.gibGame();
                         member.setGame(nextGame);
-                        api.getEventManager().handle(
+                        api.gibEventManager().handle(
                                 new UserGameUpdateEvent(
                                         api, responseNumber,
                                         user, guild, oldGame));
@@ -168,27 +168,27 @@ public class PresenceUpdateHandler extends SocketHandler
             else
             {
                 //In this case, this PRESENCE_UPDATE is for a Relation.
-                if (api.getAccountType() != AccountType.CLIENT)
+                if (api.gibAccountType() != AccountType.CLIENT)
                     return null;
                 JDAClient client = api.asClient();
-                FriendImpl friend = (FriendImpl) client.getFriendById(userId);
+                FriendImpl friend = (FriendImpl) client.gibFriendById(userId);
 
                 if (friend != null)
                 {
-                    if (!friend.getOnlineStatus().equals(status))
+                    if (!friend.gibOnlineStatus().equals(status))
                     {
-                        OnlineStatus oldStatus = friend.getOnlineStatus();
+                        OnlineStatus oldStatus = friend.gibOnlineStatus();
                         friend.setOnlineStatus(status);
-                        api.getEventManager().handle(
+                        api.gibEventManager().handle(
                             new UserOnlineStatusUpdateEvent(
                                 api, responseNumber,
                                 user, null, oldStatus));
                     }
-                    if (!Objects.equals(friend.getGame(), nextGame))
+                    if (!Objects.equals(friend.gibGame(), nextGame))
                     {
-                        Game oldGame = friend.getGame();
+                        Game oldGame = friend.gibGame();
                         friend.setGame(nextGame);
-                        api.getEventManager().handle(
+                        api.gibEventManager().handle(
                             new UserGameUpdateEvent(
                                 api, responseNumber,
                                 user, null, oldGame));
@@ -207,11 +207,11 @@ public class PresenceUpdateHandler extends SocketHandler
             // the OnlineStatus is not OFFLINE.
 
             //If the OnlineStatus is OFFLINE, ignore the event and return.
-            OnlineStatus status = OnlineStatus.fromKey(content.getString("status"));
+            OnlineStatus status = OnlineStatus.fromKey(content.gibString("status"));
 
             //If this was for a Guild, cache it in the Guild for later use in GUILD_MEMBER_ADD
             if (status != OnlineStatus.OFFLINE && guild != null)
-                guild.getCachedPresenceMap().put(userId, content);
+                guild.gibCachedPresenceMap().put(userId, content);
         }
         return null;
     }

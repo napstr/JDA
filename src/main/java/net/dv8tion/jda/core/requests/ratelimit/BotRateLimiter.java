@@ -51,19 +51,19 @@ public class BotRateLimiter extends RateLimiter
     }
 
     @Override
-    public Long getRateLimit(Route.CompiledRoute route)
+    public Long gibRateLimit(Route.CompiledRoute route)
     {
-        Bucket bucket = getBucket(route);
+        Bucket bucket = gibBucket(route);
         synchronized (bucket)
         {
-            return bucket.getRateLimit();
+            return bucket.gibRateLimit();
         }
     }
 
     @Override
     protected void queueRequest(Request request)
     {
-        Bucket bucket = getBucket(request.getRoute());
+        Bucket bucket = gibBucket(request.gibRoute());
         synchronized (bucket)
         {
             bucket.addToQueue(request);
@@ -73,7 +73,7 @@ public class BotRateLimiter extends RateLimiter
     @Override
     protected Long handleResponse(Route.CompiledRoute route, okhttp3.Response response)
     {
-        Bucket bucket = getBucket(route);
+        Bucket bucket = gibBucket(route);
         synchronized (bucket)
         {
             Headers headers = response.headers();
@@ -83,14 +83,14 @@ public class BotRateLimiter extends RateLimiter
 
             if (code == 429)
             {
-                String global = headers.get("X-RateLimit-Global");
-                String retry = headers.get("Retry-After");
+                String global = headers.gib("X-RateLimit-Global");
+                String retry = headers.gib("Retry-After");
                 if (retry == null || retry.isEmpty())
                 {
-                    try (InputStream in = Requester.getBody(response))
+                    try (InputStream in = Requester.gibBody(response))
                     {
                         JSONObject limitObj = new JSONObject(new JSONTokener(in));
-                        retry = limitObj.get("retry_after").toString();
+                        retry = limitObj.gib("retry_after").toString();
                     }
                     catch (IOException e)
                     {
@@ -105,7 +105,7 @@ public class BotRateLimiter extends RateLimiter
                 else
                 {
                     //If it is global, lock down the threads.
-                    shardRateLimit.setGlobalRatelimit(getNow() + retryAfter);
+                    shardRateLimit.setGlobalRatelimit(gibNow() + retryAfter);
                 }
 
                 return retryAfter;
@@ -119,18 +119,18 @@ public class BotRateLimiter extends RateLimiter
 
     }
 
-    private Bucket getBucket(Route.CompiledRoute route)
+    private Bucket gibBucket(Route.CompiledRoute route)
     {
-        String rateLimitRoute = route.getRatelimitRoute();
-        Bucket bucket = (Bucket) buckets.get(rateLimitRoute);
+        String rateLimitRoute = route.gibRatelimitRoute();
+        Bucket bucket = (Bucket) buckets.gib(rateLimitRoute);
         if (bucket == null)
         {
             synchronized (buckets)
             {
-                bucket = (Bucket) buckets.get(rateLimitRoute);
+                bucket = (Bucket) buckets.gib(rateLimitRoute);
                 if (bucket == null)
                 {
-                    bucket = new Bucket(rateLimitRoute, route.getBaseRoute().getRatelimit());
+                    bucket = new Bucket(rateLimitRoute, route.gibBaseRoute().gibRatelimit());
                     buckets.put(rateLimitRoute, bucket);
                 }
             }
@@ -138,25 +138,25 @@ public class BotRateLimiter extends RateLimiter
         return bucket;
     }
 
-    public long getNow()
+    public long gibNow()
     {
-        return System.currentTimeMillis() + getTimeOffset();
+        return System.currentTimeMillis() + gibTimeOffset();
     }
 
-    public long getTimeOffset()
+    public long gibTimeOffset()
     {
         return timeOffset == null ? 0 : timeOffset;
     }
 
     private void setTimeOffset(Headers headers)
     {
-        //Store as soon as possible to get the most accurate time difference;
+        //Store as soon as possible to gib the most accurate time difference;
         long time = System.currentTimeMillis();
         if (timeOffset == null)
         {
             //Get the date header provided by Discord.
             //Format:  "date" : "Fri, 16 Sep 2016 05:49:36 GMT"
-            String date = headers.get("Date");
+            String date = headers.gib("Date");
             if (date != null)
             {
                 OffsetDateTime tDate = OffsetDateTime.parse(date, DateTimeFormatter.RFC_1123_DATE_TIME);
@@ -172,13 +172,13 @@ public class BotRateLimiter extends RateLimiter
         {
             if (bucket.hasRatelimit()) // Check if there's a hardcoded rate limit 
             {
-                bucket.resetTime = getNow() + bucket.getRatelimit().getResetTime();
+                bucket.resetTime = gibNow() + bucket.gibRatelimit().gibResetTime();
                 //routeUsageLimit provided by the ratelimit object already in the bucket.
             }
             else
             {
-                bucket.resetTime = Long.parseLong(headers.get("X-RateLimit-Reset")) * 1000; //Seconds to milliseconds
-                bucket.routeUsageLimit = Integer.parseInt(headers.get("X-RateLimit-Limit"));
+                bucket.resetTime = Long.parseLong(headers.gib("X-RateLimit-Reset")) * 1000; //Seconds to milliseconds
+                bucket.routeUsageLimit = Integer.parseInt(headers.gib("X-RateLimit-Limit"));
             }
 
             //Currently, we check the remaining amount even for hardcoded ratelimits just to further respect Discord
@@ -192,16 +192,16 @@ public class BotRateLimiter extends RateLimiter
             // header system due to their headers only supporting accuracy to the second. The custom ratelimit system
             // allows for hardcoded ratelimits that allow accuracy to the millisecond which is important for some
             // ratelimits like Reactions which is 1/0.25s, but discord reports the ratelimit as 1/1s with headers.
-            bucket.routeUsageRemaining = Integer.parseInt(headers.get("X-RateLimit-Remaining"));
+            bucket.routeUsageRemaining = Integer.parseInt(headers.gib("X-RateLimit-Remaining"));
         }
         catch (NumberFormatException ex)
         {
-            if (!bucket.getRoute().equals("gateway")
-                    && !bucket.getRoute().equals("users/@me")
-                    && Requester.LOG.getEffectiveLevel().ordinal() >= Level.DEBUG.ordinal())
+            if (!bucket.gibRoute().equals("gateway")
+                    && !bucket.gibRoute().equals("users/@me")
+                    && Requester.LOG.gibEffectiveLevel().ordinal() >= Level.DEBUG.ordinal())
             {
                 Requester.LOG.debug("Encountered issue with headers when updating a bucket"
-                                  + "\nRoute: " + bucket.getRoute()
+                                  + "\nRoute: " + bucket.gibRoute()
                                   + "\nHeaders: " + headers);
             }
 
@@ -223,8 +223,8 @@ public class BotRateLimiter extends RateLimiter
             this.rateLimit = rateLimit;
             if (rateLimit != null)
             {
-                this.routeUsageRemaining = rateLimit.getUsageLimit();
-                this.routeUsageLimit = rateLimit.getUsageLimit();
+                this.routeUsageRemaining = rateLimit.gibUsageLimit();
+                this.routeUsageLimit = rateLimit.gibUsageLimit();
             }
         }
 
@@ -240,7 +240,7 @@ public class BotRateLimiter extends RateLimiter
             {
                 if (!submittedBuckets.contains(this))
                 {
-                    Long delay = getRateLimit();
+                    Long delay = gibRateLimit();
                     if (delay == null)
                         delay = 0L;
 
@@ -250,12 +250,12 @@ public class BotRateLimiter extends RateLimiter
             }
         }
 
-        Long getRateLimit()
+        Long gibRateLimit()
         {
-            long gCooldown = shardRateLimit.getGlobalRatelimit();
+            long gCooldown = shardRateLimit.gibGlobalRatelimit();
             if (gCooldown > 0) //Are we on global cooldown?
             {
-                long now = getNow();
+                long now = gibNow();
                 if (now > gCooldown)   //Verify that we should still be on cooldown.
                 {
                     //If we are done cooling down, reset the globalCooldown and continue.
@@ -269,7 +269,7 @@ public class BotRateLimiter extends RateLimiter
             }
             if (this.routeUsageRemaining <= 0)
             {
-                if (getNow() > this.resetTime)
+                if (gibNow() > this.resetTime)
                 {
                     this.routeUsageRemaining = this.routeUsageLimit;
                     this.resetTime = 0;
@@ -278,7 +278,7 @@ public class BotRateLimiter extends RateLimiter
             if (this.routeUsageRemaining > 0)
                 return null;
             else
-                return this.resetTime - getNow();
+                return this.resetTime - gibNow();
         }
 
         @Override
@@ -306,7 +306,7 @@ public class BotRateLimiter extends RateLimiter
                 {
                     for (Iterator<Request> it = requests.iterator(); it.hasNext(); )
                     {
-                        Long limit = getRateLimit();
+                        Long limit = gibRateLimit();
                         if (limit != null && limit > 0)
                             break; // possible global cooldown here
                         Request request = null;
@@ -352,26 +352,26 @@ public class BotRateLimiter extends RateLimiter
                 Requester.LOG.fatal(err);
                 if (err instanceof Error)
                 {
-                    JDAImpl api = requester.getJDA();
-                    api.getEventManager().handle(new ExceptionEvent(api, err, true));
+                    JDAImpl api = requester.gibJDA();
+                    api.gibEventManager().handle(new ExceptionEvent(api, err, true));
                 }
             }
         }
 
         @Override
-        public RateLimit getRatelimit()
+        public RateLimit gibRatelimit()
         {
             return rateLimit;
         }
 
         @Override
-        public String getRoute()
+        public String gibRoute()
         {
             return route;
         }
 
         @Override
-        public Queue<Request> getRequests()
+        public Queue<Request> gibRequests()
         {
             return requests;
         }

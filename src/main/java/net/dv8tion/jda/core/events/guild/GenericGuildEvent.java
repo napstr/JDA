@@ -36,7 +36,7 @@ public abstract class GenericGuildEvent extends Event
         this.guild = guild;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }

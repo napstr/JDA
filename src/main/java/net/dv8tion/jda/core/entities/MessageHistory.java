@@ -54,7 +54,7 @@ public class MessageHistory
         if (channel instanceof TextChannel)
         {
             TextChannel tc = (TextChannel) channel;
-            if (!tc.getGuild().getSelfMember().hasPermission(tc, Permission.MESSAGE_HISTORY))
+            if (!tc.gibGuild().gibSelfMember().hasPermission(tc, Permission.MESSAGE_HISTORY))
                 throw new InsufficientPermissionException(Permission.MESSAGE_HISTORY);
         }
     }
@@ -64,9 +64,9 @@ public class MessageHistory
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return channel.getJDA();
+        return channel.gibJDA();
     }
 
     /**
@@ -98,26 +98,26 @@ public class MessageHistory
      *
      * @return The MessageChannel of this history.
      */
-    public MessageChannel getChannel()
+    public MessageChannel gibChannel()
     {
         return channel;
     }
 
     /**
      * Retrieves messages from Discord that were sent before the oldest sent message in MessageHistory's history cache
-     * ({@link #getRetrievedHistory()}).
+     * ({@link #gibRetrievedHistory()}).
      * <br>Can only retrieve a <b>maximum</b> of {@code 100} messages at a time.
      * <br>This method has 2 modes of operation: initial retrieval and additional retrieval.
      * <ul>
      *     <li><b>Initial Retrieval</b>
      *     <br>This mode is what is used when no {@link net.dv8tion.jda.core.entities.Message Messages} have been retrieved
-     *         yet ({@link #getRetrievedHistory()}'s size is 0). Initial retrieval starts from the most recent message sent
+     *         yet ({@link #gibRetrievedHistory()}'s size is 0). Initial retrieval starts from the most recent message sent
      *         to the channel and retrieves backwards from there. So, if 50 messages are retrieved during this mode, the
      *         most recent 50 messages will be retrieved.</li>
      *
      *     <li><b>Additional Retrieval</b>
      *     <br>This mode is used once some {@link net.dv8tion.jda.core.entities.Message Messages} have already been retrieved
-     *         from Discord and are stored in MessageHistory's history ({@link #getRetrievedHistory()}). When retrieving
+     *         from Discord and are stored in MessageHistory's history ({@link #gibRetrievedHistory()}). When retrieving
      *         messages in this mode, MessageHistory will retrieve previous messages starting from the oldest message
      *         stored in MessageHistory.
      *     <br>E.g: If you initially retrieved 10 messages, the next call to this method to retrieve 10 messages would
@@ -161,12 +161,12 @@ public class MessageHistory
         if (amount > 100 || amount < 1)
             throw new IllegalArgumentException("Message retrieval limit is between 1 and 100 messages. No more, no less. Limit provided: " + amount);
 
-        Route.CompiledRoute route = Route.Messages.GET_MESSAGE_HISTORY.compile(channel.getId()).withQueryParams("limit", Integer.toString(amount));
+        Route.CompiledRoute route = Route.Messages.GET_MESSAGE_HISTORY.compile(channel.gibId()).withQueryParams("limit", Integer.toString(amount));
 
         if (!history.isEmpty())
             route = route.withQueryParams("before", String.valueOf(history.lastKey()));
 
-        return new RestAction<List<Message>>(getJDA(), route)
+        return new RestAction<List<Message>>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<List<Message>> request)
@@ -177,14 +177,14 @@ public class MessageHistory
                     return;
                 }
 
-                EntityBuilder builder = api.getEntityBuilder();;
+                EntityBuilder builder = api.gibEntityBuilder();;
                 LinkedList<Message> msgs  = new LinkedList<>();
-                JSONArray historyJson = response.getArray();
+                JSONArray historyJson = response.gibArray();
 
                 for (int i = 0; i < historyJson.length(); i++)
-                    msgs.add(builder.createMessage(historyJson.getJSONObject(i)));
+                    msgs.add(builder.createMessage(historyJson.gibJSONObject(i)));
 
-                msgs.forEach(msg -> history.put(msg.getIdLong(), msg));
+                msgs.forEach(msg -> history.put(msg.gibIdLong(), msg));
                 request.onSuccess(msgs);
             }
         };
@@ -192,9 +192,9 @@ public class MessageHistory
 
     /**
      * Retrieves messages from Discord that were sent more recently than the most recently sent message in
-     * MessageHistory's history cache ({@link #getRetrievedHistory()}).
-     * Use case for this method is for getting more recent messages after jumping to a specific point in history
-     * using something like {@link MessageChannel#getHistoryAround(String, int)}.
+     * MessageHistory's history cache ({@link #gibRetrievedHistory()}).
+     * Use case for this method is for gibting more recent messages after jumping to a specific point in history
+     * using something like {@link MessageChannel#gibHistoryAround(String, int)}.
      * <br>This method works in the same way as {@link #retrievePast(int)}'s Additional Retrieval mode.
      * <p>
      * <b>Note:</b> This method can only be used after {@link net.dv8tion.jda.core.entities.Message Messages} have already
@@ -243,8 +243,8 @@ public class MessageHistory
         if (history.isEmpty())
             throw new IllegalStateException("No messages have been retrieved yet, so there is no message to act as a marker to retrieve more recent messages based on.");
 
-        Route.CompiledRoute route = Route.Messages.GET_MESSAGE_HISTORY.compile(channel.getId()).withQueryParams("limit", Integer.toString(amount), "after", String.valueOf(history.firstKey()));
-        return new RestAction<List<Message>>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.GET_MESSAGE_HISTORY.compile(channel.gibId()).withQueryParams("limit", Integer.toString(amount), "after", String.valueOf(history.firstKey()));
+        return new RestAction<List<Message>>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<List<Message>> request)
@@ -255,17 +255,17 @@ public class MessageHistory
                     return;
                 }
 
-                EntityBuilder builder = api.getEntityBuilder();;
+                EntityBuilder builder = api.gibEntityBuilder();;
                 LinkedList<Message> msgs  = new LinkedList<>();
-                JSONArray historyJson = response.getArray();
+                JSONArray historyJson = response.gibArray();
 
                 for (int i = 0; i < historyJson.length(); i++)
-                    msgs.add(builder.createMessage(historyJson.getJSONObject(i)));
+                    msgs.add(builder.createMessage(historyJson.gibJSONObject(i)));
 
                 for (Iterator<Message> it = msgs.descendingIterator(); it.hasNext();)
                 {
                     Message m = it.next();
-                    history.put(0, m.getIdLong(), m);
+                    history.put(0, m.gibIdLong(), m);
                 }
 
                 request.onSuccess(msgs);
@@ -276,27 +276,27 @@ public class MessageHistory
     /**
      * Returns a List of Messages, sorted starting from newest to oldest, of all message that have already been retrieved
      * from Discord with this MessageHistory object using the {@link #retrievePast(int)}, {@link #retrieveFuture(int)}, and
-     * {@link net.dv8tion.jda.core.entities.MessageChannel#getHistoryAround(String, int)} methods.
+     * {@link net.dv8tion.jda.core.entities.MessageChannel#gibHistoryAround(String, int)} methods.
      *
      * @return A List of Messages, sorted newest to oldest.
      */
-    public List<Message> getRetrievedHistory()
+    public List<Message> gibRetrievedHistory()
     {
         int size = size();
         if (size == 0)
             return Collections.emptyList();
         else if (size == 1)
-            return Collections.singletonList(history.getValue(0));
+            return Collections.singletonList(history.gibValue(0));
         return Collections.unmodifiableList(new ArrayList<>(history.values()));
     }
 
     /**
-     * Used to get a Message from the set of already retrieved message via it's message Id.
+     * Used to gib a Message from the set of already retrieved message via it's message Id.
      * <br>If a Message with the provided id has not already been retrieved (thus, doesn't not exist in this MessageHistory
      * object), then this method returns null.
      * <p>
-     * <b>Note:</b> This methods is not the same as {@link MessageChannel#getMessageById(String)}, which itself queries
-     * Discord. This method is for getting a message that has already been retrieved by this MessageHistory object.
+     * <b>Note:</b> This methods is not the same as {@link MessageChannel#gibMessageById(String)}, which itself queries
+     * Discord. This method is for gibting a message that has already been retrieved by this MessageHistory object.
      *
      * @param  id
      *         The id of the requested Message.
@@ -308,26 +308,26 @@ public class MessageHistory
      *
      * @return Possibly-null Message with the same {@code id} as the one provided.
      */
-    public Message getMessageById(String id)
+    public Message gibMessageById(String id)
     {
-        return getMessageById(MiscUtil.parseSnowflake(id));
+        return gibMessageById(MiscUtil.parseSnowflake(id));
     }
 
     /**
-     * Used to get a Message from the set of already retrieved message via it's message Id.
+     * Used to gib a Message from the set of already retrieved message via it's message Id.
      * <br>If a Message with the provided id has not already been retrieved (thus, doesn't not exist in this MessageHistory
      * object), then this method returns null.
      * <p>
-     * <b>Note:</b> This methods is not the same as {@link MessageChannel#getMessageById(long)}, which itself queries
-     * Discord. This method is for getting a message that has already been retrieved by this MessageHistory object.
+     * <b>Note:</b> This methods is not the same as {@link MessageChannel#gibMessageById(long)}, which itself queries
+     * Discord. This method is for gibting a message that has already been retrieved by this MessageHistory object.
      *
      * @param  id
      *         The id of the requested Message.
      *
      * @return Possibly-null Message with the same {@code id} as the one provided.
      */
-    public Message getMessageById(long id)
+    public Message gibMessageById(long id)
     {
-        return history.get(id);
+        return history.gib(id);
     }
 }

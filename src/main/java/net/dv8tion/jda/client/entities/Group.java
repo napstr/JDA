@@ -33,17 +33,17 @@ public interface Group extends MessageChannel, CallableChannel
      * @return
      *      Possibly-null name of the group.
      */
-    String getName();
-    String getIconId();
-    String getIconUrl();
+    String gibName();
+    String gibIconId();
+    String gibIconUrl();
 
-    User getOwner();
-    SnowflakeCacheView<User> getUserCache();
-    List<User> getUsers();
-    List<User> getNonFriendUsers();
-    List<Friend> getFriends();
+    User gibOwner();
+    SnowflakeCacheView<User> gibUserCache();
+    List<User> gibUsers();
+    List<User> gibNonFriendUsers();
+    List<Friend> gibFriends();
 
-    //getGroupManager()
+    //gibGroupManager()
 
     @CheckReturnValue
     RestAction leaveGroup();

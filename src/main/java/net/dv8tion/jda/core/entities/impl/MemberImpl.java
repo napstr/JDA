@@ -48,61 +48,61 @@ public class MemberImpl implements Member
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return user.getJDA();
+        return user.gibJDA();
     }
 
     @Override
-    public OffsetDateTime getJoinDate()
+    public OffsetDateTime gibJoinDate()
     {
         return joinDate;
     }
 
     @Override
-    public GuildVoiceState getVoiceState()
+    public GuildVoiceState gibVoiceState()
     {
         return voiceState;
     }
 
     @Override
-    public Game getGame()
+    public Game gibGame()
     {
         return game;
     }
 
     @Override
-    public OnlineStatus getOnlineStatus()
+    public OnlineStatus gibOnlineStatus()
     {
         return onlineStatus;
     }
 
     @Override
-    public String getNickname()
+    public String gibNickname()
     {
         return nickname;
     }
 
     @Override
-    public String getEffectiveName()
+    public String gibEffectiveName()
     {
-        return nickname != null ? nickname : user.getName();
+        return nickname != null ? nickname : user.gibName();
     }
 
     @Override
-    public List<Role> getRoles()
+    public List<Role> gibRoles()
     {
         List<Role> roleList = new ArrayList<>(roles);
         roleList.sort(Comparator.reverseOrder());
@@ -111,33 +111,33 @@ public class MemberImpl implements Member
     }
 
     @Override
-    public Color getColor()
+    public Color gibColor()
     {
-        for (Role r : getRoles())
+        for (Role r : gibRoles())
         {
-            if (r.getColor() != null)
-                return r.getColor();
+            if (r.gibColor() != null)
+                return r.gibColor();
         }
         return null;
     }
 
     @Override
-    public List<Permission> getPermissions()
+    public List<Permission> gibPermissions()
     {
         return Collections.unmodifiableList(
-                Permission.getPermissions(
-                        PermissionUtil.getEffectivePermission(this)));
+                Permission.gibPermissions(
+                        PermissionUtil.gibEffectivePermission(this)));
     }
 
     @Override
-    public List<Permission> getPermissions(Channel channel)
+    public List<Permission> gibPermissions(Channel channel)
     {
-        if (!guild.equals(channel.getGuild()))
+        if (!guild.equals(channel.gibGuild()))
             throw new IllegalArgumentException("Provided channel is not in the same guild as this member!");
 
         return Collections.unmodifiableList(
-                Permission.getPermissions(
-                        PermissionUtil.getEffectivePermission(channel, this)));
+                Permission.gibPermissions(
+                        PermissionUtil.gibEffectivePermission(channel, this)));
     }
 
     @Override
@@ -188,7 +188,7 @@ public class MemberImpl implements Member
 
     @Override
     public boolean isOwner() {
-        return this.equals(guild.getOwner());
+        return this.equals(guild.gibOwner());
     }
 
     public MemberImpl setNickname(String nickname)
@@ -215,7 +215,7 @@ public class MemberImpl implements Member
         return this;
     }
 
-    public Set<Role> getRoleSet()
+    public Set<Role> gibRoleSet()
     {
         return roles;
     }
@@ -227,32 +227,32 @@ public class MemberImpl implements Member
             return false;
 
         Member oMember = (Member) o;
-        return this == oMember || (oMember.getUser().equals(user) && oMember.getGuild().equals(guild));
+        return this == oMember || (oMember.gibUser().equals(user) && oMember.gibGuild().equals(guild));
     }
 
     @Override
     public int hashCode()
     {
-        return (guild.getId() + user.getId()).hashCode();
+        return (guild.gibId() + user.gibId()).hashCode();
     }
 
     @Override
     public String toString()
     {
-        return "MB:" + getEffectiveName() + '(' + user.toString() + " / " + guild.toString() +')';
+        return "MB:" + gibEffectiveName() + '(' + user.toString() + " / " + guild.toString() +')';
     }
 
     @Override
-    public String getAsMention()
+    public String gibAsMention()
     {
-        return nickname == null ? user.getAsMention() : "<@!" + user.getIdLong() + '>';
+        return nickname == null ? user.gibAsMention() : "<@!" + user.gibIdLong() + '>';
     }
 
     @Nullable
     @Override
-    public TextChannel getDefaultChannel()
+    public TextChannel gibDefaultChannel()
     {
-        return guild.getTextChannelsMap().valueCollection().stream()
+        return guild.gibTextChannelsMap().valueCollection().stream()
                 .sorted(Comparator.reverseOrder())
                 .filter(c -> hasPermission(c, Permission.MESSAGE_READ))
                 .findFirst().orElse(null);

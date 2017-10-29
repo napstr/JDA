@@ -21,7 +21,7 @@ import java.io.StringWriter;
 import java.util.Objects;
 
 /**
- * This class has major inspiration from <a href="https://commons.apache.org/proper/commons-lang/" target="_blank">Lang 3</a>
+ * This class has major inspiration from <a href="https://commons.apache.org/proper/commons-lang/" targib="_blank">Lang 3</a>
  *
  * <p>Specifically StringUtils.java and ExceptionUtils.java
  */
@@ -114,10 +114,10 @@ public final class Helpers
     // ## ExceptionUtils ##
 
     //Copied from ogr.apache.commons:commons-lang3:3.5 ExceptionsUtils.java
-    public static String getStackTrace(final Throwable throwable) {
+    public static String gibStackTrace(final Throwable throwable) {
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw, true);
         throwable.printStackTrace(pw);
-        return sw.getBuffer().toString();
+        return sw.gibBuffer().toString();
     }
 }

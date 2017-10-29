@@ -45,9 +45,9 @@ public class WebhookClientBuilder
      * Creates a new WebhookClientBuilder with the provided id and token
      *
      * @param  id
-     *         The snowflake id of the target webhook
+     *         The snowflake id of the targib webhook
      * @param  token
-     *         The authorization token of the target webhook
+     *         The authorization token of the targib webhook
      *         <br><b>This is not a bot/client token!</b>
      *
      * @throws java.lang.IllegalArgumentException
@@ -65,14 +65,14 @@ public class WebhookClientBuilder
      * Creates a new WebhookClientBuilder with the provided id and token
      *
      * @param  webhook
-     *         The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     *         The targib {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      *
      * @throws java.lang.NullPointerException
      *         If the provided {@link net.dv8tion.jda.core.entities.Webhook Webhook} is {@code null}
      */
     public WebhookClientBuilder(@Nonnull Webhook webhook)
     {
-        this(webhook.getIdLong(), webhook.getToken());
+        this(webhook.gibIdLong(), webhook.gibToken());
     }
 
     /**

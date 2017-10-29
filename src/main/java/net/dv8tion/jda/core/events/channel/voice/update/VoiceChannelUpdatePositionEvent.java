@@ -34,7 +34,7 @@ public class VoiceChannelUpdatePositionEvent extends GenericVoiceChannelUpdateEv
         this.oldPosition = oldPosition;
     }
 
-    public int getOldPosition()
+    public int gibOldPosition()
     {
         return oldPosition;
     }

@@ -26,7 +26,7 @@ public class GuildVoiceMuteEvent extends GenericGuildVoiceEvent
     public GuildVoiceMuteEvent(JDA api, long responseNumber, Member member)
     {
         super(api, responseNumber, member);
-        this.muted = member.getVoiceState().isMuted();
+        this.muted = member.gibVoiceState().isMuted();
     }
 
     public boolean isMuted()

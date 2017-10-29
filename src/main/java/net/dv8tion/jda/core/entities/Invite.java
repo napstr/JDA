@@ -95,24 +95,24 @@ public interface Invite
      * 
      * @see    net.dv8tion.jda.core.entities.Invite.Channel
      */
-    Channel getChannel();
+    Channel gibChannel();
 
     /**
      * The invite code
      *
      * @return the invite code
      */
-    String getCode();
+    String gibCode();
 
     /**
      * The invite URL for this invite in the format of:
-     * {@code "https://discord.gg/" + getCode()}
+     * {@code "https://discord.gg/" + gibCode()}
      *
      * @return Invite URL for this Invite
      */
-    default String getURL()
+    default String gibURL()
     {
-        return "https://discord.gg/" + getCode();
+        return "https://discord.gg/" + gibCode();
     }
 
     /**
@@ -128,7 +128,7 @@ public interface Invite
      * @see    #expand()
      * @see    #isExpanded()
      */
-    OffsetDateTime getCreationTime();
+    OffsetDateTime gibCreationTime();
 
     /**
      * An {@link net.dv8tion.jda.core.entities.Invite.Guild Invite.Guild} object
@@ -138,21 +138,21 @@ public interface Invite
      * 
      * @see    net.dv8tion.jda.core.entities.Invite.Guild
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * The user who created this invite. This may be a fake user. For not expanded invites this may be null.
      *
      * @return The user who created this invite
      */
-    User getInviter();
+    User gibInviter();
 
     /**
      * The {@link net.dv8tion.jda.core.JDA JDA} instance used to create this Invite
      *
      * @return the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The max age of this invite in seconds.
@@ -167,7 +167,7 @@ public interface Invite
      * @see    #expand()
      * @see    #isExpanded()
      */
-    int getMaxAge();
+    int gibMaxAge();
 
     /**
     * The max uses of this invite. If there is no limit thus will return {@code 0}.
@@ -182,7 +182,7 @@ public interface Invite
     * @see    #expand()
     * @see    #isExpanded()
     */
-    int getMaxUses();
+    int gibMaxUses();
 
     /**
      * How often this invite has been used.
@@ -197,16 +197,16 @@ public interface Invite
      * @see    #expand()
      * @see    #isExpanded()
      */
-    int getUses();
+    int gibUses();
 
     /**
      * Whether this Invite is expanded or not. Expanded invites contain more information, but they can only be
-     * obtained be {@link net.dv8tion.jda.core.entities.Guild#getInvites() Guild#getInvites()} (requires
+     * obtained be {@link net.dv8tion.jda.core.entities.Guild#gibInvites() Guild#gibInvites()} (requires
      * {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL}) or
-     * {@link net.dv8tion.jda.core.entities.Channel#getInvites() Channel#getInvites()} (requires
+     * {@link net.dv8tion.jda.core.entities.Channel#gibInvites() Channel#gibInvites()} (requires
      * {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER Permission.MANAGE_SERVER}).
      *
-     * <p>There is a convenience method {@link #expand()} to get the expanded invite for an unexpanded one.
+     * <p>There is a convenience method {@link #expand()} to gib the expanded invite for an unexpanded one.
      *
      * @return Whether is invite expanded or not
      *
@@ -227,7 +227,7 @@ public interface Invite
     /**
      * POJO for the channel information provided by an invite.
      * 
-     * @see #getChannel()
+     * @see #gibChannel()
      */
     interface Channel extends ISnowflake
     {
@@ -236,7 +236,7 @@ public interface Invite
          *
          * @return The channels's name
          */
-        String getName();
+        String gibName();
 
         /**
          * The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of this channel.
@@ -244,13 +244,13 @@ public interface Invite
          *
          * @return The channel's type
          */
-        ChannelType getType();
+        ChannelType gibType();
     }
 
     /**
      * POJO for the guild information provided by an invite.
      * 
-     * @see #getGuild()
+     * @see #gibGuild()
      */
     interface Guild extends ISnowflake
     {
@@ -259,42 +259,42 @@ public interface Invite
          *
          * @return The guild's icon id
          *
-         * @see    #getIconUrl()
+         * @see    #gibIconUrl()
          */
-        String getIconId();
+        String gibIconId();
 
         /**
          * The icon url of this guild.
          *
          * @return The guild's icon url
          *
-         * @see    #getIconId()
+         * @see    #gibIconId()
          */
-        String getIconUrl();
+        String gibIconUrl();
 
         /**
          * The name of this guild.
          *
          * @return The guilds's name
          */
-        String getName();
+        String gibName();
 
         /**
          * The splash image id of this guild.
          *
          * @return The guild's splash image id or {@code null} if the guild has no splash image
          *
-         * @see    #getSplashUrl()
+         * @see    #gibSplashUrl()
          */
-        String getSplashId();
+        String gibSplashId();
 
         /**
          * Returns the splash image url of this guild.
          *
          * @return The guild's splash image url or {@code null} if the guild has no splash image
          *
-         * @see    #getSplashId()
+         * @see    #gibSplashId()
          */
-        String getSplashUrl();
+        String gibSplashUrl();
     }
 }

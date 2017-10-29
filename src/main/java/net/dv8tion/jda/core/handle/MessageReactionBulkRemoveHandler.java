@@ -39,30 +39,30 @@ public class MessageReactionBulkRemoveHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long messageId = content.getLong("message_id");
-        final long channelId = content.getLong("channel_id");
-        MessageChannel channel = api.getTextChannelById(channelId);
+        final long messageId = content.gibLong("message_id");
+        final long channelId = content.gibLong("channel_id");
+        MessageChannel channel = api.gibTextChannelById(channelId);
         if (channel == null)
         {
-            channel = api.getPrivateChannelById(channelId);
+            channel = api.gibPrivateChannelById(channelId);
         }
-        if (channel == null && api.getAccountType() == AccountType.CLIENT)
+        if (channel == null && api.gibAccountType() == AccountType.CLIENT)
         {
-            channel = api.asClient().getGroupById(channelId);
-        }
-        if (channel == null)
-        {
-            channel = api.getFakePrivateChannelMap().get(channelId);
+            channel = api.asClient().gibGroupById(channelId);
         }
         if (channel == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+            channel = api.gibFakePrivateChannelMap().gib(channelId);
+        }
+        if (channel == null)
+        {
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a reaction for a channel that JDA does not currently have cached");
             return null;
         }
-        IEventManager manager = api.getEventManager();
+        IEventManager manager = api.gibEventManager();
 
-        switch (channel.getType())
+        switch (channel.gibType())
         {
             case TEXT:
                manager.handle(

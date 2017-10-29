@@ -40,10 +40,10 @@ import java.util.stream.Collectors;
 
 /**
  * An {@link #update() updatable} manager that allows
- * to modify emote settings like the {@link #getNameField() name}.
+ * to modify emote settings like the {@link #gibNameField() name}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.client.managers.fields.EmoteField EmoteField} for specific
+ * by gibting the {@link net.dv8tion.jda.client.managers.fields.EmoteField EmoteField} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update()}!
  *
  * <p>The {@link net.dv8tion.jda.client.managers.EmoteManager EmoteManager} implementation
@@ -66,7 +66,7 @@ public class EmoteManagerUpdatable
      * Creates a new EmoteManagerUpdatable instance
      *
      * @param  emote
-     *         The target {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
+     *         The targib {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
      *
      * @throws java.lang.IllegalStateException
      *         If the specified Emote is {@link net.dv8tion.jda.core.entities.Emote#isFake() fake} or {@link net.dv8tion.jda.core.entities.Emote#isManaged() managed}.
@@ -87,30 +87,30 @@ public class EmoteManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return emote.getJDA();
+        return emote.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Emote Emote} is in.
-     * <br>This is logically the same as calling {@code getEmote().getGuild()}
+     * <br>This is logically the same as calling {@code gibEmote().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return emote.getGuild();
+        return emote.gibGuild();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.Emote Emote}
+     * The targib {@link net.dv8tion.jda.core.entities.Emote Emote}
      * that will be modified by this Manager
      *
-     * @return The target Emote
+     * @return The targib Emote
      */
-    public Emote getEmote()
+    public Emote gibEmote()
     {
         return emote;
     }
@@ -129,7 +129,7 @@ public class EmoteManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.client.managers.fields.EmoteField EmoteField} - Type: {@code String}
      */
-    public EmoteField<String> getNameField()
+    public EmoteField<String> gibNameField()
     {
         return name;
     }
@@ -150,7 +150,7 @@ public class EmoteManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.client.managers.fields.EmoteField EmoteField} - Type: {@link Collection}
      */
-    public EmoteField<Collection<Role>> getRolesField()
+    public EmoteField<Collection<Role>> gibRolesField()
     {
         return roles;
     }
@@ -178,7 +178,7 @@ public class EmoteManagerUpdatable
      * update include the following:
      * <ul>
      *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI UNKNOWN_EMOJI}
-     *      <br>If the target Emote was deleted before finishing the task</li>
+     *      <br>If the targib Emote was deleted before finishing the task</li>
      *
      *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *      <br>If the currently logged in account was removed from the Guild before finishing the task</li>
@@ -201,18 +201,18 @@ public class EmoteManagerUpdatable
         checkPermission(Permission.MANAGE_EMOTES);
 
         if (!needsUpdate())
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
         JSONObject body = new JSONObject();
 
         if (name.shouldUpdate())
-            body.put("name", name.getValue());
+            body.put("name", name.gibValue());
         if (roles.shouldUpdate())
-            body.put("roles", roles.getValue().stream().map(ISnowflake::getId).collect(Collectors.toList()));
+            body.put("roles", roles.gibValue().stream().map(ISnowflake::gibId).collect(Collectors.toList()));
 
         reset(); //reset because we built the JSONObject needed to update
-        Route.CompiledRoute route = Route.Emotes.MODIFY_EMOTE.compile(getGuild().getId(), emote.getId());
-        return new AuditableRestAction<Void>(getJDA(), route, body)
+        Route.CompiledRoute route = Route.Emotes.MODIFY_EMOTE.compile(gibGuild().gibId(), emote.gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -233,13 +233,13 @@ public class EmoteManagerUpdatable
 
     protected void checkPermission(Permission perm)
     {
-        if (!getGuild().getSelfMember().hasPermission(perm))
+        if (!gibGuild().gibSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
     protected void setupFields()
     {
-        name = new EmoteField<String>(this, emote::getName)
+        name = new EmoteField<String>(this, emote::gibName)
         {
             @Override
             public void checkValue(String value)
@@ -254,7 +254,7 @@ public class EmoteManagerUpdatable
             }
         };
 
-        roles = new EmoteField<Collection<Role>>(this, emote::getRoles)
+        roles = new EmoteField<Collection<Role>>(this, emote::gibRoles)
         {
             @Override
             public void checkValue(Collection<Role> value)

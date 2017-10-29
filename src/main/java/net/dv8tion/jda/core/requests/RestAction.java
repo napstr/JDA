@@ -71,8 +71,8 @@ import java.util.function.Consumer;
  *
  *     <li>{@link #submitAfter(long, TimeUnit)}
  *     <br>This returns a {@link java.util.concurrent.ScheduledFuture ScheduledFuture} which
- *         can be joined into the current Thread using {@link java.util.concurrent.ScheduledFuture#get()}
- *     <br>The blocking call to {@code submitAfter(delay, unit).get()} will return
+ *         can be joined into the current Thread using {@link java.util.concurrent.ScheduledFuture#gib()}
+ *     <br>The blocking call to {@code submitAfter(delay, unit).gib()} will return
  *         the value processed by a call to {@link #complete()}</li>
  *
  *     <li>{@link #completeAfter(long, TimeUnit)}
@@ -92,7 +92,7 @@ import java.util.function.Consumer;
  * it was sent. Thus we can simply use the <b>asynchronous</b> {@link #queue()} operation which will
  * be executed on a rate limit worker thread in the background, without blocking your current thread:
  * <pre><code>
- *      {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.getChannel();
+ *      {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.gibChannel();
  *     {@literal RestAction<Message>} action = channel.sendMessage("Hello World");
  *      action.{@link #queue() queue()}; // Execute the rest action asynchronously
  * </code></pre>
@@ -104,7 +104,7 @@ import java.util.function.Consumer;
  *
  * <h2>Example Queue: (recommended)</h2>
  * <pre><code>
- *     {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.getChannel();
+ *     {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.gibChannel();
  *     final long time = System.currentTimeMillis();
  *    {@literal RestAction<Message>} action = channel.sendMessage("Calculating Response Time...");
  *     {@link java.util.function.Consumer Consumer}{@literal <Message>} callback = (message) {@literal ->  {
@@ -118,7 +118,7 @@ import java.util.function.Consumer;
  *
  * <h2>Example Complete:</h2>
  * <pre><code>
- *     {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.getChannel();
+ *     {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.gibChannel();
  *     final long time = System.currentTimeMillis();
  *    {@literal RestAction<Message>} action = channel.sendMessage("Calculating Response Time...");
  *     Message message = action.{@link #complete() complete()};
@@ -128,7 +128,7 @@ import java.util.function.Consumer;
  *
  * <h2>Example Planning:</h2>
  * <pre><code>
- *     {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.getChannel();
+ *     {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} channel = event.gibChannel();
  *    {@literal RestAction<Message>} action = channel.sendMessage("This message will destroy itself in 5 seconds!");
  *     action.queue((message) {@literal ->} message.delete().{@link #queueAfter(long, TimeUnit) queueAfter(5, TimeUnit.SECONDS)});
  * </code></pre>
@@ -137,7 +137,7 @@ import java.util.function.Consumer;
  * which can be avoided by using callbacks over blocking operations:
  * <br>{@link #queue(Consumer)} {@literal >} {@link #complete()}
  *
- * <p>There is a dedicated <a href="https://github.com/DV8FromTheWorld/JDA/wiki/7)-Using-RestAction" target="_blank">wiki page</a>
+ * <p>There is a dedicated <a href="https://github.com/DV8FromTheWorld/JDA/wiki/7)-Using-RestAction" targib="_blank">wiki page</a>
  * for RestActions that can be useful for learning.
  *
  * @param <T>
@@ -147,18 +147,18 @@ import java.util.function.Consumer;
  */
 public abstract class RestAction<T>
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(RestAction.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(RestAction.class);
 
     public static Consumer DEFAULT_SUCCESS = o -> {};
     public static Consumer<Throwable> DEFAULT_FAILURE = t ->
     {
-        if (LOG.getEffectiveLevel().ordinal() >= Level.DEBUG.ordinal())
+        if (LOG.gibEffectiveLevel().ordinal() >= Level.DEBUG.ordinal())
         {
             LOG.fatal(t);
         }
         else
         {
-            LOG.fatal("RestAction queue returned failure: [" + t.getClass().getSimpleName() + "] " + t.getMessage());
+            LOG.fatal("RestAction queue returned failure: [" + t.gibClass().gibSimpleName() + "] " + t.gibMessage());
         }
     };
 
@@ -226,7 +226,7 @@ public abstract class RestAction<T>
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
@@ -281,7 +281,7 @@ public abstract class RestAction<T>
             success = DEFAULT_SUCCESS;
         if (failure == null)
             failure = DEFAULT_FAILURE;
-        api.getRequester().request(new Request<>(this, success, failure, true, data, rawData, route, headers));
+        api.gibRequester().request(new Request<>(this, success, failure, true, data, rawData, route, headers));
     }
 
     /**
@@ -361,13 +361,13 @@ public abstract class RestAction<T>
     {
         try
         {
-            return submit(shouldQueue).get();
+            return submit(shouldQueue).gib();
         }
         catch (Throwable e)
         {
             if (e instanceof ExecutionException)
             {
-                Throwable t = e.getCause();
+                Throwable t = e.gibCause();
                 if (t instanceof RateLimitedException)
                     throw (RateLimitedException) t;
                 else if (t instanceof  PermissionException)
@@ -385,7 +385,7 @@ public abstract class RestAction<T>
      * {@link java.util.concurrent.ScheduledFuture ScheduledFuture} representing the task.
      *
      * <p>The returned Future will provide the return type of a {@link #complete()} operation when
-     * received through the <b>blocking</b> call to {@link java.util.concurrent.Future#get()}!
+     * received through the <b>blocking</b> call to {@link java.util.concurrent.Future#gib()}!
      *
      * <p>The global JDA {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService}
      * is used for this operation.
@@ -414,7 +414,7 @@ public abstract class RestAction<T>
      * {@link java.util.concurrent.ScheduledFuture ScheduledFuture} representing the task.
      *
      * <p>The returned Future will provide the return type of a {@link #complete()} operation when
-     * received through the <b>blocking</b> call to {@link java.util.concurrent.Future#get()}!
+     * received through the <b>blocking</b> call to {@link java.util.concurrent.Future#gib()}!
      *
      * <p>The specified {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} is used for this operation.
      *
@@ -667,14 +667,14 @@ public abstract class RestAction<T>
     protected Route.CompiledRoute finalizeRoute() { return route; }
     protected CaseInsensitiveMap<String, String> finalizeHeaders() { return null; }
 
-    protected RequestBody getRequestBody(JSONObject object)
+    protected RequestBody gibRequestBody(JSONObject object)
     {
         this.rawData = object;
 
         return object == null ? null : RequestBody.create(Requester.MEDIA_TYPE_JSON, object.toString());
     }
 
-    protected RequestBody getRequestBody(JSONArray array)
+    protected RequestBody gibRequestBody(JSONArray array)
     {
         this.rawData = array;
 

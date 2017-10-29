@@ -52,7 +52,7 @@ public class AuthorizedApplicationImpl implements AuthorizedApplication
     @Override
     public RestAction<Void> delete()
     {
-        Route.CompiledRoute route = Route.Applications.DELETE_AUTHORIZED_APPLICATION.compile(getAuthId());
+        Route.CompiledRoute route = Route.Applications.DELETE_AUTHORIZED_APPLICATION.compile(gibAuthId());
 
         return new RestAction<Void>(this.api, route)
         {
@@ -74,50 +74,50 @@ public class AuthorizedApplicationImpl implements AuthorizedApplication
     }
 
     @Override
-    public String getAuthId()
+    public String gibAuthId()
     {
         return Long.toUnsignedString(this.authId);
     }
 
     @Override
-    public String getDescription()
+    public String gibDescription()
     {
         return this.description;
     }
 
     @Override
-    public String getIconId()
+    public String gibIconId()
     {
         return this.iconId;
     }
 
     @Override
-    public String getIconUrl()
+    public String gibIconUrl()
     {
         return this.iconId == null ? null
                 : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".png";
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return this.id;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return this.api;
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return this.name;
     }
 
     @Override
-    public List<String> getScopes()
+    public List<String> gibScopes()
     {
         return this.scopes;
     }

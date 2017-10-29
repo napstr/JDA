@@ -40,7 +40,7 @@ public class CategoryUpdatePositionEvent extends GenericCategoryUpdateEvent
      *
      * @return The previous position
      */
-    public int getOldPosition()
+    public int gibOldPosition()
     {
         return oldPosition;
     }

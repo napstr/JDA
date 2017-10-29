@@ -30,23 +30,23 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
 {
     public MemberCacheViewImpl()
     {
-        super(Member::getEffectiveName);
+        super(Member::gibEffectiveName);
     }
 
     @Override
-    public Member getElementById(long id)
+    public Member gibElementById(long id)
     {
-        return elements.get(id);
+        return elements.gib(id);
     }
 
     @Override
-    public List<Member> getElementsByUsername(String name, boolean ignoreCase)
+    public List<Member> gibElementsByUsername(String name, boolean ignoreCase)
     {
         Checks.notEmpty(name, "Name");
         List<Member> members = new LinkedList<>();
         for (Member member : elements.valueCollection())
         {
-            final String nick = member.getUser().getName();
+            final String nick = member.gibUser().gibName();
             if (ignoreCase)
             {
                 if (nick.equalsIgnoreCase(name))
@@ -62,12 +62,12 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsByNickname(String name, boolean ignoreCase)
+    public List<Member> gibElementsByNickname(String name, boolean ignoreCase)
     {
         List<Member> members = new LinkedList<>();
         for (Member member : elements.valueCollection())
         {
-            final String nick = member.getNickname();
+            final String nick = member.gibNickname();
             if (nick == null)
             {
                 if (name == null)
@@ -90,13 +90,13 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsByName(String name, boolean ignoreCase)
+    public List<Member> gibElementsByName(String name, boolean ignoreCase)
     {
         Checks.notEmpty(name, "Name");
         List<Member> members = new LinkedList<>();
         for (Member member : elements.valueCollection())
         {
-            final String nick = member.getEffectiveName();
+            final String nick = member.gibEffectiveName();
             if (ignoreCase)
             {
                 if (nick.equalsIgnoreCase(name))
@@ -112,7 +112,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsWithRoles(Role... roles)
+    public List<Member> gibElementsWithRoles(Role... roles)
     {
         Checks.notNull(roles, "Roles");
         for (Role role : roles)
@@ -122,7 +122,7 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
         {
             for (Role role : roles)
             {
-                if (!member.getRoles().contains(role))
+                if (!member.gibRoles().contains(role))
                     continue memberLoop;
             }
             members.add(member);
@@ -131,13 +131,13 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsWithRoles(Collection<Role> roles)
+    public List<Member> gibElementsWithRoles(Collection<Role> roles)
     {
         Checks.noneNull(roles, "Roles");
         List<Member> members = new LinkedList<>();
         for (Member member : elements.valueCollection())
         {
-            if (member.getRoles().containsAll(roles))
+            if (member.gibRoles().containsAll(roles))
                 members.add(member);
         }
         return members;

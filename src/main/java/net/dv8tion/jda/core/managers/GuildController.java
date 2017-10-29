@@ -75,7 +75,7 @@ public class GuildController
      *
      * @return The underlying {@link net.dv8tion.jda.core.entities.Guild Guild} instance
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -85,9 +85,9 @@ public class GuildController
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return guild.getJDA();
+        return guild.gibJDA();
     }
 
     /**
@@ -100,7 +100,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be moved due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be moved due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -144,26 +144,26 @@ public class GuildController
         checkAvailable();
         Checks.notNull(member, "Member");
         Checks.notNull(voiceChannel, "VoiceChannel");
-        checkGuild(member.getGuild(), "Member");
-        checkGuild(voiceChannel.getGuild(), "VoiceChannel");
+        checkGuild(member.gibGuild(), "Member");
+        checkGuild(voiceChannel.gibGuild(), "VoiceChannel");
 
-        GuildVoiceState vState = member.getVoiceState();
+        GuildVoiceState vState = member.gibVoiceState();
         if (!vState.inVoiceChannel())
             throw new IllegalStateException("You cannot move a Member who isn't in a VoiceChannel!");
 
-        if (!PermissionUtil.checkPermission(vState.getChannel(), guild.getSelfMember(), Permission.VOICE_MOVE_OTHERS))
+        if (!PermissionUtil.checkPermission(vState.gibChannel(), guild.gibSelfMember(), Permission.VOICE_MOVE_OTHERS))
             throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS, "This account does not have Permission to MOVE_OTHERS out of the channel that the Member is currently in.");
 
-        if (!PermissionUtil.checkPermission(voiceChannel, guild.getSelfMember(), Permission.VOICE_CONNECT)
+        if (!PermissionUtil.checkPermission(voiceChannel, guild.gibSelfMember(), Permission.VOICE_CONNECT)
                 && !PermissionUtil.checkPermission(voiceChannel, member, Permission.VOICE_CONNECT))
             throw new InsufficientPermissionException(Permission.VOICE_CONNECT,
                     "Neither this account nor the Member that is attempting to be moved have the VOICE_CONNECT permission " +
                             "for the destination VoiceChannel, so the move cannot be done.");
 
-        JSONObject body = new JSONObject().put("channel_id", voiceChannel.getId());
-        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.getId(), member.getUser().getId());
+        JSONObject body = new JSONObject().put("channel_id", voiceChannel.gibId());
+        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.gibId(), member.gibUser().gibId());
 
-        return new RestAction<Void>(guild.getJDA(), route, body)
+        return new RestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -189,7 +189,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The nickname of the target Member is not modifiable due to a permission discrepancy</li>
+     *     <br>The nickname of the targib Member is not modifiable due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -227,9 +227,9 @@ public class GuildController
     {
         checkAvailable();
         Checks.notNull(member, "Member");
-        checkGuild(member.getGuild(), "Member");
+        checkGuild(member.gibGuild(), "Member");
 
-        if(member.equals(guild.getSelfMember()))
+        if(member.equals(guild.gibSelfMember()))
         {
             if(!member.hasPermission(Permission.NICKNAME_CHANGE)
                     && !member.hasPermission(Permission.NICKNAME_MANAGE))
@@ -241,8 +241,8 @@ public class GuildController
             checkPosition(member);
         }
 
-        if (Objects.equals(nickname, member.getNickname()))
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+        if (Objects.equals(nickname, member.gibNickname()))
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
         if (nickname == null)
             nickname = "";
@@ -250,12 +250,12 @@ public class GuildController
         JSONObject body = new JSONObject().put("nick", nickname);
 
         Route.CompiledRoute route;
-        if (member.equals(guild.getSelfMember()))
-            route = Route.Guilds.MODIFY_SELF_NICK.compile(guild.getId());
+        if (member.equals(guild.gibSelfMember()))
+            route = Route.Guilds.MODIFY_SELF_NICK.compile(guild.gibId());
         else
-            route = Route.Guilds.MODIFY_MEMBER.compile(guild.getId(), member.getUser().getId());
+            route = Route.Guilds.MODIFY_MEMBER.compile(guild.gibId(), member.gibUser().gibId());
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -271,7 +271,7 @@ public class GuildController
     /**
      * This method will prune (kick) all members who were offline for at least <i>days</i> days.
      * <br>The RestAction returned from this method will return the amount of Members that were pruned.
-     * <br>You can use {@link Guild#getPrunableMemberCount(int)} to determine how many Members would be pruned if you were to
+     * <br>You can use {@link Guild#gibPrunableMemberCount(int)} to determine how many Members would be pruned if you were to
      * call this method.
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
@@ -285,7 +285,7 @@ public class GuildController
      * </ul>
      *
      * @param  days
-     *         Minimum number of days since a member has been offline to get affected.
+     *         Minimum number of days since a member has been offline to gib affected.
      *
      * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
      *         If the account doesn't have {@link net.dv8tion.jda.core.Permission#KICK_MEMBERS KICK_MEMBER} Permission.
@@ -305,14 +305,14 @@ public class GuildController
 
         Checks.check(days >= 1, "Days amount must be at minimum 1 day.");
 
-        Route.CompiledRoute route = Route.Guilds.PRUNE_MEMBERS.compile(guild.getId()).withQueryParams("days", Integer.toString(days));
-        return new AuditableRestAction<Integer>(guild.getJDA(), route)
+        Route.CompiledRoute route = Route.Guilds.PRUNE_MEMBERS.compile(guild.gibId()).withQueryParams("days", Integer.toString(days));
+        return new AuditableRestAction<Integer>(guild.gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Integer> request)
             {
                 if (response.isOk())
-                    request.onSuccess(response.getObject().getInt("pruned"));
+                    request.onSuccess(response.gibObject().gibInt("pruned"));
                 else
                     request .onFailure(response);
             }
@@ -322,14 +322,14 @@ public class GuildController
     /**
      * Kicks a {@link net.dv8tion.jda.core.entities.Member Member} from the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be kicked due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be kicked due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -362,18 +362,18 @@ public class GuildController
     {
         checkAvailable();
         Checks.notNull(member, "member");
-        checkGuild(member.getGuild(), "member");
+        checkGuild(member.gibGuild(), "member");
         checkPermission(Permission.KICK_MEMBERS);
         checkPosition(member);
 
-        final String userId = member.getUser().getId();
-        final String guildId = guild.getId();
+        final String userId = member.gibUser().gibId();
+        final String guildId = guild.gibId();
 
         Route.CompiledRoute route = Route.Guilds.KICK_MEMBER.compile(guildId, userId);
         if (reason != null && !reason.isEmpty())
             route = route.withQueryParams("reason", MiscUtil.encodeUTF8(reason));
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -389,14 +389,14 @@ public class GuildController
     /**
      * Kicks the {@link net.dv8tion.jda.core.entities.Member Member} specified by the userId from the from the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be kicked due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be kicked due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -428,7 +428,7 @@ public class GuildController
     {
         Checks.notBlank(userId, "userId");
 
-        Member member = guild.getMemberById(userId);
+        Member member = guild.gibMemberById(userId);
         Checks.check(member != null, "The provided userId does not correspond to a member in this guild! Provided userId: %s", userId);
 
         return kick(member, reason);
@@ -437,14 +437,14 @@ public class GuildController
     /**
      * Kicks a {@link net.dv8tion.jda.core.entities.Member Member} from the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be kicked due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be kicked due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -478,14 +478,14 @@ public class GuildController
     /**
      * Kicks the {@link net.dv8tion.jda.core.entities.Member Member} specified by the userId from the from the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User}
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be kicked due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be kicked due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -521,7 +521,7 @@ public class GuildController
      * <br>If you wish to ban a member without deleting any messages, provide delDays with a value of 0.
      * This change will be applied immediately.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the
      * {@link net.dv8tion.jda.core.entities.Member Member} until Discord sends the
      * {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
@@ -529,7 +529,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be banned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be banned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -568,7 +568,7 @@ public class GuildController
         Checks.notNull(member, "Member");
         //Don't check if the provided member is from this guild. It doesn't matter if they are or aren't.
 
-        return ban(member.getUser(), delDays, reason);
+        return ban(member.gibUser(), delDays, reason);
     }
 
     /**
@@ -577,7 +577,7 @@ public class GuildController
      * <br>If you wish to ban a user without deleting any messages, provide delDays with a value of 0.
      * This change will be applied immediately.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User's}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User's}
      * {@link net.dv8tion.jda.core.entities.Member Member} object (if the User was in the Guild)
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
@@ -585,7 +585,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be banned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be banned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -624,19 +624,19 @@ public class GuildController
         checkPermission(Permission.BAN_MEMBERS);
 
         if (guild.isMember(user)) // If user is in guild. Check if we are able to ban.
-            checkPosition(guild.getMember(user));
+            checkPosition(guild.gibMember(user));
 
         Checks.notNegative(delDays, "Deletion Days");
 
-        final String userId = user.getId();
+        final String userId = user.gibId();
 
-        Route.CompiledRoute route = Route.Guilds.BAN.compile(guild.getId(), userId);
+        Route.CompiledRoute route = Route.Guilds.BAN.compile(guild.gibId(), userId);
         if (reason != null && !reason.isEmpty())
             route = route.withQueryParams("reason", MiscUtil.encodeUTF8(reason));
         if (delDays > 0)
             route = route.withQueryParams("delete-message-days", Integer.toString(delDays));
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -655,7 +655,7 @@ public class GuildController
      * <br>If you wish to ban a user without deleting any messages, provide delDays with a value of 0.
      * This change will be applied immediately.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User's}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User's}
      * {@link net.dv8tion.jda.core.entities.Member Member} object (if the User was in the Guild)
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
@@ -663,7 +663,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be banned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be banned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -698,19 +698,19 @@ public class GuildController
         Checks.notBlank(userId, "User ID");
         checkPermission(Permission.BAN_MEMBERS);
 
-        User user = guild.getJDA().getUserById(userId);
+        User user = guild.gibJDA().gibUserById(userId);
         if (user != null) // If we have the user cached then we should use the additional information available to use during the ban process.
         {
             return ban(user, delDays, reason);
         }
 
-        Route.CompiledRoute route = Route.Guilds.BAN.compile(guild.getId(), userId);
+        Route.CompiledRoute route = Route.Guilds.BAN.compile(guild.gibId(), userId);
         if (reason != null && !reason.isEmpty())
             route = route.withQueryParams("reason", MiscUtil.encodeUTF8(reason));
         if (delDays > 0)
             route = route.withQueryParams("delete-message-days", Integer.toString(delDays));
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -731,7 +731,7 @@ public class GuildController
      * <br>If you wish to ban a member without deleting any messages, provide delDays with a value of 0.
      * This change will be applied immediately.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the
      * {@link net.dv8tion.jda.core.entities.Member Member} until Discord sends the
      * {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
@@ -739,7 +739,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be banned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be banned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -781,7 +781,7 @@ public class GuildController
      * <br>If you wish to ban a member without deleting any messages, provide delDays with a value of 0.
      * This change will be applied immediately.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the
      * {@link net.dv8tion.jda.core.entities.Member Member} until Discord sends the
      * {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
@@ -789,7 +789,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be banned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be banned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -831,7 +831,7 @@ public class GuildController
      * <br>If you wish to ban a user without deleting any messages, provide delDays with a value of 0.
      * This change will be applied immediately.
      *
-     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#getMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User's}
+     * <p><b>Note:</b> {@link net.dv8tion.jda.core.entities.Guild#gibMembers()} will still contain the {@link net.dv8tion.jda.core.entities.User User's}
      * {@link net.dv8tion.jda.core.entities.Member Member} object (if the User was in the Guild)
      * until Discord sends the {@link net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent}.
      *
@@ -839,7 +839,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be banned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be banned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -878,7 +878,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be unbanned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be unbanned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -904,7 +904,7 @@ public class GuildController
     {
         Checks.notNull(user, "User");
 
-        return unban(user.getId());
+        return unban(user.gibId());
     }
 
     /**
@@ -914,7 +914,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be unbanned due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be unbanned due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -942,9 +942,9 @@ public class GuildController
         Checks.notBlank(userId, "User ID");
         checkPermission(Permission.BAN_MEMBERS);
 
-        Route.CompiledRoute route = Route.Guilds.UNBAN.compile(guild.getId(), userId);
+        Route.CompiledRoute route = Route.Guilds.UNBAN.compile(guild.gibId(), userId);
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -970,7 +970,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be deafened due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be deafened due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -1000,20 +1000,20 @@ public class GuildController
     {
         checkAvailable();
         Checks.notNull(member, "Member");
-        checkGuild(member.getGuild(), "Member");
+        checkGuild(member.gibGuild(), "Member");
         checkPermission(Permission.VOICE_DEAF_OTHERS);
 
         //We check the owner instead of Position because, apparently, Discord doesn't care about position for
         // muting and deafening, only whether the affected Member is the owner.
-        if (guild.getOwner().equals(member))
+        if (guild.gibOwner().equals(member))
             throw new HierarchyException("Cannot modify Guild Deafen status the Owner of the Guild");
 
-        if (member.getVoiceState().isGuildDeafened() == deafen)
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+        if (member.gibVoiceState().isGuildDeafened() == deafen)
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
         JSONObject body = new JSONObject().put("deaf", deafen);
-        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.getId(), member.getUser().getId());
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.gibId(), member.gibUser().gibId());
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1037,7 +1037,7 @@ public class GuildController
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The target Member cannot be muted due to a permission discrepancy</li>
+     *     <br>The targib Member cannot be muted due to a permission discrepancy</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
      *     <br>We were removed from the Guild before finishing the task</li>
@@ -1067,20 +1067,20 @@ public class GuildController
     {
         checkAvailable();
         Checks.notNull(member, "Member");
-        checkGuild(member.getGuild(), "Member");
+        checkGuild(member.gibGuild(), "Member");
         checkPermission(Permission.VOICE_MUTE_OTHERS);
 
         //We check the owner instead of Position because, apparently, Discord doesn't care about position for
         // muting and deafening, only whether the affected Member is the owner.
-        if (guild.getOwner().equals(member))
+        if (guild.gibOwner().equals(member))
             throw new HierarchyException("Cannot modify Guild Mute status the Owner of the Guild");
 
-        if (member.getVoiceState().isGuildMuted() == mute)
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+        if (member.gibVoiceState().isGuildMuted() == mute)
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
         JSONObject body = new JSONObject().put("mute", mute);
-        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.getId(), member.getUser().getId());
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.gibId(), member.gibUser().gibId());
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1095,7 +1095,7 @@ public class GuildController
 
     /**
      * Atomically assigns the provided {@link net.dv8tion.jda.core.entities.Role Role} to the specified {@link net.dv8tion.jda.core.entities.Member Member}.
-     * <br><b>This can be used together with other role modification methods as it does not require an updated cache!</b>
+     * <br><b>This can be used togibher with other role modification methods as it does not require an updated cache!</b>
      *
      * <p>If multiple roles should be added/removed (efficiently) in one request
      * you may use {@link #modifyMemberRoles(Member, Collection, Collection) modifyMemberRoles(Member, Collection, Collection)} or similar methods.
@@ -1112,14 +1112,14 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_ROLE UNKNOWN_ROLE}
      *     <br>If the specified Role does not exist</li>
      * </ul>
      *
      * @param  member
-     *         The target member who will receive the new role
+     *         The targib member who will receive the new role
      * @param  role
      *         The role which should be assigned atomically
      *
@@ -1141,13 +1141,13 @@ public class GuildController
     {
         Checks.notNull(member, "Member");
         Checks.notNull(role, "Role");
-        checkGuild(member.getGuild(), "Member");
-        checkGuild(role.getGuild(), "Role");
+        checkGuild(member.gibGuild(), "Member");
+        checkGuild(role.gibGuild(), "Role");
         checkPermission(Permission.MANAGE_ROLES);
         checkPosition(role);
 
-        Route.CompiledRoute route = Route.Guilds.ADD_MEMBER_ROLE.compile(guild.getId(), member.getUser().getId(), role.getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Guilds.ADD_MEMBER_ROLE.compile(guild.gibId(), member.gibUser().gibId(), role.gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1162,7 +1162,7 @@ public class GuildController
 
     /**
      * Atomically removes the provided {@link net.dv8tion.jda.core.entities.Role Role} from the specified {@link net.dv8tion.jda.core.entities.Member Member}.
-     * <br><b>This can be used together with other role modification methods as it does not require an updated cache!</b>
+     * <br><b>This can be used togibher with other role modification methods as it does not require an updated cache!</b>
      *
      * <p>If multiple roles should be added/removed (efficiently) in one request
      * you may use {@link #modifyMemberRoles(Member, Collection, Collection) modifyMemberRoles(Member, Collection, Collection)} or similar methods.
@@ -1179,14 +1179,14 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_ROLE UNKNOWN_ROLE}
      *     <br>If the specified Role does not exist</li>
      * </ul>
      *
      * @param  member
-     *         The target member who will lose the specified role
+     *         The targib member who will lose the specified role
      * @param  role
      *         The role which should be removed atomically
      *
@@ -1208,13 +1208,13 @@ public class GuildController
     {
         Checks.notNull(member, "Member");
         Checks.notNull(role, "Role");
-        checkGuild(member.getGuild(), "Member");
-        checkGuild(role.getGuild(), "Role");
+        checkGuild(member.gibGuild(), "Member");
+        checkGuild(role.gibGuild(), "Role");
         checkPermission(Permission.MANAGE_ROLES);
         checkPosition(role);
 
-        Route.CompiledRoute route = Route.Guilds.REMOVE_MEMBER_ROLE.compile(guild.getId(), member.getUser().getId(), role.getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Guilds.REMOVE_MEMBER_ROLE.compile(guild.gibId(), member.gibUser().gibId(), role.gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1232,7 +1232,7 @@ public class GuildController
      * to the specified {@link net.dv8tion.jda.core.entities.Member Member}
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
      * by a {@link net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent GuildMemberRoleAddEvent}.
@@ -1248,7 +1248,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1288,7 +1288,7 @@ public class GuildController
      * to the specified {@link net.dv8tion.jda.core.entities.Member Member}
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
      * by a {@link net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent GuildMemberRoleAddEvent}.
@@ -1304,7 +1304,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1344,7 +1344,7 @@ public class GuildController
      * from the specified {@link net.dv8tion.jda.core.entities.Member Member}
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
      * by a {@link net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent GuildMemberRoleRemoveEvent}.
@@ -1360,7 +1360,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1400,7 +1400,7 @@ public class GuildController
      * from the specified {@link net.dv8tion.jda.core.entities.Member Member}
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
      * by a {@link net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent GuildMemberRoleRemoveEvent}.
@@ -1416,7 +1416,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1461,10 +1461,10 @@ public class GuildController
      * <br>To only add or remove roles use either {@link #removeRolesFromMember(Member, Collection)} or {@link #addRolesToMember(Member, Collection)}
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
-     * by a {@link net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent GenericGuildMemberEvent} targeting the same Member.</b>
+     * by a {@link net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent GenericGuildMemberEvent} targibing the same Member.</b>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
@@ -1476,7 +1476,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1510,35 +1510,35 @@ public class GuildController
         Checks.notNull(member, "Member");
         Checks.notNull(rolesToAdd, "Collection containing roles to be added to the member");
         Checks.notNull(rolesToRemove, "Collection containing roles to be removed from the member");
-        checkGuild(member.getGuild(), "Member");
+        checkGuild(member.gibGuild(), "Member");
         checkPermission(Permission.MANAGE_ROLES);
         rolesToAdd.forEach(role ->
         {
             Checks.notNull(role, "Role in rolesToAdd");
-            checkGuild(role.getGuild(), "Role: " + role.toString());
+            checkGuild(role.gibGuild(), "Role: " + role.toString());
             checkPosition(role);
             Checks.check(!role.isManaged(), "Cannot add a Managed role to a Member. Role: %s", role.toString());
         });
         rolesToRemove.forEach(role ->
         {
             Checks.notNull(role, "Role in rolesToRemove");
-            checkGuild(role.getGuild(), "Role: " + role.toString());
+            checkGuild(role.gibGuild(), "Role: " + role.toString());
             checkPosition(role);
             Checks.check(!role.isManaged(), "Cannot remove a Managed role from a Member. Role: %s", role.toString());
         });
 
-        Set<Role> currentRoles = new HashSet<>(((MemberImpl) member).getRoleSet());
+        Set<Role> currentRoles = new HashSet<>(((MemberImpl) member).gibRoleSet());
         currentRoles.addAll(rolesToAdd);
         currentRoles.removeAll(rolesToRemove);
 
-        Checks.check(!currentRoles.contains(guild.getPublicRole()),
+        Checks.check(!currentRoles.contains(guild.gibPublicRole()),
             "Cannot add the PublicRole of a Guild to a Member. All members have this role by default!");
 
         JSONObject body = new JSONObject()
-                .put("roles", currentRoles.stream().map(Role::getId).collect(Collectors.toList()));
-        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.getId(), member.getUser().getId());
+                .put("roles", currentRoles.stream().map(Role::gibId).collect(Collectors.toList()));
+        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.gibId(), member.gibUser().gibId());
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1556,10 +1556,10 @@ public class GuildController
      * <br>The provided roles will replace all current Roles of the specified Member.
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
-     * by a {@link net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent GenericGuildMemberEvent} targeting the same Member.</b>
+     * by a {@link net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent GenericGuildMemberEvent} targibing the same Member.</b>
      *
      * <p><b>The new roles <u>must not</u> contain the Public Role of the Guild</b>
      *
@@ -1573,7 +1573,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1613,10 +1613,10 @@ public class GuildController
      * <p><u>The new roles <b>must not</b> contain the Public Role of the Guild</u>
      *
      * <h1>Warning</h1>
-     * <b>This may <u>not</u> be used together with any other role add/remove/modify methods for the same Member
+     * <b>This may <u>not</u> be used togibher with any other role add/remove/modify methods for the same Member
      * within one event listener cycle! The changes made by this require cache updates which are triggered by
      * lifecycle events which are received later. This may only be called again once the specific Member has been updated
-     * by a {@link net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent GenericGuildMemberEvent} targeting the same Member.</b>
+     * by a {@link net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent GenericGuildMemberEvent} targibing the same Member.</b>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
@@ -1628,7 +1628,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  member
@@ -1661,15 +1661,15 @@ public class GuildController
         checkAvailable();
         Checks.notNull(member, "Member");
         Checks.notNull(roles, "Roles");
-        checkGuild(member.getGuild(), "Member");
+        checkGuild(member.gibGuild(), "Member");
         roles.forEach(role ->
         {
             Checks.notNull(role, "Role in collection");
-            checkGuild(role.getGuild(), "Role: " + role.toString());
+            checkGuild(role.gibGuild(), "Role: " + role.toString());
             checkPosition(role);
         });
 
-        Checks.check(!roles.contains(guild.getPublicRole()),
+        Checks.check(!roles.contains(guild.gibPublicRole()),
             "Cannot add the PublicRole of a Guild to a Member. All members have this role by default!");
 
         //Make sure that the current managed roles are preserved and no new ones are added.
@@ -1687,10 +1687,10 @@ public class GuildController
 
         //This is identical to the rest action stuff in #modifyMemberRoles(Member, Collection<Role>, Collection<Role>)
         JSONObject body = new JSONObject()
-                .put("roles", roles.stream().map(Role::getId).collect(Collectors.toList()));
-        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.getId(), member.getUser().getId());
+                .put("roles", roles.stream().map(Role::gibId).collect(Collectors.toList()));
+        Route.CompiledRoute route = Route.Guilds.MODIFY_MEMBER.compile(guild.gibId(), member.gibUser().gibId());
 
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1717,7 +1717,7 @@ public class GuildController
      *     <br>We were removed from the Guild before finishing the task</li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MEMBER UNKNOWN_MEMBER}
-     *     <br>The target Member was removed from the Guild before finishing the task</li>
+     *     <br>The targib Member was removed from the Guild before finishing the task</li>
      * </ul>
      *
      * @param  newOwner
@@ -1741,18 +1741,18 @@ public class GuildController
     {
         checkAvailable();
         Checks.notNull(newOwner, "Member");
-        checkGuild(newOwner.getGuild(), "Member");
-        if (!guild.getOwner().equals(guild.getSelfMember()))
+        checkGuild(newOwner.gibGuild(), "Member");
+        if (!guild.gibOwner().equals(guild.gibSelfMember()))
             throw new PermissionException("The logged in account must be the owner of this Guild to be able to transfer ownership");
 
-        Checks.check(!guild.getSelfMember().equals(newOwner),
+        Checks.check(!guild.gibSelfMember().equals(newOwner),
             "The member provided as the newOwner is the currently logged in account. Provide a different member to give ownership to.");
 
-        Checks.check(!newOwner.getUser().isBot(), "Cannot transfer ownership of a Guild to a Bot!");
+        Checks.check(!newOwner.gibUser().isBot(), "Cannot transfer ownership of a Guild to a Bot!");
 
-        JSONObject body = new JSONObject().put("owner_id", newOwner.getUser().getId());
-        Route.CompiledRoute route = Route.Guilds.MODIFY_GUILD.compile(guild.getId());
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        JSONObject body = new JSONObject().put("owner_id", newOwner.gibUser().gibId());
+        Route.CompiledRoute route = Route.Guilds.MODIFY_GUILD.compile(guild.gibId());
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1802,7 +1802,7 @@ public class GuildController
 
         Checks.check(name.length() >= 2 && name.length() <= 100, "Provided name must be 2 - 100 characters in length");
 
-        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.getId());
+        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.gibId());
         return new ChannelAction(route, name, guild, ChannelType.TEXT);
     }
 
@@ -1843,7 +1843,7 @@ public class GuildController
 
         Checks.check(name.length() >= 2 && name.length() <= 100, "Provided name must be 2 - 100 characters in length");
 
-        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.getId());
+        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.gibId());
         return new ChannelAction(route, name, guild, ChannelType.VOICE);
     }
 
@@ -1884,7 +1884,7 @@ public class GuildController
 
         Checks.check(name.length() >= 2 && name.length() <= 100, "Provided name must be 2 - 100 characters in length");
 
-        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.getId());
+        Route.CompiledRoute route = Route.Guilds.CREATE_CHANNEL.compile(guild.gibId());
         return new ChannelAction(route, name, guild, ChannelType.CATEGORY);
     }
 
@@ -1951,7 +1951,7 @@ public class GuildController
      * </ul>
      *
      * @param  channel
-     *         The target TextChannel to attach a new Webhook to.
+     *         The targib TextChannel to attach a new Webhook to.
      * @param  name
      *         The default name for the new Webhook.
      *
@@ -1975,7 +1975,7 @@ public class GuildController
     public WebhookAction createWebhook(TextChannel channel, String name)
     {
         Checks.notNull(channel, "Channel");
-        checkGuild(channel.getGuild(), "channel");
+        checkGuild(channel.gibGuild(), "channel");
         return channel.createWebhook(name);
     }
 
@@ -2011,7 +2011,7 @@ public class GuildController
         checkAvailable();
         checkPermission(Permission.MANAGE_ROLES);
 
-        Route.CompiledRoute route = Route.Roles.CREATE_ROLE.compile(guild.getId());
+        Route.CompiledRoute route = Route.Roles.CREATE_ROLE.compile(guild.gibId());
         return new RoleAction(route, guild);
     }
 
@@ -2101,17 +2101,17 @@ public class GuildController
         Checks.notNull(icon, "Emote icon");
         Checks.notNull(roles, "Roles");
 
-//        if (getJDA().getAccountType() != AccountType.CLIENT)
+//        if (gibJDA().gibAccountType() != AccountType.CLIENT)
 //            throw new AccountTypeException(AccountType.CLIENT);
 
         JSONObject body = new JSONObject();
         body.put("name", name);
-        body.put("image", icon.getEncoding());
+        body.put("image", icon.gibEncoding());
         if (roles.length > 0) // making sure none of the provided roles are null before mapping them to the snowflake id
-            body.put("roles", Stream.of(roles).filter(Objects::nonNull).map(ISnowflake::getId).collect(Collectors.toSet()));
+            body.put("roles", Stream.of(roles).filter(Objects::nonNull).map(ISnowflake::gibId).collect(Collectors.toSet()));
 
-        Route.CompiledRoute route = Route.Emotes.CREATE_EMOTE.compile(guild.getId());
-        return new AuditableRestAction<Emote>(getJDA(), route, body)
+        Route.CompiledRoute route = Route.Emotes.CREATE_EMOTE.compile(guild.gibId());
+        return new AuditableRestAction<Emote>(gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Emote> request)
@@ -2121,23 +2121,23 @@ public class GuildController
                     request.onFailure(response);
                     return;
                 }
-                JSONObject obj = response.getObject();
-                final long id = obj.getLong("id");
-                final String name = obj.getString("name");
-                final boolean managed = !obj.isNull("managed") && obj.getBoolean("managed");
+                JSONObject obj = response.gibObject();
+                final long id = obj.gibLong("id");
+                final String name = obj.gibString("name");
+                final boolean managed = !obj.isNull("managed") && obj.gibBoolean("managed");
                 EmoteImpl emote = new EmoteImpl(id, guild).setName(name).setManaged(managed);
 
-                JSONArray rolesArr = obj.getJSONArray("roles");
-                Set<Role> roleSet = emote.getRoleSet();
+                JSONArray rolesArr = obj.gibJSONArray("roles");
+                Set<Role> roleSet = emote.gibRoleSet();
                 for (int i = 0; i < rolesArr.length(); i++)
-                    roleSet.add(guild.getRoleById(rolesArr.getString(i)));
+                    roleSet.add(guild.gibRoleById(rolesArr.gibString(i)));
                 request.onSuccess(emote);
             }
         };
     }
 
     /**
-     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#getCategories() Guild.getCategories()}
+     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#gibCategories() Guild.gibCategories()}
      * using a specific {@link net.dv8tion.jda.core.requests.RestAction RestAction} extension to allow moving Channels
      * {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveUp(int) up}/{@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveDown(int) down}
      * or {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveTo(int) to} a specific position.
@@ -2161,7 +2161,7 @@ public class GuildController
     }
 
     /**
-     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#getTextChannels() Guild.getTextChannels()}
+     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#gibTextChannels() Guild.gibTextChannels()}
      * using a specific {@link net.dv8tion.jda.core.requests.RestAction RestAction} extension to allow moving Channels
      * {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveUp(int) up}/{@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveDown(int) down}
      * or {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveTo(int) to} a specific position.
@@ -2185,7 +2185,7 @@ public class GuildController
     }
 
     /**
-     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#getVoiceChannels() Guild.getVoiceChannels()}
+     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#gibVoiceChannels() Guild.gibVoiceChannels()}
      * using a specific {@link net.dv8tion.jda.core.requests.RestAction RestAction} extension to allow moving Channels
      * {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveUp(int) up}/{@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveDown(int) down}
      * or {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveTo(int) to} a specific position.
@@ -2209,7 +2209,7 @@ public class GuildController
     }
 
     /**
-     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#getRoles() Guild.getRoles()}
+     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#gibRoles() Guild.gibRoles()}
      * using a specific {@link net.dv8tion.jda.core.requests.RestAction RestAction} extension to allow moving Roles
      * {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveUp(int) up}/{@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveDown(int) down}
      * or {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveTo(int) to} a specific position.
@@ -2218,8 +2218,8 @@ public class GuildController
      * <br>This means the highest role appears at index {@code 0} and the lower role at index {@code n - 1}.
      * <br>Providing {@code false} to {@link #modifyRolePositions(boolean)} will result in the ordering being
      * in ascending order, with the lower role at index {@code 0} and the highest at index {@code n - 1}.
-     * <br>As a note: {@link net.dv8tion.jda.core.entities.Member#getRoles() Member.getRoles()}
-     * and {@link net.dv8tion.jda.core.entities.Guild#getRoles() Guild.getRoles()} are both in descending order.
+     * <br>As a note: {@link net.dv8tion.jda.core.entities.Member#gibRoles() Member.gibRoles()}
+     * and {@link net.dv8tion.jda.core.entities.Guild#gibRoles() Guild.gibRoles()} are both in descending order.
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} include:
      * <ul>
@@ -2239,7 +2239,7 @@ public class GuildController
     }
 
     /**
-     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#getRoles() Guild.getRoles()}
+     * Modifies the positional order of {@link net.dv8tion.jda.core.entities.Guild#gibRoles() Guild.gibRoles()}
      * using a specific {@link net.dv8tion.jda.core.requests.RestAction RestAction} extension to allow moving Roles
      * {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveUp(int) up}/{@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveDown(int) down}
      * or {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction#moveTo(int) to} a specific position.
@@ -2258,8 +2258,8 @@ public class GuildController
      *         defined by Discord for roles, which is Descending. This means that the highest role appears at index {@code 0}
      *         and the lowest role at index {@code n - 1}. Providing {@code false} will result in the ordering being
      *         in ascending order, with the lower role at index {@code 0} and the highest at index {@code n - 1}.
-     *         <br>As a note: {@link net.dv8tion.jda.core.entities.Member#getRoles() Member.getRoles()}
-     *         and {@link net.dv8tion.jda.core.entities.Guild#getRoles() Guild.getRoles()} are both in descending order.
+     *         <br>As a note: {@link net.dv8tion.jda.core.entities.Member#gibRoles() Member.gibRoles()}
+     *         and {@link net.dv8tion.jda.core.entities.Guild#gibRoles() Guild.gibRoles()} are both in descending order.
      *
      * @return {@link net.dv8tion.jda.core.requests.restaction.order.RoleOrderAction RoleOrderAction}
      */
@@ -2283,19 +2283,19 @@ public class GuildController
 
     protected void checkPermission(Permission perm)
     {
-        if (!guild.getSelfMember().hasPermission(perm))
+        if (!guild.gibSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
     protected void checkPosition(Member member)
     {
-        if(!guild.getSelfMember().canInteract(member))
+        if(!guild.gibSelfMember().canInteract(member))
             throw new HierarchyException("Can't modify a member with higher or equal highest role than yourself!");
     }
 
     protected void checkPosition(Role role)
     {
-        if(!guild.getSelfMember().canInteract(role))
+        if(!guild.gibSelfMember().canInteract(role))
             throw new HierarchyException("Can't modify a role with higher or equal highest role than yourself! Role: " + role.toString());
     }
 }

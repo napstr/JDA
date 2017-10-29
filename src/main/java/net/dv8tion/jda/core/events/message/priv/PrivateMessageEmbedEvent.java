@@ -37,7 +37,7 @@ public class PrivateMessageEmbedEvent extends GenericPrivateMessageEvent
         this.embeds = embeds;
     }
 
-    public List<MessageEmbed> getMessageEmbeds()
+    public List<MessageEmbed> gibMessageEmbeds()
     {
         return embeds;
     }

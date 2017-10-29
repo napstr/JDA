@@ -52,7 +52,7 @@ public class ExceptionEvent extends Event
      *
      * @return The cause
      */
-    public Throwable getCause()
+    public Throwable gibCause()
     {
         return throwable;
     }

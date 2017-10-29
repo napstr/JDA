@@ -76,9 +76,9 @@ public class MessageReaction
      *
      * @return The JDA instance of this Reaction
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return channel.getJDA();
+        return channel.gibJDA();
     }
 
     /**
@@ -104,7 +104,7 @@ public class MessageReaction
      *
      * @return The amount of users that reacted with this Reaction
      */
-    public int getCount()
+    public int gibCount()
     {
         if (count < 0)
             throw new IllegalStateException("Cannot retrieve count for this MessageReaction!");
@@ -117,9 +117,9 @@ public class MessageReaction
      *
      * @return The ChannelType
      */
-    public ChannelType getChannelType()
+    public ChannelType gibChannelType()
     {
-        return channel.getType();
+        return channel.gibType();
     }
 
     /**
@@ -133,7 +133,7 @@ public class MessageReaction
      */
     public boolean isFromType(ChannelType type)
     {
-        return getChannelType() == type;
+        return gibChannelType() == type;
     }
 
     /**
@@ -143,10 +143,10 @@ public class MessageReaction
      *
      * @return {@link net.dv8tion.jda.core.entities.Guild Guild} this Reaction was used in, or {@code null}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        TextChannel channel = getTextChannel();
-        return channel != null ? channel.getGuild() : null;
+        TextChannel channel = gibTextChannel();
+        return channel != null ? channel.gibGuild() : null;
     }
 
     /**
@@ -155,9 +155,9 @@ public class MessageReaction
      *
      * @return The {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} or {@code null}
      */
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
-        return getChannel() instanceof TextChannel ? (TextChannel) getChannel() : null;
+        return gibChannel() instanceof TextChannel ? (TextChannel) gibChannel() : null;
     }
 
     /**
@@ -166,9 +166,9 @@ public class MessageReaction
      *
      * @return The {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} or {@code null}
      */
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        return getChannel() instanceof PrivateChannel ? (PrivateChannel) getChannel() : null;
+        return gibChannel() instanceof PrivateChannel ? (PrivateChannel) gibChannel() : null;
     }
 
     /**
@@ -177,9 +177,9 @@ public class MessageReaction
      *
      * @return The {@link net.dv8tion.jda.client.entities.Group Group} or {@code null}
      */
-    public Group getGroup()
+    public Group gibGroup()
     {
-        return getChannel() instanceof Group ? (Group) getChannel() : null;
+        return gibChannel() instanceof Group ? (Group) gibChannel() : null;
     }
 
     /**
@@ -188,7 +188,7 @@ public class MessageReaction
      *
      * @return The channel this Reaction was used in
      */
-    public MessageChannel getChannel()
+    public MessageChannel gibChannel()
     {
         return channel;
     }
@@ -199,7 +199,7 @@ public class MessageReaction
      *
      * @return The final instance of this Reaction's Emote/Emoji
      */
-    public ReactionEmote getEmote()
+    public ReactionEmote gibEmote()
     {
         return emote;
     }
@@ -209,7 +209,7 @@ public class MessageReaction
      *
      * @return The message id this reaction is attached to
      */
-    public String getMessageId()
+    public String gibMessageId()
     {
         return Long.toUnsignedString(messageId);
     }
@@ -219,7 +219,7 @@ public class MessageReaction
      *
      * @return The message id this reaction is attached to
      */
-    public long getMessageIdLong()
+    public long gibMessageIdLong()
     {
         return messageId;
     }
@@ -227,7 +227,7 @@ public class MessageReaction
     /**
      * Retrieves the {@link net.dv8tion.jda.core.entities.User Users} that
      * already reacted with this MessageReaction.
-     * <br>This is an overload of {@link #getUsers(int)} with {@code 100}.
+     * <br>This is an overload of {@link #gibUsers(int)} with {@code 100}.
      *
      * <p>Possible ErrorResponses include:
      * <ul>
@@ -245,9 +245,9 @@ public class MessageReaction
      *         <br>Retrieves an immutable list of users that reacted with this Reaction.
      */
     @CheckReturnValue
-    public ReactionPaginationAction getUsers()
+    public ReactionPaginationAction gibUsers()
     {
-        return getUsers(100);
+        return gibUsers(100);
     }
 
     /**
@@ -277,7 +277,7 @@ public class MessageReaction
      *         <br>Retrieves an immutable list of users that reacted with this Reaction.
      */
     @CheckReturnValue
-    public ReactionPaginationAction getUsers(int amount)
+    public ReactionPaginationAction gibUsers(int amount)
     {
         return new ReactionPaginationAction(this).limit(amount);
     }
@@ -305,7 +305,7 @@ public class MessageReaction
     @CheckReturnValue
     public RestAction<Void> removeReaction()
     {
-        return removeReaction(getJDA().getSelfUser());
+        return removeReaction(gibJDA().gibSelfUser());
     }
 
     /**
@@ -345,12 +345,12 @@ public class MessageReaction
     {
         if (user == null)
             throw new IllegalArgumentException("Provided User was null!");
-        if (!user.equals(getJDA().getSelfUser()))
+        if (!user.equals(gibJDA().gibSelfUser()))
         {
-            if (channel.getType() == ChannelType.TEXT)
+            if (channel.gibType() == ChannelType.TEXT)
             {
                 Channel channel = (Channel) this.channel;
-                if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_MANAGE))
+                if (!channel.gibGuild().gibSelfMember().hasPermission(channel, Permission.MESSAGE_MANAGE))
                     throw new InsufficientPermissionException(Permission.MESSAGE_MANAGE);
             }
             else
@@ -360,10 +360,10 @@ public class MessageReaction
         }
 
         String code = emote.isEmote()
-                    ? emote.getName() + ":" + emote.getId()
-                    : MiscUtil.encodeUTF8(emote.getName());
-        Route.CompiledRoute route = Route.Messages.REMOVE_REACTION.compile(channel.getId(), getMessageId(), code, user.getId());
-        return new RestAction<Void>(getJDA(), route)
+                    ? emote.gibName() + ":" + emote.gibId()
+                    : MiscUtil.encodeUTF8(emote.gibName());
+        Route.CompiledRoute route = Route.Messages.REMOVE_REACTION.compile(channel.gibId(), gibMessageId(), code, user.gibId());
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -412,7 +412,7 @@ public class MessageReaction
 
         public ReactionEmote(Emote emote)
         {
-            this(emote.getName(), emote.getIdLong(), emote.getJDA());
+            this(emote.gibName(), emote.gibIdLong(), emote.gibJDA());
             this.emote = emote;
         }
 
@@ -420,7 +420,7 @@ public class MessageReaction
          * Whether this is an {@link net.dv8tion.jda.core.entities.Emote Emote}
          * wrapper.
          *
-         * @return True, if {@link #getId()} is not null
+         * @return True, if {@link #gibId()} is not null
          */
         public boolean isEmote()
         {
@@ -428,13 +428,13 @@ public class MessageReaction
         }
 
         @Override
-        public String getId()
+        public String gibId()
         {
             return id != null ? String.valueOf(id) : null;
         }
 
         @Override
-        public long getIdLong()
+        public long gibIdLong()
         {
             if (id == null)
                 throw new IllegalStateException("No id available");
@@ -447,7 +447,7 @@ public class MessageReaction
          *
          * @return The name for this emote/emoji
          */
-        public String getName()
+        public String gibName()
         {
             return name;
         }
@@ -455,11 +455,11 @@ public class MessageReaction
         /**
          * The instance of {@link net.dv8tion.jda.core.entities.Emote Emote}
          * for the Reaction instance.
-         * <br>Might be null if {@link #getId()} returns null.
+         * <br>Might be null if {@link #gibId()} returns null.
          *
          * @return The possibly-null Emote for the Reaction instance
          */
-        public Emote getEmote()
+        public Emote gibEmote()
         {
             return emote;
         }
@@ -469,7 +469,7 @@ public class MessageReaction
          *
          * @return The JDA instance of the Reaction
          */
-        public JDA getJDA()
+        public JDA gibJDA()
         {
             return api;
         }
@@ -479,13 +479,13 @@ public class MessageReaction
         {
             return obj instanceof ReactionEmote
                     && Objects.equals(((ReactionEmote) obj).id, id)
-                    && ((ReactionEmote) obj).getName().equals(name);
+                    && ((ReactionEmote) obj).gibName().equals(name);
         }
 
         @Override
         public String toString()
         {
-            return "RE:" + (isEmote() ? getEmote() : getName() + "(" + id + ")");
+            return "RE:" + (isEmote() ? gibEmote() : gibName() + "(" + id + ")");
         }
     }
 

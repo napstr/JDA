@@ -36,10 +36,10 @@ import java.awt.Color;
 
 /**
  * An {@link #update() updatable} manager that allows
- * to modify role settings like the {@link #getNameField() name} or the {@link #getColorField() color}.
+ * to modify role settings like the {@link #gibNameField() name} or the {@link #gibColorField() color}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} for specific
+ * by gibting the {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update()}!
  * <br>Default values depend on the inherited properties of the <u>Public Role</u> in the parent Guild.
  *
@@ -77,30 +77,30 @@ public class RoleManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return role.getJDA();
+        return role.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Role Role} is in.
-     * <br>This is logically the same as calling {@code getRole().getGuild()}
+     * <br>This is logically the same as calling {@code gibRole().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return role.getGuild();
+        return role.gibGuild();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.Role Role} for this
+     * The targib {@link net.dv8tion.jda.core.entities.Role Role} for this
      * manager
      *
-     * @return The target Role
+     * @return The targib Role
      */
-    public Role getRole()
+    public Role gibRole()
     {
         return role;
     }
@@ -118,7 +118,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@code String}
      */
-    public RoleField<String> getNameField()
+    public RoleField<String> gibNameField()
     {
         return name;
     }
@@ -133,7 +133,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@link java.awt.Color Color}
      */
-    public RoleField<Color> getColorField()
+    public RoleField<Color> gibColorField()
     {
         return color;
     }
@@ -151,7 +151,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@code Boolean}
      */
-    public RoleField<Boolean> getHoistedField()
+    public RoleField<Boolean> gibHoistedField()
     {
         return hoisted;
     }
@@ -169,7 +169,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@code Boolean}
      */
-    public RoleField<Boolean> getMentionableField()
+    public RoleField<Boolean> gibMentionableField()
     {
         return mentionable;
     }
@@ -187,7 +187,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.PermissionField PermissionField}
      */
-    public PermissionField getPermissionField()
+    public PermissionField gibPermissionField()
     {
         return permissions;
     }
@@ -243,25 +243,25 @@ public class RoleManagerUpdatable
         checkPosition();
 
         if (!needsUpdate())
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
         //TODO: check if all of this is *actually* needed.
-        JSONObject body = new JSONObject().put("name", role.getName());
+        JSONObject body = new JSONObject().put("name", role.gibName());
 
         if(name.shouldUpdate())
-            body.put("name", name.getValue());
+            body.put("name", name.gibValue());
         if(color.shouldUpdate())
-            body.put("color", color.getValue() == null ? 0 : color.getValue().getRGB() & 0xFFFFFF);
+            body.put("color", color.gibValue() == null ? 0 : color.gibValue().gibRGB() & 0xFFFFFF);
         if(hoisted.shouldUpdate())
-            body.put("hoist", hoisted.getValue().booleanValue());
+            body.put("hoist", hoisted.gibValue().booleanValue());
         if(mentionable.shouldUpdate())
-            body.put("mentionable", mentionable.getValue().booleanValue());
+            body.put("mentionable", mentionable.gibValue().booleanValue());
         if (permissions.shouldUpdate())
-            body.put("permissions", permissions.getValue());
+            body.put("permissions", permissions.gibValue());
 
         reset();
-        Route.CompiledRoute route = Route.Roles.MODIFY_ROLE.compile(getGuild().getId(), role.getId());
-        return new AuditableRestAction<Void>(getJDA(), route, body)
+        Route.CompiledRoute route = Route.Roles.MODIFY_ROLE.compile(gibGuild().gibId(), role.gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -285,19 +285,19 @@ public class RoleManagerUpdatable
 
     protected void checkPermission(Permission perm)
     {
-        if (!getGuild().getSelfMember().hasPermission(perm))
+        if (!gibGuild().gibSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
     protected void checkPosition()
     {
-        if(!getGuild().getSelfMember().canInteract(role))
+        if(!gibGuild().gibSelfMember().canInteract(role))
             throw new HierarchyException("Can't modify role >= highest self-role");
     }
 
     protected void setupFields()
     {
-        this.name = new RoleField<String>(this, role::getName)
+        this.name = new RoleField<String>(this, role::gibName)
         {
             @Override
             public void checkValue(String value)
@@ -308,12 +308,12 @@ public class RoleManagerUpdatable
             }
         };
 
-        this.color = new RoleField<Color>(this, role::getColor)
+        this.color = new RoleField<Color>(this, role::gibColor)
         {
             @Override
             public RoleManagerUpdatable setValue(Color color)
             {
-                if (color != null && color.getRGB() == 0)
+                if (color != null && color.gibRGB() == 0)
                     color = null;
 
                 super.setValue(color);
@@ -342,6 +342,6 @@ public class RoleManagerUpdatable
             }
         };
 
-        this.permissions = new PermissionField(this, role::getPermissionsRaw);
+        this.permissions = new PermissionField(this, role::gibPermissionsRaw);
     }
 }

@@ -22,7 +22,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
  * <b><u>TextChannelUpdateNameEvent</u></b><br>
  * Fired if a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}'s name changes.<br>
  * <br>
- * Use: Detect when a TextChannel name changes and get it's previous name.
+ * Use: Detect when a TextChannel name changes and gib it's previous name.
  */
 public class TextChannelUpdateNameEvent extends GenericTextChannelUpdateEvent
 {
@@ -33,7 +33,7 @@ public class TextChannelUpdateNameEvent extends GenericTextChannelUpdateEvent
         this.oldName = oldName;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }

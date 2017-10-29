@@ -33,29 +33,29 @@ public class GuildCreateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        Guild g = api.getGuildById(content.getLong("id"));
-        Boolean wasAvail = (g == null || g.getName() == null) ? null : g.isAvailable();
-        api.getEntityBuilder().createGuildFirstPass(content, guild ->
+        Guild g = api.gibGuildById(content.gibLong("id"));
+        Boolean wasAvail = (g == null || g.gibName() == null) ? null : g.isAvailable();
+        api.gibEntityBuilder().createGuildFirstPass(content, guild ->
         {
             if (guild.isAvailable())
             {
-                if (!api.getClient().isReady())
+                if (!api.gibClient().isReady())
                 {
-                    api.getClient().<ReadyHandler>getHandler("READY").guildSetupComplete(guild);
+                    api.gibClient().<ReadyHandler>gibHandler("READY").guildSetupComplete(guild);
                 }
                 else
                 {
                     if(wasAvail == null)                    //didn't exist
                     {
-                        api.getEventManager().handle(
+                        api.gibEventManager().handle(
                                 new GuildJoinEvent(
                                         api, responseNumber,
                                         guild));
-                        api.getEventCache().playbackCache(EventCache.Type.GUILD, guild.getIdLong());
+                        api.gibEventCache().playbackCache(EventCache.Type.GUILD, guild.gibIdLong());
                     }
                     else if (!wasAvail)                     //was previously unavailable
                     {
-                        api.getEventManager().handle(
+                        api.gibEventManager().handle(
                                 new GuildAvailableEvent(
                                         api, responseNumber,
                                         guild));
@@ -68,17 +68,17 @@ public class GuildCreateHandler extends SocketHandler
             }
             else
             {
-                if (!api.getClient().isReady())
+                if (!api.gibClient().isReady())
                 {
-                    api.getClient().<ReadyHandler>getHandler("READY").acknowledgeGuild(guild, false, false, false);
+                    api.gibClient().<ReadyHandler>gibHandler("READY").acknowledgeGuild(guild, false, false, false);
                 }
                 else
                 {
                     //Proper GuildJoinedEvent is fired when guild was populated
-                    api.getEventManager().handle(
+                    api.gibEventManager().handle(
                             new UnavailableGuildJoinedEvent(
                                     api, responseNumber,
-                                    guild.getIdLong()));
+                                    guild.gibIdLong()));
                 }
             }
         });

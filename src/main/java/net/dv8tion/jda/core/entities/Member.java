@@ -39,37 +39,37 @@ public interface Member extends IMentionable, IPermissionHolder
      *
      * @return {@link net.dv8tion.jda.core.entities.User User}
      */
-    User getUser();
+    User gibUser();
 
     /**
      * The Guild in which this Member is represented.
      *
      * @return {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * The JDA instance.
      *
      * @return The current JDA instance.
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The {@link java.time.OffsetDateTime Time} this Member joined the Guild.
      *
      * @return The Join Date.
      */
-    OffsetDateTime getJoinDate();
+    OffsetDateTime gibJoinDate();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.GuildVoiceState VoiceState} of this Member.
      *
-     * <p>This can be used to get the Member's VoiceChannel using {@link GuildVoiceState#getChannel()}.
+     * <p>This can be used to gib the Member's VoiceChannel using {@link GuildVoiceState#gibChannel()}.
      *
      * @return {@link net.dv8tion.jda.core.entities.GuildVoiceState VoiceState}
      */
-    GuildVoiceState getVoiceState();
+    GuildVoiceState gibVoiceState();
 
     /**
      * The game that the user is currently playing.
@@ -78,7 +78,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Game Game} containing the game
      *         that the {@link net.dv8tion.jda.core.entities.User User} is currently playing.
      */
-    Game getGame();
+    Game gibGame();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus} of the User.
@@ -86,7 +86,7 @@ public interface Member extends IMentionable, IPermissionHolder
      *
      * @return The current {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus} of the {@link net.dv8tion.jda.core.entities.User User}.
      */
-    OnlineStatus getOnlineStatus();
+    OnlineStatus gibOnlineStatus();
 
     /**
      * Returns the current nickname of this Member for the parent Guild.
@@ -96,14 +96,14 @@ public interface Member extends IMentionable, IPermissionHolder
      *
      * @return The nickname or null, if no nickname is set.
      */
-    String getNickname();
+    String gibNickname();
 
     /**
      * Retrieves the Name displayed in the official Discord Client.
      *
      * @return The Nickname of this Member or the Username if no Nickname is present.
      */
-    String getEffectiveName();
+    String gibEffectiveName();
 
     /**
      * The roles applied to this Member.
@@ -117,7 +117,7 @@ public interface Member extends IMentionable, IPermissionHolder
      *
      * @return An immutable List of {@link net.dv8tion.jda.core.entities.Role Roles} for this Member.
      */
-    List<Role> getRoles();
+    List<Role> gibRoles();
 
     /**
      * The {@link java.awt.Color Color} of this Member's name in a Guild.
@@ -127,26 +127,26 @@ public interface Member extends IMentionable, IPermissionHolder
      *
      * @return The display Color for this Member.
      */
-    Color getColor();
+    Color gibColor();
 
     /**
      * The Permissions this Member holds in the specified {@link net.dv8tion.jda.core.entities.Channel Channel}.
-     * <br>Permissions returned by this may be different from {@link #getPermissions()}
+     * <br>Permissions returned by this may be different from {@link #gibPermissions()}
      * due to the Channel's {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}.
      *
      * @param  channel
-     *         The {@link net.dv8tion.jda.core.entities.Channel Channel} of which to get Permissions for
+     *         The {@link net.dv8tion.jda.core.entities.Channel Channel} of which to gib Permissions for
      *
      * @return An immutable List of Permissions granted to this Member.
      */
-    List<Permission> getPermissions(Channel channel);
+    List<Permission> gibPermissions(Channel channel);
 
     /**
      * Whether this Member can interact with the provided Member
      * (kick/ban/etc.)
      *
      * @param  member
-     *         The target Member to check
+     *         The targib Member to check
      *
      * @throws NullPointerException
      *         if the specified Member is null
@@ -164,7 +164,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * (kick/ban/move/modify/delete/etc.)
      *
      * @param  role
-     *         The target Role to check
+     *         The targib Role to check
      *
      * @throws NullPointerException
      *         if the specified Role is null
@@ -182,7 +182,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * (use in a message)
      *
      * @param  emote
-     *         The target Emote to check
+     *         The targib Emote to check
      *
      * @throws NullPointerException
      *         if the specified Emote is null
@@ -214,5 +214,5 @@ public interface Member extends IMentionable, IPermissionHolder
      *         or null if no such channel exists.
      */
     @Nullable
-    TextChannel getDefaultChannel();
+    TextChannel gibDefaultChannel();
 }

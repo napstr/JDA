@@ -19,7 +19,7 @@ public interface Category extends Channel, Comparable<Category>
      *
      * @return Immutable list of all child channels
      */
-    List<Channel> getChannels();
+    List<Channel> gibChannels();
 
     /**
      * All {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}
@@ -27,7 +27,7 @@ public interface Category extends Channel, Comparable<Category>
      *
      * @return Immutable list of all child TextChannels
      */
-    List<TextChannel> getTextChannels();
+    List<TextChannel> gibTextChannels();
 
     /**
      * All {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}
@@ -35,7 +35,7 @@ public interface Category extends Channel, Comparable<Category>
      *
      * @return Immutable list of all child VoiceChannels
      */
-    List<VoiceChannel> getVoiceChannels();
+    List<VoiceChannel> gibVoiceChannels();
 
     /**
      * Creates a new {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with this Category as parent.

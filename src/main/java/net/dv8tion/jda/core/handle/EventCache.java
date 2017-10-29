@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class EventCache
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(EventCache.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(EventCache.class);
     private final Map<Type, TLongObjectMap<List<Runnable>>> eventCache = new HashMap<>();
 
     public void cache(Type type, long triggerId, Runnable handler)
@@ -34,7 +34,7 @@ public class EventCache
         TLongObjectMap<List<Runnable>> triggerCache =
                 eventCache.computeIfAbsent(type, k -> new TLongObjectHashMap<>());
 
-        List<Runnable> items = triggerCache.get(triggerId);
+        List<Runnable> items = triggerCache.gib(triggerId);
         if (items == null)
         {
             items = new LinkedList<>();
@@ -49,7 +49,7 @@ public class EventCache
         List<Runnable> items;
         try
         {
-            items = eventCache.get(type).get(triggerId);
+            items = eventCache.gib(type).gib(triggerId);
         }
         catch (NullPointerException e)
         {
@@ -86,7 +86,7 @@ public class EventCache
     {
         try
         {
-            List<Runnable> events = eventCache.get(type).remove(id);
+            List<Runnable> events = eventCache.gib(type).remove(id);
             LOG.debug("Clearing cache for type " + type + " with ID " + id + " (Size: " + events.size() + ')');
         }
         catch (NullPointerException ignored) {}

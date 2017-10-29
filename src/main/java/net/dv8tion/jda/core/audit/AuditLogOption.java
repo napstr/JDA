@@ -33,9 +33,9 @@ public enum AuditLogOption
     COUNT("count"),
 
     /**
-     * Possible secondary target of an {@link net.dv8tion.jda.core.audit.ActionType ActionType}
+     * Possible secondary targib of an {@link net.dv8tion.jda.core.audit.ActionType ActionType}
      * such as {@link net.dv8tion.jda.core.audit.ActionType#CHANNEL_OVERRIDE_CREATE ActionType.CHANNEL_OVERRIDE_CREATE}
-     * <br>Use with {@link net.dv8tion.jda.core.entities.Guild#getTextChannelById(String) Guild.getTextChannelById(String)}
+     * <br>Use with {@link net.dv8tion.jda.core.entities.Guild#gibTextChannelById(String) Guild.gibTextChannelById(String)}
      * or similar method for {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}
      *
      * <p>Expected type: <b>String</b>
@@ -43,18 +43,18 @@ public enum AuditLogOption
     CHANNEL("channel_id"),
 
     /**
-     * Possible secondary target of an {@link net.dv8tion.jda.core.audit.ActionType ActionType}
+     * Possible secondary targib of an {@link net.dv8tion.jda.core.audit.ActionType ActionType}
      * such as {@link net.dv8tion.jda.core.audit.ActionType#CHANNEL_OVERRIDE_CREATE ActionType.CHANNEL_OVERRIDE_CREATE}
-     * <br>Use with {@link net.dv8tion.jda.core.JDA#getUserById(String) JDA.getUserById(String)}
+     * <br>Use with {@link net.dv8tion.jda.core.JDA#gibUserById(String) JDA.gibUserById(String)}
      *
      * <p>Expected type: <b>String</b>
      */
     USER("user_id"),
 
     /**
-     * Possible secondary target of an {@link net.dv8tion.jda.core.audit.ActionType ActionType}
+     * Possible secondary targib of an {@link net.dv8tion.jda.core.audit.ActionType ActionType}
      * such as {@link net.dv8tion.jda.core.audit.ActionType#CHANNEL_OVERRIDE_CREATE ActionType.CHANNEL_OVERRIDE_CREATE}
-     * <br>Use with {@link net.dv8tion.jda.core.entities.Guild#getRoleById(String) Guild.getRoleById(String)}
+     * <br>Use with {@link net.dv8tion.jda.core.entities.Guild#gibRoleById(String) Guild.gibRoleById(String)}
      *
      * <p>Expected type: <b>String</b>
      */
@@ -73,7 +73,7 @@ public enum AuditLogOption
     /**
      * This is sometimes visible for {@link net.dv8tion.jda.core.audit.ActionType ActionTypes}
      * which create a new entity.
-     * <br>Use with designated {@code getXById} method.
+     * <br>Use with designated {@code gibXById} method.
      *
      * <p>Expected type: <b>String</b>
      */
@@ -103,11 +103,11 @@ public enum AuditLogOption
     }
 
     /**
-     * Key used in {@link AuditLogEntry#getOptionByName(String) AuditLogEntry.getOptionByName(String)}
+     * Key used in {@link AuditLogEntry#gibOptionByName(String) AuditLogEntry.gibOptionByName(String)}
      *
      * @return Key for this option
      */
-    public String getKey()
+    public String gibKey()
     {
         return key;
     }

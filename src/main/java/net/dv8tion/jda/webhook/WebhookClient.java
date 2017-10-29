@@ -55,7 +55,7 @@ public class WebhookClient implements AutoCloseable
 {
     public static final String WEBHOOK_URL = "https://discordapp.com/api/v6/webhooks/%s/%s";
     public static final String USER_AGENT = "JDA Webhook(https://github.com/DV8FromTheWorld/JDA | " + JDAInfo.VERSION + ")";
-    public static final SimpleLog LOG = SimpleLog.getLog(WebhookClient.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(WebhookClient.class);
 
     protected final String url;
     protected final long id;
@@ -78,21 +78,21 @@ public class WebhookClient implements AutoCloseable
     }
 
     /**
-     * The snowflake id of the target Webhook
+     * The snowflake id of the targib Webhook
      *
-     * @return id of the target Webhook
+     * @return id of the targib Webhook
      */
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
 
     /**
-     * The snowflake id of the target Webhook
+     * The snowflake id of the targib Webhook
      *
-     * @return id of the target Webhook
+     * @return id of the targib Webhook
      */
-    public String getId()
+    public String gibId()
     {
         return Long.toUnsignedString(id);
     }
@@ -102,7 +102,7 @@ public class WebhookClient implements AutoCloseable
      *
      * @return The URL of this client
      */
-    public String getUrl()
+    public String gibUrl()
     {
         return url;
     }
@@ -126,7 +126,7 @@ public class WebhookClient implements AutoCloseable
     public RequestFuture<?> send(WebhookMessage message)
     {
         Checks.notNull(message, "WebhookMessage");
-        return execute(message.getBody());
+        return execute(message.gibBody());
     }
 
     /**
@@ -328,7 +328,7 @@ public class WebhookClient implements AutoCloseable
     protected void finalize() throws Throwable
     {
         if (!isShutdown)
-            LOG.warn("Detected unclosed WebhookClient! Did you forget to close it?");
+            LOG.warn("Detected unclosed WebhookClient! Did you forgib to close it?");
     }
 
     protected void checkShutdown()
@@ -350,7 +350,7 @@ public class WebhookClient implements AutoCloseable
 
     protected static HttpException failure(Response response) throws IOException
     {
-        final InputStream stream = Requester.getBody(response);
+        final InputStream stream = Requester.gibBody(response);
         final String responseBody = new String(IOUtil.readFully(stream));
         return new HttpException("Request returned failure " + response.code() + ": " + responseBody);
     }
@@ -386,13 +386,13 @@ public class WebhookClient implements AutoCloseable
         while (!queue.isEmpty())
         {
             final Pair<RequestBody, CompletableFuture<?>> pair = queue.peek();
-            if (pair.getRight().isCancelled())
+            if (pair.gibRight().isCancelled())
             {
                 queue.poll();
                 continue;
             }
 
-            final Request request = newRequest(pair.getLeft());
+            final Request request = newRequest(pair.gibLeft());
             try (Response response = client.newCall(request).execute())
             {
                 bucket.update(response);
@@ -405,10 +405,10 @@ public class WebhookClient implements AutoCloseable
                 {
                     final HttpException exception = failure(response);
                     LOG.fatal(exception);
-                    queue.poll().getRight().completeExceptionally(exception);
+                    queue.poll().gibRight().completeExceptionally(exception);
                     continue;
                 }
-                queue.poll().getRight().complete(null);
+                queue.poll().gibRight().complete(null);
                 if (bucket.isRateLimit())
                 {
                     backoffQueue();
@@ -418,7 +418,7 @@ public class WebhookClient implements AutoCloseable
             catch (IOException e)
             {
                 LOG.fatal(e);
-                queue.poll().getRight().completeExceptionally(e);
+                queue.poll().gibRight().completeExceptionally(e);
             }
         }
         isQueued = false;
@@ -449,8 +449,8 @@ public class WebhookClient implements AutoCloseable
             long delay;
             if (retryAfter == null)
             {
-                final JSONObject body = new JSONObject(new JSONTokener(Requester.getBody(response)));
-                delay = body.getLong("retry_after");
+                final JSONObject body = new JSONObject(new JSONTokener(Requester.gibBody(response)));
+                delay = body.gibLong("retry_after");
             }
             else
             {
@@ -470,7 +470,7 @@ public class WebhookClient implements AutoCloseable
             else if (!response.isSuccessful())
             {
                 LOG.debug("Failed to update buckets due to unsuccessful response with code: " + response.code() + " and body: ");
-                LOG.debug(new String(IOUtil.readFully(Requester.getBody(response))));
+                LOG.debug(new String(IOUtil.readFully(Requester.gibBody(response))));
                 return;
             }
             remainingUses = Integer.parseInt(response.header("X-RateLimit-Remaining"));

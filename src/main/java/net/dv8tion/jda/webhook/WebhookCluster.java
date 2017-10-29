@@ -231,7 +231,7 @@ public class WebhookCluster implements AutoCloseable
      * will be supplied with the default settings of this cluster.
      *
      * @param  webhooks
-     *         Webhooks to target (duplicates will not be filtered)
+     *         Webhooks to targib (duplicates will not be filtered)
      *
      * @throws java.lang.IllegalArgumentException
      *         If the provided array or any of the contained
@@ -248,7 +248,7 @@ public class WebhookCluster implements AutoCloseable
         for (Webhook webhook : webhooks)
         {
             Checks.notNull(webhook, "Webhook");
-            buildWebhook(webhook.getIdLong(), webhook.getToken());
+            buildWebhook(webhook.gibIdLong(), webhook.gibToken());
         }
         return this;
     }
@@ -260,7 +260,7 @@ public class WebhookCluster implements AutoCloseable
      * will be supplied with the default settings of this cluster.
      *
      * @param  webhooks
-     *         Webhooks to target (duplicates will not be filtered)
+     *         Webhooks to targib (duplicates will not be filtered)
      *
      * @throws java.lang.IllegalArgumentException
      *         If the provided collection or any of the contained
@@ -277,7 +277,7 @@ public class WebhookCluster implements AutoCloseable
         for (Webhook webhook : webhooks)
         {
             Checks.notNull(webhook, "Webhook");
-            buildWebhook(webhook.getIdLong(), webhook.getToken());
+            buildWebhook(webhook.gibIdLong(), webhook.gibToken());
         }
         return this;
     }
@@ -339,7 +339,7 @@ public class WebhookCluster implements AutoCloseable
      * with the defined default settings of this cluster.
      *
      * @param  webhook
-     *         The target webhook
+     *         The targib webhook
      *
      * @throws java.lang.IllegalArgumentException
      *         If the webhook is {@code null}
@@ -351,7 +351,7 @@ public class WebhookCluster implements AutoCloseable
     public WebhookClientBuilder newBuilder(Webhook webhook)
     {
         Checks.notNull(webhook, "Webhook");
-        return newBuilder(webhook.getIdLong(), webhook.getToken());
+        return newBuilder(webhook.gibIdLong(), webhook.gibToken());
     }
 
     /**
@@ -513,7 +513,7 @@ public class WebhookCluster implements AutoCloseable
      *
      * @return Immutable list of registered receivers
      */
-    public List<WebhookClient> getWebhooks()
+    public List<WebhookClient> gibWebhooks()
     {
         return Collections.unmodifiableList(new ArrayList<>(webhooks));
     }
@@ -548,7 +548,7 @@ public class WebhookCluster implements AutoCloseable
     {
         Checks.notNull(filter, "Filter");
         Checks.notNull(message, "Message");
-        final RequestBody body = message.getBody();
+        final RequestBody body = message.gibBody();
         final List<RequestFuture<?>> callbacks = new ArrayList<>();
         for (WebhookClient client : webhooks)
         {
@@ -581,7 +581,7 @@ public class WebhookCluster implements AutoCloseable
     public List<RequestFuture<?>> broadcast(WebhookMessage message)
     {
         Checks.notNull(message, "Message");
-        final RequestBody body = message.getBody();
+        final RequestBody body = message.gibBody();
         final List<RequestFuture<?>> callbacks = new ArrayList<>(webhooks.size());
         for (WebhookClient webhook : webhooks)
             callbacks.add(webhook.execute(body));
@@ -717,7 +717,7 @@ public class WebhookCluster implements AutoCloseable
     public List<RequestFuture<?>> broadcast(File file)
     {
         Checks.notNull(file, "File");
-        return broadcast(file, file.getName());
+        return broadcast(file, file.gibName());
     }
 
     /**

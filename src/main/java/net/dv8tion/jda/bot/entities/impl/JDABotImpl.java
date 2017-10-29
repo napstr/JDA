@@ -40,16 +40,16 @@ public class JDABotImpl implements JDABot
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
     @Override
-    public RestAction<ApplicationInfo> getApplicationInfo()
+    public RestAction<ApplicationInfo> gibApplicationInfo()
     {
         Route.CompiledRoute route = Route.Applications.GET_BOT_APPLICATION.compile();
-        return new RestAction<ApplicationInfo>(getJDA(), route)
+        return new RestAction<ApplicationInfo>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<ApplicationInfo> request)
@@ -60,35 +60,35 @@ public class JDABotImpl implements JDABot
                     return;
                 }
 
-                ApplicationInfo info = api.getEntityBuilder().createApplicationInfo(response.getObject());
-                JDABotImpl.this.clientId = info.getId();
+                ApplicationInfo info = api.gibEntityBuilder().createApplicationInfo(response.gibObject());
+                JDABotImpl.this.clientId = info.gibId();
                 request.onSuccess(info);
             }
         };
     }
 
     @Override
-    public String getInviteUrl(Permission... permissions)
+    public String gibInviteUrl(Permission... permissions)
     {
         StringBuilder builder = buildBaseInviteUrl();
         if (permissions != null && permissions.length > 0)
-            builder.append("&permissions=").append(Permission.getRaw(permissions));
+            builder.append("&permissions=").append(Permission.gibRaw(permissions));
         return builder.toString();
     }
 
     @Override
-    public String getInviteUrl(Collection<Permission> permissions)
+    public String gibInviteUrl(Collection<Permission> permissions)
     {
         StringBuilder builder = buildBaseInviteUrl();
         if (permissions != null && !permissions.isEmpty())
-            builder.append("&permissions=").append(Permission.getRaw(permissions));
+            builder.append("&permissions=").append(Permission.gibRaw(permissions));
         return builder.toString();
     }
 
     private StringBuilder buildBaseInviteUrl()
     {
         if (clientId == null)
-            getApplicationInfo().complete();
+            gibApplicationInfo().complete();
         StringBuilder builder = new StringBuilder("https://discordapp.com/oauth2/authorize?scope=bot&client_id=");
         builder.append(clientId);
         return builder;

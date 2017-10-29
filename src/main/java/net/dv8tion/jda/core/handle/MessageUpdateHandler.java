@@ -48,7 +48,7 @@ public class MessageUpdateHandler extends SocketHandler
         {
             if (content.has("type"))
             {
-                MessageType type = MessageType.fromId(content.getInt("type"));
+                MessageType type = MessageType.fromId(content.gibInt("type"));
                 switch (type)
                 {
                     case DEFAULT:
@@ -80,23 +80,23 @@ public class MessageUpdateHandler extends SocketHandler
         Message message;
         try
         {
-            message = api.getEntityBuilder().createMessage(content);
+            message = api.gibEntityBuilder().createMessage(content);
         }
         catch (IllegalArgumentException e)
         {
-            switch (e.getMessage())
+            switch (e.gibMessage())
             {
                 case EntityBuilder.MISSING_CHANNEL:
                 {
-                    final long channelId = content.getLong("channel_id");
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    final long channelId = content.gibLong("channel_id");
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message update for a channel that JDA does not currently have cached");
                     return null;
                 }
                 case EntityBuilder.MISSING_USER:
                 {
-                    final long authorId = content.getJSONObject("author").getLong("id");
-                    api.getEventCache().cache(EventCache.Type.USER, authorId, () -> handle(responseNumber, allContent));
+                    final long authorId = content.gibJSONObject("author").gibLong("id");
+                    api.gibEventCache().cache(EventCache.Type.USER, authorId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message update for a user that JDA does not currently have cached");
                     return null;
                 }
@@ -105,16 +105,16 @@ public class MessageUpdateHandler extends SocketHandler
             }
         }
 
-        switch (message.getChannelType())
+        switch (message.gibChannelType())
         {
             case TEXT:
             {
-                TextChannel channel = message.getTextChannel();
-                if (api.getGuildLock().isLocked(channel.getGuild().getIdLong()))
+                TextChannel channel = message.gibTextChannel();
+                if (api.gibGuildLock().isLocked(channel.gibGuild().gibIdLong()))
                 {
-                    return channel.getGuild().getIdLong();
+                    return channel.gibGuild().gibIdLong();
                 }
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new GuildMessageUpdateEvent(
                                 api, responseNumber,
                                 message));
@@ -122,14 +122,14 @@ public class MessageUpdateHandler extends SocketHandler
             }
             case PRIVATE:
             {
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new PrivateMessageUpdateEvent(
                                 api, responseNumber,
                                 message));
             }
             case GROUP:
             {
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new GroupMessageUpdateEvent(
                                 api, responseNumber,
                                 message));
@@ -142,7 +142,7 @@ public class MessageUpdateHandler extends SocketHandler
         }
 
         //Combo event
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new MessageUpdateEvent(
                         api, responseNumber,
                         message));
@@ -151,20 +151,20 @@ public class MessageUpdateHandler extends SocketHandler
 
     private Long handleMessageEmbed(JSONObject content)
     {
-        EntityBuilder builder = api.getEntityBuilder();
-        final long messageId = content.getLong("id");
-        final long channelId = content.getLong("channel_id");
+        EntityBuilder builder = api.gibEntityBuilder();
+        final long messageId = content.gibLong("id");
+        final long channelId = content.gibLong("channel_id");
         LinkedList<MessageEmbed> embeds = new LinkedList<>();
-        MessageChannel channel = api.getTextChannelMap().get(channelId);
+        MessageChannel channel = api.gibTextChannelMap().gib(channelId);
         if (channel == null)
-            channel = api.getPrivateChannelMap().get(channelId);
+            channel = api.gibPrivateChannelMap().gib(channelId);
         if (channel == null)
-            channel = api.getFakePrivateChannelMap().get(channelId);
-        if (channel == null && api.getAccountType() == AccountType.CLIENT)
-            channel = api.asClient().getGroupById(channelId);
+            channel = api.gibFakePrivateChannelMap().gib(channelId);
+        if (channel == null && api.gibAccountType() == AccountType.CLIENT)
+            channel = api.asClient().gibGroupById(channelId);
         if (channel == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () ->
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () ->
             {
                 handle(responseNumber, allContent);
             });
@@ -172,40 +172,40 @@ public class MessageUpdateHandler extends SocketHandler
             return null;
         }
 
-        JSONArray embedsJson = content.getJSONArray("embeds");
+        JSONArray embedsJson = content.gibJSONArray("embeds");
         for (int i = 0; i < embedsJson.length(); i++)
         {
-            embeds.add(builder.createMessageEmbed(embedsJson.getJSONObject(i)));
+            embeds.add(builder.createMessageEmbed(embedsJson.gibJSONObject(i)));
         }
 
         if (channel instanceof TextChannel)
         {
             TextChannel tChannel = (TextChannel) channel;
-            if (api.getGuildLock().isLocked(tChannel.getGuild().getIdLong()))
+            if (api.gibGuildLock().isLocked(tChannel.gibGuild().gibIdLong()))
             {
-                return tChannel.getGuild().getIdLong();
+                return tChannel.gibGuild().gibIdLong();
             }
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildMessageEmbedEvent(
                             api, responseNumber,
                             messageId, tChannel, embeds));
         }
         else if (channel instanceof PrivateChannel)
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new PrivateMessageEmbedEvent(
                             api, responseNumber,
                             messageId, (PrivateChannel) channel, embeds));
         }
         else
         {
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GroupMessageEmbedEvent(
                             api, responseNumber,
                             messageId, (Group) channel, embeds));
         }
         //Combo event
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new MessageEmbedEvent(
                         api, responseNumber,
                         messageId, channel, embeds));

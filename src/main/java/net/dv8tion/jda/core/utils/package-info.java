@@ -35,8 +35,8 @@
  *     <br>Focused all around the {@link net.dv8tion.jda.core.Permission Permissions enum},
  *         used to check whether a certain entity has case-by-case permissions</li>
  *
- *     <li>{@link net.dv8tion.jda.core.utils.WidgetUtil WidgetUtil}
- *     <br>This is not bound to a JDA instance and can view the {@link net.dv8tion.jda.core.utils.WidgetUtil.Widget Widget}
+ *     <li>{@link net.dv8tion.jda.core.utils.WidgibUtil WidgibUtil}
+ *     <br>This is not bound to a JDA instance and can view the {@link net.dv8tion.jda.core.utils.WidgibUtil.Widgib Widgib}
  *         for a specified Guild. (by id)</li>
  * </ul>
  */

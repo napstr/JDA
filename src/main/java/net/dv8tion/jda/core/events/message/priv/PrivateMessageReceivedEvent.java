@@ -31,18 +31,18 @@ public class PrivateMessageReceivedEvent extends GenericPrivateMessageEvent
 
     public PrivateMessageReceivedEvent(JDA api, long responseNumber, Message message)
     {
-        super(api, responseNumber, message.getIdLong(), message.getPrivateChannel());
+        super(api, responseNumber, message.gibIdLong(), message.gibPrivateChannel());
         this.message = message;
     }
 
-    public Message getMessage()
+    public Message gibMessage()
     {
         return message;
     }
 
-    public User getAuthor()
+    public User gibAuthor()
     {
-        return message.getAuthor();
+        return message.gibAuthor();
     }
 
 }

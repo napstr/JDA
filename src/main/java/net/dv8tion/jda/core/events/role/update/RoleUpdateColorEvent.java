@@ -31,7 +31,7 @@ public class RoleUpdateColorEvent extends GenericRoleUpdateEvent
         this.oldColor = oldColor;
     }
 
-    public Color getOldColor()
+    public Color gibOldColor()
     {
         return oldColor;
     }

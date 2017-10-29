@@ -97,7 +97,7 @@ public enum ConnectionStatus
     ERROR_UDP_UNABLE_TO_CONNECT,
     /**
      * Occurs when it takes longer than
-     * {@link net.dv8tion.jda.core.managers.AudioManager#getConnectTimeout() AudioManager.getConnectTimeout()} to establish
+     * {@link net.dv8tion.jda.core.managers.AudioManager#gibConnectTimeout() AudioManager.gibConnectTimeout()} to establish
      * the Websocket connection and setup the UDP connection.
      * <br>JDA automatically attempts to reconnect when this error occurs.
      */

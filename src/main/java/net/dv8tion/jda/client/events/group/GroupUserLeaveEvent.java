@@ -30,7 +30,7 @@ public class GroupUserLeaveEvent extends GenericGroupEvent
         this.user = user;
     }
 
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }

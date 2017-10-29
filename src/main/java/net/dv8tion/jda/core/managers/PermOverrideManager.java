@@ -52,44 +52,44 @@ public class PermOverrideManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return updatable.getJDA();
+        return updatable.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Channel Channel} is in.
-     * <br>This is logically the same as calling {@code getPermissionOverride().getGuild()}
+     * <br>This is logically the same as calling {@code gibPermissionOverride().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return updatable.getGuild();
+        return updatable.gibGuild();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Channel Channel} this Manager's
      * {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is in.
-     * <br>This is logically the same as calling {@code getPermissionOverride().getChannel()}
+     * <br>This is logically the same as calling {@code gibPermissionOverride().gibChannel()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Channel Channel}
      */
-    public Channel getChannel()
+    public Channel gibChannel()
     {
-        return updatable.getChannel();
+        return updatable.gibChannel();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
+     * The targib {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * that will be modified by this Manager
      *
-     * @return The target {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
+     * @return The targib {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      */
-    public PermissionOverride getPermissionOverride()
+    public PermissionOverride gibPermissionOverride()
     {
-        return updatable.getPermissionOverride();
+        return updatable.gibPermissionOverride();
     }
 
     /**

@@ -77,5 +77,5 @@ public interface IEventManager
      * @return An immutable list of listeners
      *         that have already been registered
      */
-    List<Object> getRegisteredListeners();
+    List<Object> gibRegisteredListeners();
 }

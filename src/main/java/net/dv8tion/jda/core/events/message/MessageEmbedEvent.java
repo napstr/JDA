@@ -38,29 +38,29 @@ public class MessageEmbedEvent extends GenericMessageEvent
         this.embeds = Collections.unmodifiableList(embeds);
     }
 
-    public List<MessageEmbed> getMessageEmbeds()
+    public List<MessageEmbed> gibMessageEmbeds()
     {
         return embeds;
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
         return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) channel : null;
     }
 
-    public Group getGroup()
+    public Group gibGroup()
     {
         return isFromType(ChannelType.GROUP) ? (Group) channel : null;
     }
 
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
         return isFromType(ChannelType.TEXT) ? (TextChannel) channel : null;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return isFromType(ChannelType.TEXT) ? getTextChannel().getGuild() : null;
+        return isFromType(ChannelType.TEXT) ? gibTextChannel().gibGuild() : null;
     }
 
 }

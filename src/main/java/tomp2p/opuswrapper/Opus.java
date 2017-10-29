@@ -166,7 +166,7 @@ public interface Opus extends Library {
     public static final int OPUS_MULTISTREAM_GET_ENCODER_STATE_REQUEST = (int)5120;
 
 
-    int opus_encoder_get_size(int channels);
+    int opus_encoder_gib_size(int channels);
 
     PointerByReference opus_encoder_create(int Fs, int channels, int application, IntBuffer error);
 
@@ -184,7 +184,7 @@ public interface Opus extends Library {
 
     int opus_encoder_ctl(PointerByReference st, int request, Object... varargs);
 
-    int opus_decoder_get_size(int channels);
+    int opus_decoder_gib_size(int channels);
 
     PointerByReference opus_decoder_create(int Fs, int channels, IntBuffer error);
 
@@ -204,23 +204,23 @@ public interface Opus extends Library {
 
     int opus_packet_parse(byte data[], int len, ByteBuffer out_toc, byte frames[], ShortBuffer size, IntBuffer payload_offset);
 
-    int opus_packet_get_bandwidth(byte data[]);
+    int opus_packet_gib_bandwidth(byte data[]);
 
-    int opus_packet_get_samples_per_frame(byte data[], int Fs);
+    int opus_packet_gib_samples_per_frame(byte data[], int Fs);
 
-    int opus_packet_get_nb_channels(byte data[]);
+    int opus_packet_gib_nb_channels(byte data[]);
 
-    int opus_packet_get_nb_frames(byte packet[], int len);
+    int opus_packet_gib_nb_frames(byte packet[], int len);
 
-    int opus_packet_get_nb_samples(byte packet[], int len, int Fs);
+    int opus_packet_gib_nb_samples(byte packet[], int len, int Fs);
 
-    int opus_decoder_get_nb_samples(PointerByReference dec, byte packet[], int len);
+    int opus_decoder_gib_nb_samples(PointerByReference dec, byte packet[], int len);
 
-    int opus_decoder_get_nb_samples(PointerByReference dec, Pointer packet, int len);
+    int opus_decoder_gib_nb_samples(PointerByReference dec, Pointer packet, int len);
 
     void opus_pcm_soft_clip(FloatBuffer pcm, int frame_size, int channels, FloatBuffer softclip_mem);
 
-    int opus_repacketizer_get_size();
+    int opus_repacketizer_gib_size();
 
     PointerByReference opus_repacketizer_init(PointerByReference rp);
 
@@ -236,7 +236,7 @@ public interface Opus extends Library {
 
     int opus_repacketizer_out_range(PointerByReference rp, int begin, int end, Pointer data, int maxlen);
 
-    int opus_repacketizer_get_nb_frames(PointerByReference rp);
+    int opus_repacketizer_gib_nb_frames(PointerByReference rp);
 
     int opus_repacketizer_out(PointerByReference rp, ByteBuffer data, int maxlen);
 
@@ -277,11 +277,11 @@ public interface Opus extends Library {
 
     String opus_strerror(int error);
 
-    String opus_get_version_string();
+    String opus_gib_version_string();
 
-    int opus_multistream_encoder_get_size(int streams, int coupled_streams);
+    int opus_multistream_encoder_gib_size(int streams, int coupled_streams);
 
-    int opus_multistream_surround_encoder_get_size(int channels, int mapping_family);
+    int opus_multistream_surround_encoder_gib_size(int channels, int mapping_family);
 
     PointerByReference opus_multistream_encoder_create(int Fs, int channels, int streams, int coupled_streams, byte mapping[], int application, IntBuffer error);
 
@@ -307,7 +307,7 @@ public interface Opus extends Library {
 
     int opus_multistream_encoder_ctl(PointerByReference st, int request, Object... varargs);
 
-    int opus_multistream_decoder_get_size(int streams, int coupled_streams);
+    int opus_multistream_decoder_gib_size(int streams, int coupled_streams);
 
     PointerByReference opus_multistream_decoder_create(int Fs, int channels, int streams, int coupled_streams, byte mapping[], IntBuffer error);
 
@@ -347,7 +347,7 @@ public interface Opus extends Library {
 
     void opus_custom_mode_destroy(PointerByReference mode);
 
-    int opus_custom_encoder_get_size(PointerByReference mode, int channels);
+    int opus_custom_encoder_gib_size(PointerByReference mode, int channels);
 
     PointerByReference opus_custom_encoder_create(PointerByReference mode, int channels, IntBuffer error);
 
@@ -365,7 +365,7 @@ public interface Opus extends Library {
 
     int opus_custom_encoder_ctl(PointerByReference st, int request, Object... varargs);
 
-    int opus_custom_decoder_get_size(PointerByReference mode, int channels);
+    int opus_custom_decoder_gib_size(PointerByReference mode, int channels);
 
     int opus_custom_decoder_init(PointerByReference st, PointerByReference mode, int channels);
 

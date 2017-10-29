@@ -206,9 +206,9 @@ public class GuildAction extends RestAction<Void>
      * @return The current GuildAction for chaining convenience
      */
     @CheckReturnValue
-    public ChannelData getChannel(int index)
+    public ChannelData gibChannel(int index)
     {
-        return this.channels.get(index);
+        return this.channels.gib(index);
     }
 
     /**
@@ -277,7 +277,7 @@ public class GuildAction extends RestAction<Void>
 
     /**
      * Retrieves the {@link net.dv8tion.jda.core.requests.restaction.GuildAction.RoleData RoleData} for the
-     * public role ({@link net.dv8tion.jda.core.entities.Guild#getPublicRole() Guild.getPublicRole()}) for the resulting Guild.
+     * public role ({@link net.dv8tion.jda.core.entities.Guild#gibPublicRole() Guild.gibPublicRole()}) for the resulting Guild.
      * <br>The public role is also known in the official client as the {@code @everyone} role.
      *
      * <p><b>You can only change the permissions of the public role!</b>
@@ -285,9 +285,9 @@ public class GuildAction extends RestAction<Void>
      * @return RoleData of the public role
      */
     @CheckReturnValue
-    public RoleData getPublicRole()
+    public RoleData gibPublicRole()
     {
-        return this.roles.get(0);
+        return this.roles.gib(0);
     }
 
     /**
@@ -304,9 +304,9 @@ public class GuildAction extends RestAction<Void>
      * @return RoleData of the provided index
      */
     @CheckReturnValue
-    public RoleData getRole(int index)
+    public RoleData gibRole(int index)
     {
-        return this.roles.get(index);
+        return this.roles.gib(index);
     }
 
     /**
@@ -335,16 +335,16 @@ public class GuildAction extends RestAction<Void>
         if (!channels.isEmpty())
             object.put("channels", new JSONArray(channels));
         if (icon != null)
-            object.put("icon", icon.getEncoding());
+            object.put("icon", icon.gibEncoding());
         if (verificationLevel != null)
-            object.put("verification_level", verificationLevel.getKey());
+            object.put("verification_level", verificationLevel.gibKey());
         if (notificationLevel != null)
-            object.put("default_message_notifications", notificationLevel.getKey());
+            object.put("default_message_notifications", notificationLevel.gibKey());
         if (explicitContentLevel != null)
-            object.put("explicit_content_filter", explicitContentLevel.getKey());
+            object.put("explicit_content_filter", explicitContentLevel.gibKey());
         if (region != null)
-            object.put("region", region.getKey());
-        return getRequestBody(object);
+            object.put("region", region.gibKey());
+        return gibRequestBody(object);
     }
 
     @Override
@@ -419,7 +419,7 @@ public class GuildAction extends RestAction<Void>
                 Checks.notNull(perm, "Permissions");
             if (this.permissions == null)
                 this.permissions = 0L;
-            this.permissions |= Permission.getRaw(permissions);
+            this.permissions |= Permission.gibRaw(permissions);
             return this;
         }
 
@@ -439,7 +439,7 @@ public class GuildAction extends RestAction<Void>
             Checks.noneNull(permissions, "Permissions");
             if (this.permissions == null)
                 this.permissions = 0L;
-            this.permissions |= Permission.getRaw(permissions);
+            this.permissions |= Permission.gibRaw(permissions);
             return this;
         }
 
@@ -475,7 +475,7 @@ public class GuildAction extends RestAction<Void>
         public RoleData setColor(Color color)
         {
             checkPublic("color");
-            this.color = color == null ? null : color.getRGB();
+            this.color = color == null ? null : color.gibRGB();
             return this;
         }
 
@@ -708,7 +708,7 @@ public class GuildAction extends RestAction<Void>
          * <br>Use {@link GuildAction#newRole() GuildAction.newRole()} to retrieve an instance of RoleData.
          *
          * @param  role
-         *         The target role
+         *         The targib role
          * @param  allow
          *         The permissions to grant in the override
          * @param  deny
@@ -740,7 +740,7 @@ public class GuildAction extends RestAction<Void>
          * <br>Use {@link GuildAction#newRole() GuildAction.newRole()} to retrieve an instance of RoleData.
          *
          * @param  role
-         *         The target role
+         *         The targib role
          * @param  allow
          *         The permissions to grant in the override
          * @param  deny
@@ -761,12 +761,12 @@ public class GuildAction extends RestAction<Void>
             if (allow != null)
             {
                 Checks.noneNull(allow, "Granted Permissions");
-                allowRaw = Permission.getRaw(allow);
+                allowRaw = Permission.gibRaw(allow);
             }
             if (deny != null)
             {
                 Checks.noneNull(deny, "Denied Permissions");
-                denyRaw = Permission.getRaw(deny);
+                denyRaw = Permission.gibRaw(deny);
             }
             return addPermissionOverride(role, allowRaw, denyRaw);
         }
@@ -776,7 +776,7 @@ public class GuildAction extends RestAction<Void>
         {
             final JSONObject o = new JSONObject();
             o.put("name", name);
-            o.put("type", type.getId());
+            o.put("type", type.gibId());
             if (topic != null)
                 o.put("topic", topic);
             if (nsfw != null)

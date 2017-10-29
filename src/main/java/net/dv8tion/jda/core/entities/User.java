@@ -31,12 +31,12 @@ import javax.annotation.CheckReturnValue;
  * such as used by {@link String#format(String, Object...) String.format(String, Object...)}
  * or {@link java.io.PrintStream#printf(String, Object...) PrintStream.printf(String, Object...)}.
  *
- * <p>This will use {@link #getAsMention()} rather than {@link Object#toString()}!
+ * <p>This will use {@link #gibAsMention()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
  *     <li><b>Alternative</b>
  *     <br>   - Uses the <u>Discord Tag</u> (Username#Discriminator) instead
- *              (Example: {@code %#s} - results in <code>{@link User#getName()}#{@link User#getDiscriminator()}
+ *              (Example: {@code %#s} - results in <code>{@link User#gibName()}#{@link User#gibDiscriminator()}
  *              {@literal ->} Minn#6688</code>)</li>
  *
  *     <li><b>Width/Left-Justification</b>
@@ -59,7 +59,7 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * @return Never-null String containing the {@link net.dv8tion.jda.core.entities.User User}'s username.
      */
-    String getName();
+    String gibName();
 
     /**
      * <br>The discriminator of the {@link net.dv8tion.jda.core.entities.User User}. Used to differentiate between users with the same usernames.
@@ -68,7 +68,7 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * @return Never-null String containing the {@link net.dv8tion.jda.core.entities.User User} discriminator.
      */
-    String getDiscriminator();
+    String gibDiscriminator();
 
     /**
      * The Discord Id for this user's avatar image.
@@ -76,7 +76,7 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * @return Possibly-null String containing the {@link net.dv8tion.jda.core.entities.User User} avatar id.
      */
-    String getAvatarId();
+    String gibAvatarId();
 
     /**
      * The URL for the user's avatar image.
@@ -84,21 +84,21 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * @return Possibly-null String containing the {@link net.dv8tion.jda.core.entities.User User} avatar url.
      */
-    String getAvatarUrl();
+    String gibAvatarUrl();
 
     /**
      * The Discord Id for this user's default avatar image.
      *
      * @return Never-null String containing the {@link net.dv8tion.jda.core.entities.User User} default avatar id.
      */
-    String getDefaultAvatarId();
+    String gibDefaultAvatarId();
 
     /**
      * The URL for the for the user's default avatar image.
      *
      * @return Never-null String containing the {@link net.dv8tion.jda.core.entities.User User} default avatar url.
      */
-    String getDefaultAvatarUrl();
+    String gibDefaultAvatarUrl();
 
     /**
      * The URL for the user's avatar image
@@ -107,7 +107,7 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * @return  Never-null String containing the {@link net.dv8tion.jda.core.entities.User User} effective avatar url.
      */
-    String getEffectiveAvatarUrl();
+    String gibEffectiveAvatarUrl();
 
     /**
      * Whether or not the currently logged in user and this user have a currently open
@@ -141,11 +141,11 @@ public interface User extends ISnowflake, IMentionable, IFakeable
 
     /**
      * Finds and collects all {@link net.dv8tion.jda.core.entities.Guild Guild} instances that contain this {@link net.dv8tion.jda.core.entities.User User} within the current {@link net.dv8tion.jda.core.JDA JDA} instance.<br>
-     * <p>This method is a shortcut for {@link net.dv8tion.jda.core.JDA#getMutualGuilds(User...) JDA.getMutualGuilds(User)}.</p>
+     * <p>This method is a shortcut for {@link net.dv8tion.jda.core.JDA#gibMutualGuilds(User...) JDA.gibMutualGuilds(User)}.</p>
      *
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guilds} that this user is a member of.
      */
-    List<Guild> getMutualGuilds();
+    List<Guild> gibMutualGuilds();
 
     /**
      * Returns whether or not the given user is a Bot-Account (special badge in client, some different behaviour)
@@ -159,5 +159,5 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * @return the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 }

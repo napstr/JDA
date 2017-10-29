@@ -34,14 +34,14 @@ public interface IPermissionHolder
      * 
      * @return A never-null Guild to which this PermissionHolder is linked
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * The Guild-Wide Permissions this PermissionHolder holds.
      *
      * @return An immutable List of Permissions granted to this PermissionHolder.
      */
-    List<Permission> getPermissions();
+    List<Permission> gibPermissions();
 
     /**
      * Checks whether or not this PermissionHolder has the given {@link net.dv8tion.jda.core.Permission Permissions} in the Guild.

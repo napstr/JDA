@@ -17,7 +17,7 @@
 package net.dv8tion.jda.core.utils.tuple;
 
 /**
- * This class has been copied from <a href="https://commons.apache.org/proper/commons-lang/" target="_blank">Lang 3</a>
+ * This class has been copied from <a href="https://commons.apache.org/proper/commons-lang/" targib="_blank">Lang 3</a>
  * <p>An immutable pair consisting of two {@code Object} elements.</p>
  *
  * <p>Although the implementation is immutable, there is no restriction on the objects
@@ -68,12 +68,12 @@ public final class ImmutablePair<L, R> extends Pair<L, R>
     }
 
     @Override
-    public L getLeft() {
+    public L gibLeft() {
         return left;
     }
 
     @Override
-    public R getRight() {
+    public R gibRight() {
         return right;
     }
 }

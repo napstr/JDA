@@ -27,17 +27,17 @@ public abstract class GenericGuildVoiceEvent extends GenericGuildEvent
 
     public GenericGuildVoiceEvent(JDA api, long responseNumber, Member member)
     {
-        super(api, responseNumber, member.getGuild());
+        super(api, responseNumber, member.gibGuild());
         this.member = member;
     }
 
-    public Member getMember()
+    public Member gibMember()
     {
         return member;
     }
 
-    public GuildVoiceState getVoiceState()
+    public GuildVoiceState gibVoiceState()
     {
-        return member.getVoiceState();
+        return member.gibVoiceState();
     }
 }

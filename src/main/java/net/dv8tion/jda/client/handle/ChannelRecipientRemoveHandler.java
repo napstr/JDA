@@ -35,42 +35,42 @@ public class ChannelRecipientRemoveHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long groupId = content.getLong("channel_id");
-        final long userId = content.getJSONObject("user").getLong("id");
+        final long groupId = content.gibLong("channel_id");
+        final long userId = content.gibJSONObject("user").gibLong("id");
 
-        GroupImpl group = (GroupImpl) api.asClient().getGroupById(groupId);
+        GroupImpl group = (GroupImpl) api.asClient().gibGroupById(groupId);
         if (group == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CHANNEL_RECIPIENT_REMOVE for a group that is not yet cached! JSON: " + content);
             return null;
         }
 
-        User user = group.getUserMap().remove(userId);
+        User user = group.gibUserMap().remove(userId);
         if (user == null)
         {
-            api.getEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CHANNEL_RECIPIENT_REMOVE for a user that is not yet cached in the group! JSON: " + content);
             return null;
         }
 
-        CallImpl call = (CallImpl) group.getCurrentCall();
+        CallImpl call = (CallImpl) group.gibCurrentCall();
         if (call != null)
         {
-            call.getCallUserMap().remove(userId);
+            call.gibCallUserMap().remove(userId);
         }
 
         //User is fake, has no privateChannel, is not in a relationship, and is not in any other groups
         // then we remove the fake user from the fake cache as it was only in this group
-        //Note: we getGroups() which gets all groups, however we already removed the user from the current group.
+        //Note: we gibGroups() which gibs all groups, however we already removed the user from the current group.
         if (user.isFake()
                 && !user.hasPrivateChannel()
-                && api.asClient().getRelationshipById(userId) == null
-                && api.asClient().getGroups().stream().noneMatch(g -> g.getUsers().contains(user)))
+                && api.asClient().gibRelationshipById(userId) == null
+                && api.asClient().gibGroups().stream().noneMatch(g -> g.gibUsers().contains(user)))
         {
-            api.getFakeUserMap().remove(userId);
+            api.gibFakeUserMap().remove(userId);
         }
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new GroupUserLeaveEvent(
                         api, responseNumber,
                         group, user));

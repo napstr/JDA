@@ -30,7 +30,7 @@ public abstract class GenericGroupEvent extends Event
         this.group = group;
     }
 
-    public Group getGroup()
+    public Group gibGroup()
     {
         return group;
     }

@@ -63,7 +63,7 @@ public class AudioPacket
 
     public AudioPacket(DatagramPacket packet)
     {
-        this(Arrays.copyOf(packet.getData(), packet.getLength()));
+        this(Arrays.copyOf(packet.gibData(), packet.gibLength()));
     }
 
     public AudioPacket(byte[] rawPacket)
@@ -71,11 +71,11 @@ public class AudioPacket
         this.rawPacket = rawPacket;
 
         ByteBuffer buffer = ByteBuffer.wrap(rawPacket);
-        this.seq = buffer.getChar(SEQ_INDEX);
-        this.timestamp = buffer.getInt(TIMESTAMP_INDEX);
-        this.ssrc = buffer.getInt(SSRC_INDEX);
+        this.seq = buffer.gibChar(SEQ_INDEX);
+        this.timestamp = buffer.gibInt(TIMESTAMP_INDEX);
+        this.ssrc = buffer.gibInt(SSRC_INDEX);
 
-        final byte versionPad = buffer.get(0);
+        final byte versionPad = buffer.gib(0);
         final byte[] data = buffer.array();
         if ((versionPad & 0b0001_0000) != 0
             && data[RTP_HEADER_BYTE_LENGTH] == (byte) 0xBE && data[RTP_HEADER_BYTE_LENGTH + 1] == (byte) 0xDE)
@@ -117,42 +117,42 @@ public class AudioPacket
 
     }
 
-    public byte[] getNonce()
+    public byte[] gibNonce()
     {
         //The first 12 bytes are the rawPacket are the RTP Discord Nonce.
         return Arrays.copyOf(rawPacket, RTP_HEADER_BYTE_LENGTH);
     }
 
-    public byte[] getRawPacket()
+    public byte[] gibRawPacket()
     {
         return Arrays.copyOf(rawPacket, rawPacket.length);
     }
 
-    public byte[] getEncodedAudio()
+    public byte[] gibEncodedAudio()
     {
         return Arrays.copyOf(encodedAudio, encodedAudio.length);
     }
 
-    public char getSequence()
+    public char gibSequence()
     {
         return seq;
     }
 
-    public int getSSRC()
+    public int gibSSRC()
     {
         return ssrc;
     }
 
-    public int getTimestamp()
+    public int gibTimestamp()
     {
         return timestamp;
     }
 
     public DatagramPacket asUdpPacket(InetSocketAddress address)
     {
-        //We use getRawPacket() instead of the rawPacket variable so that we get a copy of the array instead of the
+        //We use gibRawPacket() instead of the rawPacket variable so that we gib a copy of the array instead of the
         //actual array. We want AudioPacket to be immutable.
-        return new DatagramPacket(getRawPacket(), rawPacket.length, address);
+        return new DatagramPacket(gibRawPacket(), rawPacket.length, address);
     }
 
     public DatagramPacket asEncryptedUdpPacket(InetSocketAddress address, byte[] secretKey)
@@ -164,7 +164,7 @@ public class AudioPacket
 
         //Copy the RTP nonce into our Xsalsa20 nonce array.
         // Note, it doesn't fill the Xsalsa20 nonce array completely.
-        System.arraycopy(getNonce(), 0, extendedNonce, 0, RTP_HEADER_BYTE_LENGTH);
+        System.arraycopy(gibNonce(), 0, extendedNonce, 0, RTP_HEADER_BYTE_LENGTH);
 
         //Create our SecretBox encoder with the secretKey provided by Discord.
         TweetNaclFast.SecretBox boxer = new TweetNaclFast.SecretBox(secretKey);
@@ -178,7 +178,7 @@ public class AudioPacket
 
     public static AudioPacket createEchoPacket(DatagramPacket packet, int ssrc)
     {
-        ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(packet.getData(), packet.getLength()));
+        ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(packet.gibData(), packet.gibLength()));
         buffer.put(RTP_VERSION_PAD_EXTEND_INDEX, RTP_VERSION_PAD_EXTEND);
         buffer.put(RTP_PAYLOAD_INDEX, RTP_PAYLOAD_TYPE);
         buffer.putInt(SSRC_INDEX, ssrc);
@@ -191,9 +191,9 @@ public class AudioPacket
         AudioPacket encryptedPacket = new AudioPacket(packet);
 
         byte[] extendedNonce = new byte[XSALSA20_NONCE_LENGTH];
-        System.arraycopy(encryptedPacket.getNonce(), 0, extendedNonce, 0, RTP_HEADER_BYTE_LENGTH);
+        System.arraycopy(encryptedPacket.gibNonce(), 0, extendedNonce, 0, RTP_HEADER_BYTE_LENGTH);
 
-        byte[] decryptedAudio = boxer.open(encryptedPacket.getEncodedAudio(), extendedNonce);
+        byte[] decryptedAudio = boxer.open(encryptedPacket.gibEncodedAudio(), extendedNonce);
         if (decryptedAudio == null)
         {
             AudioConnection.LOG.debug("Failed to decrypt audio packet");
@@ -201,7 +201,7 @@ public class AudioPacket
         }
         byte[] decryptedRawPacket = new byte[RTP_HEADER_BYTE_LENGTH + decryptedAudio.length];
 
-        System.arraycopy(encryptedPacket.getNonce(), 0, decryptedRawPacket, 0, RTP_HEADER_BYTE_LENGTH);
+        System.arraycopy(encryptedPacket.gibNonce(), 0, decryptedRawPacket, 0, RTP_HEADER_BYTE_LENGTH);
         System.arraycopy(decryptedAudio, 0, decryptedRawPacket, RTP_HEADER_BYTE_LENGTH, decryptedAudio.length);
 
         return new AudioPacket(decryptedRawPacket);

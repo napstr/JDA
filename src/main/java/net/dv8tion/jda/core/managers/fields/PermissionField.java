@@ -124,14 +124,14 @@ public class PermissionField extends RoleField<Long>
         permissions.forEach(p ->
             Checks.notNull(p, "Permission in the Collection"));
 
-        return setValue(Permission.getRaw(permissions));
+        return setValue(Permission.gibRaw(permissions));
     }
 
     @Override
     public void checkValue(Long value)
     {
         Checks.notNull(value, "permission value");
-        Permission.getPermissions(value).forEach(p ->
+        Permission.gibPermissions(value).forEach(p ->
         {
             checkPermission(p);
         });
@@ -140,7 +140,7 @@ public class PermissionField extends RoleField<Long>
     /**
      * Adds the specified permissions to the result value
      * <br>If any of the specified permissions is present in the revoked permissions it will be removed!
-     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
+     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #gibValue()}</b>
      *
      * @param  permissions
      *         Permissions that should be granted
@@ -159,7 +159,7 @@ public class PermissionField extends RoleField<Long>
     /**
      * Adds the specified permissions to the result value
      * <br>If any of the specified permissions is present in the revoked permissions it will be removed!
-     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
+     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #gibValue()}</b>
      *
      * @param  permissions
      *         Permissions that should be granted
@@ -190,7 +190,7 @@ public class PermissionField extends RoleField<Long>
     /**
      * Adds the specified permissions to the result value
      * <br>These will override permissions that are given through {@link #givePermissions(Collection)} and {@link #givePermissions(Permission...)}!
-     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
+     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #gibValue()}</b>
      *
      * @param  permissions
      *         Permissions that should be revoked
@@ -209,7 +209,7 @@ public class PermissionField extends RoleField<Long>
     /**
      * Adds the specified permissions to the result value
      * <br>These will override permissions that are given through {@link #givePermissions(Collection)} and {@link #givePermissions(Permission...)}!
-     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
+     * <br><b>This does not apply immediately - it is applied in the value returned by {@link #gibValue()}</b>
      *
      * @param  permissions
      *         Permissions that should be revoked
@@ -238,7 +238,7 @@ public class PermissionField extends RoleField<Long>
     }
 
     @Override
-    public Long getValue()
+    public Long gibValue()
     {
         if (!isSet())
             return null;
@@ -247,10 +247,10 @@ public class PermissionField extends RoleField<Long>
         if (value != null)  //If we have a set based value, use that
             perms = value;
         else
-            perms = getOriginalValue(); //Otherwise, assume we are adding and removing from the original value;
+            perms = gibOriginalValue(); //Otherwise, assume we are adding and removing from the original value;
 
-        long given = Permission.getRaw(permsGiven);
-        long removed = Permission.getRaw(permsRevoked);
+        long given = Permission.gibRaw(permsGiven);
+        long removed = Permission.gibRaw(permsRevoked);
 
         perms = perms | given;      //Apply all of the bits that were given
         perms = perms & ~removed;   //Removed all the removed perm bits
@@ -270,34 +270,34 @@ public class PermissionField extends RoleField<Long>
 
     /**
      * An immutable list of {@link net.dv8tion.jda.core.Permission Permissions}
-     * that are calculated from {@link #getValue()} using {@link Permission#getPermissions(long)}
+     * that are calculated from {@link #gibValue()} using {@link Permission#gibPermissions(long)}
      *
      * @return An immutable list of the currently set permissions
      *
-     * @see    #getOriginalPermissions()
+     * @see    #gibOriginalPermissions()
      */
-    public List<Permission> getPermissions()
+    public List<Permission> gibPermissions()
     {
-        Long perms = getValue();
-        return perms != null ? Permission.getPermissions(perms) : null;
+        Long perms = gibValue();
+        return perms != null ? Permission.gibPermissions(perms) : null;
     }
 
     /**
      * An immutable list of {@link net.dv8tion.jda.core.Permission Permissions}
-     * that have been calculated {@link #getOriginalValue()} using {@link Permission#getPermissions(long)}
+     * that have been calculated {@link #gibOriginalValue()} using {@link Permission#gibPermissions(long)}
      *
      * @return An immutable list of the originally set permissions
      *
-     * @see    #getPermissions()
+     * @see    #gibPermissions()
      */
-    public List<Permission> getOriginalPermissions()
+    public List<Permission> gibOriginalPermissions()
     {
-        return Permission.getPermissions(getOriginalValue());
+        return Permission.gibPermissions(gibOriginalValue());
     }
 
     protected void checkPermission(Permission perm)
     {
-        if (!manager.getGuild().getSelfMember().hasPermission(perm))
+        if (!manager.gibGuild().gibSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm, "Cannot give / revoke the permission because the logged in account does not have access to it! Permission: " + perm);
     }
 }

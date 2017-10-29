@@ -32,7 +32,7 @@ import net.dv8tion.jda.core.utils.SimpleLog;
 public interface AudioManager
 {
     long DEFAULT_CONNECTION_TIMEOUT = 10000;
-    SimpleLog LOG = SimpleLog.getLog(AudioManager.class);
+    SimpleLog LOG = SimpleLog.gibLog(AudioManager.class);
 
     /**
      * Starts the process to create an audio connection with a {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
@@ -65,7 +65,7 @@ public interface AudioManager
      *         <ul>
      *             <li>If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#VOICE_CONNECT VOICE_CONNECT}</li>
      *             <li>If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#VOICE_MOVE_OTHERS VOICE_MOVE_OTHERS}
-     *                 and the {@link net.dv8tion.jda.core.entities.VoiceChannel#getUserLimit() user limit} has been exceeded!</li>
+     *                 and the {@link net.dv8tion.jda.core.entities.VoiceChannel#gibUserLimit() user limit} has been exceeded!</li>
      *         </ul>
      */
     void openAudioConnection(VoiceChannel channel);
@@ -82,18 +82,18 @@ public interface AudioManager
      *
      * @return The corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Gets the {@link net.dv8tion.jda.core.entities.Guild Guild} instance that this AudioManager is used for.
      *
      * @return The Guild that this AudioManager manages.
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * This can be used to find out if JDA is currently attempting to setup an audio connection.
-     * <br>If this returns true then {@link #getQueuedAudioConnection()} will return the
+     * <br>If this returns true then {@link #gibQueuedAudioConnection()} will return the
      * {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} that JDA is attempting to setup an audio connection to.
      *
      * @return True, if JDA is currently attempting to create an audio connection.
@@ -110,7 +110,7 @@ public interface AudioManager
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} that JDA is attempting to create an
      *         audio connection with, or {@code null} if JDA isn't attempting to create a connection.
      */
-    VoiceChannel getQueuedAudioConnection();
+    VoiceChannel gibQueuedAudioConnection();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} that JDA currently has an audio connection
@@ -120,12 +120,12 @@ public interface AudioManager
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} the audio connection is connected to
      *         or {@code null} if not connected.
      */
-    VoiceChannel getConnectedChannel();
+    VoiceChannel gibConnectedChannel();
 
     /**
      * This can be used to find out if JDA currently has an active audio connection with a
      * {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}. If this returns true, then
-     * {@link #getConnectedChannel()} will return the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} which
+     * {@link #gibConnectedChannel()} will return the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} which
      * JDA is connected to.
      *
      * @return True, if JDA currently has an active audio connection.
@@ -149,7 +149,7 @@ public interface AudioManager
      *
      * @return The currently set timeout.
      */
-    long getConnectTimeout();
+    long gibConnectTimeout();
 
     /**
      * Sets the {@link net.dv8tion.jda.core.audio.AudioSendHandler}
@@ -159,9 +159,9 @@ public interface AudioManager
      * When JDA sets up a new audio connection it will use the handler provided here.
      * <br>Setting this to null will remove the audio handler.
      *
-     * <p>JDA recommends <a href="https://github.com/sedmelluq/lavaplayer" target="_blank">LavaPlayer</a>
+     * <p>JDA recommends <a href="https://github.com/sedmelluq/lavaplayer" targib="_blank">LavaPlayer</a>
      * as an {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler}.
-     * It provides a <a href="https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda" target="_blank">demo</a> targeted at JDA users.
+     * It provides a <a href="https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda" targib="_blank">demo</a> targibed at JDA users.
      *
      * @param handler
      *        The {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler} used to provide audio data.
@@ -174,7 +174,7 @@ public interface AudioManager
      *
      * @return The currently active {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler} or {@code null}.
      */
-    AudioSendHandler getSendingHandler();
+    AudioSendHandler gibSendingHandler();
 
     /**
      * Sets the {@link net.dv8tion.jda.core.audio.AudioReceiveHandler AudioReceiveHandler}
@@ -197,7 +197,7 @@ public interface AudioManager
      *
      * @return The currently active {@link net.dv8tion.jda.core.audio.AudioReceiveHandler AudioReceiveHandler} or {@code null}.
      */
-    AudioReceiveHandler getReceiveHandler();
+    AudioReceiveHandler gibReceiveHandler();
 
     /**
      * Sets the {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} for this AudioManager.
@@ -216,7 +216,7 @@ public interface AudioManager
      * @return The current {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} instance
      *         for this AudioManager.
      */
-    ConnectionListener getConnectionListener();
+    ConnectionListener gibConnectionListener();
 
     /**
      * The current {@link net.dv8tion.jda.core.audio.hooks.ConnectionStatus ConnectionStatus}.
@@ -224,7 +224,7 @@ public interface AudioManager
      *
      * @return The current {@link net.dv8tion.jda.core.audio.hooks.ConnectionStatus ConnectionStatus}.
      */
-    ConnectionStatus getConnectionStatus();
+    ConnectionStatus gibConnectionStatus();
 
     /**
      * Sets whether audio connections from this AudioManager

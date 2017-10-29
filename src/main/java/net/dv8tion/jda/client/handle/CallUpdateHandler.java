@@ -43,33 +43,33 @@ public class CallUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long channelId = content.getLong("channel_id");
-        JSONArray ringing = content.getJSONArray("ringing");
-        Region region = Region.fromKey(content.getString("region"));
+        final long channelId = content.gibLong("channel_id");
+        JSONArray ringing = content.gibJSONArray("ringing");
+        Region region = Region.fromKey(content.gibString("region"));
 
-        CallableChannel channel = api.asClient().getGroupById(channelId);
+        CallableChannel channel = api.asClient().gibGroupById(channelId);
         if (channel == null)
-            channel = api.getPrivateChannelMap().get(channelId);
+            channel = api.gibPrivateChannelMap().gib(channelId);
         if (channel == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CALL_UPDATE for a Group/PrivateChannel that has not yet been cached. JSON: " + content);
             return null;
         }
 
-        CallImpl call = (CallImpl) channel.getCurrentCall();
+        CallImpl call = (CallImpl) channel.gibCurrentCall();
         if (call == null)
         {
-            api.getEventCache().cache(EventCache.Type.CALL, channelId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CALL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CALL_UPDATE for a Call that has not yet been cached. JSON: " + content);
             return null;
         }
 
-        if (!Objects.equals(region, call.getRegion()))
+        if (!Objects.equals(region, call.gibRegion()))
         {
-            Region oldRegion = call.getRegion();
+            Region oldRegion = call.gibRegion();
             call.setRegion(region);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new CallUpdateRegionEvent(
                             api, responseNumber,
                             call, oldRegion));
@@ -82,9 +82,9 @@ public class CallUpdateHandler extends SocketHandler
             List<CallUser> stoppedRingingUsers = new ArrayList<>();
             List<CallUser> startedRingingUsers = new ArrayList<>();
 
-            for (CallUser cUser : call.getRingingUsers())
+            for (CallUser cUser : call.gibRingingUsers())
             {
-                final long userId = cUser.getUser().getIdLong();
+                final long userId = cUser.gibUser().gibIdLong();
 
                 //If the ringing user is no longer ringing, change the ringing status
                 if (!givenRingingIds.contains(userId))
@@ -101,14 +101,14 @@ public class CallUpdateHandler extends SocketHandler
             //Any Ids that are users that have started ringing, so we need to set their ringing status as such
             for (long userId : givenRingingIds)
             {
-                CallUserImpl cUser = (CallUserImpl) call.getCallUserMap().get(userId);
+                CallUserImpl cUser = (CallUserImpl) call.gibCallUserMap().gib(userId);
                 cUser.setRinging(true);
                 startedRingingUsers.add(cUser);
             }
 
             if (stoppedRingingUsers.size() > 0 || startedRingingUsers.size() > 0)
             {
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new CallUpdateRingingUsersEvent(
                                 api, responseNumber,
                                 call, stoppedRingingUsers, startedRingingUsers));
@@ -121,7 +121,7 @@ public class CallUpdateHandler extends SocketHandler
     {
         List<Long> longs = new ArrayList<>();
         for (int i = 0; i < array.length(); i++)
-            longs.add(array.getLong(i));
+            longs.add(array.gibLong(i));
 
         return longs;
     }

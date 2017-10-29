@@ -34,10 +34,10 @@ import java.util.regex.Pattern;
 
 /**
  * An {@link #update(String) updatable} manager that allows
- * to modify account settings like the {@link #getNameField() username} or the {@link #getAvatarField() avatar}.
+ * to modify account settings like the {@link #gibNameField() username} or the {@link #gibAvatarField() avatar}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.core.managers.fields.AccountField AccountFields} for specific
+ * by gibting the {@link net.dv8tion.jda.core.managers.fields.AccountField AccountFields} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update(String)}!
  *
  * <p>The {@link net.dv8tion.jda.core.managers.AccountManager AccountManager} implementation
@@ -75,9 +75,9 @@ public class AccountManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return selfUser.getJDA();
+        return selfUser.gibJDA();
     }
 
     /**
@@ -87,7 +87,7 @@ public class AccountManagerUpdatable
      *
      * @return The corresponding SelfUser
      */
-    public SelfUser getSelfUser()
+    public SelfUser gibSelfUser()
     {
         return selfUser;
     }
@@ -105,7 +105,7 @@ public class AccountManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@code String}
      */
-    public AccountField<String> getNameField()
+    public AccountField<String> gibNameField()
     {
         return name;
     }
@@ -118,13 +118,13 @@ public class AccountManagerUpdatable
      * on the returned {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} instance.
      * <br>An {@link net.dv8tion.jda.core.entities.Icon Icon} can be retrieved through one of the static {@code Icon.from(...)} methods
      *
-     * <p>Providing {@code null} as value will cause the {@link net.dv8tion.jda.core.entities.SelfUser#getDefaultAvatarId() default avatar} for this account to be used.
+     * <p>Providing {@code null} as value will cause the {@link net.dv8tion.jda.core.entities.SelfUser#gibDefaultAvatarId() default avatar} for this account to be used.
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
      */
-    public AccountField<Icon> getAvatarField()
+    public AccountField<Icon> gibAvatarField()
     {
         return avatar;
     }
@@ -147,7 +147,7 @@ public class AccountManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@code String}
      */
-    public AccountField<String> getEmailField()
+    public AccountField<String> gibEmailField()
     {
         if (!isType(AccountType.CLIENT))
             throw new AccountTypeException(AccountType.CLIENT);
@@ -173,7 +173,7 @@ public class AccountManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@code String}
      */
-    public AccountField<String> getPasswordField()
+    public AccountField<String> gibPasswordField()
     {
         if (!isType(AccountType.CLIENT))
             throw new AccountTypeException(AccountType.CLIENT);
@@ -230,34 +230,34 @@ public class AccountManagerUpdatable
             throw new IllegalArgumentException("Provided client account password to be used in auth is null or empty!");
 
         if (!needToUpdate())
-            return new RestAction.EmptyRestAction<>(getJDA(), null);
+            return new RestAction.EmptyRestAction<>(gibJDA(), null);
 
         JSONObject body = new JSONObject();
 
         //Required fields. Populate with current values..
-        body.put("username", name.getOriginalValue());
-        body.put("avatar", selfUser.getAvatarId() != null ? selfUser.getAvatarId() : JSONObject.NULL);
+        body.put("username", name.gibOriginalValue());
+        body.put("avatar", selfUser.gibAvatarId() != null ? selfUser.gibAvatarId() : JSONObject.NULL);
 
         if (name.shouldUpdate())
-            body.put("username", name.getValue());
+            body.put("username", name.gibValue());
         if (avatar.shouldUpdate())
-            body.put("avatar", avatar.getValue() != null ? avatar.getValue().getEncoding() : JSONObject.NULL);
+            body.put("avatar", avatar.gibValue() != null ? avatar.gibValue().gibEncoding() : JSONObject.NULL);
 
         if (isType(AccountType.CLIENT))
         {
             //Required fields. Populate with current values.
             body.put("password", currentPassword);
-            body.put("email", email.getOriginalValue());
+            body.put("email", email.gibOriginalValue());
 
             if (email.shouldUpdate())
-                body.put("email", email.getValue());
+                body.put("email", email.gibValue());
             if (password.shouldUpdate())
-                body.put("new_password", password.getValue());
+                body.put("new_password", password.gibValue());
         }
 
         reset();    //now that we've built our JSON object, reset the manager back to the non-modified state
         Route.CompiledRoute route = Route.Self.MODIFY_SELF.compile();
-        return new RestAction<Void>(getJDA(), route, body)
+        return new RestAction<Void>(gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -268,7 +268,7 @@ public class AccountManagerUpdatable
                     return;
                 }
 
-                String newToken = response.getObject().getString("token");
+                String newToken = response.gibObject().gibString("token");
                 newToken = newToken.replace("Bot ", "");
 
                 api.setToken(newToken);
@@ -294,7 +294,7 @@ public class AccountManagerUpdatable
     @CheckReturnValue
     public RestAction<Void> update()
     {
-        if (getJDA().getAccountType() == AccountType.CLIENT)
+        if (gibJDA().gibAccountType() == AccountType.CLIENT)
             throw new AccountTypeException(AccountType.BOT);
         return update(null);
     }
@@ -309,7 +309,7 @@ public class AccountManagerUpdatable
 
     protected void setupFields()
     {
-        name = new AccountField<String>(this, selfUser::getName)
+        name = new AccountField<String>(this, selfUser::gibName)
         {
             @Override
             public void checkValue(String value)
@@ -326,9 +326,9 @@ public class AccountManagerUpdatable
             public void checkValue(Icon value) { }
 
             @Override
-            public Icon getOriginalValue()
+            public Icon gibOriginalValue()
             {
-                throw new UnsupportedOperationException("Cannot easily provide the original Avatar. Use User#getIconUrl() and download it yourself.");
+                throw new UnsupportedOperationException("Cannot easily provide the original Avatar. Use User#gibIconUrl() and download it yourself.");
             }
 
             @Override
@@ -340,7 +340,7 @@ public class AccountManagerUpdatable
 
         if (isType(AccountType.CLIENT))
         {
-            email = new AccountField<String>(this, selfUser::getEmail)
+            email = new AccountField<String>(this, selfUser::gibEmail)
             {
                 @Override
                 public void checkValue(String value)
@@ -362,9 +362,9 @@ public class AccountManagerUpdatable
                 }
 
                 @Override
-                public String getOriginalValue()
+                public String gibOriginalValue()
                 {
-                    throw new UnsupportedOperationException("Cannot get the original password. We are not given this information.");
+                    throw new UnsupportedOperationException("Cannot gib the original password. We are not given this information.");
                 }
 
                 @Override
@@ -378,6 +378,6 @@ public class AccountManagerUpdatable
 
     private boolean isType(AccountType type)
     {
-        return getJDA().getAccountType() == type;
+        return gibJDA().gibAccountType() == type;
     }
 }

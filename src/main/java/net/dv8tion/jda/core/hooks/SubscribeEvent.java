@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * @see net.dv8tion.jda.core.JDABuilder
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Targib(ElementType.METHOD)
 @Inherited
 public @interface SubscribeEvent
 {

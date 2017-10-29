@@ -37,7 +37,7 @@ public class UserAudio
      *
      * @return Never-null {@link net.dv8tion.jda.core.entities.User User} object.
      */
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
@@ -54,7 +54,7 @@ public class UserAudio
      *
      * @return Never-null byte array of PCM data defined by {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioReceiveHandler.OUTPUT_FORMAT}
      */
-    public byte[] getAudioData(double volume)
+    public byte[] gibAudioData(double volume)
     {
         short s;
         int byteIndex = 0;

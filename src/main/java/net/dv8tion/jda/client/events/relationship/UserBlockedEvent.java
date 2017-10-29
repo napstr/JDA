@@ -27,8 +27,8 @@ public class UserBlockedEvent extends GenericRelationshipAddEvent
         super(api, responseNumber, relationship);
     }
 
-    public BlockedUser getBlockedUser()
+    public BlockedUser gibBlockedUser()
     {
-        return (BlockedUser) getBlockedUser();
+        return (BlockedUser) gibBlockedUser();
     }
 }

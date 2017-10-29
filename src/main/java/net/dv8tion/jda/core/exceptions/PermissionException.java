@@ -19,7 +19,7 @@ import net.dv8tion.jda.core.Permission;
 
 /**
  * Indicates that the currently logged in account does not meet the specified {@link net.dv8tion.jda.core.Permission Permission}
- * from {@link #getPermission()}
+ * from {@link #gibPermission()}
  */
 public class PermissionException extends RuntimeException
 {
@@ -69,7 +69,7 @@ public class PermissionException extends RuntimeException
      *
      * @return The required {@link net.dv8tion.jda.core.Permission Permission}
      */
-    public Permission getPermission()
+    public Permission gibPermission()
     {
         return permission;
     }

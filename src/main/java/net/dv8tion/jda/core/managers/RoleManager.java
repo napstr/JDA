@@ -53,37 +53,37 @@ public class RoleManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return updatable.getJDA();
+        return updatable.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Role Role} is in.
-     * <br>This is logically the same as calling {@code getRole().getGuild()}
+     * <br>This is logically the same as calling {@code gibRole().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return updatable.getGuild();
+        return updatable.gibGuild();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.Role Role} for this
+     * The targib {@link net.dv8tion.jda.core.entities.Role Role} for this
      * manager
      *
-     * @return The target Role
+     * @return The targib Role
      */
-    public Role getRole()
+    public Role gibRole()
     {
-        return updatable.getRole();
+        return updatable.gibRole();
     }
 
     /**
      * Sets the <b><u>name</u></b> of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link RoleManagerUpdatable#getNameField()}
+     * <br>Wraps {@link RoleManagerUpdatable#gibNameField()}
      *
      * <p>A role name <b>must not</b> be {@code null} nor less than 1 characters or more than 32 characters long!
      *
@@ -101,18 +101,18 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getNameField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibNameField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setName(String name)
     {
-        return updatable.getNameField().setValue(name).update();
+        return updatable.gibNameField().setValue(name).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.Permission Permissions} of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#setValue(Long) RoleManagerUpdatable#getPermissionField().setValue(Long)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#setValue(Long) RoleManagerUpdatable#gibPermissionField().setValue(Long)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
@@ -130,7 +130,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Collection)
      * @see    #setPermissions(Permission...)
@@ -138,12 +138,12 @@ public class RoleManager
     @CheckReturnValue
     public AuditableRestAction<Void> setPermissions(long perms)
     {
-        return updatable.getPermissionField().setValue(perms).update();
+        return updatable.gibPermissionField().setValue(perms).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.Permission Permissions} of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#setPermissions(Permission...) RoleManagerUpdatable#getPermissionField().setPermissions(Permission...)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#setPermissions(Permission...) RoleManagerUpdatable#gibPermissionField().setPermissions(Permission...)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
@@ -163,7 +163,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Collection)
      * @see    #setPermissions(long)
@@ -176,7 +176,7 @@ public class RoleManager
 
     /**
      * Sets the {@link net.dv8tion.jda.core.Permission Permissions} of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#setPermissions(Collection) RoleManagerUpdatable#getPermissionField().setPermissions(Collection)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#setPermissions(Collection) RoleManagerUpdatable#gibPermissionField().setPermissions(Collection)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
@@ -196,7 +196,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Permission...)
      * @see    #setPermissions(long)
@@ -204,12 +204,12 @@ public class RoleManager
     @CheckReturnValue
     public AuditableRestAction<Void> setPermissions(Collection<Permission> permissions)
     {
-        return updatable.getPermissionField().setPermissions(permissions).update();
+        return updatable.gibPermissionField().setPermissions(permissions).update();
     }
 
     /**
      * Sets the {@link java.awt.Color Color} of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link RoleManagerUpdatable#getColorField()}
+     * <br>Wraps {@link RoleManagerUpdatable#gibColorField()}
      *
      * @param  color
      *         The new color for the selected {@link net.dv8tion.jda.core.entities.Role Role}
@@ -223,18 +223,18 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getColorField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibColorField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setColor(Color color)
     {
-        return updatable.getColorField().setValue(color).update();
+        return updatable.gibColorField().setValue(color).update();
     }
 
     /**
      * Sets the <b><u>hoist state</u></b> of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link RoleManagerUpdatable#getHoistedField()}
+     * <br>Wraps {@link RoleManagerUpdatable#gibHoistedField()}
      *
      * @param  hoisted
      *         Whether the selected {@link net.dv8tion.jda.core.entities.Role Role} should be hoisted
@@ -248,18 +248,18 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getHoistedField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibHoistedField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setHoisted(boolean hoisted)
     {
-        return updatable.getHoistedField().setValue(hoisted).update();
+        return updatable.gibHoistedField().setValue(hoisted).update();
     }
 
     /**
      * Sets the <b><u>mentionable state</u></b> of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link RoleManagerUpdatable#getMentionableField()}
+     * <br>Wraps {@link RoleManagerUpdatable#gibMentionableField()}
      *
      * @param  mentionable
      *         Whether the selected {@link net.dv8tion.jda.core.entities.Role Role} should be mentionable
@@ -273,18 +273,18 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getMentionableField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibMentionableField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setMentionable(boolean mentionable)
     {
-        return updatable.getMentionableField().setValue(mentionable).update();
+        return updatable.gibMentionableField().setValue(mentionable).update();
     }
 
     /**
      * Adds the specified {@link net.dv8tion.jda.core.Permission Permissions} to the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#givePermissions(Permission...) RoleManagerUpdatable#getPermissionField().givePermissions(Permission...)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#givePermissions(Permission...) RoleManagerUpdatable#gibPermissionField().givePermissions(Permission...)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
@@ -302,7 +302,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Collection)
      * @see    #setPermissions(Permission...)
@@ -315,7 +315,7 @@ public class RoleManager
 
     /**
      * Adds the specified {@link net.dv8tion.jda.core.Permission Permissions} to the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#givePermissions(Collection) RoleManagerUpdatable#getPermissionField().givePermissions(Collection)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#givePermissions(Collection) RoleManagerUpdatable#gibPermissionField().givePermissions(Collection)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
@@ -333,7 +333,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Collection)
      * @see    #setPermissions(Permission...)
@@ -341,12 +341,12 @@ public class RoleManager
     @CheckReturnValue
     public AuditableRestAction<Void> givePermissions(Collection<Permission> perms)
     {
-        return updatable.getPermissionField().givePermissions(perms).update();
+        return updatable.gibPermissionField().givePermissions(perms).update();
     }
 
     /**
      * Revokes the specified {@link net.dv8tion.jda.core.Permission Permissions} from the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#revokePermissions(Permission...) RoleManagerUpdatable#getPermissionField().revokePermissions(Permission...)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#revokePermissions(Permission...) RoleManagerUpdatable#gibPermissionField().revokePermissions(Permission...)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to revoke permissions you don't have!
@@ -364,7 +364,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Collection)
      * @see    #setPermissions(Permission...)
@@ -377,7 +377,7 @@ public class RoleManager
 
     /**
      * Revokes the specified {@link net.dv8tion.jda.core.Permission Permissions} from the selected {@link net.dv8tion.jda.core.entities.Role Role}.
-     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#revokePermissions(Collection) RoleManagerUpdatable#getPermissionField().revokePermissions(Collection)}
+     * <br>Wraps {@link net.dv8tion.jda.core.managers.fields.PermissionField#revokePermissions(Collection) RoleManagerUpdatable#gibPermissionField().revokePermissions(Collection)}
      *
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to revoke permissions you don't have!
@@ -395,7 +395,7 @@ public class RoleManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link RoleManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#getPermissionField()
+     * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#gibPermissionField()
      * @see    net.dv8tion.jda.core.managers.RoleManagerUpdatable#update()
      * @see    #setPermissions(Collection)
      * @see    #setPermissions(Permission...)
@@ -403,6 +403,6 @@ public class RoleManager
     @CheckReturnValue
     public AuditableRestAction<Void> revokePermissions(Collection<Permission> perms)
     {
-        return updatable.getPermissionField().revokePermissions(perms).update();
+        return updatable.gibPermissionField().revokePermissions(perms).update();
     }
 }

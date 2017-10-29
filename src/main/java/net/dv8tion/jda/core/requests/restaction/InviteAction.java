@@ -58,14 +58,14 @@ public class InviteAction extends AuditableRestAction<Invite>
         if (this.unique != null)
             object.put("unique", (boolean) this.unique);
 
-        return getRequestBody(object);
+        return gibRequestBody(object);
     }
 
     @Override
     protected void handleResponse(final Response response, final Request<Invite> request)
     {
         if (response.isOk())
-            request.onSuccess(this.api.getEntityBuilder().createInvite(response.getObject()));
+            request.onSuccess(this.api.gibEntityBuilder().createInvite(response.gibObject()));
         else
             request.onFailure(response);
     }

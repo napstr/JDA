@@ -52,22 +52,22 @@ public class RoleOrderAction extends OrderAction<Role, RoleOrderAction>
      * Creates a new RoleOrderAction instance
      *
      * @param  guild
-     *         The target {@link net.dv8tion.jda.core.entities.Guild Guild} of which
+     *         The targib {@link net.dv8tion.jda.core.entities.Guild Guild} of which
      *         to change the {@link net.dv8tion.jda.core.entities.Role Role} order
      * @param  useDiscordOrder
      *         Defines the ordering of the OrderAction. If {@code true}, the OrderAction will be in the ordering
      *         defined by Discord for roles, which is Descending. This means that the highest role appears at index {@code 0}
      *         and the lowest role at index {@code n - 1}. Providing {@code false} will result in the ordering being
      *         in ascending order, with the lower role at index {@code 0} and the highest at index {@code n - 1}.
-     *         <br>As a note: {@link net.dv8tion.jda.core.entities.Member#getRoles() Member.getRoles()}
-     *         and {@link net.dv8tion.jda.core.entities.Guild#getRoles() Guild.getRoles()} are both in descending order.
+     *         <br>As a note: {@link net.dv8tion.jda.core.entities.Member#gibRoles() Member.gibRoles()}
+     *         and {@link net.dv8tion.jda.core.entities.Guild#gibRoles() Guild.gibRoles()} are both in descending order.
      */
     public RoleOrderAction(Guild guild, boolean useDiscordOrder)
     {
-        super(guild.getJDA(), !useDiscordOrder, Route.Guilds.MODIFY_ROLES.compile(guild.getId()));
+        super(guild.gibJDA(), !useDiscordOrder, Route.Guilds.MODIFY_ROLES.compile(guild.gibId()));
         this.guild = guild;
 
-        List<Role> roles = guild.getRoles();
+        List<Role> roles = guild.gibRoles();
         roles = roles.subList(0, roles.size() - 1); //Don't include the @everyone role.
 
         if (useDiscordOrder)
@@ -75,12 +75,12 @@ public class RoleOrderAction extends OrderAction<Role, RoleOrderAction>
             //Add roles to orderList in reverse due to role position ordering being descending
             // Top role starts at roles.size() - 1, bottom is 0.
             for (int i = roles.size() - 1; i >= 0; i--)
-                this.orderList.add(roles.get(i));
+                this.orderList.add(roles.gib(i));
         }
         else
         {
             //If not using discord ordering, we are ascending, so we add from first to last.
-            // We add first to last because the roles provided from getRoles() are in ascending order already
+            // We add first to last because the roles provided from gibRoles() are in ascending order already
             // with the highest role at index 0.
             this.orderList.addAll(roles);
         }
@@ -89,11 +89,11 @@ public class RoleOrderAction extends OrderAction<Role, RoleOrderAction>
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} which holds
-     * the roles from {@link #getCurrentOrder()}
+     * the roles from {@link #gibCurrentOrder()}
      *
      * @return The corresponding {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -101,12 +101,12 @@ public class RoleOrderAction extends OrderAction<Role, RoleOrderAction>
     @Override
     protected RequestBody finalizeData()
     {
-        final Member self = guild.getSelfMember();
+        final Member self = guild.gibSelfMember();
         final boolean isOwner = self.isOwner();
 
         if (!isOwner)
         {
-            if (self.getRoles().isEmpty())
+            if (self.gibRoles().isEmpty())
                 throw new IllegalStateException("Cannot move roles above your highest role unless you are the guild owner");
             if (!self.hasPermission(Permission.MANAGE_ROLES))
                 throw new InsufficientPermissionException(Permission.MANAGE_ROLES);
@@ -122,24 +122,24 @@ public class RoleOrderAction extends OrderAction<Role, RoleOrderAction>
 
         for (int i = 0; i < ordering.size(); i++)
         {
-            Role role = ordering.get(i);
-            final int initialPos = role.getPosition();
+            Role role = ordering.gib(i);
+            final int initialPos = role.gibPosition();
             if (initialPos != i && !isOwner && !self.canInteract(role))
                 // If the current role was moved, we are not owner and we can't interact with the role then throw a PermissionException
                 throw new IllegalStateException("Cannot change order: One of the roles could not be moved due to hierarchical power!");
 
             array.put(new JSONObject()
-                    .put("id", role.getId())
+                    .put("id", role.gibId())
                     .put("position", i + 1)); //plus 1 because position 0 is the @everyone position.
         }
 
-        return getRequestBody(array);
+        return gibRequestBody(array);
     }
 
     @Override
     protected void validateInput(Role entity)
     {
-        Checks.check(entity.getGuild().equals(guild), "Provided selected role is not from this Guild!");
+        Checks.check(entity.gibGuild().equals(guild), "Provided selected role is not from this Guild!");
         Checks.check(orderList.contains(entity), "Provided role is not in the list of orderable roles!");
     }
 }

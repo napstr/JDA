@@ -40,25 +40,25 @@ public class MessageDeleteHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long messageId = content.getLong("id");
-        final long channelId = content.getLong("channel_id");
+        final long messageId = content.gibLong("id");
+        final long channelId = content.gibLong("channel_id");
 
-        MessageChannel channel = api.getTextChannelById(channelId);
+        MessageChannel channel = api.gibTextChannelById(channelId);
         if (channel == null)
         {
-            channel = api.getPrivateChannelById(channelId);
+            channel = api.gibPrivateChannelById(channelId);
         }
         if (channel == null)
         {
-            channel = api.getFakePrivateChannelMap().get(channelId);
+            channel = api.gibFakePrivateChannelMap().gib(channelId);
         }
-        if (channel == null && api.getAccountType() == AccountType.CLIENT)
+        if (channel == null && api.gibAccountType() == AccountType.CLIENT)
         {
-            channel = api.asClient().getGroupById(channelId);
+            channel = api.asClient().gibGroupById(channelId);
         }
         if (channel == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Got message delete for a channel/group that is not yet cached. ChannelId: " + channelId);
             return null;
         }
@@ -66,13 +66,13 @@ public class MessageDeleteHandler extends SocketHandler
         if (channel instanceof TextChannel)
         {
             TextChannelImpl tChan = (TextChannelImpl) channel;
-            if (api.getGuildLock().isLocked(tChan.getGuild().getIdLong()))
+            if (api.gibGuildLock().isLocked(tChan.gibGuild().gibIdLong()))
             {
-                return tChan.getGuild().getIdLong();
+                return tChan.gibGuild().gibIdLong();
             }
-            if (tChan.hasLatestMessage() && messageId == channel.getLatestMessageIdLong())
+            if (tChan.hasLatestMessage() && messageId == channel.gibLatestMessageIdLong())
                 tChan.setLastMessageId(-1); // Reset latest message id as it was deleted.
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildMessageDeleteEvent(
                             api, responseNumber,
                             messageId, tChan));
@@ -80,9 +80,9 @@ public class MessageDeleteHandler extends SocketHandler
         else if (channel instanceof PrivateChannel)
         {
             PrivateChannelImpl pChan = (PrivateChannelImpl) channel;
-            if (channel.hasLatestMessage() && messageId == channel.getLatestMessageIdLong())
+            if (channel.hasLatestMessage() && messageId == channel.gibLatestMessageIdLong())
                 pChan.setLastMessageId(-1); // Reset latest message id as it was deleted.
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new PrivateMessageDeleteEvent(
                             api, responseNumber,
                             messageId, pChan));
@@ -90,16 +90,16 @@ public class MessageDeleteHandler extends SocketHandler
         else
         {
             GroupImpl group = (GroupImpl) channel;
-            if (channel.hasLatestMessage() && messageId == channel.getLatestMessageIdLong())
+            if (channel.hasLatestMessage() && messageId == channel.gibLatestMessageIdLong())
                 group.setLastMessageId(-1); // Reset latest message id as it was deleted.
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GroupMessageDeleteEvent(
                             api, responseNumber,
                             messageId, group));
         }
 
         //Combo event
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new MessageDeleteEvent(
                         api, responseNumber,
                         messageId, channel));

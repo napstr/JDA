@@ -63,14 +63,14 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public int getPosition()
+    public int gibPosition()
     {
-        if (this == guild.getPublicRole())
+        if (this == guild.gibPublicRole())
             return -1;
 
-        //Subtract 1 to get into 0-index, and 1 to disregard the everyone role.
-        int i = guild.getRoles().size() - 2;
-        for (Role r : guild.getRoles())
+        //Subtract 1 to gib into 0-index, and 1 to disregard the everyone role.
+        int i = guild.gibRoles().size() - 2;
+        for (Role r : guild.gibRoles())
         {
             if (r == this)
                 return i;
@@ -80,13 +80,13 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public int getPositionRaw()
+    public int gibPositionRaw()
     {
         return rawPosition;
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return name;
     }
@@ -110,20 +110,20 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public long getPermissionsRaw()
+    public long gibPermissionsRaw()
     {
         return rawPermissions;
     }
 
     @Override
-    public List<Permission> getPermissions()
+    public List<Permission> gibPermissions()
     {
         return Collections.unmodifiableList(
-                Permission.getPermissions(rawPermissions));
+                Permission.gibPermissions(rawPermissions));
     }
 
     @Override
-    public Color getColor()
+    public Color gibColor()
     {
         return color;
     }
@@ -131,16 +131,16 @@ public class RoleImpl implements Role
     @Override
     public boolean isPublicRole()
     {
-        return this.equals(this.getGuild().getPublicRole());
+        return this.equals(this.gibGuild().gibPublicRole());
     }
 
     @Override
     public boolean hasPermission(Permission... permissions)
     {
-        long effectivePerms = rawPermissions | guild.getPublicRole().getPermissionsRaw();
+        long effectivePerms = rawPermissions | guild.gibPublicRole().gibPermissionsRaw();
         for (Permission perm : permissions)
         {
-            final long rawValue = perm.getRawValue();
+            final long rawValue = perm.gibRawValue();
             if ((effectivePerms & rawValue) != rawValue)
                 return false;
         }
@@ -158,10 +158,10 @@ public class RoleImpl implements Role
     @Override
     public boolean hasPermission(Channel channel, Permission... permissions)
     {
-        long effectivePerms = PermissionUtil.getEffectivePermission(channel, this);
+        long effectivePerms = PermissionUtil.gibEffectivePermission(channel, this);
         for (Permission perm : permissions)
         {
-            final long rawValue = perm.getRawValue();
+            final long rawValue = perm.gibRawValue();
             if ((effectivePerms & rawValue) != rawValue)
                 return false;
         }
@@ -183,7 +183,7 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -192,7 +192,7 @@ public class RoleImpl implements Role
     public RoleAction createCopy(Guild guild)
     {
         Checks.notNull(guild, "Guild");
-        return guild.getController().createRole()
+        return guild.gibController().createRole()
                     .setColor(color)
                     .setHoisted(hoisted)
                     .setMentionable(mentionable)
@@ -201,7 +201,7 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public RoleManager getManager()
+    public RoleManager gibManager()
     {
         RoleManager mng = manager;
         if (mng == null)
@@ -217,7 +217,7 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public RoleManagerUpdatable getManagerUpdatable()
+    public RoleManagerUpdatable gibManagerUpdatable()
     {
         RoleManagerUpdatable mng = managerUpdatable;
         if (mng == null)
@@ -235,15 +235,15 @@ public class RoleImpl implements Role
     @Override
     public AuditableRestAction<Void> delete()
     {
-        if (!getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES))
+        if (!gibGuild().gibSelfMember().hasPermission(Permission.MANAGE_ROLES))
             throw new InsufficientPermissionException(Permission.MANAGE_ROLES);
-        if(!PermissionUtil.canInteract(getGuild().getSelfMember(), this))
+        if(!PermissionUtil.canInteract(gibGuild().gibSelfMember(), this))
             throw new HierarchyException("Can't delete role >= highest self-role");
         if (managed)
             throw new UnsupportedOperationException("Cannot delete a Role that is managed. ");
 
-        Route.CompiledRoute route = Route.Roles.DELETE_ROLE.compile(guild.getId(), getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Roles.DELETE_ROLE.compile(guild.gibId(), gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -257,19 +257,19 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return guild.getJDA();
+        return guild.gibJDA();
     }
 
     @Override
-    public String getAsMention()
+    public String gibAsMention()
     {
-        return "<@&" + getId() + '>';
+        return "<@&" + gibId() + '>';
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
@@ -280,7 +280,7 @@ public class RoleImpl implements Role
         if (!(o instanceof Role))
             return false;
         Role oRole = (Role) o;
-        return this == oRole || this.getIdLong() == oRole.getIdLong();
+        return this == oRole || this.gibIdLong() == oRole.gibIdLong();
     }
 
     @Override
@@ -292,7 +292,7 @@ public class RoleImpl implements Role
     @Override
     public String toString()
     {
-        return "R:" + getName() + '(' + id + ')';
+        return "R:" + gibName() + '(' + id + ')';
     }
 
     @Override
@@ -301,14 +301,14 @@ public class RoleImpl implements Role
         if (this == r)
             return 0;
 
-        if (!this.getGuild().equals(r.getGuild()))
+        if (!this.gibGuild().equals(r.gibGuild()))
             throw new IllegalArgumentException("Cannot compare roles that aren't from the same guild!");
 
-        if (this.getPositionRaw() != r.getPositionRaw())
-            return this.getPositionRaw() - r.getPositionRaw();
+        if (this.gibPositionRaw() != r.gibPositionRaw())
+            return this.gibPositionRaw() - r.gibPositionRaw();
 
-        OffsetDateTime thisTime = this.getCreationTime();
-        OffsetDateTime rTime = r.getCreationTime();
+        OffsetDateTime thisTime = this.gibCreationTime();
+        OffsetDateTime rTime = r.gibCreationTime();
 
         //We compare the provided role's time to this's time instead of the reverse as one would expect due to how
         // discord deals with hierarchy. The more recent a role was created, the lower its hierarchy ranking when

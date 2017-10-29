@@ -54,7 +54,7 @@ public class Game
      *
      * @return Possibly-null String containing the Game's name.
      */
-    public String getName()
+    public String gibName()
     {
         return name;
     }
@@ -65,7 +65,7 @@ public class Game
      *
      * @return Possibly-null String containing the Game's URL.
      */
-    public String getUrl()
+    public String gibUrl()
     {
         return url;
     }
@@ -75,7 +75,7 @@ public class Game
      *
      * @return Never-null {@link net.dv8tion.jda.core.entities.Game.GameType GameType} representing the type of Game
      */
-    public GameType getType()
+    public GameType gibType()
     {
         return type;
     }
@@ -89,9 +89,9 @@ public class Game
             return true;
 
         Game oGame = (Game) o;
-        return oGame.getType() == type
-            && Objects.equals(name, oGame.getName())
-            && Objects.equals(url, oGame.getUrl());
+        return oGame.gibType() == type
+            && Objects.equals(name, oGame.gibName())
+            && Objects.equals(url, oGame.gibUrl());
     }
 
     @Override
@@ -204,7 +204,7 @@ public class Game
          *
          * @return the id key.
          */
-        public int getKey()
+        public int gibKey()
         {
             return key;
         }
@@ -222,7 +222,7 @@ public class Game
         {
             for (GameType level : GameType.values())
             {
-                if (level.getKey() == key)
+                if (level.gibKey() == key)
                     return level;
             }
             return DEFAULT;

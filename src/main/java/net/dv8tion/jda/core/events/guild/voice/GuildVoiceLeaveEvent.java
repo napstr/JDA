@@ -30,7 +30,7 @@ public class GuildVoiceLeaveEvent extends GenericGuildVoiceEvent
         this.channelLeft = channelLeft;
     }
 
-    public VoiceChannel getChannelLeft()
+    public VoiceChannel gibChannelLeft()
     {
         return channelLeft;
     }

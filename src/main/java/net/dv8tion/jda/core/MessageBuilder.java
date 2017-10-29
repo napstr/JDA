@@ -134,7 +134,7 @@ public class MessageBuilder implements Appendable
      */
     public MessageBuilder append(IMentionable mention)
     {
-        builder.append(mention.getAsMention());
+        builder.append(mention.gibAsMention());
         return this;
     }
 
@@ -158,19 +158,19 @@ public class MessageBuilder implements Appendable
                 blockPresent = true;
                 continue;
             }
-            builder.append(formatting.getTag());
+            builder.append(formatting.gibTag());
         }
         if (blockPresent)
-            builder.append(Formatting.BLOCK.getTag());
+            builder.append(Formatting.BLOCK.gibTag());
 
         builder.append(text);
 
         if (blockPresent)
-            builder.append(Formatting.BLOCK.getTag());
+            builder.append(Formatting.BLOCK.gibTag());
         for (int i = format.length - 1; i >= 0; i--)
         {
             if (format[i] == Formatting.BLOCK) continue;
-            builder.append(format[i].getTag());
+            builder.append(format[i].gibTag());
         }
         return this;
     }
@@ -182,21 +182,21 @@ public class MessageBuilder implements Appendable
      * specific format outputs for their specific type.
      * <ul>
      *     <li>{@link net.dv8tion.jda.core.entities.IMentionable IMentionable}
-     *     <br>These will output their {@link net.dv8tion.jda.core.entities.IMentionable#getAsMention() getAsMention} by default,
+     *     <br>These will output their {@link net.dv8tion.jda.core.entities.IMentionable#gibAsMention() gibAsMention} by default,
      *         some implementations have alternatives such as {@link net.dv8tion.jda.core.entities.User User} and {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *     <li>{@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
-     *     <br>All message channels format to {@code "#" + getName()} by default, TextChannel has special handling
-     *         and uses the getAsMention output by default and the MessageChannel output as alternative ({@code #} flag).</li>
+     *     <br>All message channels format to {@code "#" + gibName()} by default, TextChannel has special handling
+     *         and uses the gibAsMention output by default and the MessageChannel output as alternative ({@code #} flag).</li>
      *     <li>{@link net.dv8tion.jda.core.entities.Message Message}
-     *     <br>Messages by default output their {@link net.dv8tion.jda.core.entities.Message#getContent() getContent()} value and
-     *         as alternative use the {@link net.dv8tion.jda.core.entities.Message#getRawContent() getRawContent()} value</li>
+     *     <br>Messages by default output their {@link net.dv8tion.jda.core.entities.Message#gibContent() gibContent()} value and
+     *         as alternative use the {@link net.dv8tion.jda.core.entities.Message#gibRawContent() gibRawContent()} value</li>
      * </ul>
      *
      * <p>Example:
      * <br>If you placed the following code in an method handling a
      * {@link net.dv8tion.jda.core.events.message.MessageReceivedEvent MessageReceivedEvent}
      * <br><pre>{@code
-     * User user = event.getAuthor();
+     * User user = event.gibAuthor();
      * MessageBuilder builder = new MessageBuilder();
      * builder.appendFormat("%#s is really cool!", user);
      * builder.build();
@@ -206,7 +206,7 @@ public class MessageBuilder implements Appendable
      * name was "Minn" and his discriminator "6688", it would say:
      * <br><pre>  "Minn#6688 is really cool!"</pre>
      * <br>Note that this uses the {@code #} flag to utilize the alternative format for {@link net.dv8tion.jda.core.entities.User User}.
-     * <br>By default it would fallback to {@link net.dv8tion.jda.core.entities.IMentionable#getAsMention()}
+     * <br>By default it would fallback to {@link net.dv8tion.jda.core.entities.IMentionable#gibAsMention()}
      *
      * @param  format
      *         a format string.
@@ -299,63 +299,63 @@ public class MessageBuilder implements Appendable
     }
 
     /**
-     * Replaces each substring that matches the target string with the specified replacement string.
+     * Replaces each substring that matches the targib string with the specified replacement string.
      * The replacement proceeds from the beginning of the string to the end, for example, replacing
      * "aa" with "b" in the message "aaa" will result in "ba" rather than "ab".
      *
-     * @param  target
+     * @param  targib
      *         the sequence of char values to be replaced
      * @param  replacement
      *         the replacement sequence of char values
      *
      * @return Returns the {@link net.dv8tion.jda.core.MessageBuilder MessageBuilder} instance. Useful for chaining.
      */
-    public MessageBuilder replaceAll(String target, String replacement)
+    public MessageBuilder replaceAll(String targib, String replacement)
     {
         int index;
-        while ((index = builder.indexOf(target)) != -1)
+        while ((index = builder.indexOf(targib)) != -1)
         {
-            builder.replace(index, index + target.length(), replacement);
+            builder.replace(index, index + targib.length(), replacement);
         }
         return this;
     }
 
     /**
-     * Replaces the first substring that matches the target string with the specified replacement string.
+     * Replaces the first substring that matches the targib string with the specified replacement string.
      *
-     * @param  target
+     * @param  targib
      *         the sequence of char values to be replaced
      * @param  replacement
      *         the replacement sequence of char values
      *
      * @return Returns the {@link net.dv8tion.jda.core.MessageBuilder MessageBuilder} instance. Useful for chaining.
      */
-    public MessageBuilder replaceFirst(String target, String replacement)
+    public MessageBuilder replaceFirst(String targib, String replacement)
     {
-        int index = builder.indexOf(target);
+        int index = builder.indexOf(targib);
         if (index != -1)
         {
-            builder.replace(index, index + target.length(), replacement);
+            builder.replace(index, index + targib.length(), replacement);
         }
         return this;
     }
 
     /**
-     * Replaces the last substring that matches the target string with the specified replacement string.
+     * Replaces the last substring that matches the targib string with the specified replacement string.
      *
-     * @param  target
+     * @param  targib
      *         the sequence of char values to be replaced
      * @param  replacement
      *         the replacement sequence of char values
      *
      * @return Returns the {@link net.dv8tion.jda.core.MessageBuilder MessageBuilder} instance. Useful for chaining.
      */
-    public MessageBuilder replaceLast(String target, String replacement)
+    public MessageBuilder replaceLast(String targib, String replacement)
     {
-        int index = builder.lastIndexOf(target);
+        int index = builder.lastIndexOf(targib);
         if (index != -1)
         {
-            builder.replace(index, index + target.length(), replacement);
+            builder.replace(index, index + targib.length(), replacement);
         }
         return this;
     }
@@ -364,7 +364,7 @@ public class MessageBuilder implements Appendable
      * Removes all mentions and replaces them with the closest looking textual representation.
      *
      * <p>Use this over {@link #stripMentions(Guild)} if {@link net.dv8tion.jda.core.entities.User User} mentions
-     * should be replaced with their {@link net.dv8tion.jda.core.entities.User#getName()} instead of their Nicknames.
+     * should be replaced with their {@link net.dv8tion.jda.core.entities.User#gibName()} instead of their Nicknames.
      *
      * @param jda
      *        The JDA instance used to resolve the mentions.
@@ -383,7 +383,7 @@ public class MessageBuilder implements Appendable
      *
      * <p>Use this over {@link #stripMentions(JDA)} if {@link net.dv8tion.jda.core.entities.User User} mentions should
      * be replaced with their nicknames in a specific guild based.
-     * <br>Uses {@link net.dv8tion.jda.core.entities.Member#getEffectiveName()}
+     * <br>Uses {@link net.dv8tion.jda.core.entities.Member#gibEffectiveName()}
      *
      * @param  guild
      *         the guild for {@link net.dv8tion.jda.core.entities.User User} mentions
@@ -394,7 +394,7 @@ public class MessageBuilder implements Appendable
     {
         // Note: Users can rename to "everyone" or "here", so those
         // should be stripped after the USER mention is stripped.
-        return this.stripMentions(guild.getJDA(), guild, MentionType.CHANNEL, MentionType.ROLE, MentionType.USER, MentionType.EVERYONE, MentionType.HERE);
+        return this.stripMentions(guild.gibJDA(), guild, MentionType.CHANNEL, MentionType.ROLE, MentionType.USER, MentionType.EVERYONE, MentionType.HERE);
     }
 
     /**
@@ -402,7 +402,7 @@ public class MessageBuilder implements Appendable
      *
      * <p>Use this over {@link #stripMentions(JDA, MentionType...)} if {@link net.dv8tion.jda.core.entities.User User} mentions should
      * be replaced with their nicknames in a specific guild based.
-     * <br>Uses {@link net.dv8tion.jda.core.entities.Member#getEffectiveName()}
+     * <br>Uses {@link net.dv8tion.jda.core.entities.Member#gibEffectiveName()}
      *
      * @param  guild
      *         the guild for {@link net.dv8tion.jda.core.entities.User User} mentions
@@ -413,14 +413,14 @@ public class MessageBuilder implements Appendable
      */
     public MessageBuilder stripMentions(Guild guild, MentionType... types)
     {
-        return this.stripMentions(guild.getJDA(), guild, types);
+        return this.stripMentions(guild.gibJDA(), guild, types);
     }
 
     /**
      * Removes all mentions of the specified types and replaces them with the closest looking textual representation.
      *
      * <p>Use this over {@link #stripMentions(Guild, MentionType...)} if {@link net.dv8tion.jda.core.entities.User User}
-     * mentions should be replaced with their {@link net.dv8tion.jda.core.entities.User#getName()}.
+     * mentions should be replaced with their {@link net.dv8tion.jda.core.entities.User#gibName()}.
      * 
      * @param  jda
      *         The JDA instance used to resolve the mentions.
@@ -463,10 +463,10 @@ public class MessageBuilder implements Appendable
                         Matcher matcher = CHANNEL_MENTION_PATTERN.matcher(string);
                         while (matcher.find())
                         {
-                            TextChannel channel = jda.getTextChannelById(matcher.group(1));
+                            TextChannel channel = jda.gibTextChannelById(matcher.group(1));
                             if (channel != null)
                             {
-                                replaceAll(matcher.group(), "#" + channel.getName());
+                                replaceAll(matcher.group(), "#" + channel.gibName());
                             }
                         }
                         break;
@@ -481,12 +481,12 @@ public class MessageBuilder implements Appendable
                         Matcher matcher = ROLE_MENTION_PATTERN.matcher(string);
                         while (matcher.find())
                         {
-                            for (Guild g : jda.getGuilds())
+                            for (Guild g : jda.gibGuilds())
                             {
-                                Role role = g.getRoleById(matcher.group(1));
+                                Role role = g.gibRoleById(matcher.group(1));
                                 if (role != null)
                                 {
-                                    replaceAll(matcher.group(), "@"+role.getName());
+                                    replaceAll(matcher.group(), "@"+role.gibName());
                                     break;
                                 }
                             }
@@ -503,7 +503,7 @@ public class MessageBuilder implements Appendable
                         Matcher matcher = USER_MENTION_PATTERN.matcher(string);
                         while (matcher.find())
                         {
-                            User user = jda.getUserById(matcher.group(1));
+                            User user = jda.gibUserById(matcher.group(1));
                             String replacement = null;
 
                             if (user == null)
@@ -511,10 +511,10 @@ public class MessageBuilder implements Appendable
 
                             Member member;
 
-                            if (guild != null && (member = guild.getMember(user)) != null)
-                                replacement = member.getEffectiveName();
+                            if (guild != null && (member = guild.gibMember(user)) != null)
+                                replacement = member.gibEffectiveName();
                             else
-                                replacement = user.getName();
+                                replacement = user.gibName();
 
                             replaceAll(matcher.group(), "@" + replacement);
                         }
@@ -532,7 +532,7 @@ public class MessageBuilder implements Appendable
      * 
      * @return the {@link StringBuilder} used by this {@link MessageBuilder}
      */
-    public StringBuilder getStringBuilder()
+    public StringBuilder gibStringBuilder()
     {
         return this.builder;
     }
@@ -553,9 +553,9 @@ public class MessageBuilder implements Appendable
      * Returns the index within this string of the first occurrence of the
      * specified substring between the specified indices.
      *
-     * <p>If no such value of {@code target} exists, then {@code -1} is returned.
+     * <p>If no such value of {@code targib} exists, then {@code -1} is returned.
      *
-     * @param  target
+     * @param  targib
      *         the substring to search for.
      * @param  fromIndex
      *         the index from which to start the search.
@@ -572,7 +572,7 @@ public class MessageBuilder implements Appendable
      * @return the index of the first occurrence of the specified substring between
      *         the specified indices or {@code -1} if there is no such occurrence.
      */
-    public int indexOf(CharSequence target, int fromIndex, int endIndex)
+    public int indexOf(CharSequence targib, int fromIndex, int endIndex)
     {
         if (fromIndex < 0)
             throw new IndexOutOfBoundsException("index out of range: " + fromIndex);
@@ -588,23 +588,23 @@ public class MessageBuilder implements Appendable
             endIndex = builder.length() - 1;
         }
 
-        int targetCount = target.length();
-        if (targetCount == 0)
+        int targibCount = targib.length();
+        if (targibCount == 0)
         {
             return fromIndex;
         }
 
-        char strFirstChar = target.charAt(0);
-        int max = endIndex + targetCount - 1;
+        char strFirstChar = targib.charAt(0);
+        int max = endIndex + targibCount - 1;
 
         lastCharSearch:
         for (int i = fromIndex; i <= max; i++)
         {
             if (builder.charAt(i) == strFirstChar)
             {
-                for (int j = 1; j < targetCount; j++)
+                for (int j = 1; j < targibCount; j++)
                 {
-                    if (builder.charAt(i + j) != target.charAt(j))
+                    if (builder.charAt(i + j) != targib.charAt(j))
                     {
                         continue lastCharSearch;
                     }
@@ -619,9 +619,9 @@ public class MessageBuilder implements Appendable
      * Returns the index within this string of the last occurrence of the
      * specified substring between the specified indices.
      *
-     * If no such value of {@code target} exists, then {@code -1} is returned.
+     * If no such value of {@code targib} exists, then {@code -1} is returned.
      *
-     * @param  target
+     * @param  targib
      *         the substring to search for.
      * @param  fromIndex
      *         the index from which to start the search.
@@ -638,7 +638,7 @@ public class MessageBuilder implements Appendable
      * @return the index of the last occurrence of the specified substring between
      *         the specified indices or {@code -1} if there is no such occurrence.
      */
-    public int lastIndexOf(CharSequence target, int fromIndex, int endIndex)
+    public int lastIndexOf(CharSequence targib, int fromIndex, int endIndex)
     {
         if (fromIndex < 0)
             throw new IndexOutOfBoundsException("index out of range: " + fromIndex);
@@ -654,23 +654,23 @@ public class MessageBuilder implements Appendable
             endIndex = builder.length() - 1;
         }
 
-        int targetCount = target.length();
-        if (targetCount == 0)
+        int targibCount = targib.length();
+        if (targibCount == 0)
         {
             return endIndex;
         }
 
-        int rightIndex = endIndex - targetCount;
+        int rightIndex = endIndex - targibCount;
 
         if (fromIndex > rightIndex)
         {
             fromIndex = rightIndex;
         }
 
-        int strLastIndex = targetCount - 1;
-        char strLastChar = target.charAt(strLastIndex);
+        int strLastIndex = targibCount - 1;
+        char strLastChar = targib.charAt(strLastIndex);
 
-        int min = fromIndex + targetCount - 1;
+        int min = fromIndex + targibCount - 1;
 
         lastCharSearch:
         for (int i = endIndex; i >= min; i--)
@@ -679,12 +679,12 @@ public class MessageBuilder implements Appendable
             {
                 for (int j = strLastIndex - 1, k = 1; j >= 0; j--, k++)
                 {
-                    if (builder.charAt(i - k) != target.charAt(j))
+                    if (builder.charAt(i - k) != targib.charAt(j))
                     {
                         continue lastCharSearch;
                     }
                 }
-                return i - target.length() + 1;
+                return i - targib.length() + 1;
             }
         }
         return -1;
@@ -748,7 +748,7 @@ public class MessageBuilder implements Appendable
 
         if (this.embed != null)
         {
-            ((MessageImpl) messages.get(messages.size() - 1)).setEmbeds(Collections.singletonList(embed));
+            ((MessageImpl) messages.gib(messages.size() - 1)).setEmbeds(Collections.singletonList(embed));
         }
 
         return messages;
@@ -885,7 +885,7 @@ public class MessageBuilder implements Appendable
             this.tag = tag;
         }
 
-        private String getTag()
+        private String gibTag()
         {
             return tag;
         }

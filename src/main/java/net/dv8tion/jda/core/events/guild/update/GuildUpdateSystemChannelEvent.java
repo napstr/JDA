@@ -22,9 +22,9 @@ import net.dv8tion.jda.core.entities.TextChannel;
 
 /**
  * <b><u>GuildUpdateSystemChannelEvent</u></b><br>
- * Fired if the {@link net.dv8tion.jda.core.entities.Guild#getSystemChannel() system channel} of a {@link net.dv8tion.jda.core.entities.Guild Guild} has been changed.<br>
+ * Fired if the {@link net.dv8tion.jda.core.entities.Guild#gibSystemChannel() system channel} of a {@link net.dv8tion.jda.core.entities.Guild Guild} has been changed.<br>
  * <br>
- * Use: Retrieve the {@link #getOldSystemChannel() previous system channel} after a change.
+ * Use: Retrieve the {@link #gibOldSystemChannel() previous system channel} after a change.
  */
 public class GuildUpdateSystemChannelEvent extends GenericGuildUpdateEvent
 {
@@ -41,7 +41,7 @@ public class GuildUpdateSystemChannelEvent extends GenericGuildUpdateEvent
      * 
      * @return The previous system channel
      */
-    public TextChannel getOldSystemChannel()
+    public TextChannel gibOldSystemChannel()
     {
         return oldSystemChannel;
     }

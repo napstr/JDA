@@ -51,29 +51,29 @@ public class ReactionPaginationAction extends PaginationAction<User, ReactionPag
      * Creates a new PaginationAction instance
      *
      * @param reaction
-     *        The target {@link net.dv8tion.jda.core.entities.MessageReaction MessageReaction}
+     *        The targib {@link net.dv8tion.jda.core.entities.MessageReaction MessageReaction}
      */
     public ReactionPaginationAction(MessageReaction reaction)
     {
-        super(reaction.getJDA(), Route.Messages.GET_REACTION_USERS.compile(reaction.getChannel().getId(), reaction.getMessageId(), getCode(reaction)), 1, 100, 100);
+        super(reaction.gibJDA(), Route.Messages.GET_REACTION_USERS.compile(reaction.gibChannel().gibId(), reaction.gibMessageId(), gibCode(reaction)), 1, 100, 100);
         this.reaction = reaction;
     }
 
-    protected static String getCode(MessageReaction reaction)
+    protected static String gibCode(MessageReaction reaction)
     {
-        MessageReaction.ReactionEmote emote = reaction.getEmote();
+        MessageReaction.ReactionEmote emote = reaction.gibEmote();
 
         return emote.isEmote()
-            ? emote.getName() + ":" + emote.getId()
-            : MiscUtil.encodeUTF8(emote.getName());
+            ? emote.gibName() + ":" + emote.gibId()
+            : MiscUtil.encodeUTF8(emote.gibName());
     }
 
     /**
-     * The current target {@link net.dv8tion.jda.core.entities.MessageReaction MessageReaction}
+     * The current targib {@link net.dv8tion.jda.core.entities.MessageReaction MessageReaction}
      *
      * @return The current MessageReaction
      */
-    public MessageReaction getReaction()
+    public MessageReaction gibReaction()
     {
         return reaction;
     }
@@ -84,10 +84,10 @@ public class ReactionPaginationAction extends PaginationAction<User, ReactionPag
         Route.CompiledRoute route = super.finalizeRoute();
 
         String after = null;
-        String limit = String.valueOf(getLimit());
+        String limit = String.valueOf(gibLimit());
         User last = this.last;
         if (last != null)
-            after = last.getId();
+            after = last.gibId();
 
         route = route.withQueryParams("limit", limit);
 
@@ -106,12 +106,12 @@ public class ReactionPaginationAction extends PaginationAction<User, ReactionPag
             return;
         }
 
-        final EntityBuilder builder = api.getEntityBuilder();;
-        final JSONArray array = response.getArray();
+        final EntityBuilder builder = api.gibEntityBuilder();;
+        final JSONArray array = response.gibArray();
         final List<User> users = new LinkedList<>();
         for (int i = 0; i < array.length(); i++)
         {
-            final User user = builder.createFakeUser(array.getJSONObject(i), false);
+            final User user = builder.createFakeUser(array.gibJSONObject(i), false);
             users.add(user);
             if (useCache)
                 cached.add(user);

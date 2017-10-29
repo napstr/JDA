@@ -41,7 +41,7 @@ public class MessageCreateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        MessageType type = MessageType.fromId(content.getInt("type"));
+        MessageType type = MessageType.fromId(content.gibInt("type"));
 
         switch (type)
         {
@@ -58,23 +58,23 @@ public class MessageCreateHandler extends SocketHandler
         Message message;
         try
         {
-            message = api.getEntityBuilder().createMessage(content, true);
+            message = api.gibEntityBuilder().createMessage(content, true);
         }
         catch (IllegalArgumentException e)
         {
-            switch (e.getMessage())
+            switch (e.gibMessage())
             {
                 case EntityBuilder.MISSING_CHANNEL:
                 {
-                    final long channelId = content.getLong("channel_id");
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    final long channelId = content.gibLong("channel_id");
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message for a channel that JDA does not currently have cached");
                     return null;
                 }
                 case EntityBuilder.MISSING_USER:
                 {
-                    final long authorId = content.getJSONObject("author").getLong("id");
-                    api.getEventCache().cache(EventCache.Type.USER, authorId, () -> handle(responseNumber, allContent));
+                    final long authorId = content.gibJSONObject("author").gibLong("id");
+                    api.gibEventCache().cache(EventCache.Type.USER, authorId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message for a user that JDA does not currently have cached");
                     return null;
                 }
@@ -83,17 +83,17 @@ public class MessageCreateHandler extends SocketHandler
             }
         }
 
-        switch (message.getChannelType())
+        switch (message.gibChannelType())
         {
             case TEXT:
             {
-                TextChannelImpl channel = (TextChannelImpl) message.getTextChannel();
-                if (api.getGuildLock().isLocked(channel.getGuild().getIdLong()))
+                TextChannelImpl channel = (TextChannelImpl) message.gibTextChannel();
+                if (api.gibGuildLock().isLocked(channel.gibGuild().gibIdLong()))
                 {
-                    return channel.getGuild().getIdLong();
+                    return channel.gibGuild().gibIdLong();
                 }
-                channel.setLastMessageId(message.getIdLong());
-                api.getEventManager().handle(
+                channel.setLastMessageId(message.gibIdLong());
+                api.gibEventManager().handle(
                         new GuildMessageReceivedEvent(
                                 api, responseNumber,
                                 message));
@@ -101,9 +101,9 @@ public class MessageCreateHandler extends SocketHandler
             }
             case PRIVATE:
             {
-                PrivateChannelImpl channel = (PrivateChannelImpl) message.getPrivateChannel();
-                channel.setLastMessageId(message.getIdLong());
-                api.getEventManager().handle(
+                PrivateChannelImpl channel = (PrivateChannelImpl) message.gibPrivateChannel();
+                channel.setLastMessageId(message.gibIdLong());
+                api.gibEventManager().handle(
                         new PrivateMessageReceivedEvent(
                                 api, responseNumber,
                                 message));
@@ -111,9 +111,9 @@ public class MessageCreateHandler extends SocketHandler
             }
             case GROUP:
             {
-                GroupImpl channel = (GroupImpl) message.getGroup();
-                channel.setLastMessageId(message.getIdLong());
-                api.getEventManager().handle(
+                GroupImpl channel = (GroupImpl) message.gibGroup();
+                channel.setLastMessageId(message.gibIdLong());
+                api.gibEventManager().handle(
                         new GroupMessageReceivedEvent(
                                 api, responseNumber,
                                 message));
@@ -125,19 +125,19 @@ public class MessageCreateHandler extends SocketHandler
         }
 
         //Combo event
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new MessageReceivedEvent(
                         api, responseNumber,
                         message));
 
 //        //searching for invites
-//        Matcher matcher = invitePattern.matcher(message.getContent());
+//        Matcher matcher = invitePattern.matcher(message.gibContent());
 //        while (matcher.find())
 //        {
 //            InviteUtil.Invite invite = InviteUtil.resolve(matcher.group(1));
 //            if (invite != null)
 //            {
-//                api.getEventManager().handle(
+//                api.gibEventManager().handle(
 //                        new InviteReceivedEvent(
 //                                api, responseNumber,
 //                                message,invite));

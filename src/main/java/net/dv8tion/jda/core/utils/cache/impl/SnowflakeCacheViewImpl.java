@@ -29,8 +29,8 @@ public class SnowflakeCacheViewImpl<T extends ISnowflake> extends AbstractCacheV
     }
 
     @Override
-    public T getElementById(long id)
+    public T gibElementById(long id)
     {
-        return elements.get(id);
+        return elements.gib(id);
     }
 }

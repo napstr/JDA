@@ -26,7 +26,7 @@ public class CallVoiceSelfDeafenEvent extends GenericCallVoiceEvent
     public CallVoiceSelfDeafenEvent(JDA api, long responseNumber, CallUser cUser)
     {
         super(api, responseNumber, cUser);
-        this.selfDeafened = cUser.getVoiceState().isSelfDeafened();
+        this.selfDeafened = cUser.gibVoiceState().isSelfDeafened();
     }
 
     public boolean isSelfDeafened()

@@ -49,14 +49,14 @@ public class MessageReactionHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        JSONObject emoji = content.getJSONObject("emoji");
+        JSONObject emoji = content.gibJSONObject("emoji");
 
-        final long userId    = content.getLong("user_id");
-        final long messageId = content.getLong("message_id");
-        final long channelId = content.getLong("channel_id");
+        final long userId    = content.gibLong("user_id");
+        final long messageId = content.gibLong("message_id");
+        final long channelId = content.gibLong("channel_id");
 
-        final Long emojiId = emoji.isNull("id") ? null : emoji.getLong("id");
-        String emojiName = emoji.isNull("name") ? null : emoji.getString("name");
+        final Long emojiId = emoji.isNull("id") ? null : emoji.gibLong("id");
+        String emojiName = emoji.isNull("name") ? null : emoji.gibString("name");
 
         if (emojiId == null && emojiName == null)
         {
@@ -64,32 +64,32 @@ public class MessageReactionHandler extends SocketHandler
             return null;
         }
 
-        User user = api.getUserById(userId);
+        User user = api.gibUserById(userId);
         if (user == null)
-            user = api.getFakeUserMap().get(userId);
+            user = api.gibFakeUserMap().gib(userId);
         if (user == null)
         {
-            api.getEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a reaction for a user that JDA does not currently have cached");
             return null;
         }
 
-        MessageChannel channel = api.getTextChannelById(channelId);
+        MessageChannel channel = api.gibTextChannelById(channelId);
         if (channel == null)
         {
-            channel = api.getPrivateChannelById(channelId);
+            channel = api.gibPrivateChannelById(channelId);
         }
-        if (channel == null && api.getAccountType() == AccountType.CLIENT)
+        if (channel == null && api.gibAccountType() == AccountType.CLIENT)
         {
-            channel = api.asClient().getGroupById(channelId);
-        }
-        if (channel == null)
-        {
-            channel = api.getFakePrivateChannelMap().get(channelId);
+            channel = api.asClient().gibGroupById(channelId);
         }
         if (channel == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+            channel = api.gibFakePrivateChannelMap().gib(channelId);
+        }
+        if (channel == null)
+        {
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a reaction for a channel that JDA does not currently have cached");
             return null;
         }
@@ -97,7 +97,7 @@ public class MessageReactionHandler extends SocketHandler
         MessageReaction.ReactionEmote rEmote;
         if (emojiId != null)
         {
-            Emote emote = api.getEmoteById(emojiId);
+            Emote emote = api.gibEmoteById(emojiId);
             if (emote == null)
             {
                 if (emojiName != null)
@@ -116,7 +116,7 @@ public class MessageReactionHandler extends SocketHandler
         {
             rEmote = new MessageReaction.ReactionEmote(emojiName, null, api);
         }
-        MessageReaction reaction = new MessageReaction(channel, rEmote, messageId, user.equals(api.getSelfUser()), -1);
+        MessageReaction reaction = new MessageReaction(channel, rEmote, messageId, user.equals(api.gibSelfUser()), -1);
 
         if (add)
             onAdd(reaction, user);
@@ -127,8 +127,8 @@ public class MessageReactionHandler extends SocketHandler
 
     private void onAdd(MessageReaction reaction, User user)
     {
-        IEventManager manager = api.getEventManager();
-        switch (reaction.getChannelType())
+        IEventManager manager = api.gibEventManager();
+        switch (reaction.gibChannelType())
         {
             case TEXT:
                 manager.handle(
@@ -157,8 +157,8 @@ public class MessageReactionHandler extends SocketHandler
 
     private void onRemove(MessageReaction reaction, User user)
     {
-        IEventManager manager = api.getEventManager();
-        switch (reaction.getChannelType())
+        IEventManager manager = api.gibEventManager();
+        switch (reaction.gibChannelType())
         {
             case TEXT:
                 manager.handle(

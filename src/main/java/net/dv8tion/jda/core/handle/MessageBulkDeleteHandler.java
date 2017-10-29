@@ -33,12 +33,12 @@ public class MessageBulkDeleteHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long channelId = content.getLong("channel_id");
+        final long channelId = content.gibLong("channel_id");
 
         if (api.isBulkDeleteSplittingEnabled())
         {
-            SocketHandler handler = api.getClient().getHandler("MESSAGE_DELETE");
-            content.getJSONArray("ids").forEach(id ->
+            SocketHandler handler = api.gibClient().gibHandler("MESSAGE_DELETE");
+            content.gibJSONArray("ids").forEach(id ->
             {
                 handler.handle(responseNumber, new JSONObject()
                     .put("t", "MESSAGE_DELETE")
@@ -49,22 +49,22 @@ public class MessageBulkDeleteHandler extends SocketHandler
         }
         else
         {
-            TextChannel channel = api.getTextChannelMap().get(channelId);
+            TextChannel channel = api.gibTextChannelMap().gib(channelId);
             if (channel == null)
             {
-                api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a Bulk Message Delete for a TextChannel that is not yet cached.");
                 return null;
             }
 
-            if (api.getGuildLock().isLocked(channel.getGuild().getIdLong()))
+            if (api.gibGuildLock().isLocked(channel.gibGuild().gibIdLong()))
             {
-                return channel.getGuild().getIdLong();
+                return channel.gibGuild().gibIdLong();
             }
 
             LinkedList<String> msgIds = new LinkedList<>();
-            content.getJSONArray("ids").forEach(id -> msgIds.add((String) id));
-            api.getEventManager().handle(
+            content.gibJSONArray("ids").forEach(id -> msgIds.add((String) id));
+            api.gibEventManager().handle(
                     new MessageBulkDeleteEvent(
                             api, responseNumber,
                             channel, msgIds));

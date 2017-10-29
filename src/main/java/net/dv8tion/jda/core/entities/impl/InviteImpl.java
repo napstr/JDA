@@ -76,7 +76,7 @@ public class InviteImpl implements Invite
             {
                 if (response.isOk())
                 {
-                    final Invite invite = this.api.getEntityBuilder().createInvite(response.getObject());
+                    final Invite invite = this.api.gibEntityBuilder().createInvite(response.gibObject());
                     request.onSuccess(invite);
                 }
                 else
@@ -109,28 +109,28 @@ public class InviteImpl implements Invite
     public RestAction<Invite> expand()
     {
         if (this.expanded)
-            return new RestAction.EmptyRestAction<>(getJDA(), this);
+            return new RestAction.EmptyRestAction<>(gibJDA(), this);
 
-        final net.dv8tion.jda.core.entities.Guild guild = this.api.getGuildById(this.guild.getIdLong());
+        final net.dv8tion.jda.core.entities.Guild guild = this.api.gibGuildById(this.guild.gibIdLong());
 
         if (guild == null)
             throw new UnsupportedOperationException("You're not in the guild this invite points to");
 
-        final Member member = guild.getSelfMember();
+        final Member member = guild.gibSelfMember();
 
         Route.CompiledRoute route;
 
-        final net.dv8tion.jda.core.entities.Channel channel = this.channel.getType() == ChannelType.TEXT
-                ? guild.getTextChannelById(this.channel.getIdLong())
-                : guild.getVoiceChannelById(this.channel.getIdLong());
+        final net.dv8tion.jda.core.entities.Channel channel = this.channel.gibType() == ChannelType.TEXT
+                ? guild.gibTextChannelById(this.channel.gibIdLong())
+                : guild.gibVoiceChannelById(this.channel.gibIdLong());
 
         if (member.hasPermission(channel, Permission.MANAGE_CHANNEL))
         {
-            route = Route.Invites.GET_CHANNEL_INVITES.compile(channel.getId());
+            route = Route.Invites.GET_CHANNEL_INVITES.compile(channel.gibId());
         }
         else if (member.hasPermission(Permission.MANAGE_SERVER))
         {
-            route = Route.Invites.GET_GUILD_INVITES.compile(guild.getId());
+            route = Route.Invites.GET_GUILD_INVITES.compile(guild.gibId());
         }
         else
         {
@@ -144,12 +144,12 @@ public class InviteImpl implements Invite
             {
                 if (response.isOk())
                 {
-                    final EntityBuilder entityBuilder = this.api.getEntityBuilder();
-                    final JSONArray array = response.getArray();
+                    final EntityBuilder entityBuilder = this.api.gibEntityBuilder();
+                    final JSONArray array = response.gibArray();
                     for (int i = 0; i < array.length(); i++)
                     {
-                        final JSONObject object = array.getJSONObject(i);
-                        if (InviteImpl.this.code.equals(object.getString("code")))
+                        final JSONObject object = array.gibJSONObject(i);
+                        if (InviteImpl.this.code.equals(object.gibString("code")))
                         {
                             request.onSuccess(entityBuilder.createInvite(object));
                             return;
@@ -166,19 +166,19 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public Channel getChannel()
+    public Channel gibChannel()
     {
         return this.channel;
     }
 
     @Override
-    public String getCode()
+    public String gibCode()
     {
         return this.code;
     }
 
     @Override
-    public OffsetDateTime getCreationTime()
+    public OffsetDateTime gibCreationTime()
     {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
@@ -186,25 +186,25 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return this.guild;
     }
 
     @Override
-    public User getInviter()
+    public User gibInviter()
     {
         return this.inviter;
     }
 
     @Override
-    public JDAImpl getJDA()
+    public JDAImpl gibJDA()
     {
         return this.api;
     }
 
     @Override
-    public int getMaxAge()
+    public int gibMaxAge()
     {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
@@ -212,7 +212,7 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public int getMaxUses()
+    public int gibMaxUses()
     {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
@@ -220,7 +220,7 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public int getUses()
+    public int gibUses()
     {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
@@ -261,19 +261,19 @@ public class InviteImpl implements Invite
         }
 
         @Override
-        public long getIdLong()
+        public long gibIdLong()
         {
             return id;
         }
 
         @Override
-        public String getName()
+        public String gibName()
         {
             return this.name;
         }
 
         @Override
-        public ChannelType getType()
+        public ChannelType gibType()
         {
             return this.type;
         }
@@ -295,38 +295,38 @@ public class InviteImpl implements Invite
         }
 
         @Override
-        public String getIconId()
+        public String gibIconId()
         {
             return this.iconId;
         }
 
         @Override
-        public String getIconUrl()
+        public String gibIconUrl()
         {
             return this.iconId == null ? null
                     : "https://cdn.discordapp.com/icons/" + this.id + "/" + this.iconId + ".jpg";
         }
 
         @Override
-        public long getIdLong()
+        public long gibIdLong()
         {
             return id;
         }
 
         @Override
-        public String getName()
+        public String gibName()
         {
             return this.name;
         }
 
         @Override
-        public String getSplashId()
+        public String gibSplashId()
         {
             return this.splashId;
         }
 
         @Override
-        public String getSplashUrl()
+        public String gibSplashUrl()
         {
             return this.splashId == null ? null
                     : "https://cdn.discordapp.com/splashes/" + this.id + "/" + this.splashId + ".jpg";

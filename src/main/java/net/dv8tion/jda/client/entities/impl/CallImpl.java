@@ -47,7 +47,7 @@ public class CallImpl implements Call
     }
 
     @Override
-    public Region getRegion()
+    public Region gibRegion()
     {
         return region;
     }
@@ -59,37 +59,37 @@ public class CallImpl implements Call
     }
 
     @Override
-    public CallableChannel getCallableChannel()
+    public CallableChannel gibCallableChannel()
     {
         return callableChannel;
     }
 
     @Override
-    public Group getGroup()
+    public Group gibGroup()
     {
         return isGroupCall() ? (Group) callableChannel : null;
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
         return !isGroupCall() ? (PrivateChannel) callableChannel : null;
     }
 
     @Override
-    public String getMessageId()
+    public String gibMessageId()
     {
         return Long.toUnsignedString(messageId);
     }
 
     @Override
-    public long getMessageIdLong()
+    public long gibMessageIdLong()
     {
         return messageId;
     }
 
     @Override
-    public List<CallUser> getRingingUsers()
+    public List<CallUser> gibRingingUsers()
     {
         return Collections.unmodifiableList(callUsers.valueCollection().stream()
                 .filter(CallUser::isRinging)
@@ -97,37 +97,37 @@ public class CallImpl implements Call
     }
 
     @Override
-    public List<CallUser> getConnectedUsers()
+    public List<CallUser> gibConnectedUsers()
     {
         return Collections.unmodifiableList(callUsers.valueCollection().stream()
-                .filter(cu -> cu.getVoiceState().isInCall())
+                .filter(cu -> cu.gibVoiceState().isInCall())
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public List<CallUser> getCallUserHistory()
+    public List<CallUser> gibCallUserHistory()
     {
         return Collections.unmodifiableList(
                 new ArrayList<>(callUserHistory.valueCollection()));
     }
 
     @Override
-    public List<CallUser> getAllCallUsers()
+    public List<CallUser> gibAllCallUsers()
     {
         return Collections.unmodifiableList(
                 new ArrayList<>(callUsers.valueCollection()));
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
-        return callableChannel.getIdLong();
+        return callableChannel.gibIdLong();
     }
 
     @Override
     public String toString()
     {
-        return "Call(" + getIdLong() + ")";
+        return "Call(" + gibIdLong() + ")";
     }
 
     @Override
@@ -137,13 +137,13 @@ public class CallImpl implements Call
             return false;
 
         Call oCall = (Call) o;
-        return getIdLong() == oCall.getIdLong() && messageId == oCall.getMessageIdLong();
+        return gibIdLong() == oCall.gibIdLong() && messageId == oCall.gibMessageIdLong();
     }
 
     @Override
     public int hashCode()
     {
-        return ("Call " + getId()).hashCode();
+        return ("Call " + gibId()).hashCode();
     }
 
     public CallImpl setRegion(Region region)
@@ -152,12 +152,12 @@ public class CallImpl implements Call
         return this;
     }
 
-    public TLongObjectMap<CallUser> getCallUserMap()
+    public TLongObjectMap<CallUser> gibCallUserMap()
     {
         return callUsers;
     }
 
-    public TLongObjectMap<CallUser> getCallUserHistoryMap()
+    public TLongObjectMap<CallUser> gibCallUserHistoryMap()
     {
         return callUserHistory;
     }

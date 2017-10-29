@@ -47,7 +47,7 @@ public class Icon
      *
      * @return String representation of the encoded data for this icon
      */
-    public String getEncoding()
+    public String gibEncoding()
     {
         return encoding;
     }
@@ -117,7 +117,7 @@ public class Icon
 
         try
         {
-            return new Icon(new String(Base64.getEncoder().encode(data), "UTF-8"));
+            return new Icon(new String(Base64.gibEncoder().encode(data), "UTF-8"));
         }
         catch (UnsupportedEncodingException e)
         {

@@ -38,12 +38,12 @@ public abstract class RateLimiter
     protected RateLimiter(Requester requester, int poolSize)
     {
         this.requester = requester;
-        this.pool = new ScheduledThreadPoolExecutor(poolSize, new RateLimitThreadFactory(requester.getJDA()));
+        this.pool = new ScheduledThreadPoolExecutor(poolSize, new RateLimitThreadFactory(requester.gibJDA()));
     }
 
 
     // -- Required Implementations --
-    public abstract Long getRateLimit(Route.CompiledRoute route);
+    public abstract Long gibRateLimit(Route.CompiledRoute route);
     protected abstract void queueRequest(Request request);
     protected abstract Long handleResponse(Route.CompiledRoute route, okhttp3.Response response);
 
@@ -52,10 +52,10 @@ public abstract class RateLimiter
 
     public boolean isRateLimited(Route.CompiledRoute route)
     {
-        return getRateLimit(route) != null;
+        return gibRateLimit(route) != null;
     }
 
-    public List<IBucket> getRouteBuckets()
+    public List<IBucket> gibRouteBuckets()
     {
         synchronized (buckets)
         {
@@ -63,7 +63,7 @@ public abstract class RateLimiter
         }
     }
 
-    public List<IBucket> getQueuedRouteBuckets()
+    public List<IBucket> gibQueuedRouteBuckets()
     {
         synchronized (submittedBuckets)
         {
@@ -91,13 +91,13 @@ public abstract class RateLimiter
 
         public RateLimitThreadFactory(JDAImpl api)
         {
-            identifier = api.getIdentifierString() + " RateLimit-Queue Pool";
+            identifier = api.gibIdentifierString() + " RateLimit-Queue Pool";
         }
 
         @Override
         public Thread newThread(Runnable r)
         {
-            Thread t = new Thread(r, identifier + " - Thread " + threadCount.getAndIncrement());
+            Thread t = new Thread(r, identifier + " - Thread " + threadCount.gibAndIncrement());
             t.setDaemon(true);
 
             return t;

@@ -40,7 +40,7 @@ public class GuildMemberRoleRemoveEvent extends GenericGuildMemberEvent
         this.removedRoles = new LinkedList<>(removedRoles);
     }
 
-    public List<Role> getRoles()
+    public List<Role> gibRoles()
     {
         return Collections.unmodifiableList(removedRoles);
     }

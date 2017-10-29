@@ -31,13 +31,13 @@ public class IncomingFriendRequestImpl implements IncomingFriendRequest
     }
 
     @Override
-    public RelationshipType getType()
+    public RelationshipType gibType()
     {
         return RelationshipType.INCOMING_FRIEND_REQUEST;
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
@@ -67,12 +67,12 @@ public class IncomingFriendRequestImpl implements IncomingFriendRequest
             return false;
 
         IncomingFriendRequest oIFR = (IncomingFriendRequest) o;
-        return user.equals(oIFR.getUser());
+        return user.equals(oIFR.gibUser());
     }
 
     @Override
     public int hashCode()
     {
-        return ("IFR " + user.getId()).hashCode();
+        return ("IFR " + user.gibId()).hashCode();
     }
 }

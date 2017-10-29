@@ -29,7 +29,7 @@ public class GuildUpdateNameEvent extends GenericGuildUpdateEvent
         this.oldName = oldName;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }

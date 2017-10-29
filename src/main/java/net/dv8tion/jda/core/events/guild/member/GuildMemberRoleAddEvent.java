@@ -40,7 +40,7 @@ public class GuildMemberRoleAddEvent extends GenericGuildMemberEvent
         this.addedRoles = new LinkedList<>(addedRoles);
     }
 
-    public List<Role> getRoles()
+    public List<Role> gibRoles()
     {
         return Collections.unmodifiableList(addedRoles);
     }

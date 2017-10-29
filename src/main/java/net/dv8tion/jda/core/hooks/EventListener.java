@@ -40,7 +40,7 @@ public interface EventListener
     /**
      * Handles any {@link net.dv8tion.jda.core.events.Event Event}.
      *
-     * <p>To get specific events with Methods like {@code onMessageReceived(MessageReceivedEvent event)}
+     * <p>To gib specific events with Methods like {@code onMessageReceived(MessageReceivedEvent event)}
      * take a look at: {@link net.dv8tion.jda.core.hooks.ListenerAdapter ListenerAdapter}
      *
      * @param  event

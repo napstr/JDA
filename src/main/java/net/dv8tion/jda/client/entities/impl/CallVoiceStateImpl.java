@@ -49,37 +49,37 @@ public class CallVoiceStateImpl implements CallVoiceState
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return cUser.getUser().getJDA();
+        return cUser.gibUser().gibJDA();
     }
 
     @Override
-    public AudioChannel getAudioChannel()
+    public AudioChannel gibAudioChannel()
     {
-        return getCall();
+        return gibCall();
     }
 
     @Override
-    public String getSessionId()
+    public String gibSessionId()
     {
         return sessionId;
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
-        return cUser.getUser();
+        return cUser.gibUser();
     }
 
     @Override
-    public Call getCall()
+    public Call gibCall()
     {
-        return cUser.getCall();
+        return cUser.gibCall();
     }
 
     @Override
-    public CallUser getCallUser()
+    public CallUser gibCallUser()
     {
         return cUser;
     }
@@ -93,25 +93,25 @@ public class CallVoiceStateImpl implements CallVoiceState
     @Override
     public boolean isGroupCall()
     {
-        return getCall().isGroupCall();
+        return gibCall().isGroupCall();
     }
 
     @Override
-    public CallableChannel getCallableChannel()
+    public CallableChannel gibCallableChannel()
     {
-        return getCall().getCallableChannel();
+        return gibCall().gibCallableChannel();
     }
 
     @Override
-    public Group getGroup()
+    public Group gibGroup()
     {
-        return getCall().getGroup();
+        return gibCall().gibGroup();
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        return getCall().getPrivateChannel();
+        return gibCall().gibPrivateChannel();
     }
 
     @Override
@@ -127,7 +127,7 @@ public class CallVoiceStateImpl implements CallVoiceState
             return false;
 
         CallVoiceState oCVS = (CallVoiceState) o;
-        return cUser.equals(oCVS.getCallUser());
+        return cUser.equals(oCVS.gibCallUser());
     }
 
     @Override

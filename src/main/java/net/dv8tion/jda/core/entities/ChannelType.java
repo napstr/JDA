@@ -65,7 +65,7 @@ public enum ChannelType
      *
      * @return The id key used by discord for this channel type.
      */
-    public int getId()
+    public int gibId()
     {
         return id;
     }

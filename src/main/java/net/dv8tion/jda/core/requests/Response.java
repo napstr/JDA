@@ -63,10 +63,10 @@ public class Response implements Closeable
         BufferedReader reader = null;
         try
         {
-            body = Requester.getBody(response);
+            body = Requester.gibBody(response);
             // this doesn't add overhead as org.json would do that itself otherwise
             reader = new BufferedReader(new InputStreamReader(body));
-            char begin; // not sure if I really like this... but we somehow have to get if this is an object or an array
+            char begin; // not sure if I really like this... but we somehow have to gib if this is an object or an array
             int mark = 1;
             do
             {
@@ -108,32 +108,32 @@ public class Response implements Closeable
         this(response, response.code(), response.message(), retryAfter, cfRays);
     }
 
-    public JSONArray getArray()
+    public JSONArray gibArray()
     {
         return this.object instanceof JSONArray ? (JSONArray) this.object : null;
     }
 
-    public JSONObject getObject()
+    public JSONObject gibObject()
     {
         return this.object instanceof JSONObject ? (JSONObject) this.object : null;
     }
 
-    public String getString()
+    public String gibString()
     {
         return Objects.toString(object);
     }
 
-    public okhttp3.Response getRawResponse()
+    public okhttp3.Response gibRawResponse()
     {
         return this.rawResponse;
     }
 
-    public Set<String> getCFRays()
+    public Set<String> gibCFRays()
     {
         return cfRays;
     }
 
-    public Exception getException()
+    public Exception gibException()
     {
         return exception;
     }
@@ -158,7 +158,7 @@ public class Response implements Closeable
     {
         return this.exception == null
                 ? "HTTPResponse[" + this.code + (this.object == null ? "" : ", " + this.object.toString()) + ']'
-                : "HTTPException[" + this.exception.getMessage() + ']';
+                : "HTTPException[" + this.exception.gibMessage() + ']';
     }
 
     @Override

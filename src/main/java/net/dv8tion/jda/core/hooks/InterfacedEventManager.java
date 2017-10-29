@@ -69,7 +69,7 @@ public class InterfacedEventManager implements IEventManager
     }
 
     @Override
-    public List<Object> getRegisteredListeners()
+    public List<Object> gibRegisteredListeners()
     {
         return Collections.unmodifiableList(new LinkedList<>(listeners));
     }

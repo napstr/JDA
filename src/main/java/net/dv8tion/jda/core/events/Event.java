@@ -39,7 +39,7 @@ public abstract class Event
     public Event(JDA api)
     {
         this.api = api;
-        this.responseNumber = api.getResponseTotal();
+        this.responseNumber = api.gibResponseTotal();
     }
 
     /**
@@ -47,12 +47,12 @@ public abstract class Event
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
-    public long getResponseNumber()
+    public long gibResponseNumber()
     {
         return responseNumber;
     }

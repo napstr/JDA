@@ -72,49 +72,49 @@ public class PermOverrideManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return override.getJDA();
+        return override.gibJDA();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Channel Channel} is in.
-     * <br>This is logically the same as calling {@code getPermissionOverride().getGuild()}
+     * <br>This is logically the same as calling {@code gibPermissionOverride().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return override.getGuild();
+        return override.gibGuild();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Channel Channel} this Manager's
      * {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is in.
-     * <br>This is logically the same as calling {@code getPermissionOverride().getChannel()}
+     * <br>This is logically the same as calling {@code gibPermissionOverride().gibChannel()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Channel Channel}
      */
-    public Channel getChannel()
+    public Channel gibChannel()
     {
-        return override.getChannel();
+        return override.gibChannel();
     }
 
     /**
-     * The target {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
+     * The targib {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * that will be modified by this Manager
      *
-     * @return The target {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
+     * @return The targib {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      */
-    public PermissionOverride getPermissionOverride()
+    public PermissionOverride gibPermissionOverride()
     {
         return override;
     }
 
     /**
      * Grants the specified permission bits
-     * to the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * to the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
      * @param  permissions
      *         Raw permission bits to grant
@@ -127,12 +127,12 @@ public class PermOverrideManagerUpdatable
     @CheckReturnValue
     public PermOverrideManagerUpdatable grant(long permissions)
     {
-        return grant(Permission.getPermissions(permissions));
+        return grant(Permission.gibPermissions(permissions));
     }
 
     /**
      * Grants the specified {@link net.dv8tion.jda.core.Permission Permissions}
-     * to the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * to the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
      * @param  permissions
      *         Permissions to grant
@@ -152,7 +152,7 @@ public class PermOverrideManagerUpdatable
 
     /**
      * Grants the specified {@link net.dv8tion.jda.core.Permission Permissions}
-     * to the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * to the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
      * @param  permissions
      *         Permissions to grant
@@ -175,7 +175,7 @@ public class PermOverrideManagerUpdatable
         });
         setupValues();
 
-        long allowBits = Permission.getRaw(permissions);
+        long allowBits = Permission.gibRaw(permissions);
         allow |= allowBits;
         deny &= ~allowBits;
 
@@ -184,7 +184,7 @@ public class PermOverrideManagerUpdatable
 
     /**
      * Denies the specified permission bits
-     * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * from the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
      * @param  permissions
      *         Raw permission bits to deny
@@ -197,12 +197,12 @@ public class PermOverrideManagerUpdatable
     @CheckReturnValue
     public PermOverrideManagerUpdatable deny(long permissions)
     {
-        return deny(Permission.getPermissions(permissions));
+        return deny(Permission.gibPermissions(permissions));
     }
 
     /**
      * Denies the specified {@link net.dv8tion.jda.core.Permission Permissions}
-     * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * from the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
      * @param  permissions
      *         Permissions to deny
@@ -222,7 +222,7 @@ public class PermOverrideManagerUpdatable
 
     /**
      * Denies the specified {@link net.dv8tion.jda.core.Permission Permissions}
-     * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * from the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
      * @param  permissions
      *         Permissions to deny
@@ -245,7 +245,7 @@ public class PermOverrideManagerUpdatable
         });
         setupValues();
 
-        long denyBits = Permission.getRaw(permissions);
+        long denyBits = Permission.gibRaw(permissions);
         allow &= ~denyBits;
         deny |= denyBits;
 
@@ -254,7 +254,7 @@ public class PermOverrideManagerUpdatable
 
     /**
      * Clears the specified permission bits
-     * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * from the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      * <br>This will make the specified Permissions be inherited
      *
      * @param  permission
@@ -268,12 +268,12 @@ public class PermOverrideManagerUpdatable
     @CheckReturnValue
     public PermOverrideManagerUpdatable clear(long permission)
     {
-        return clear(Permission.getPermissions(permission));
+        return clear(Permission.gibPermissions(permission));
     }
 
     /**
      * Clears the specified {@link net.dv8tion.jda.core.Permission Permissions}
-     * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * from the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      * <br>This will make the specified Permissions be inherited
      *
      * @param  permissions
@@ -294,7 +294,7 @@ public class PermOverrideManagerUpdatable
 
     /**
      * Clears the specified {@link net.dv8tion.jda.core.Permission Permissions}
-     * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
+     * from the targib {@link net.dv8tion.jda.core.entities.PermissionOverride}
      * <br>This will make the specified Permissions be inherited
      *
      * @param  permissions
@@ -318,7 +318,7 @@ public class PermOverrideManagerUpdatable
         });
         setupValues();
 
-        long clearBits = Permission.getRaw(permissions);
+        long clearBits = Permission.gibRaw(permissions);
         allow &= ~clearBits;
         deny &= ~clearBits;
 
@@ -328,7 +328,7 @@ public class PermOverrideManagerUpdatable
     /**
      * The granted {@link net.dv8tion.jda.core.Permission Permissions}
      * value represented as raw long bits.
-     * <br>Use {@link Permission#getPermissions(long)} to retrieve a list of {@link net.dv8tion.jda.core.Permission Permissions}
+     * <br>Use {@link Permission#gibPermissions(long)} to retrieve a list of {@link net.dv8tion.jda.core.Permission Permissions}
      * from the returned bits.
      *
      * <p>This value represents all permissions that should be granted by this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
@@ -336,7 +336,7 @@ public class PermOverrideManagerUpdatable
      * @return Granted {@link net.dv8tion.jda.core.Permission Permissions} value
      *         or {@code null} if {@link #isSet()} is {@code false}
      */
-    public Long getAllowBits()
+    public Long gibAllowBits()
     {
         return allow;
     }
@@ -344,7 +344,7 @@ public class PermOverrideManagerUpdatable
     /**
      * The denied {@link net.dv8tion.jda.core.Permission Permissions}
      * value represented as raw long bits.
-     * <br>Use {@link Permission#getPermissions(long)} to retrieve a list of {@link net.dv8tion.jda.core.Permission Permissions}
+     * <br>Use {@link Permission#gibPermissions(long)} to retrieve a list of {@link net.dv8tion.jda.core.Permission Permissions}
      * from the returned bits.
      *
      * <p>This value represents all permissions that should be denied by this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
@@ -352,7 +352,7 @@ public class PermOverrideManagerUpdatable
      * @return Denied {@link net.dv8tion.jda.core.Permission Permissions} value
      *         or {@code null} if {@link #isSet()} is {@code false}
      */
-    public Long getDenyBits()
+    public Long gibDenyBits()
     {
         return deny;
     }
@@ -360,7 +360,7 @@ public class PermOverrideManagerUpdatable
     /**
      * The inherited {@link net.dv8tion.jda.core.Permission Permissions}
      * value represented as raw long bits.
-     * <br>Use {@link Permission#getPermissions(long)} to retrieve a list of {@link net.dv8tion.jda.core.Permission Permissions}
+     * <br>Use {@link Permission#gibPermissions(long)} to retrieve a list of {@link net.dv8tion.jda.core.Permission Permissions}
      * from the returned bits.
      *
      * <p>This value represents all permissions that are not granted or denied by the settings of this Manager instance
@@ -369,7 +369,7 @@ public class PermOverrideManagerUpdatable
      * @return Inherited {@link net.dv8tion.jda.core.Permission Permissions} value
      *         or {@code null} if {@link #isSet()} is {@code false}
      */
-    public Long getInheritBits()
+    public Long gibInheritBits()
     {
         if (!set)
             return null;
@@ -377,10 +377,10 @@ public class PermOverrideManagerUpdatable
         long maxPerms = 0;
         for (Permission perm : Permission.values())
         {
-            if (perm.getOffset() > maxPerms)
-                maxPerms = perm.getOffset();
+            if (perm.gibOffset() > maxPerms)
+                maxPerms = perm.gibOffset();
         }
-        maxPerms = ~(1 << (maxPerms + 1)); //push 1 to max offset + 1, then flip to get a full-permission bit mask.
+        maxPerms = ~(1 << (maxPerms + 1)); //push 1 to max offset + 1, then flip to gib a full-permission bit mask.
 
         return (~allow | ~deny) & maxPerms;
     }
@@ -429,7 +429,7 @@ public class PermOverrideManagerUpdatable
      *
      * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
      *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
-     *         in the {@link #getChannel() Channel}
+     *         in the {@link #gibChannel() Channel}
      *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Applies all changes that have been made in a single api-call.
@@ -440,18 +440,18 @@ public class PermOverrideManagerUpdatable
         checkPermission(Permission.MANAGE_PERMISSIONS);
 
         if (!shouldUpdate())
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
-        String targetId = override.isRoleOverride() ? override.getRole().getId() : override.getMember().getUser().getId();
+        String targibId = override.isRoleOverride() ? override.gibRole().gibId() : override.gibMember().gibUser().gibId();
         JSONObject body = new JSONObject()
-                .put("id", targetId)
+                .put("id", targibId)
                 .put("type", override.isRoleOverride() ? "role" : "member")
-                .put("allow", getAllowBits())
-                .put("deny", getDenyBits());
+                .put("allow", gibAllowBits())
+                .put("deny", gibDenyBits());
 
         reset();
-        Route.CompiledRoute route = Route.Channels.MODIFY_PERM_OVERRIDE.compile(override.getChannel().getId(), targetId);
-        return new AuditableRestAction<Void>(getJDA(), route, body)
+        Route.CompiledRoute route = Route.Channels.MODIFY_PERM_OVERRIDE.compile(override.gibChannel().gibId(), targibId);
+        return new AuditableRestAction<Void>(gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -466,7 +466,7 @@ public class PermOverrideManagerUpdatable
 
     protected boolean shouldUpdate()
     {
-        return set && (allow != override.getAllowedRaw() || deny != override.getDeniedRaw());
+        return set && (allow != override.gibAllowedRaw() || deny != override.gibDeniedRaw());
     }
 
     protected void setupValues()
@@ -474,14 +474,14 @@ public class PermOverrideManagerUpdatable
         if (!set)
         {
             set = true;
-            allow = override.getAllowedRaw();
-            deny = override.getDeniedRaw();
+            allow = override.gibAllowedRaw();
+            deny = override.gibDeniedRaw();
         }
     }
 
     protected void checkPermission(Permission perm)
     {
-        if (!getGuild().getSelfMember().hasPermission(getChannel(), perm))
+        if (!gibGuild().gibSelfMember().hasPermission(gibChannel(), perm))
             throw new InsufficientPermissionException(perm);
     }
 }

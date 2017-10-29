@@ -35,12 +35,12 @@ public class CallUpdateRingingUsersEvent extends GenericCallUpdateEvent
         this.usersStartedRinging = Collections.unmodifiableList(usersStartedRinging);
     }
 
-    public List<CallUser> getUsersStoppedRinging()
+    public List<CallUser> gibUsersStoppedRinging()
     {
         return usersStoppedRinging;
     }
 
-    public List<CallUser> getUsersStartedRinging()
+    public List<CallUser> gibUsersStartedRinging()
     {
         return usersStartedRinging;
     }

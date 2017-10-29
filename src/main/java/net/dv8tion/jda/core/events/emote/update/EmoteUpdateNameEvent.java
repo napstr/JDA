@@ -29,13 +29,13 @@ public class EmoteUpdateNameEvent extends GenericEmoteUpdateEvent
         this.oldName = oldName;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }
 
-    public String getNewName()
+    public String gibNewName()
     {
-        return emote.getName();
+        return emote.gibName();
     }
 }

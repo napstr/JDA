@@ -20,7 +20,7 @@ import net.dv8tion.jda.core.entities.User;
 
 public interface Relationship
 {
-    RelationshipType getType();
+    RelationshipType gibType();
 
-    User getUser();
+    User gibUser();
 }

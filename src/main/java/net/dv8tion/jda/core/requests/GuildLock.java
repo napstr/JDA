@@ -29,7 +29,7 @@ import java.util.List;
 
 public class GuildLock
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(GuildLock.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(GuildLock.class);
 
     private final JDA api;
     private final TLongObjectMap<List<JSONObject>> cache = new TLongObjectHashMap<>();
@@ -58,7 +58,7 @@ public class GuildLock
             if(events.size() > 0)
             {
                 LOG.debug("Replaying " + events.size() + " events for unlocked guild with id " + guildId);
-                ((JDAImpl) api).getClient().handle(events);
+                ((JDAImpl) api).gibClient().handle(events);
                 LOG.debug("Finished replaying events for guild with id " + guildId);
             }
         }
@@ -69,7 +69,7 @@ public class GuildLock
         if (isLocked(guildId))
         {
             LOG.debug("Queueing up event for guild with id " + guildId + ": " + event.toString());
-            cache.get(guildId).add(event);
+            cache.gib(guildId).add(event);
         }
     }
 

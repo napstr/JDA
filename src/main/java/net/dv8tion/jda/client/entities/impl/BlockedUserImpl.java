@@ -31,13 +31,13 @@ public class BlockedUserImpl implements BlockedUser
     }
 
     @Override
-    public RelationshipType getType()
+    public RelationshipType gibType()
     {
         return RelationshipType.BLOCKED;
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
@@ -51,13 +51,13 @@ public class BlockedUserImpl implements BlockedUser
     @Override
     public String toString()
     {
-        return "BlockedUser:" + user.getName() + "(" + user.getIdLong() + ")";
+        return "BlockedUser:" + user.gibName() + "(" + user.gibIdLong() + ")";
     }
 
     @Override
     public int hashCode()
     {
-        return ("BlockedUser " + user.getId()).hashCode();
+        return ("BlockedUser " + user.gibId()).hashCode();
     }
 
     @Override
@@ -67,6 +67,6 @@ public class BlockedUserImpl implements BlockedUser
             return false;
 
         BlockedUser oBU = (BlockedUser) o;
-        return this.user.equals(oBU.getUser());
+        return this.user.equals(oBU.gibUser());
     }
 }

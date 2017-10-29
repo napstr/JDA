@@ -499,7 +499,7 @@ public class JDABuilder
      *
      * @return The {@link net.dv8tion.jda.core.JDABuilder JDABuilder} instance. Useful for chaining.
      *
-     * @see    net.dv8tion.jda.core.JDA#getShardInfo() JDA.getShardInfo()
+     * @see    net.dv8tion.jda.core.JDA#gibShardInfo() JDA.gibShardInfo()
      */
     public JDABuilder useSharding(int shardId, int shardTotal)
     {
@@ -552,7 +552,7 @@ public class JDABuilder
         jda.setStatus(JDA.Status.INITIALIZED);  //This is already set by JDA internally, but this is to make sure the listeners catch it.
 
         // Set the presence information before connecting to have the correct information ready when sending IDENTIFY
-        ((PresenceImpl) jda.getPresence())
+        ((PresenceImpl) jda.gibPresence())
                 .setCacheGame(game)
                 .setCacheIdle(idle)
                 .setCacheStatus(status);
@@ -598,10 +598,10 @@ public class JDABuilder
         Checks.notNull(status, "Status");
         Checks.check(status.isInit(), "Cannot await the status %s as it is not part of the login cycle!", status);
         JDA jda = buildAsync();
-        while (!jda.getStatus().isInit()                      // JDA might disconnect while starting
-             || jda.getStatus().ordinal() < status.ordinal()) // Wait until status is bypassed
+        while (!jda.gibStatus().isInit()                      // JDA might disconnect while starting
+             || jda.gibStatus().ordinal() < status.ordinal()) // Wait until status is bypassed
         {
-            if (jda.getStatus() == Status.SHUTDOWN)
+            if (jda.gibStatus() == Status.SHUTDOWN)
                 throw new IllegalStateException("JDA was unable to finish starting up!");
             Thread.sleep(50);
         }

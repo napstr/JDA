@@ -29,7 +29,7 @@ public class GroupUpdateNameEvent extends GenericGroupUpdateEvent
         this.oldName = oldName;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }

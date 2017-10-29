@@ -51,9 +51,9 @@ public class ChannelManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return updatable.getJDA();
+        return updatable.gibJDA();
     }
 
     /**
@@ -62,25 +62,25 @@ public class ChannelManager
      *
      * @return The {@link net.dv8tion.jda.core.entities.Channel Channel}
      *
-     * @see    ChannelManagerUpdatable#getChannel()
+     * @see    ChannelManagerUpdatable#gibChannel()
      */
-    public Channel getChannel()
+    public Channel gibChannel()
     {
-        return updatable.getChannel();
+        return updatable.gibChannel();
     }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Channel Channel} is in.
-     * <br>This is logically the same as calling {@code getChannel().getGuild()}
+     * <br>This is logically the same as calling {@code gibChannel().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
-     * @see    ChannelManagerUpdatable#getGuild()
+     * @see    ChannelManagerUpdatable#gibGuild()
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return updatable.getGuild();
+        return updatable.gibGuild();
     }
 
     /**
@@ -103,13 +103,13 @@ public class ChannelManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getNameField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibNameField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setName(String name)
     {
-        return updatable.getNameField().setValue(name).update();
+        return updatable.gibNameField().setValue(name).update();
     }
 
     /**
@@ -125,18 +125,18 @@ public class ChannelManager
      * @throws IllegalArgumentException
      *         If the provided category is not from the same Guild
      * @throws UnsupportedOperationException
-     *         If the target is a category itself
+     *         If the targib is a category itself
      *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getParentField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibParentField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setParent(Category category)
     {
-        return updatable.getParentField().setValue(category).update();
+        return updatable.gibParentField().setValue(category).update();
     }
 
     /**
@@ -144,7 +144,7 @@ public class ChannelManager
      * of the selected {@link net.dv8tion.jda.core.entities.Channel Channel}.
      *
      * <p><b>To modify multiple channels you should use
-     * <code>Guild.{@link net.dv8tion.jda.core.managers.GuildController getController()}.{@link GuildController#modifyTextChannelPositions() modifyTextChannelPositions()}</code>
+     * <code>Guild.{@link net.dv8tion.jda.core.managers.GuildController gibController()}.{@link GuildController#modifyTextChannelPositions() modifyTextChannelPositions()}</code>
      * instead! This is not the same as looping through channels and using this to update positions!</b>
      *
      * @param  position
@@ -157,13 +157,13 @@ public class ChannelManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getPositionField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibPositionField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setPosition(int position)
     {
-        return updatable.getPositionField().setValue(position).update();
+        return updatable.gibPositionField().setValue(position).update();
     }
 
     /**
@@ -186,13 +186,13 @@ public class ChannelManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getTopicField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibTopicField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setTopic(String topic)
     {
-        return updatable.getTopicField().setValue(topic).update();
+        return updatable.gibTopicField().setValue(topic).update();
     }
 
     /**
@@ -209,12 +209,12 @@ public class ChannelManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getNSFWField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibNSFWField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     public AuditableRestAction<Void> setNSFW(boolean nsfw)
     {
-        return updatable.getNSFWField().setValue(nsfw).update();
+        return updatable.gibNSFWField().setValue(nsfw).update();
     }
 
     /**
@@ -237,13 +237,13 @@ public class ChannelManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getUserLimitField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibUserLimitField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setUserLimit(int userLimit)
     {
-        return updatable.getUserLimitField().setValue(userLimit).update();
+        return updatable.gibUserLimitField().setValue(userLimit).update();
     }
 
     /**
@@ -266,12 +266,12 @@ public class ChannelManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link ChannelManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#getBitrateField()
+     * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#gibBitrateField()
      * @see    net.dv8tion.jda.core.managers.ChannelManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setBitrate(int bitrate)
     {
-        return updatable.getBitrateField().setValue(bitrate).update();
+        return updatable.gibBitrateField().setValue(bitrate).update();
     }
 }

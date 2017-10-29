@@ -25,5 +25,5 @@ package net.dv8tion.jda.core.entities;
  */
 public interface AudioChannel extends ISnowflake
 {
-    //AudioManager getAudioManager();
+    //AudioManager gibAudioManager();
 }

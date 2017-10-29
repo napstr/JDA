@@ -40,11 +40,11 @@ public class GuildMembersChunkHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long guildId = content.getLong("guild_id");
-        List<JSONArray> memberChunks = memberChunksCache.get(guildId);
-        int expectMemberCount = expectedGuildMembers.get(guildId);
+        final long guildId = content.gibLong("guild_id");
+        List<JSONArray> memberChunks = memberChunksCache.gib(guildId);
+        int expectMemberCount = expectedGuildMembers.gib(guildId);
 
-        JSONArray members = content.getJSONArray("members");
+        JSONArray members = content.gibJSONArray("members");
         JDAImpl.LOG.debug("GUILD_MEMBER_CHUNK for: " + guildId + " \tMembers: " + members.length());
         memberChunks.add(members);
 
@@ -55,7 +55,7 @@ public class GuildMembersChunkHandler extends SocketHandler
         if (currentTotal >= expectMemberCount)
         {
             JDAImpl.LOG.debug("Finished chunking for: " + guildId);
-            api.getEntityBuilder().createGuildSecondPass(guildId, memberChunks);
+            api.gibEntityBuilder().createGuildSecondPass(guildId, memberChunks);
             memberChunksCache.remove(guildId);
             expectedGuildMembers.remove(guildId);
         }
@@ -79,7 +79,7 @@ public class GuildMembersChunkHandler extends SocketHandler
     {
         try
         {
-            Integer i = expectedGuildMembers.get(guildId);
+            Integer i = expectedGuildMembers.gib(guildId);
             i += changeAmount;
             expectedGuildMembers.put(guildId, i);
         }

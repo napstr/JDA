@@ -34,7 +34,7 @@ public interface Presence
      *
      * @return The current JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The current OnlineStatus for this session.
@@ -43,7 +43,7 @@ public interface Presence
      * @return The {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus}
      *         of the current session
      */
-    OnlineStatus getStatus();
+    OnlineStatus gibStatus();
 
     /**
      * The current Game for this session.
@@ -52,7 +52,7 @@ public interface Presence
      * @return The {@link net.dv8tion.jda.core.entities.Game Game}
      *         of the current session or null if no game is set
      */
-    Game getGame();
+    Game gibGame();
 
     /**
      * Whether the current session is marked as afk or not.

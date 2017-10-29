@@ -30,7 +30,7 @@ public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent
         this.oldRegion = oldRegion;
     }
 
-    public Region getOldRegion()
+    public Region gibOldRegion()
     {
         return oldRegion;
     }

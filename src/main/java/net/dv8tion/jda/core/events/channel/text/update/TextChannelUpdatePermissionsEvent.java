@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * <b><u>TextChannelUpdatePermissionsEvent</u></b><br>
  * Fired if a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}'s permission overrides change.<br>
  * <br>
- * Use: Detect when a TextChannel's permission overrides change and get affected {@link net.dv8tion.jda.core.entities.Role Roles}/{@link net.dv8tion.jda.core.entities.User Users}.
+ * Use: Detect when a TextChannel's permission overrides change and gib affected {@link net.dv8tion.jda.core.entities.Role Roles}/{@link net.dv8tion.jda.core.entities.User Users}.
  */
 public class TextChannelUpdatePermissionsEvent extends GenericTextChannelUpdateEvent
 {
@@ -40,12 +40,12 @@ public class TextChannelUpdatePermissionsEvent extends GenericTextChannelUpdateE
         this.changed = permHolders;
     }
 
-    public List<IPermissionHolder> getChangedPermissionHolders()
+    public List<IPermissionHolder> gibChangedPermissionHolders()
     {
         return changed;
     }
 
-    public List<Role> getChangedRoles()
+    public List<Role> gibChangedRoles()
     {
         return changed.stream()
                       .filter(it -> it instanceof Role)
@@ -53,7 +53,7 @@ public class TextChannelUpdatePermissionsEvent extends GenericTextChannelUpdateE
                       .collect(Collectors.toList());
     }
 
-    public List<Member> getMembersWithPermissionChanges()
+    public List<Member> gibMembersWithPermissionChanges()
     {
         return changed.stream()
                 .filter(it -> it instanceof Member)

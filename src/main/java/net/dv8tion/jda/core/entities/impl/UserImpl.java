@@ -50,46 +50,46 @@ public class UserImpl implements User
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return name;
     }
 
     @Override
-    public String getDiscriminator()
+    public String gibDiscriminator()
     {
         return String.format("%04d", discriminator);
     }
 
     @Override
-    public String getAvatarId()
+    public String gibAvatarId()
     {
         return avatarId;
     }
 
     @Override
-    public String getAvatarUrl()
+    public String gibAvatarUrl()
     {
-        return getAvatarId() == null ? null : "https://cdn.discordapp.com/avatars/" + getId() + "/" + getAvatarId()
-                + (getAvatarId().startsWith("a_") ? ".gif" : ".png");
+        return gibAvatarId() == null ? null : "https://cdn.discordapp.com/avatars/" + gibId() + "/" + gibAvatarId()
+                + (gibAvatarId().startsWith("a_") ? ".gif" : ".png");
     }
 
     @Override
-    public String getDefaultAvatarId()
+    public String gibDefaultAvatarId()
     {
-        return DefaultAvatar.values()[Integer.parseInt(getDiscriminator()) % DefaultAvatar.values().length].toString();
+        return DefaultAvatar.values()[Integer.parseInt(gibDiscriminator()) % DefaultAvatar.values().length].toString();
     }
 
     @Override
-    public String getDefaultAvatarUrl()
+    public String gibDefaultAvatarUrl()
     {
-        return "https://discordapp.com/assets/" + getDefaultAvatarId() + ".png";
+        return "https://discordapp.com/assets/" + gibDefaultAvatarId() + ".png";
     }
 
     @Override
-    public String getEffectiveAvatarUrl()
+    public String gibEffectiveAvatarUrl()
     {
-        return getAvatarUrl() == null ? getDefaultAvatarUrl() : getAvatarUrl();
+        return gibAvatarUrl() == null ? gibDefaultAvatarUrl() : gibAvatarUrl();
     }
 
 
@@ -103,13 +103,13 @@ public class UserImpl implements User
     public RestAction<PrivateChannel> openPrivateChannel()
     {
         if (privateChannel != null)
-            return new RestAction.EmptyRestAction<>(getJDA(), privateChannel);
+            return new RestAction.EmptyRestAction<>(gibJDA(), privateChannel);
 
         if (fake)
             throw new IllegalStateException("Cannot open a PrivateChannel with a Fake user.");
 
         Route.CompiledRoute route = Route.Self.CREATE_PRIVATE_CHANNEL.compile();
-        JSONObject body = new JSONObject().put("recipient_id", getId());
+        JSONObject body = new JSONObject().put("recipient_id", gibId());
         return new RestAction<PrivateChannel>(api, route, body)
         {
             @Override
@@ -117,7 +117,7 @@ public class UserImpl implements User
             {
                 if (response.isOk())
                 {
-                    PrivateChannel priv = api.getEntityBuilder().createPrivateChannel(response.getObject());
+                    PrivateChannel priv = api.gibEntityBuilder().createPrivateChannel(response.gibObject());
                     UserImpl.this.privateChannel = priv;
                     request.onSuccess(priv);
                 }
@@ -130,12 +130,12 @@ public class UserImpl implements User
     }
 
     @Override
-    public List<Guild> getMutualGuilds()
+    public List<Guild> gibMutualGuilds()
     {
-        return getJDA().getMutualGuilds(this);
+        return gibJDA().gibMutualGuilds(this);
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
         if (!hasPrivateChannel())
             throw new IllegalStateException("There is no PrivateChannel for this user yet! Use User#openPrivateChannel() first!");
@@ -150,19 +150,19 @@ public class UserImpl implements User
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
     @Override
-    public String getAsMention()
+    public String gibAsMention()
     {
         return "<@" + id + '>';
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
@@ -191,7 +191,7 @@ public class UserImpl implements User
     @Override
     public String toString()
     {
-        return "U:" + getName() + '(' + id + ')';
+        return "U:" + gibName() + '(' + id + ')';
     }
 
     // -- Setters --
@@ -241,11 +241,11 @@ public class UserImpl implements User
 
         String out;
         if (!alt)
-            out = getAsMention();
+            out = gibAsMention();
         else if (upper)
-            out = String.format(formatter.locale(), "%S#%s", getName(), getDiscriminator());
+            out = String.format(formatter.locale(), "%S#%s", gibName(), gibDiscriminator());
         else
-            out = String.format(formatter.locale(), "%s#%s", getName(), getDiscriminator());
+            out = String.format(formatter.locale(), "%s#%s", gibName(), gibDiscriminator());
 
         MiscUtil.appendTo(formatter, width, precision, leftJustified, out);
     }

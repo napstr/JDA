@@ -44,93 +44,93 @@ public class RelationshipRemoveHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long userId = content.getLong("id");
-        RelationshipType type = RelationshipType.fromKey(content.getInt("type"));
+        final long userId = content.gibLong("id");
+        RelationshipType type = RelationshipType.fromKey(content.gibInt("type"));
 
         //Technically this could be used to detect when another user has unblocked us,
         // but it seems like functionality that may change so I'm not supporting it.
         if (type == RelationshipType.NO_RELATIONSHIP)
             return null;
 
-        //Make sure that we get the proper relationship, not just any one cached by this userId.
+        //Make sure that we gib the proper relationship, not just any one cached by this userId.
         //Deals with possibly out of order RELATIONSHIP_REMOVE and RELATIONSHIP_ADD when blocking a Friend.
-        Relationship relationship = api.asClient().getRelationshipById(userId, type);
+        Relationship relationship = api.asClient().gibRelationshipById(userId, type);
         if (relationship == null)
         {
-            api.getEventCache().cache(EventCache.Type.RELATIONSHIP, userId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.RELATIONSHIP, userId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a RELATIONSHIP_REMOVE for a relationship that was not yet cached! JSON: " + content);
             return null;
         }
-        ((JDAClientImpl) api.asClient()).getRelationshipMap().remove(userId);
+        ((JDAClientImpl) api.asClient()).gibRelationshipMap().remove(userId);
 
-        if (relationship.getType() == RelationshipType.FRIEND)
+        if (relationship.gibType() == RelationshipType.FRIEND)
         {
             //The user is not in a different guild that we share
-            if (api.getGuildMap().valueCollection().stream().noneMatch(g -> ((GuildImpl) g).getMembersMap().containsKey(userId)))
+            if (api.gibGuildMap().valueCollection().stream().noneMatch(g -> ((GuildImpl) g).gibMembersMap().containsKey(userId)))
             {
-                UserImpl user = (UserImpl) api.getUserMap().remove(userId);
+                UserImpl user = (UserImpl) api.gibUserMap().remove(userId);
                 if (user.hasPrivateChannel())
                 {
-                    PrivateChannelImpl priv = (PrivateChannelImpl) user.getPrivateChannel();
+                    PrivateChannelImpl priv = (PrivateChannelImpl) user.gibPrivateChannel();
                     user.setFake(true);
                     priv.setFake(true);
-                    api.getFakeUserMap().put(user.getIdLong(), user);
-                    api.getFakePrivateChannelMap().put(priv.getIdLong(), priv);
+                    api.gibFakeUserMap().put(user.gibIdLong(), user);
+                    api.gibFakePrivateChannelMap().put(priv.gibIdLong(), priv);
                 }
                 else
                 {
                     //While the user might not have a private channel, if this is a client account then the user
                     // could be in a Group, and if so we need to change the User object to be fake and
                     // place it in the FakeUserMap
-                    for (Group grp : api.asClient().getGroups())
+                    for (Group grp : api.asClient().gibGroups())
                     {
-                        if (grp.getNonFriendUsers().contains(user))
+                        if (grp.gibNonFriendUsers().contains(user))
                         {
                             user.setFake(true);
-                            api.getFakeUserMap().put(user.getIdLong(), user);
+                            api.gibFakeUserMap().put(user.gibIdLong(), user);
                             break;
                         }
                     }
                 }
-                api.getEventCache().clear(EventCache.Type.USER, userId);
+                api.gibEventCache().clear(EventCache.Type.USER, userId);
             }
         }
         else
         {
             //Checks that the user is fake, has no privateChannel,and is not in any other groups
             // then we remove the fake user from the fake cache as it was only in this group
-            //Note: we getGroups() which gets all groups, however we already removed the user from the current group.
-            User user = relationship.getUser();
+            //Note: we gibGroups() which gibs all groups, however we already removed the user from the current group.
+            User user = relationship.gibUser();
             if (user.isFake()
                     && !user.hasPrivateChannel()
-                    && api.asClient().getGroups().stream().noneMatch(g -> g.getUsers().contains(user)))
+                    && api.asClient().gibGroups().stream().noneMatch(g -> g.gibUsers().contains(user)))
             {
-                api.getFakeUserMap().remove(userId);
+                api.gibFakeUserMap().remove(userId);
             }
         }
 
         switch (type)
         {
             case FRIEND:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new FriendRemovedEvent(
                                 api, responseNumber,
                                 relationship));
                 break;
             case BLOCKED:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new UserUnblockedEvent(
                                 api, responseNumber,
                                 relationship));
                 break;
             case INCOMING_FRIEND_REQUEST:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new FriendRequestIgnoredEvent(
                                 api, responseNumber,
                                 relationship));
                 break;
             case OUTGOING_FRIEND_REQUEST:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new FriendRequestCanceledEvent(
                                 api, responseNumber,
                                 relationship));
@@ -139,7 +139,7 @@ public class RelationshipRemoveHandler extends SocketHandler
                 WebSocketClient.LOG.warn("Received a RELATIONSHIP_REMOVE with an unknown RelationshipType! JSON: " + content);
                 return null;
         }
-        api.getEventCache().clear(EventCache.Type.RELATIONSHIP, userId);
+        api.gibEventCache().clear(EventCache.Type.RELATIONSHIP, userId);
         return null;
     }
 }

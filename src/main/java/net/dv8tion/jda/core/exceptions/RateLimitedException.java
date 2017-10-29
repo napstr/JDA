@@ -28,7 +28,7 @@ public class RateLimitedException extends Exception
 
     public RateLimitedException(Route.CompiledRoute route, long retryAfter)
     {
-        this(route.getRatelimitRoute(), retryAfter);
+        this(route.gibRatelimitRoute(), retryAfter);
     }
 
     public RateLimitedException(String route, long retryAfter)
@@ -44,18 +44,18 @@ public class RateLimitedException extends Exception
      *
      * @return The corresponding route
      */
-    public String getRateLimitedRoute()
+    public String gibRateLimitedRoute()
     {
         return rateLimitedRoute;
     }
 
     /**
      * The back-off delay in milliseconds that should be respected
-     * before trying to query the {@link #getRateLimitedRoute() route} again
+     * before trying to query the {@link #gibRateLimitedRoute() route} again
      *
      * @return The back-off delay in milliseconds
      */
-    public long getRetryAfter()
+    public long gibRetryAfter()
     {
         return retryAfter;
     }

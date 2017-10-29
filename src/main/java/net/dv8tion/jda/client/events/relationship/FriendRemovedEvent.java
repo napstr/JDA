@@ -27,7 +27,7 @@ public class FriendRemovedEvent extends GenericRelationshipRemoveEvent
         super(api, responseNumber, relationship);
     }
 
-    public Friend getFriend()
+    public Friend gibFriend()
     {
         return (Friend) relationship;
     }

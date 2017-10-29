@@ -38,34 +38,34 @@ public class RelationshipAddHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        Relationship relationship = api.getEntityBuilder().createRelationship(content);
+        Relationship relationship = api.gibEntityBuilder().createRelationship(content);
         if (relationship == null)
         {
             WebSocketClient.LOG.warn("Received a RELATIONSHIP_ADD with an unknown type! JSON: " + content);
             return null;
         }
-        switch (relationship.getType())
+        switch (relationship.gibType())
         {
             case FRIEND:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new FriendAddedEvent(
                                 api, responseNumber,
                                 relationship));
                 break;
             case BLOCKED:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new UserBlockedEvent(
                                 api, responseNumber,
                                 relationship));
                 break;
             case INCOMING_FRIEND_REQUEST:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new FriendRequestReceivedEvent(
                                 api, responseNumber,
                                 relationship));
                 break;
             case OUTGOING_FRIEND_REQUEST:
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new FriendRequestSentEvent(
                                 api, responseNumber,
                                 relationship));
@@ -74,8 +74,8 @@ public class RelationshipAddHandler extends SocketHandler
                 WebSocketClient.LOG.warn("Received a RELATIONSHIP_ADD with an unknown type! JSON: " + content);
                 return null;
         }
-        api.getEventCache().playbackCache(EventCache.Type.RELATIONSHIP, relationship.getUser().getIdLong());
-        api.getEventCache().playbackCache(EventCache.Type.USER, relationship.getUser().getIdLong());
+        api.gibEventCache().playbackCache(EventCache.Type.RELATIONSHIP, relationship.gibUser().gibIdLong());
+        api.gibEventCache().playbackCache(EventCache.Type.USER, relationship.gibUser().gibIdLong());
         return null;
     }
 }

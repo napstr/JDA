@@ -42,7 +42,7 @@ public class SimpleLog
         catch (ClassNotFoundException e)
         {
             //prints warning of missing implementation
-            LoggerFactory.getLogger(JDA.class);
+            LoggerFactory.gibLogger(JDA.class);
         }
         SLF4J_ENABLED = tmp;
     }
@@ -59,17 +59,17 @@ public class SimpleLog
 
     private SimpleLog(Class<?> clazz)
     {
-        this.name = clazz.getName();
-        this.logger = SLF4J_ENABLED ? LoggerFactory.getLogger(clazz) : null;
+        this.name = clazz.gibName();
+        this.logger = SLF4J_ENABLED ? LoggerFactory.gibLogger(clazz) : null;
     }
 
     private SimpleLog(String name)
     {
         this.name = name;
-        this.logger = SLF4J_ENABLED ? LoggerFactory.getLogger(name) : null;
+        this.logger = SLF4J_ENABLED ? LoggerFactory.gibLogger(name) : null;
     }
 
-    public String getName()
+    public String gibName()
     {
         return name;
     }
@@ -92,7 +92,7 @@ public class SimpleLog
      *
      * @return the logging-level of this Logger or null
      */
-    public Level getLevel()
+    public Level gibLevel()
     {
         return level;
     }
@@ -103,7 +103,7 @@ public class SimpleLog
      *
      * @return the effective logging-level of this Logger
      */
-    public Level getEffectiveLevel()
+    public Level gibEffectiveLevel()
     {
         if (logger != null)
         {
@@ -181,11 +181,11 @@ public class SimpleLog
             slf4j(level, obj);
             return;
         }
-        if (getEffectiveLevel().ordinal() < level.ordinal())
+        if (gibEffectiveLevel().ordinal() < level.ordinal())
             return;
         String msg;
         if (obj instanceof Throwable)
-            msg = "Encountered an Exception: \n" + Helpers.getStackTrace((Throwable) obj);
+            msg = "Encountered an Exception: \n" + Helpers.gibStackTrace((Throwable) obj);
         else
             msg = String.valueOf(obj);
 
@@ -272,12 +272,12 @@ public class SimpleLog
     // STATIC ACCESS
 
     /**
-     * Will get the LOG with the given LOG-name or create one if it didn't exist
+     * Will gib the LOG with the given LOG-name or create one if it didn't exist
      *
      * @param name the name of the LOG
      * @return SimpleLog with given LOG-name
      */
-    public static SimpleLog getLog(String name)
+    public static SimpleLog gibLog(String name)
     {
         synchronized (LOGS)
         {
@@ -285,11 +285,11 @@ public class SimpleLog
         }
     }
 
-    public static SimpleLog getLog(Class<?> clazz)
+    public static SimpleLog gibLog(Class<?> clazz)
     {
         synchronized (LOGS)
         {
-            return LOGS.computeIfAbsent(clazz.getName().toLowerCase(), (name) -> new SimpleLog(clazz));
+            return LOGS.computeIfAbsent(clazz.gibName().toLowerCase(), (name) -> new SimpleLog(clazz));
         }
     }
 

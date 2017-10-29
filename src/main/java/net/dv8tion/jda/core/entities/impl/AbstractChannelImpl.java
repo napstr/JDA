@@ -62,72 +62,72 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return name;
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
 
     @Override
-    public Category getParent()
+    public Category gibParent()
     {
-        return guild.getCategoriesMap().get(parentId);
+        return guild.gibCategoriesMap().gib(parentId);
     }
 
     @Override
-    public int getPositionRaw()
+    public int gibPositionRaw()
     {
         return rawPosition;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return getGuild().getJDA();
+        return gibGuild().gibJDA();
     }
 
     @Override
-    public PermissionOverride getPermissionOverride(Member member)
+    public PermissionOverride gibPermissionOverride(Member member)
     {
-        return member != null ? overrides.get(member.getUser().getIdLong()) : null;
+        return member != null ? overrides.gib(member.gibUser().gibIdLong()) : null;
     }
 
     @Override
-    public PermissionOverride getPermissionOverride(Role role)
+    public PermissionOverride gibPermissionOverride(Role role)
     {
-        return role != null ? overrides.get(role.getIdLong()) : null;
+        return role != null ? overrides.gib(role.gibIdLong()) : null;
     }
 
     @Override
-    public List<PermissionOverride> getPermissionOverrides()
+    public List<PermissionOverride> gibPermissionOverrides()
     {
         // already unmodifiable!
         return Arrays.asList(overrides.values(new PermissionOverride[overrides.size()]));
     }
 
     @Override
-    public List<PermissionOverride> getMemberPermissionOverrides()
+    public List<PermissionOverride> gibMemberPermissionOverrides()
     {
-        return Collections.unmodifiableList(getPermissionOverrides().stream()
+        return Collections.unmodifiableList(gibPermissionOverrides().stream()
                 .filter(PermissionOverride::isMemberOverride)
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public List<PermissionOverride> getRolePermissionOverrides()
+    public List<PermissionOverride> gibRolePermissionOverrides()
     {
-        return Collections.unmodifiableList(getPermissionOverrides().stream()
+        return Collections.unmodifiableList(gibPermissionOverrides().stream()
                 .filter(PermissionOverride::isRoleOverride)
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public ChannelManager getManager()
+    public ChannelManager gibManager()
     {
         ChannelManager mng = manager;
         if (mng == null)
@@ -143,7 +143,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public ChannelManagerUpdatable getManagerUpdatable()
+    public ChannelManagerUpdatable gibManagerUpdatable()
     {
         ChannelManagerUpdatable mng = managerUpdatable;
         if (mng == null)
@@ -163,8 +163,8 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     {
         checkPermission(Permission.MANAGE_CHANNEL);
 
-        Route.CompiledRoute route = Route.Channels.DELETE_CHANNEL.compile(getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Channels.DELETE_CHANNEL.compile(gibId());
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -183,13 +183,13 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
         checkPermission(Permission.MANAGE_PERMISSIONS);
         Checks.notNull(member, "member");
 
-        if (!guild.equals(member.getGuild()))
+        if (!guild.equals(member.gibGuild()))
             throw new IllegalArgumentException("Provided member is not from the same guild as this channel!");
-        if (overrides.containsKey(member.getUser().getIdLong()))
+        if (overrides.containsKey(member.gibUser().gibIdLong()))
             throw new IllegalStateException("Provided member already has a PermissionOverride in this channel!");
 
-        Route.CompiledRoute route = Route.Channels.CREATE_PERM_OVERRIDE.compile(getId(), member.getUser().getId());
-        return new PermissionOverrideAction(getJDA(), route, this, member);
+        Route.CompiledRoute route = Route.Channels.CREATE_PERM_OVERRIDE.compile(gibId(), member.gibUser().gibId());
+        return new PermissionOverrideAction(gibJDA(), route, this, member);
     }
 
     @Override
@@ -198,45 +198,45 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
         checkPermission(Permission.MANAGE_PERMISSIONS);
         Checks.notNull(role, "role");
 
-        if (!guild.equals(role.getGuild()))
+        if (!guild.equals(role.gibGuild()))
             throw new IllegalArgumentException("Provided role is not from the same guild as this channel!");
-        if (overrides.containsKey(role.getIdLong()))
+        if (overrides.containsKey(role.gibIdLong()))
             throw new IllegalStateException("Provided role already has a PermissionOverride in this channel!");
 
-        Route.CompiledRoute route = Route.Channels.CREATE_PERM_OVERRIDE.compile(getId(), role.getId());
-        return new PermissionOverrideAction(getJDA(), route, this, role);
+        Route.CompiledRoute route = Route.Channels.CREATE_PERM_OVERRIDE.compile(gibId(), role.gibId());
+        return new PermissionOverrideAction(gibJDA(), route, this, role);
     }
 
     @Override
     public InviteAction createInvite()
     {
-        if (!this.guild.getSelfMember().hasPermission(this, Permission.CREATE_INSTANT_INVITE))
+        if (!this.guild.gibSelfMember().hasPermission(this, Permission.CREATE_INSTANT_INVITE))
             throw new InsufficientPermissionException(Permission.CREATE_INSTANT_INVITE);
 
-        return new InviteAction(this.getJDA(), this.getId());
+        return new InviteAction(this.gibJDA(), this.gibId());
     }
 
     @Override
-    public RestAction<List<Invite>> getInvites()
+    public RestAction<List<Invite>> gibInvites()
     {
-        if (!this.guild.getSelfMember().hasPermission(this, Permission.MANAGE_CHANNEL))
+        if (!this.guild.gibSelfMember().hasPermission(this, Permission.MANAGE_CHANNEL))
             throw new InsufficientPermissionException(Permission.MANAGE_CHANNEL);
 
-        final Route.CompiledRoute route = Route.Invites.GET_CHANNEL_INVITES.compile(getId());
+        final Route.CompiledRoute route = Route.Invites.GET_CHANNEL_INVITES.compile(gibId());
 
-        return new RestAction<List<Invite>>(getJDA(), route)
+        return new RestAction<List<Invite>>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(final Response response, final Request<List<Invite>> request)
             {
                 if (response.isOk())
                 {
-                    EntityBuilder entityBuilder = this.api.getEntityBuilder();
-                    JSONArray array = response.getArray();
+                    EntityBuilder entityBuilder = this.api.gibEntityBuilder();
+                    JSONArray array = response.gibArray();
                     List<Invite> invites = new ArrayList<>(array.length());
                     for (int i = 0; i < array.length(); i++)
                     {
-                        invites.add(entityBuilder.createInvite(array.getJSONObject(i)));
+                        invites.add(entityBuilder.createInvite(array.gibJSONObject(i)));
                     }
                     request.onSuccess(invites);
                 }
@@ -249,7 +249,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
@@ -268,10 +268,10 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
         if (obj == this)
             return true;
         Channel channel = (Channel) obj;
-        return channel.getIdLong() == getIdLong();
+        return channel.gibIdLong() == gibIdLong();
     }
 
-    public TLongObjectMap<PermissionOverride> getOverrideMap()
+    public TLongObjectMap<PermissionOverride> gibOverrideMap()
     {
         return overrides;
     }
@@ -300,7 +300,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     protected void checkPermission(Permission permission) {checkPermission(permission, null);}
     protected void checkPermission(Permission permission, String message)
     {
-        if (!guild.getSelfMember().hasPermission(this, permission))
+        if (!guild.gibSelfMember().hasPermission(this, permission))
         {
             if (message != null)
                 throw new InsufficientPermissionException(permission, message);

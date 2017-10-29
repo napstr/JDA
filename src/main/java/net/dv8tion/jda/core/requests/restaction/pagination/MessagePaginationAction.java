@@ -47,12 +47,12 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
 
     public MessagePaginationAction(MessageChannel channel)
     {
-        super(channel.getJDA(), Route.Messages.GET_MESSAGE_HISTORY.compile(channel.getId()), 1, 100, 100);
+        super(channel.gibJDA(), Route.Messages.GET_MESSAGE_HISTORY.compile(channel.gibId()), 1, 100, 100);
 
-        if (channel.getType() == ChannelType.TEXT)
+        if (channel.gibType() == ChannelType.TEXT)
         {
             TextChannel textChannel = (TextChannel) channel;
-            if (!textChannel.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_HISTORY))
+            if (!textChannel.gibGuild().gibSelfMember().hasPermission(textChannel, Permission.MESSAGE_HISTORY))
                 throw new InsufficientPermissionException(Permission.MESSAGE_HISTORY);
         }
 
@@ -61,21 +61,21 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
 
     /**
      * The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of
-     * the targeted {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * the targibed {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
      *
      * @return {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
      */
-    public ChannelType getType()
+    public ChannelType gibType()
     {
-        return getChannel().getType();
+        return gibChannel().gibType();
     }
 
     /**
-     * The targeted {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
+     * The targibed {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
      *
      * @return The MessageChannel instance
      */
-    public MessageChannel getChannel()
+    public MessageChannel gibChannel()
     {
         return channel;
     }
@@ -85,13 +85,13 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
     {
         Route.CompiledRoute route = super.finalizeRoute();
 
-        final String limit = String.valueOf(this.getLimit());
+        final String limit = String.valueOf(this.gibLimit());
         final Message last = this.last;
 
         route = route.withQueryParams("limit", limit);
 
         if (last != null)
-            route = route.withQueryParams("before", last.getId());
+            route = route.withQueryParams("before", last.gibId());
 
         return route;
     }
@@ -105,12 +105,12 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
             return;
         }
 
-        JSONArray array = response.getArray();
+        JSONArray array = response.gibArray();
         List<Message> messages = new ArrayList<>(array.length());
-        EntityBuilder builder = api.getEntityBuilder();
+        EntityBuilder builder = api.gibEntityBuilder();
         for (int i = 0; i < array.length(); i++)
         {
-            Message msg = builder.createMessage(array.getJSONObject(i), channel, false);
+            Message msg = builder.createMessage(array.gibJSONObject(i), channel, false);
             messages.add(msg);
             if (useCache)
                 cached.add(msg);

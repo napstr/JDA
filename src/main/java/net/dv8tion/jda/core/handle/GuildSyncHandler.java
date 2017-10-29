@@ -31,17 +31,17 @@ public class GuildSyncHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long guildId = content.getLong("id");
-        if (!api.getGuildMap().containsKey(guildId))
+        final long guildId = content.gibLong("id");
+        if (!api.gibGuildMap().containsKey(guildId))
         {
             JDAImpl.LOG.fatal("Received a GUILD_SYNC for a Guild that does not yet exist in JDA's guild cache. This is a BAD ERROR FOR CLIENTS!");
             return null;
         }
 
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
-        JSONArray members = content.getJSONArray("members");
-        JSONArray presences = content.getJSONArray("presences");
-        api.getEntityBuilder().handleGuildSync(guild, members, presences);
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
+        JSONArray members = content.gibJSONArray("members");
+        JSONArray presences = content.gibJSONArray("presences");
+        api.gibEntityBuilder().handleGuildSync(guild, members, presences);
 
         return null;
     }

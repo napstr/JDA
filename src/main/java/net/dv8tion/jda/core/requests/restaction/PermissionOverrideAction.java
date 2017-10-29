@@ -60,9 +60,9 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * @param route
      *        The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute} to be used for rate limit handling
      * @param channel
-     *        The target {@link net.dv8tion.jda.core.entities.Channel Channel} for the PermissionOverride
+     *        The targib {@link net.dv8tion.jda.core.entities.Channel Channel} for the PermissionOverride
      * @param member
-     *        The target {@link net.dv8tion.jda.core.entities.Member Member} that will be affected by the PermissionOverride
+     *        The targib {@link net.dv8tion.jda.core.entities.Member Member} that will be affected by the PermissionOverride
      */
     public PermissionOverrideAction(JDA api, Route.CompiledRoute route, Channel channel, Member member)
     {
@@ -80,9 +80,9 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * @param route
      *        The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute} to be used for rate limit handling
      * @param channel
-     *        The target {@link net.dv8tion.jda.core.entities.Channel Channel} for the PermissionOverride
+     *        The targib {@link net.dv8tion.jda.core.entities.Channel Channel} for the PermissionOverride
      * @param role
-     *        The target {@link net.dv8tion.jda.core.entities.Role Role} that will be affected by the PermissionOverride
+     *        The targib {@link net.dv8tion.jda.core.entities.Role Role} that will be affected by the PermissionOverride
      */
     public PermissionOverrideAction(JDA api, Route.CompiledRoute route, Channel channel, Role role)
     {
@@ -98,12 +98,12 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * <br>This value represents all <b>granted</b> permissions
      * in the raw bitwise representation.
      *
-     * <p>Use {@link #getAllowedPermissions()} to retrieve a {@link java.util.List List}
+     * <p>Use {@link #gibAllowedPermissions()} to retrieve a {@link java.util.List List}
      * with {@link net.dv8tion.jda.core.Permission Permissions} for this value
      *
      * @return long value of granted permissions
      */
-    public long getAllow()
+    public long gibAllow()
     {
         return allow;
     }
@@ -114,9 +114,9 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      *
      * @return immutable list of granted {@link net.dv8tion.jda.core.Permission Permissions}
      */
-    public List<Permission> getAllowedPermissions()
+    public List<Permission> gibAllowedPermissions()
     {
-        return Collections.unmodifiableList(Permission.getPermissions(allow));
+        return Collections.unmodifiableList(Permission.gibPermissions(allow));
     }
 
 
@@ -125,12 +125,12 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * <br>This value represents all <b>denied</b> permissions
      * in the raw bitwise representation.
      *
-     * <p>Use {@link #getDeniedPermissions()} to retrieve a {@link java.util.List List}
+     * <p>Use {@link #gibDeniedPermissions()} to retrieve a {@link java.util.List List}
      * with {@link net.dv8tion.jda.core.Permission Permissions} for this value
      *
      * @return long value of denied permissions
      */
-    public long getDeny()
+    public long gibDeny()
     {
         return deny;
     }
@@ -141,9 +141,9 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      *
      * @return immutable list of denied {@link net.dv8tion.jda.core.Permission Permissions}
      */
-    public List<Permission> getDeniedPermissions()
+    public List<Permission> gibDeniedPermissions()
     {
-        return Collections.unmodifiableList(Permission.getPermissions(deny));
+        return Collections.unmodifiableList(Permission.gibPermissions(deny));
     }
 
 
@@ -154,12 +154,12 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * <br>Inherited Permissions are permissions that are defined by other rules
      * from maybe other PermissionOverrides or a Role.
      *
-     * <p>Use {@link #getInheritedPermissions()} to retrieve a {@link java.util.List List}
+     * <p>Use {@link #gibInheritedPermissions()} to retrieve a {@link java.util.List List}
      * with {@link net.dv8tion.jda.core.Permission Permissions} for this value
      *
      * @return long value of inherited permissions
      */
-    public long getInherited()
+    public long gibInherited()
     {
         return ~allow & ~deny;
     }
@@ -171,11 +171,11 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      *
      * @return immutable list of inherited {@link net.dv8tion.jda.core.Permission Permissions}
      *
-     * @see    #getInherited()
+     * @see    #gibInherited()
      */
-    public List<Permission> getInheritedPermissions()
+    public List<Permission> gibInheritedPermissions()
     {
-        return Permission.getPermissions(getInherited());
+        return Permission.gibPermissions(gibInherited());
     }
 
 
@@ -184,8 +184,8 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * create a {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * for a {@link net.dv8tion.jda.core.entities.Member Member} or not
      *
-     * @return True, if this is targeting a Member
-     *         If this is {@code false} it is targeting a {@link net.dv8tion.jda.core.entities.Role Role}. ({@link #isRole()})
+     * @return True, if this is targibing a Member
+     *         If this is {@code false} it is targibing a {@link net.dv8tion.jda.core.entities.Role Role}. ({@link #isRole()})
      */
     public boolean isMember()
     {
@@ -197,8 +197,8 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
      * create a {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * for a {@link net.dv8tion.jda.core.entities.Role Role} or not
      *
-     * @return True, if this is targeting a Role.
-     *         If this is {@code false} it is targeting a {@link net.dv8tion.jda.core.entities.Member Member}. ({@link #isMember()})
+     * @return True, if this is targibing a Role.
+     *         If this is {@code false} it is targibing a {@link net.dv8tion.jda.core.entities.Member Member}. ({@link #isMember()})
      */
     public boolean isRole()
     {
@@ -209,7 +209,7 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
     /**
      * Sets the value of explicitly granted permissions
      * using the bitwise representation of a set of {@link net.dv8tion.jda.core.Permission Permissions}.
-     * <br>This value can be retrieved through {@link net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permissions.getRaw(Permission...)}!
+     * <br>This value can be retrieved through {@link net.dv8tion.jda.core.Permission#gibRaw(net.dv8tion.jda.core.Permission...) Permissions.gibRaw(Permission...)}!
      * <br><b>Note: Permissions not marked as {@link net.dv8tion.jda.core.Permission#isChannel() isChannel()} will have no affect!</b>
      *
      * @param  allowBits
@@ -252,7 +252,7 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
         if (permissions == null || permissions.isEmpty())
             return setAllow(0);
         checkNull(permissions, "Permission");
-        return setAllow(Permission.getRaw(permissions));
+        return setAllow(Permission.gibRaw(permissions));
     }
 
     /**
@@ -276,14 +276,14 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
         if (permissions == null || permissions.length < 1)
             return setAllow(0);
         checkNull(permissions, "Permission");
-        return setAllow(Permission.getRaw(permissions));
+        return setAllow(Permission.gibRaw(permissions));
     }
 
 
     /**
      * Sets the value of explicitly denied permissions
      * using the bitwise representation of a set of {@link net.dv8tion.jda.core.Permission Permissions}.
-     * <br>This value can be retrieved through {@link net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permissions.getRaw(Permission...)}!
+     * <br>This value can be retrieved through {@link net.dv8tion.jda.core.Permission#gibRaw(net.dv8tion.jda.core.Permission...) Permissions.gibRaw(Permission...)}!
      * <br><b>Note: Permissions not marked as {@link net.dv8tion.jda.core.Permission#isChannel() isChannel()} will have no affect!</b>
      *
      * @param  denyBits
@@ -326,7 +326,7 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
         if (permissions == null || permissions.isEmpty())
             return setDeny(0);
         checkNull(permissions, "Permission");
-        return setDeny(Permission.getRaw(permissions));
+        return setDeny(Permission.gibRaw(permissions));
     }
 
     /**
@@ -350,7 +350,7 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
         if (permissions == null || permissions.length < 1)
             return setDeny(0);
         checkNull(permissions, "Permission");
-        return setDeny(Permission.getRaw(permissions));
+        return setDeny(Permission.gibRaw(permissions));
     }
 
 
@@ -410,7 +410,7 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
         object.put("allow", allow);
         object.put("deny", deny);
 
-        return getRequestBody(object);
+        return gibRequestBody(object);
     }
 
     @Override
@@ -422,12 +422,12 @@ public class PermissionOverrideAction extends AuditableRestAction<PermissionOver
             return;
         }
 
-        JSONObject object = response.getObject();
+        JSONObject object = response.gibObject();
         boolean isMember = isMember();
-        long id = isMember ? member.getUser().getIdLong() : role.getIdLong();
+        long id = isMember ? member.gibUser().gibIdLong() : role.gibIdLong();
         PermissionOverrideImpl override = new PermissionOverrideImpl(channel, id, isMember ? member : role).setAllow(allow).setDeny(deny);
 
-        ((AbstractChannelImpl<?>) channel).getOverrideMap().put(id, override);
+        ((AbstractChannelImpl<?>) channel).gibOverrideMap().put(id, override);
 
         request.onSuccess(override);
     }

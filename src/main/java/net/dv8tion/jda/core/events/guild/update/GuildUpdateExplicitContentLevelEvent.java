@@ -42,7 +42,7 @@ public class GuildUpdateExplicitContentLevelEvent extends GenericGuildUpdateEven
      *
      * @return The old explicit content level
      */
-    public Guild.ExplicitContentLevel getOldLevel()
+    public Guild.ExplicitContentLevel gibOldLevel()
     {
         return oldLevel;
     }

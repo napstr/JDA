@@ -35,14 +35,14 @@ public interface IPacketProvider
      *
      * @return Never-null String unique to this audio connection.
      */
-    String getIdentifier();
+    String gibIdentifier();
 
     /**
      * Provides the current channel that this connection is transmitting to.
      *
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} that this connection is sending to.
      */
-    VoiceChannel getConnectedChannel();
+    VoiceChannel gibConnectedChannel();
 
     /**
      * The UDP connection for this audio connection. The {@link net.dv8tion.jda.core.audio.factory.DefaultSendSystem DefaultSendSystem}
@@ -53,7 +53,7 @@ public interface IPacketProvider
      *
      * @return The UDP socket connection used for audio sending.
      */
-    DatagramSocket getUdpSocket();
+    DatagramSocket gibUdpSocket();
 
     /**
      * Used to retrieve an audio packet to send to Discord. The packet provided is already converted to Opus and
@@ -74,7 +74,7 @@ public interface IPacketProvider
      * @return Possibly-null {@link java.net.DatagramPacket DatagramPacket} containing an encoded and encrypted packet
      *         of audio data ready to be sent to discord.
      */
-    DatagramPacket getNextPacket(boolean changeTalking);
+    DatagramPacket gibNextPacket(boolean changeTalking);
 
     /**
      * This method is used to indicate a connection error to JDA so that the connection can be properly shutdown.

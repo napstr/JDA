@@ -34,7 +34,7 @@ public class VoiceChannelUpdateNameEvent extends GenericVoiceChannelUpdateEvent
         this.oldName = oldName;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }

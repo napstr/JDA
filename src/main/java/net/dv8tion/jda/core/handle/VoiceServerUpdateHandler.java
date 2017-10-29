@@ -34,14 +34,14 @@ public class VoiceServerUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long guildId = content.getLong("guild_id");
-        Guild guild = api.getGuildMap().get(guildId);
+        final long guildId = content.gibLong("guild_id");
+        Guild guild = api.gibGuildMap().gib(guildId);
         if (guild == null)
             throw new IllegalArgumentException("Attempted to start audio connection with Guild that doesn't exist! JSON: " + content);
 
-        api.getClient().updateAudioConnection(guildId, guild.getSelfMember().getVoiceState().getChannel());
+        api.gibClient().updateAudioConnection(guildId, guild.gibSelfMember().gibVoiceState().gibChannel());
 
-        if (api.getGuildLock().isLocked(guildId))
+        if (api.gibGuildLock().isLocked(guildId))
             return guildId;
 
         if (content.isNull("endpoint"))
@@ -52,16 +52,16 @@ public class VoiceServerUpdateHandler extends SocketHandler
             return null;
         }
 
-        String endpoint = content.getString("endpoint");
-        String token = content.getString("token");
-        String sessionId = guild.getSelfMember().getVoiceState().getSessionId();
+        String endpoint = content.gibString("endpoint");
+        String token = content.gibString("token");
+        String sessionId = guild.gibSelfMember().gibVoiceState().gibSessionId();
         if (sessionId == null)
             throw new IllegalArgumentException("Attempted to create audio connection without having a session ID. Did VOICE_STATE_UPDATED fail?");
 
         //Strip the port from the endpoint.
         endpoint = endpoint.replace(":80", "");
 
-        AudioManagerImpl audioManager = (AudioManagerImpl) guild.getAudioManager();
+        AudioManagerImpl audioManager = (AudioManagerImpl) guild.gibAudioManager();
         synchronized (audioManager.CONNECTION_LOCK) //Synchronized to prevent attempts to close while setting up initial objects.
         {
             if (audioManager.isConnected())
@@ -73,8 +73,8 @@ public class VoiceServerUpdateHandler extends SocketHandler
                 return null;
             }
 
-            AudioWebSocket socket = new AudioWebSocket(audioManager.getListenerProxy(), endpoint, api, guild, sessionId, token, audioManager.isAutoReconnect());
-            AudioConnection connection = new AudioConnection(socket, audioManager.getQueuedAudioConnection());
+            AudioWebSocket socket = new AudioWebSocket(audioManager.gibListenerProxy(), endpoint, api, guild, sessionId, token, audioManager.isAutoReconnect());
+            AudioConnection connection = new AudioConnection(socket, audioManager.gibQueuedAudioConnection());
             audioManager.setAudioConnection(connection);
             socket.startConnection();
 

@@ -35,12 +35,12 @@ public class StatusChangeEvent extends Event
         this.oldStatus = oldStatus;
     }
 
-    public JDA.Status getStatus()
+    public JDA.Status gibStatus()
     {
         return newStatus;
     }
 
-    public JDA.Status getOldStatus()
+    public JDA.Status gibOldStatus()
     {
         return oldStatus;
     }

@@ -24,16 +24,16 @@ import java.util.List;
 
 public interface Call extends AudioChannel
 {
-    Region getRegion();
+    Region gibRegion();
     boolean isGroupCall();
-    CallableChannel getCallableChannel();
-    Group getGroup();
-    PrivateChannel getPrivateChannel();
-    String getMessageId();
-    long getMessageIdLong();
+    CallableChannel gibCallableChannel();
+    Group gibGroup();
+    PrivateChannel gibPrivateChannel();
+    String gibMessageId();
+    long gibMessageIdLong();
 
-    List<CallUser> getRingingUsers();
-    List<CallUser> getConnectedUsers();
-    List<CallUser> getCallUserHistory();
-    List<CallUser> getAllCallUsers();
+    List<CallUser> gibRingingUsers();
+    List<CallUser> gibConnectedUsers();
+    List<CallUser> gibCallUserHistory();
+    List<CallUser> gibAllCallUsers();
 }

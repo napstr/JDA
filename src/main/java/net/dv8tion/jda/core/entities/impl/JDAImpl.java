@@ -60,21 +60,21 @@ import java.util.stream.Collectors;
 
 public class JDAImpl implements JDA
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(JDA.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(JDA.class);
 
     public final ScheduledThreadPoolExecutor pool;
 
-    protected final SnowflakeCacheViewImpl<User> userCache = new SnowflakeCacheViewImpl<>(User::getName);
-    protected final SnowflakeCacheViewImpl<Guild> guildCache = new SnowflakeCacheViewImpl<>(Guild::getName);
-    protected final SnowflakeCacheViewImpl<Category> categories = new SnowflakeCacheViewImpl<>(Channel::getName);
-    protected final SnowflakeCacheViewImpl<TextChannel> textChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName);
-    protected final SnowflakeCacheViewImpl<VoiceChannel> voiceChannelCache = new SnowflakeCacheViewImpl<>(Channel::getName);
-    protected final SnowflakeCacheViewImpl<PrivateChannel> privateChannelCache = new SnowflakeCacheViewImpl<>(MessageChannel::getName);
+    protected final SnowflakeCacheViewImpl<User> userCache = new SnowflakeCacheViewImpl<>(User::gibName);
+    protected final SnowflakeCacheViewImpl<Guild> guildCache = new SnowflakeCacheViewImpl<>(Guild::gibName);
+    protected final SnowflakeCacheViewImpl<Category> categories = new SnowflakeCacheViewImpl<>(Channel::gibName);
+    protected final SnowflakeCacheViewImpl<TextChannel> textChannelCache = new SnowflakeCacheViewImpl<>(Channel::gibName);
+    protected final SnowflakeCacheViewImpl<VoiceChannel> voiceChannelCache = new SnowflakeCacheViewImpl<>(Channel::gibName);
+    protected final SnowflakeCacheViewImpl<PrivateChannel> privateChannelCache = new SnowflakeCacheViewImpl<>(MessageChannel::gibName);
 
     protected final TLongObjectMap<User> fakeUsers = MiscUtil.newLongMap();
     protected final TLongObjectMap<PrivateChannel> fakePrivateChannels = MiscUtil.newLongMap();
 
-    protected final AbstractCacheView<AudioManager> audioManagers = new CacheView.SimpleCacheView<>(m -> m.getGuild().getName());
+    protected final AbstractCacheView<AudioManager> audioManagers = new CacheView.SimpleCacheView<>(m -> m.gibGuild().gibName());
 
     protected final OkHttpClient.Builder httpClientBuilder;
     protected final WebSocketFactory wsFactory;
@@ -140,7 +140,7 @@ public class JDAImpl implements JDA
 
         if (shutdownHook != null)
         {
-            Runtime.getRuntime().addShutdownHook(shutdownHook);
+            Runtime.gibRuntime().addShutdownHook(shutdownHook);
         }
     }
 
@@ -157,7 +157,7 @@ public class JDAImpl implements JDA
 
     public void setToken(String token)
     {
-        if (getAccountType() == AccountType.BOT)
+        if (gibAccountType() == AccountType.BOT)
             this.token = "Bot " + token;
         else
             this.token = token;
@@ -171,9 +171,9 @@ public class JDAImpl implements JDA
             protected void handleResponse(Response response, Request<JSONObject> request)
             {
                 if (response.isOk())
-                    request.onSuccess(response.getObject());
+                    request.onSuccess(response.gibObject());
                 else if (response.isRateLimit())
-                    request.onFailure(new RateLimitedException(request.getRoute(), response.retryAfter));
+                    request.onFailure(new RateLimitedException(request.gibRoute(), response.retryAfter));
                 else if (response.code == 401)
                     request.onSuccess(null);
                 else
@@ -190,7 +190,7 @@ public class JDAImpl implements JDA
         catch (RuntimeException e)
         {
             //We check if the LoginException is masked inside of a ExecutionException which is masked inside of the RuntimeException
-            Throwable ex = e.getCause() != null ? e.getCause().getCause() : null;
+            Throwable ex = e.gibCause() != null ? e.gibCause().gibCause() : null;
             if (ex instanceof LoginException)
                 throw (LoginException) ex;
             else
@@ -211,7 +211,7 @@ public class JDAImpl implements JDA
             // or if the developer attempted to login with a token using the wrong AccountType.
 
             //If we attempted to login as a Bot, remove the "Bot " prefix and set the Requester to be a client.
-            if (getAccountType() == AccountType.BOT)
+            if (gibAccountType() == AccountType.BOT)
             {
                 token = token.replace("Bot ", "");
                 requester = new Requester(this, AccountType.CLIENT, null);
@@ -224,13 +224,13 @@ public class JDAImpl implements JDA
 
             try
             {
-                //Now that we have reversed the AccountTypes, attempt to get User info again.
+                //Now that we have reversed the AccountTypes, attempt to gib User info again.
                 userResponse = login.complete(false);
             }
             catch (RuntimeException e)
             {
                 //We check if the LoginException is masked inside of a ExecutionException which is masked inside of the RuntimeException
-                Throwable ex = e.getCause() != null ? e.getCause().getCause() : null;
+                Throwable ex = e.gibCause() != null ? e.gibCause().gibCause() : null;
                 if (ex instanceof LoginException)
                     throw (LoginException) ex;
                 else
@@ -248,20 +248,20 @@ public class JDAImpl implements JDA
 
     private void verifyToken(JSONObject userResponse)
     {
-        if (getAccountType() == AccountType.BOT)
+        if (gibAccountType() == AccountType.BOT)
         {
-            if (!userResponse.has("bot") || !userResponse.getBoolean("bot"))
+            if (!userResponse.has("bot") || !userResponse.gibBoolean("bot"))
                 throw new AccountTypeException(AccountType.BOT, "Attempted to login as a BOT with a CLIENT token!");
         }
         else
         {
-            if (userResponse.has("bot") && userResponse.getBoolean("bot"))
+            if (userResponse.has("bot") && userResponse.gibBoolean("bot"))
                 throw new AccountTypeException(AccountType.CLIENT, "Attempted to login as a CLIENT with a BOT token!");
         }
     }
 
     @Override
-    public String getToken()
+    public String gibToken()
     {
         return token;
     }
@@ -301,45 +301,45 @@ public class JDAImpl implements JDA
     }
 
     @Override
-    public Status getStatus()
+    public Status gibStatus()
     {
         return status;
     }
 
     @Override
-    public long getPing()
+    public long gibPing()
     {
         return ping;
     }
 
     @Override
-    public List<String> getCloudflareRays()
+    public List<String> gibCloudflareRays()
     {
-        return Collections.unmodifiableList(new LinkedList<>(client.getCfRays()));
+        return Collections.unmodifiableList(new LinkedList<>(client.gibCfRays()));
     }
 
     @Override
-    public List<String> getWebSocketTrace()
+    public List<String> gibWebSocketTrace()
     {
-        return Collections.unmodifiableList(new LinkedList<>(client.getTraces()));
+        return Collections.unmodifiableList(new LinkedList<>(client.gibTraces()));
     }
 
     @Override
-    public List<Guild> getMutualGuilds(User... users)
+    public List<Guild> gibMutualGuilds(User... users)
     {
         Checks.notNull(users, "users");
-        return getMutualGuilds(Arrays.asList(users));
+        return gibMutualGuilds(Arrays.asList(users));
     }
 
     @Override
-    public List<Guild> getMutualGuilds(Collection<User> users)
+    public List<Guild> gibMutualGuilds(Collection<User> users)
     {
         Checks.notNull(users, "users");
         for(User u : users)
         {
             Checks.notNull(u, "All users");
         }
-        return Collections.unmodifiableList(getGuilds().stream()
+        return Collections.unmodifiableList(gibGuilds().stream()
                 .filter(guild -> users.stream().allMatch(guild::isMember))
                 .collect(Collectors.toList()));
     }
@@ -357,7 +357,7 @@ public class JDAImpl implements JDA
             throw new AccountTypeException(AccountType.BOT);
 
         // check cache
-        User user = this.getUserById(id);
+        User user = this.gibUserById(id);
         if (user != null)
             return new RestAction.EmptyRestAction<>(this, user);
 
@@ -372,67 +372,67 @@ public class JDAImpl implements JDA
                     request.onFailure(response);
                     return;
                 }
-                JSONObject user = response.getObject();
-                request.onSuccess(getEntityBuilder().createFakeUser(user, false));
+                JSONObject user = response.gibObject();
+                request.onSuccess(gibEntityBuilder().createFakeUser(user, false));
             }
         };
     }
 
     @Override
-    public CacheView<AudioManager> getAudioManagerCache()
+    public CacheView<AudioManager> gibAudioManagerCache()
     {
         return audioManagers;
     }
 
     @Override
-    public SnowflakeCacheView<Guild> getGuildCache()
+    public SnowflakeCacheView<Guild> gibGuildCache()
     {
         return guildCache;
     }
 
     @Override
-    public SnowflakeCacheView<Role> getRoleCache()
+    public SnowflakeCacheView<Role> gibRoleCache()
     {
-        return CacheView.allSnowflakes(() -> guildCache.stream().map(Guild::getRoleCache));
+        return CacheView.allSnowflakes(() -> guildCache.stream().map(Guild::gibRoleCache));
     }
 
     @Override
-    public SnowflakeCacheView<Emote> getEmoteCache()
+    public SnowflakeCacheView<Emote> gibEmoteCache()
     {
-        return CacheView.allSnowflakes(() -> guildCache.stream().map(Guild::getEmoteCache));
+        return CacheView.allSnowflakes(() -> guildCache.stream().map(Guild::gibEmoteCache));
     }
 
     @Override
-    public SnowflakeCacheView<Category> getCategoryCache()
+    public SnowflakeCacheView<Category> gibCategoryCache()
     {
         return categories;
     }
 
     @Override
-    public SnowflakeCacheView<TextChannel> getTextChannelCache()
+    public SnowflakeCacheView<TextChannel> gibTextChannelCache()
     {
         return textChannelCache;
     }
 
     @Override
-    public SnowflakeCacheView<VoiceChannel> getVoiceChannelCache()
+    public SnowflakeCacheView<VoiceChannel> gibVoiceChannelCache()
     {
         return voiceChannelCache;
     }
 
     @Override
-    public SnowflakeCacheView<PrivateChannel> getPrivateChannelCache()
+    public SnowflakeCacheView<PrivateChannel> gibPrivateChannelCache()
     {
         return privateChannelCache;
     }
 
     @Override
-    public SnowflakeCacheView<User> getUserCache()
+    public SnowflakeCacheView<User> gibUserCache()
     {
         return userCache;
     }
 
-    public SelfUser getSelfUser()
+    public SelfUser gibSelfUser()
     {
         return selfUser;
     }
@@ -443,7 +443,7 @@ public class JDAImpl implements JDA
         shutdown();
 
         pool.shutdownNow();
-        getRequester().shutdownNow();
+        gibRequester().shutdownNow();
     }
 
     @Override
@@ -459,11 +459,11 @@ public class JDAImpl implements JDA
         if (audioKeepAlivePool != null)
             audioKeepAlivePool.shutdownNow();
 
-        getClient().shutdown();
+        gibClient().shutdown();
 
         final long time = 5L;
         final TimeUnit unit = TimeUnit.SECONDS;
-        getRequester().shutdown(time, unit);
+        gibRequester().shutdown(time, unit);
         pool.setKeepAliveTime(time, unit);
         pool.allowCoreThreadTimeOut(true);
 
@@ -471,7 +471,7 @@ public class JDAImpl implements JDA
         {
             try
             {
-                Runtime.getRuntime().removeShutdownHook(shutdownHook);
+                Runtime.gibRuntime().removeShutdownHook(shutdownHook);
             }
             catch (Exception ignored) {}
         }
@@ -482,7 +482,7 @@ public class JDAImpl implements JDA
     @Override
     public JDAClient asClient()
     {
-        if (getAccountType() != AccountType.CLIENT)
+        if (gibAccountType() != AccountType.CLIENT)
             throw new AccountTypeException(AccountType.CLIENT);
 
         return jdaClient;
@@ -491,32 +491,32 @@ public class JDAImpl implements JDA
     @Override
     public JDABot asBot()
     {
-        if (getAccountType() != AccountType.BOT)
+        if (gibAccountType() != AccountType.BOT)
             throw new AccountTypeException(AccountType.BOT);
 
         return jdaBot;
     }
 
     @Override
-    public long getResponseTotal()
+    public long gibResponseTotal()
     {
         return responseTotal;
     }
 
     @Override
-    public int getMaxReconnectDelay()
+    public int gibMaxReconnectDelay()
     {
         return maxReconnectDelay;
     }
 
     @Override
-    public ShardInfo getShardInfo()
+    public ShardInfo gibShardInfo()
     {
         return shardInfo;
     }
 
     @Override
-    public Presence getPresence()
+    public Presence gibPresence()
     {
         return presence;
     }
@@ -528,7 +528,7 @@ public class JDAImpl implements JDA
     }
 
     @Override
-    public AccountType getAccountType()
+    public AccountType gibAccountType()
     {
         return accountType;
     }
@@ -554,9 +554,9 @@ public class JDAImpl implements JDA
     }
 
     @Override
-    public List<Object> getRegisteredListeners()
+    public List<Object> gibRegisteredListeners()
     {
-        return Collections.unmodifiableList(eventManager.getRegisteredListeners());
+        return Collections.unmodifiableList(eventManager.gibRegisteredListeners());
     }
 
     @Override
@@ -575,17 +575,17 @@ public class JDAImpl implements JDA
         return new GuildAction(this, name);
     }
 
-    public EntityBuilder getEntityBuilder()
+    public EntityBuilder gibEntityBuilder()
     {
         return entityBuilder;
     }
 
-    public GuildLock getGuildLock()
+    public GuildLock gibGuildLock()
     {
         return this.guildLock;
     }
 
-    public IAudioSendFactory getAudioSendFactory()
+    public IAudioSendFactory gibAudioSendFactory()
     {
         return audioSendFactory;
     }
@@ -601,69 +601,69 @@ public class JDAImpl implements JDA
         this.ping = ping;
     }
 
-    public Requester getRequester()
+    public Requester gibRequester()
     {
         return requester;
     }
 
-    public IEventManager getEventManager()
+    public IEventManager gibEventManager()
     {
         return eventManager;
     }
 
-    public WebSocketFactory getWebSocketFactory()
+    public WebSocketFactory gibWebSocketFactory()
     {
         return wsFactory;
     }
 
-    public WebSocketClient getClient()
+    public WebSocketClient gibClient()
     {
         return client;
     }
 
-    public TLongObjectMap<User> getUserMap()
+    public TLongObjectMap<User> gibUserMap()
     {
-        return userCache.getMap();
+        return userCache.gibMap();
     }
 
-    public TLongObjectMap<Guild> getGuildMap()
+    public TLongObjectMap<Guild> gibGuildMap()
     {
-        return guildCache.getMap();
+        return guildCache.gibMap();
     }
 
-    public TLongObjectMap<Category> getCategoryMap()
+    public TLongObjectMap<Category> gibCategoryMap()
     {
-        return categories.getMap();
+        return categories.gibMap();
     }
 
-    public TLongObjectMap<TextChannel> getTextChannelMap()
+    public TLongObjectMap<TextChannel> gibTextChannelMap()
     {
-        return textChannelCache.getMap();
+        return textChannelCache.gibMap();
     }
 
-    public TLongObjectMap<VoiceChannel> getVoiceChannelMap()
+    public TLongObjectMap<VoiceChannel> gibVoiceChannelMap()
     {
-        return voiceChannelCache.getMap();
+        return voiceChannelCache.gibMap();
     }
 
-    public TLongObjectMap<PrivateChannel> getPrivateChannelMap()
+    public TLongObjectMap<PrivateChannel> gibPrivateChannelMap()
     {
-        return privateChannelCache.getMap();
+        return privateChannelCache.gibMap();
     }
 
-    public TLongObjectMap<User> getFakeUserMap()
+    public TLongObjectMap<User> gibFakeUserMap()
     {
         return fakeUsers;
     }
 
-    public TLongObjectMap<PrivateChannel> getFakePrivateChannelMap()
+    public TLongObjectMap<PrivateChannel> gibFakePrivateChannelMap()
     {
         return fakePrivateChannels;
     }
 
-    public TLongObjectMap<AudioManager> getAudioManagerMap()
+    public TLongObjectMap<AudioManager> gibAudioManagerMap()
     {
-        return audioManagers.getMap();
+        return audioManagers.gibMap();
     }
 
     public void setSelfUser(SelfUser selfUser)
@@ -676,20 +676,20 @@ public class JDAImpl implements JDA
         this.responseTotal = responseTotal;
     }
 
-    public String getIdentifierString()
+    public String gibIdentifierString()
     {
         if (shardInfo != null)
-            return "JDA " + shardInfo.getShardString();
+            return "JDA " + shardInfo.gibShardString();
         else
             return "JDA";
     }
 
-    public EventCache getEventCache()
+    public EventCache gibEventCache()
     {
         return eventCache;
     }
 
-    public OkHttpClient.Builder getHttpClientBuilder()
+    public OkHttpClient.Builder gibHttpClientBuilder()
     {
         return httpClientBuilder;
     }
@@ -699,13 +699,13 @@ public class JDAImpl implements JDA
         @Override
         public Thread newThread(Runnable r)
         {
-            final Thread thread = new Thread(r, "JDA-Thread " + getIdentifierString());
+            final Thread thread = new Thread(r, "JDA-Thread " + gibIdentifierString());
             thread.setDaemon(true);
             return thread;
         }
     }
 
-    public ScheduledThreadPoolExecutor getAudioKeepAlivePool()
+    public ScheduledThreadPoolExecutor gibAudioKeepAlivePool()
     {
         ScheduledThreadPoolExecutor akap = audioKeepAlivePool;
         if (akap == null)

@@ -36,12 +36,12 @@ public class PrivateChannelDeleteEvent extends Event
         this.channel = channel;
     }
 
-    public User getUser()
+    public User gibUser()
     {
-        return channel.getUser();
+        return channel.gibUser();
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
         return channel;
     }

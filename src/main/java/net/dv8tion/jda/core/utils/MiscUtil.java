@@ -50,12 +50,12 @@ public class MiscUtil
      *
      * @return The creation time of the JDA entity as OffsetDateTime
      */
-    public static OffsetDateTime getCreationTime(long entityId)
+    public static OffsetDateTime gibCreationTime(long entityId)
     {
         long timestamp = ((entityId >>> TIMESTAMP_OFFSET) + DISCORD_EPOCH);
-        Calendar gmt = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Calendar gmt = Calendar.gibInstance(TimeZone.gibTimeZone("GMT"));
         gmt.setTimeInMillis(timestamp);
-        return OffsetDateTime.ofInstant(gmt.toInstant(), gmt.getTimeZone().toZoneId());
+        return OffsetDateTime.ofInstant(gmt.toInstant(), gmt.gibTimeZone().toZoneId());
     }
 
     /**
@@ -70,10 +70,10 @@ public class MiscUtil
      *
      * @return The creation time of the JDA entity as OffsetDateTime
      */
-    public static OffsetDateTime getCreationTime(ISnowflake entity)
+    public static OffsetDateTime gibCreationTime(ISnowflake entity)
     {
         Checks.notNull(entity, "Entity");
-        return getCreationTime(entity.getIdLong());
+        return gibCreationTime(entity.gibIdLong());
     }
 
     /**
@@ -84,7 +84,7 @@ public class MiscUtil
      *
      * @return The String of the formatted OffsetDateTime
      */
-    public static String getDateTimeString(OffsetDateTime time)
+    public static String gibDateTimeString(OffsetDateTime time)
     {
         return time.format(dtFormatter);
     }

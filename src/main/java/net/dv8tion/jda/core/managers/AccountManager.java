@@ -50,9 +50,9 @@ public class AccountManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return updatable.getJDA();
+        return updatable.gibJDA();
     }
 
     /**
@@ -62,14 +62,14 @@ public class AccountManager
      *
      * @return The corresponding SelfUser
      */
-    public SelfUser getSelfUser()
+    public SelfUser gibSelfUser()
     {
-        return updatable.getSelfUser();
+        return updatable.gibSelfUser();
     }
 
     /**
      * Sets the username for the currently logged in account
-     * <br>More information can be found {@link AccountManagerUpdatable#getNameField() here}!
+     * <br>More information can be found {@link AccountManagerUpdatable#gibNameField() here}!
      *
      * <p><b>Client-Accounts ({@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}) require the
      * current password to be updated. See {@link #setName(String, String)}</b>
@@ -96,7 +96,7 @@ public class AccountManager
 
     /**
      * Sets the username for the currently logged in account
-     * <br>More information can be found {@link AccountManagerUpdatable#getNameField() here}!
+     * <br>More information can be found {@link AccountManagerUpdatable#gibNameField() here}!
      *
      * @param  name
      *         The new username
@@ -120,12 +120,12 @@ public class AccountManager
     @CheckReturnValue
     public RestAction<Void> setName(String name, String currentPassword)
     {
-        return updatable.getNameField().setValue(name).update(currentPassword);
+        return updatable.gibNameField().setValue(name).update(currentPassword);
     }
 
     /**
      * Sets the avatar for the currently logged in account
-     * <br>More information can be found {@link AccountManagerUpdatable#getAvatarField() here}!
+     * <br>More information can be found {@link AccountManagerUpdatable#gibAvatarField() here}!
      *
      * <p><b>Client-Accounts ({@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}) require the
      * current password to be updated. See {@link #setAvatar(net.dv8tion.jda.core.entities.Icon, String) #setAvatar(Icon, String)}</b>
@@ -146,7 +146,7 @@ public class AccountManager
 
     /**
      * Sets the avatar for the currently logged in account
-     * <br>More information can be found {@link AccountManagerUpdatable#getAvatarField() here}!
+     * <br>More information can be found {@link AccountManagerUpdatable#gibAvatarField() here}!
      *
      * @param  avatar
      *         An {@link net.dv8tion.jda.core.entities.Icon Icon} instance representing
@@ -166,12 +166,12 @@ public class AccountManager
     @CheckReturnValue
     public RestAction<Void> setAvatar(Icon avatar, String currentPassword)
     {
-        return updatable.getAvatarField().setValue(avatar).update(currentPassword);
+        return updatable.gibAvatarField().setValue(avatar).update(currentPassword);
     }
 
     /**
      * Sets the email for the currently logged in client account.
-     * <br>More information can be found {@link AccountManagerUpdatable#getEmailField() here}!
+     * <br>More information can be found {@link AccountManagerUpdatable#gibEmailField() here}!
      *
      * @param  email
      *         The new email
@@ -193,13 +193,13 @@ public class AccountManager
     @CheckReturnValue
     public RestAction<Void> setEmail(String email, String currentPassword)
     {
-        return updatable.getEmailField().setValue(email).update(currentPassword);
+        return updatable.gibEmailField().setValue(email).update(currentPassword);
     }
 
     /**
      * Sets the password for the currently logged in client account.
      * <br>If the new password is equal to the current password this does nothing.
-     * <br>More information can be found {@link AccountManagerUpdatable#getPasswordField() here}!
+     * <br>More information can be found {@link AccountManagerUpdatable#gibPasswordField() here}!
      *
      * @param  newPassword
      *         The new password for the currently logged in account
@@ -218,6 +218,6 @@ public class AccountManager
     @CheckReturnValue
     public RestAction<Void> setPassword(String newPassword, String currentPassword)
     {
-        return updatable.getPasswordField().setValue(newPassword).update(currentPassword);
+        return updatable.gibPasswordField().setValue(newPassword).update(currentPassword);
     }
 }

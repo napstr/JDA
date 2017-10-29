@@ -49,9 +49,9 @@ public class ApplicationManager
      *
      * @return The {@link net.dv8tion.jda.client.entities.Application Application}
      */
-    public Application getApplication()
+    public Application gibApplication()
     {
-        return this.updatable.getApplication();
+        return this.updatable.gibApplication();
     }
 
     /**
@@ -59,14 +59,14 @@ public class ApplicationManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return this.updatable.getJDA();
+        return this.updatable.gibJDA();
     }
 
     /**
      * Sets the <b><u>description</u></b> of the selected {@link net.dv8tion.jda.client.entities.Application Application}.
-     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getDescriptionField() ApplicationManagerUpdatable#getDescriptionField()}.
+     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibDescriptionField() ApplicationManagerUpdatable#gibDescriptionField()}.
      *
      * <p>A description <b>must not</b> be than 400 characters long!
      *
@@ -79,18 +79,18 @@ public class ApplicationManager
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
      *         <br>Update RestAction from {@link ApplicationManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getDescriptionField()
+     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibDescriptionField()
      * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#update()
      */
     @CheckReturnValue
     public RestAction<Void> setDescription(final String description)
     {
-        return this.updatable.getDescriptionField().setValue(description).update();
+        return this.updatable.gibDescriptionField().setValue(description).update();
     }
 
     /**
      * Sets the <b><u>code grant state</u></b> of the selected {@link net.dv8tion.jda.client.entities.Application Application's} bot.
-     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getDoesBotRequireCodeGrantField() ApplicationManagerUpdatable#getDoesBotRequireCodeGrantField()}.
+     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibDoesBotRequireCodeGrantField() ApplicationManagerUpdatable#gibDoesBotRequireCodeGrantField()}.
      *
      * @param  requireCodeGrant
      *         The new state for the selected {@link net.dv8tion.jda.client.entities.Application Application's} bot
@@ -98,18 +98,18 @@ public class ApplicationManager
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
      *         <br>Update RestAction from {@link ApplicationManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getDoesBotRequireCodeGrantField()
+     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibDoesBotRequireCodeGrantField()
      * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#update()
      */
     @CheckReturnValue
     public RestAction<Void> setDoesBotRequireCodeGrant(final boolean requireCodeGrant)
     {
-        return this.updatable.getDoesBotRequireCodeGrantField().setValue(requireCodeGrant).update();
+        return this.updatable.gibDoesBotRequireCodeGrantField().setValue(requireCodeGrant).update();
     }
 
     /**
      * Sets the <b><u>icon</u></b> of the selected {@link net.dv8tion.jda.client.entities.Application Application}.
-     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getIconField() ApplicationManagerUpdatable#getIconField()}.
+     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibIconField() ApplicationManagerUpdatable#gibIconField()}.
      *
      * @param  icon
      *         The new {@link net.dv8tion.jda.core.entities.Icon Icon}
@@ -118,18 +118,18 @@ public class ApplicationManager
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
      *         <br>Update RestAction from {@link ApplicationManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getIconField()
+     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibIconField()
      * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#update()
      */
     @CheckReturnValue
     public RestAction<Void> setIcon(final Icon icon)
     {
-        return this.updatable.getIconField().setValue(icon).update();
+        return this.updatable.gibIconField().setValue(icon).update();
     }
 
     /**
      * Sets the <b><u>public state</u></b> of the selected {@link net.dv8tion.jda.client.entities.Application Application's} bot.
-     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getIsBotPublicField() ApplicationManagerUpdatable#getIsBotPublicField()}.
+     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibIsBotPublicField() ApplicationManagerUpdatable#gibIsBotPublicField()}.
      *
      * @param  botPublic
      *         The new state for the selected {@link net.dv8tion.jda.client.entities.Application Application's} bot
@@ -137,18 +137,18 @@ public class ApplicationManager
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
      *         <br>Update RestAction from {@link ApplicationManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getIsBotPublicField()
+     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibIsBotPublicField()
      * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#update()
      */
     @CheckReturnValue
     public RestAction<Void> setIsBotPublic(final boolean botPublic)
     {
-        return this.updatable.getIsBotPublicField().setValue(botPublic).update();
+        return this.updatable.gibIsBotPublicField().setValue(botPublic).update();
     }
 
     /**
      * Sets the <b><u>name</u></b> of the selected {@link net.dv8tion.jda.client.entities.Application Application}.
-     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getNameField() ApplicationManagerUpdatable#getNameField()}.
+     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibNameField() ApplicationManagerUpdatable#gibNameField()}.
      *
      * <p>A name <b>must not</b> be {@code null} nor less than 2 characters or more than 32 characters long!
      *
@@ -161,18 +161,18 @@ public class ApplicationManager
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
      *         <br>Update RestAction from {@link ApplicationManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getNameField()
+     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibNameField()
      * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#update()
      */
     @CheckReturnValue
     public RestAction<Void> setName(final String name)
     {
-        return this.updatable.getNameField().setValue(name).update();
+        return this.updatable.gibNameField().setValue(name).update();
     }
 
     /**
      * Sets the <b><u>redirect uris</u></b> of the selected {@link net.dv8tion.jda.client.entities.Application Application}.
-     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getRedirectUrisField() ApplicationManagerUpdatable#getRedirectUrisField()}.
+     * <br>Wraps {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibRedirectUrisField() ApplicationManagerUpdatable#gibRedirectUrisField()}.
      * 
      * <p>The {@link java.util.List List} as well as all redirect uris <b>must not</b> be {@code null}!
      * 
@@ -186,12 +186,12 @@ public class ApplicationManager
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
      *         <br>Update RestAction from {@link ApplicationManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#getIconField()
+     * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#gibIconField()
      * @see    net.dv8tion.jda.client.managers.ApplicationManagerUpdatable#update()
      */
     @CheckReturnValue
     public RestAction<Void> setRedirectUris(final List<String> redirectUris)
     {
-        return this.updatable.getRedirectUrisField().setValue(redirectUris).update();
+        return this.updatable.gibRedirectUrisField().setValue(redirectUris).update();
     }
 }

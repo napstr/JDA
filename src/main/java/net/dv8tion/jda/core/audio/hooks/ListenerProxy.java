@@ -88,7 +88,7 @@ public class ListenerProxy implements ConnectionListener
         }
     }
 
-    public ConnectionListener getListener()
+    public ConnectionListener gibListener()
     {
         return listener;
     }

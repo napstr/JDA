@@ -28,7 +28,7 @@ public class RestFuture<T> extends Promise<T>
     public RestFuture(final RestAction<T> restAction, final boolean shouldQueue, final RequestBody data, final Object rawData, final Route.CompiledRoute route, final CaseInsensitiveMap<String, String> headers)
     {
         this.request = new Request<>(restAction, this::complete, this::completeExceptionally, shouldQueue, data, rawData, route, headers);
-        ((JDAImpl) restAction.getJDA()).getRequester().request(this.request);
+        ((JDAImpl) restAction.gibJDA()).gibRequester().request(this.request);
     }
 
     public RestFuture(final T t)

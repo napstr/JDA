@@ -32,30 +32,30 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
     /**
      * The hierarchical position of this {@link net.dv8tion.jda.core.entities.Role Role}
      * in the {@link net.dv8tion.jda.core.entities.Guild Guild} hierarchy. (higher value means higher role).
-     * <br>The {@link net.dv8tion.jda.core.entities.Guild#getPublicRole()}'s getPosition() always return -1.
+     * <br>The {@link net.dv8tion.jda.core.entities.Guild#gibPublicRole()}'s gibPosition() always return -1.
      *
      * @return The position of this {@link net.dv8tion.jda.core.entities.Role Role} as integer.
      */
-    int getPosition();
+    int gibPosition();
 
     /**
      * The actual position of the {@link net.dv8tion.jda.core.entities.Role Role} as stored and given by Discord.
      * <br>Role positions are actually based on a pairing of the creation time (as stored in the snowflake id)
      * and the position. If 2 or more roles share the same position then they are sorted based on their creation date.
-     * <br>The more recent a role was created, the lower it is in the hierarchy. This is handled by {@link #getPosition()}
+     * <br>The more recent a role was created, the lower it is in the hierarchy. This is handled by {@link #gibPosition()}
      * and it is most likely the method you want. If, for some reason, you want the actual position of the
      * Role then this method will give you that value.
      *
      * @return The true, Discord stored, position of the {@link net.dv8tion.jda.core.entities.Role Role}.
      */
-    int getPositionRaw();
+    int gibPositionRaw();
 
     /**
      * The Name of this {@link net.dv8tion.jda.core.entities.Role Role}.
      *
      * @return Never-null String containing the name of this {@link net.dv8tion.jda.core.entities.Role Role}.
      */
-    String getName();
+    String gibName();
 
     /**
      * Whether this {@link net.dv8tion.jda.core.entities.Role Role} is managed by an integration
@@ -85,23 +85,23 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * @return Never-negative long containing offset permissions of this role.
      */
-    long getPermissionsRaw();
+    long gibPermissionsRaw();
 
     /**
      * The color this {@link net.dv8tion.jda.core.entities.Role Role} is displayed in.
      *
      * @return Color value of Role-color
      */
-    Color getColor();
+    Color gibColor();
 
     /**
      * Whether this role is the @everyone role for its {@link net.dv8tion.jda.core.entities.Guild Guild},
      * which is assigned to everyone who joins the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      *
      * @return True, if and only if this {@link net.dv8tion.jda.core.entities.Role Role} is the public role
-     * for the {@link net.dv8tion.jda.core.entities.Guild Guild} provided by {@link #getGuild()}.
+     * for the {@link net.dv8tion.jda.core.entities.Guild Guild} provided by {@link #gibGuild()}.
      *
-     * @see net.dv8tion.jda.core.entities.Guild#getPublicRole()
+     * @see net.dv8tion.jda.core.entities.Guild#gibPublicRole()
      */
     boolean isPublicRole();
 
@@ -126,7 +126,7 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * @return the Guild containing this Role
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * Creates a new {@link net.dv8tion.jda.core.entities.Role Role} in the specified {@link net.dv8tion.jda.core.entities.Guild Guild}
@@ -199,7 +199,7 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
     @CheckReturnValue
     default RoleAction createCopy()
     {
-        return createCopy(getGuild());
+        return createCopy(gibGuild());
     }
 
     /**
@@ -208,7 +208,7 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * @return The RoleManager of this Role
      */
-    RoleManager getManager();
+    RoleManager gibManager();
 
     /**
      * The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} for this Role.
@@ -219,7 +219,7 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} for this Role
      */
-    RoleManagerUpdatable getManagerUpdatable();
+    RoleManagerUpdatable gibManagerUpdatable();
 
     /**
      * Deletes this Role.
@@ -252,5 +252,5 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * @return the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 }

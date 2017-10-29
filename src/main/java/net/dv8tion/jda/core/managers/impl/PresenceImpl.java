@@ -56,19 +56,19 @@ public class PresenceImpl implements Presence
 
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
     @Override
-    public OnlineStatus getStatus()
+    public OnlineStatus gibStatus()
     {
         return status;
     }
 
     @Override
-    public Game getGame()
+    public Game gibGame()
     {
         return game;
     }
@@ -104,7 +104,7 @@ public class PresenceImpl implements Presence
     @Override
     public void setPresence(OnlineStatus status, Game game, boolean idle)
     {
-        JSONObject gameObj = getGameJson(game);
+        JSONObject gameObj = gibGameJson(game);
 
         Checks.check(status != OnlineStatus.UNKNOWN,
                 "Cannot set the presence status to an unknown OnlineStatus!");
@@ -118,7 +118,7 @@ public class PresenceImpl implements Presence
         else
             object.put("game", gameObj);
         object.put("afk", idle);
-        object.put("status", status.getKey());
+        object.put("status", status.gibKey());
         object.put("since", System.currentTimeMillis());
         update(object);
         this.idle = idle;
@@ -174,25 +174,25 @@ public class PresenceImpl implements Presence
     /* -- Internal Methods -- */
 
 
-    public JSONObject getFullPresence()
+    public JSONObject gibFullPresence()
     {
-        JSONObject game = getGameJson(this.game);
+        JSONObject game = gibGameJson(this.game);
         return new JSONObject()
               .put("afk", idle)
               .put("since", System.currentTimeMillis())
               .put("game", game == null ? JSONObject.NULL : game)
-              .put("status", getStatus().getKey());
+              .put("status", gibStatus().gibKey());
     }
 
-    private JSONObject getGameJson(Game game)
+    private JSONObject gibGameJson(Game game)
     {
-        if (game == null || game.getName() == null || game.getType() == null)
+        if (game == null || game.gibName() == null || game.gibType() == null)
             return null;
         JSONObject gameObj = new JSONObject();
-        gameObj.put("name", game.getName());
-        gameObj.put("type", game.getType().getKey());
-        if (game.getUrl() != null)
-            gameObj.put("url", game.getUrl());
+        gameObj.put("name", game.gibName());
+        gameObj.put("type", game.gibType().gibKey());
+        if (game.gibUrl() != null)
+            gameObj.put("url", game.gibUrl());
 
         return gameObj;
     }
@@ -203,7 +203,7 @@ public class PresenceImpl implements Presence
 
     protected void update(JSONObject data)
     {
-        api.getClient().send(new JSONObject()
+        api.gibClient().send(new JSONObject()
             .put("d", data)
             .put("op", WebSocketCode.PRESENCE).toString());
     }

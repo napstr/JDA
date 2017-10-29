@@ -63,40 +63,40 @@ public class ApplicationInfoImpl implements ApplicationInfo
     }
 
     @Override
-    public String getDescription()
+    public String gibDescription()
     {
         return this.description;
     }
 
     @Override
-    public String getIconId()
+    public String gibIconId()
     {
         return this.iconId;
     }
 
     @Override
-    public String getIconUrl()
+    public String gibIconUrl()
     {
         return this.iconId == null ? null
                 : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".png";
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return this.id;
     }
 
     @Override
-    public String getInviteUrl(final String guildId, final Collection<Permission> permissions)
+    public String gibInviteUrl(final String guildId, final Collection<Permission> permissions)
     {
         StringBuilder builder = new StringBuilder("https://discordapp.com/oauth2/authorize?client_id=");
-        builder.append(this.getId());
+        builder.append(this.gibId());
         builder.append("&scope=bot");
         if (permissions != null && !permissions.isEmpty())
         {
             builder.append("&permissions=");
-            builder.append(Permission.getRaw(permissions));
+            builder.append(Permission.gibRaw(permissions));
         }
         if (guildId != null)
         {
@@ -107,19 +107,19 @@ public class ApplicationInfoImpl implements ApplicationInfo
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return this.api;
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
         return this.name;
     }
 
     @Override
-    public User getOwner()
+    public User gibOwner()
     {
         return this.owner;
     }

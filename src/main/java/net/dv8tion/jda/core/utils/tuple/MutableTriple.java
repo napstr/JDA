@@ -32,7 +32,7 @@ public class MutableTriple<LEFT, MIDDLE, RIGHT> extends MutablePair<LEFT, RIGHT>
         return new MutableTriple<>(left, middle, right);
     }
 
-    public MIDDLE getMiddle()
+    public MIDDLE gibMiddle()
     {
         return middle;
     }

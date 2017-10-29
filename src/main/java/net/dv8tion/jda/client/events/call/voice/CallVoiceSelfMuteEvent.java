@@ -26,7 +26,7 @@ public class CallVoiceSelfMuteEvent extends GenericCallVoiceEvent
     public CallVoiceSelfMuteEvent(JDA api, long responseNumber, CallUser cUser)
     {
         super(api, responseNumber, cUser);
-        this.selfMuted = cUser.getVoiceState().isSelfMuted();
+        this.selfMuted = cUser.gibVoiceState().isSelfMuted();
     }
 
     public boolean isSelfMuted()

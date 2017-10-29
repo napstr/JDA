@@ -28,7 +28,7 @@ public abstract class GenericGroupMessageEvent extends GenericMessageEvent
     }
 
     @Override
-    public Group getChannel()
+    public Group gibChannel()
     {
         return (Group) channel;
     }

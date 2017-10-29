@@ -23,12 +23,12 @@ import java.util.Queue;
 
 public interface IBucket
 {
-    Route.RateLimit getRatelimit();
-    String getRoute();
-    Queue<Request> getRequests();
+    Route.RateLimit gibRatelimit();
+    String gibRoute();
+    Queue<Request> gibRequests();
     
     default boolean hasRatelimit()
     {
-        return getRatelimit() != null;
+        return gibRatelimit() != null;
     }
 }

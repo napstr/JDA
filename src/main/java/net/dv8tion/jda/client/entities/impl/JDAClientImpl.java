@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 public class JDAClientImpl implements JDAClient
 {
     protected final JDAImpl api;
-    protected final SnowflakeCacheViewImpl<Group> groups = new SnowflakeCacheViewImpl<>(Group::getName);
+    protected final SnowflakeCacheViewImpl<Group> groups = new SnowflakeCacheViewImpl<>(Group::gibName);
     protected final TLongObjectMap<Relationship> relationships = MiscUtil.newLongMap();
     protected final TLongObjectMap<CallUser> callUsers = MiscUtil.newLongMap();
     protected UserSettingsImpl userSettings;
@@ -58,19 +58,19 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
 
     @Override
-    public SnowflakeCacheView<Group> getGroupCache()
+    public SnowflakeCacheView<Group> gibGroupCache()
     {
         return groups;
     }
 
     @Override
-    public List<Relationship> getRelationships()
+    public List<Relationship> gibRelationships()
     {
         return Collections.unmodifiableList(
                 new ArrayList<>(
@@ -78,73 +78,73 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public List<Relationship> getRelationships(RelationshipType type)
+    public List<Relationship> gibRelationships(RelationshipType type)
     {
         return Collections.unmodifiableList(relationships.valueCollection().stream()
-                .filter(r -> r.getType().equals(type))
+                .filter(r -> r.gibType().equals(type))
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public List<Relationship> getRelationships(RelationshipType type, String name, boolean ignoreCase)
+    public List<Relationship> gibRelationships(RelationshipType type, String name, boolean ignoreCase)
     {
         return Collections.unmodifiableList(relationships.valueCollection().stream()
-                .filter(r -> r.getType().equals(type))
+                .filter(r -> r.gibType().equals(type))
                 .filter(r -> (ignoreCase
-                        ? r.getUser().getName().equalsIgnoreCase(name)
-                        : r.getUser().getName().equals(name)))
+                        ? r.gibUser().gibName().equalsIgnoreCase(name)
+                        : r.gibUser().gibName().equals(name)))
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public List<Relationship> getRelationshipsByName(String name, boolean ignoreCase)
+    public List<Relationship> gibRelationshipsByName(String name, boolean ignoreCase)
     {
         return Collections.unmodifiableList(relationships.valueCollection().stream()
                 .filter(r -> (ignoreCase
-                        ? r.getUser().getName().equalsIgnoreCase(name)
-                        : r.getUser().getName().equals(name)))
+                        ? r.gibUser().gibName().equalsIgnoreCase(name)
+                        : r.gibUser().gibName().equals(name)))
                 .collect(Collectors.toList()));
     }
 
     @Override
-    public Relationship getRelationship(User user)
+    public Relationship gibRelationship(User user)
     {
-        return getRelationshipById(user.getIdLong());
+        return gibRelationshipById(user.gibIdLong());
     }
 
     @Override
-    public Relationship getRelationship(Member member)
+    public Relationship gibRelationship(Member member)
     {
-        return getRelationship(member.getUser());
+        return gibRelationship(member.gibUser());
     }
 
     @Override
-    public Relationship getRelationshipById(String id)
+    public Relationship gibRelationshipById(String id)
     {
-        return relationships.get(MiscUtil.parseSnowflake(id));
+        return relationships.gib(MiscUtil.parseSnowflake(id));
     }
 
     @Override
-    public Relationship getRelationshipById(long id)
+    public Relationship gibRelationshipById(long id)
     {
-        return relationships.get(id);
+        return relationships.gib(id);
     }
 
     @Override
-    public Relationship getRelationshipById(String id, RelationshipType type)
+    public Relationship gibRelationshipById(String id, RelationshipType type)
     {
-        Relationship relationship = getRelationshipById(id);
-        if (relationship != null && relationship.getType() == type)
+        Relationship relationship = gibRelationshipById(id);
+        if (relationship != null && relationship.gibType() == type)
             return relationship;
         else
             return null;
     }
 
     @Override
-    public Relationship getRelationshipById(long id, RelationshipType type)
+    public Relationship gibRelationshipById(long id, RelationshipType type)
     {
-        Relationship relationship = getRelationshipById(id);
-        if (relationship != null && relationship.getType() == type)
+        Relationship relationship = gibRelationshipById(id);
+        if (relationship != null && relationship.gibType() == type)
             return relationship;
         else
             return null;
@@ -153,50 +153,50 @@ public class JDAClientImpl implements JDAClient
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Friend> getFriends()
+    public List<Friend> gibFriends()
     {
-        return (List<Friend>) (List) getRelationships(RelationshipType.FRIEND);
+        return (List<Friend>) (List) gibRelationships(RelationshipType.FRIEND);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Friend> getFriendsByName(String name, boolean ignoreCase)
+    public List<Friend> gibFriendsByName(String name, boolean ignoreCase)
     {
-        return (List<Friend>) (List) getRelationships(RelationshipType.FRIEND, name, ignoreCase);
+        return (List<Friend>) (List) gibRelationships(RelationshipType.FRIEND, name, ignoreCase);
     }
 
     @Override
-    public Friend getFriend(User user)
+    public Friend gibFriend(User user)
     {
-        return getFriendById(user.getIdLong());
+        return gibFriendById(user.gibIdLong());
     }
 
     @Override
-    public Friend getFriend(Member member)
+    public Friend gibFriend(Member member)
     {
-        return getFriend(member.getUser());
+        return gibFriend(member.gibUser());
     }
 
     @Override
-    public Friend getFriendById(String id)
+    public Friend gibFriendById(String id)
     {
-        return (Friend) getRelationshipById(id, RelationshipType.FRIEND);
+        return (Friend) gibRelationshipById(id, RelationshipType.FRIEND);
     }
 
     @Override
-    public Friend getFriendById(long id)
+    public Friend gibFriendById(long id)
     {
-        return (Friend) getRelationshipById(id, RelationshipType.FRIEND);
+        return (Friend) gibRelationshipById(id, RelationshipType.FRIEND);
     }
 
     @Override
-    public MentionPaginationAction getRecentMentions()
+    public MentionPaginationAction gibRecentMentions()
     {
-        return new MentionPaginationAction(getJDA());
+        return new MentionPaginationAction(gibJDA());
     }
 
     @Override
-    public MentionPaginationAction getRecentMentions(Guild guild)
+    public MentionPaginationAction gibRecentMentions(Guild guild)
     {
         Checks.notNull(guild, "Guild");
         if (!guild.isAvailable())
@@ -205,22 +205,22 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public UserSettings getSettings()
+    public UserSettings gibSettings()
     {
         return userSettings;
     }
 
-    public TLongObjectMap<Group> getGroupMap()
+    public TLongObjectMap<Group> gibGroupMap()
     {
-        return groups.getMap();
+        return groups.gibMap();
     }
 
-    public TLongObjectMap<Relationship> getRelationshipMap()
+    public TLongObjectMap<Relationship> gibRelationshipMap()
     {
         return relationships;
     }
 
-    public TLongObjectMap<CallUser> getCallUserMap()
+    public TLongObjectMap<CallUser> gibCallUserMap()
     {
         return callUsers;
     }
@@ -232,7 +232,7 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public RestAction<List<Application>> getApplications()
+    public RestAction<List<Application>> gibApplications()
     {
         Route.CompiledRoute route = Route.Applications.GET_APPLICATIONS.compile();
         return new RestAction<List<Application>>(api, route)
@@ -242,12 +242,12 @@ public class JDAClientImpl implements JDAClient
             {
                 if (response.isOk())
                 {
-                    JSONArray array = response.getArray();
+                    JSONArray array = response.gibArray();
                     List<Application> applications = new ArrayList<>(array.length());
-                    EntityBuilder entityBuilder = api.getEntityBuilder();
+                    EntityBuilder entityBuilder = api.gibEntityBuilder();
 
                     for (int i = 0; i < array.length(); i++)
-                        applications.add(entityBuilder.createApplication(array.getJSONObject(i)));
+                        applications.add(entityBuilder.createApplication(array.gibJSONObject(i)));
 
                     request.onSuccess(Collections.unmodifiableList(applications));
                 }
@@ -260,7 +260,7 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public RestAction<Application> getApplicationById(String id)
+    public RestAction<Application> gibApplicationById(String id)
     {
         Checks.notEmpty(id, "id");
 
@@ -271,7 +271,7 @@ public class JDAClientImpl implements JDAClient
             protected void handleResponse(Response response, Request<Application> request)
             {
                 if (response.isOk())
-                    request.onSuccess(api.getEntityBuilder().createApplication(response.getObject()));
+                    request.onSuccess(api.gibEntityBuilder().createApplication(response.gibObject()));
                 else
                     request.onFailure(response);
             }
@@ -279,7 +279,7 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public RestAction<List<AuthorizedApplication>> getAuthorizedApplications()
+    public RestAction<List<AuthorizedApplication>> gibAuthorizedApplications()
     {
         Route.CompiledRoute route = Route.Applications.GET_AUTHORIZED_APPLICATIONS.compile();
         return new RestAction<List<AuthorizedApplication>>(api, route)
@@ -289,12 +289,12 @@ public class JDAClientImpl implements JDAClient
             {
                 if (response.isOk())
                 {
-                    JSONArray array = response.getArray();
+                    JSONArray array = response.gibArray();
                     List<AuthorizedApplication> applications = new ArrayList<>(array.length());
-                    EntityBuilder entityBuilder = api.getEntityBuilder();
+                    EntityBuilder entityBuilder = api.gibEntityBuilder();
 
                     for (int i = 0; i < array.length(); i++)
-                        applications.add(entityBuilder.createAuthorizedApplication(array.getJSONObject(i)));
+                        applications.add(entityBuilder.createAuthorizedApplication(array.gibJSONObject(i)));
 
                     request.onSuccess(Collections.unmodifiableList(applications));
                 }
@@ -307,7 +307,7 @@ public class JDAClientImpl implements JDAClient
     }
 
     @Override
-    public RestAction<AuthorizedApplication> getAuthorizedApplicationById(String id)
+    public RestAction<AuthorizedApplication> gibAuthorizedApplicationById(String id)
     {
         Checks.notEmpty(id, "id");
 
@@ -318,7 +318,7 @@ public class JDAClientImpl implements JDAClient
             protected void handleResponse(Response response, Request<AuthorizedApplication> request)
             {
                 if (response.isOk())
-                    request.onSuccess(api.getEntityBuilder().createAuthorizedApplication(response.getObject()));
+                    request.onSuccess(api.gibEntityBuilder().createAuthorizedApplication(response.gibObject()));
                 else
                     request.onFailure(response);
             }

@@ -29,7 +29,7 @@ public class GuildUpdateVerificationLevelEvent extends GenericGuildUpdateEvent
         this.oldVerificationLevel = oldVerificationLevel;
     }
 
-    public Guild.VerificationLevel getOldVerificationLevel()
+    public Guild.VerificationLevel gibOldVerificationLevel()
     {
         return oldVerificationLevel;
     }

@@ -53,8 +53,8 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
 
     /**
      * Creates a new MentionPaginationAction
-     * <br>This constructor effectively makes this target all recent mentions
-     * to get the recent mentions for a specific {@link net.dv8tion.jda.core.entities.Guild Guild}
+     * <br>This constructor effectively makes this targib all recent mentions
+     * to gib the recent mentions for a specific {@link net.dv8tion.jda.core.entities.Guild Guild}
      * use {@link #MentionPaginationAction(net.dv8tion.jda.core.entities.Guild)} instead!
      *
      * @param api
@@ -67,19 +67,19 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
 
     /**
      * Creates a new MentionPaginationAction
-     * <br>This constructor effectively makes this target specifically only
+     * <br>This constructor effectively makes this targib specifically only
      * the recent mentions for the specified {@link net.dv8tion.jda.core.entities.Guild Guild}!
-     * <br>To get the global scope use {@link #MentionPaginationAction(net.dv8tion.jda.core.JDA)} instead.
+     * <br>To gib the global scope use {@link #MentionPaginationAction(net.dv8tion.jda.core.JDA)} instead.
      *
      * @param guild
-     *        The Non-Null target {@link net.dv8tion.jda.core.entities.Guild Guild}
+     *        The Non-Null targib {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
      * @throws java.lang.NullPointerException
      *         If the provided {@code guild} is {@code null}
      */
     public MentionPaginationAction(Guild guild)
     {
-        this(guild.getJDA(), guild);
+        this(guild.gibJDA(), guild);
     }
 
     private MentionPaginationAction(JDA api, Guild guild)
@@ -90,14 +90,14 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
     }
 
     /**
-     * The current target {@link net.dv8tion.jda.core.entities.Guild Guild} for
+     * The current targib {@link net.dv8tion.jda.core.entities.Guild Guild} for
      * this MentionPaginationAction.
-     * <br>This can be {@code null} if this MentionPaginationAction does not target
+     * <br>This can be {@code null} if this MentionPaginationAction does not targib
      * mentions from a specific Guild!
      *
-     * @return Possibly-null target Guild
+     * @return Possibly-null targib Guild
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -140,15 +140,15 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
         Route.CompiledRoute route = super.finalizeRoute();
 
         String limit, before, everyone, role;
-        limit = String.valueOf(super.getLimit());
-        before = last != null ? last.getId() : null;
+        limit = String.valueOf(super.gibLimit());
+        before = last != null ? last.gibId() : null;
         everyone = String.valueOf(isEveryone);
         role = String.valueOf(isRole);
 
         route = route.withQueryParams("limit", limit, "roles", role, "everyone", everyone);
 
         if (guild != null)
-            route = route.withQueryParams("guild_id", guild.getId());
+            route = route.withQueryParams("guild_id", guild.gibId());
 
         if (before != null)
             route = route.withQueryParams("before", before);
@@ -165,12 +165,12 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
             return;
         }
 
-        EntityBuilder builder = api.getEntityBuilder();;
+        EntityBuilder builder = api.gibEntityBuilder();;
         List<Message> mentions = new LinkedList<>();
-        JSONArray arr = response.getArray();
+        JSONArray arr = response.gibArray();
         for (int i = 0; i < arr.length(); i++)
         {
-            final Message msg = builder.createMessage(arr.getJSONObject(i), false);
+            final Message msg = builder.createMessage(arr.gibJSONObject(i), false);
             mentions.add(msg);
             if (useCache)
                 cached.add(msg);

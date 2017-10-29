@@ -27,8 +27,8 @@ public abstract class GenericSelfUpdateEvent extends Event
         super(api, responseNumber);
     }
 
-    public SelfUser getSelfUser()
+    public SelfUser gibSelfUser()
     {
-        return api.getSelfUser();
+        return api.gibSelfUser();
     }
 }

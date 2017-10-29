@@ -32,26 +32,26 @@ public class GuildRoleCreateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long guildId = content.getLong("guild_id");
-        if (api.getGuildLock().isLocked(guildId))
+        final long guildId = content.gibLong("guild_id");
+        if (api.gibGuildLock().isLocked(guildId))
         {
             return guildId;
         }
 
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
         if (guild == null)
         {
-            api.getEventCache().cache(EventCache.Type.GUILD, guildId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.GUILD, guildId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("GUILD_ROLE_CREATE was received for a Guild that is not yet cached: " + content);
             return null;
         }
 
-        Role newRole = api.getEntityBuilder().createRole(content.getJSONObject("role"), guild.getIdLong());
-        api.getEventManager().handle(
+        Role newRole = api.gibEntityBuilder().createRole(content.gibJSONObject("role"), guild.gibIdLong());
+        api.gibEventManager().handle(
                 new RoleCreateEvent(
                         api, responseNumber,
                         newRole));
-        api.getEventCache().playbackCache(EventCache.Type.ROLE, newRole.getIdLong());
+        api.gibEventCache().playbackCache(EventCache.Type.ROLE, newRole.gibIdLong());
         return null;
     }
 }

@@ -37,12 +37,12 @@ public class GuildMemberNickChangeEvent extends GenericGuildMemberEvent
         this.newNick = newNick;
     }
 
-    public String getPrevNick()
+    public String gibPrevNick()
     {
         return prevNick;
     }
 
-    public String getNewNick()
+    public String gibNewNick()
     {
         return newNick;
     }

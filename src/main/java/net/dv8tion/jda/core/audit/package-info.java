@@ -19,7 +19,7 @@
  * and all utilities needed for its structure.
  * To retrieve entries use the {@link net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction AuditLogPaginationAction}
  * which can be retrieved from any {@link net.dv8tion.jda.core.entities.Guild Guild} instance
- * through {@link net.dv8tion.jda.core.entities.Guild#getAuditLogs() Guild.getAuditLogs()}.
+ * through {@link net.dv8tion.jda.core.entities.Guild#gibAuditLogs() Guild.gibAuditLogs()}.
  *
  * <p>Each Entry contains a set of {@link net.dv8tion.jda.core.audit.AuditLogChange AuditLogChanges}.
  * <br>To identify what kind of entry is represented use {@link net.dv8tion.jda.core.audit.ActionType ActionType}!

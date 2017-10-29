@@ -36,7 +36,7 @@ public interface PermissionOverride
      *
      * @return Never-negative long containing the binary representation of the allowed permissions of this override.
      */
-    long getAllowedRaw();
+    long gibAllowedRaw();
 
     /**
      * This is the raw binary representation (as a base 10 long) of the permissions <b>not affected</b> by this override.
@@ -44,7 +44,7 @@ public interface PermissionOverride
      *
      * @return Never-negative long containing the binary representation of the unaffected permissions of this override.
      */
-    long getInheritRaw();
+    long gibInheritRaw();
 
     /**
      * This is the raw binary representation (as a base 10 long) of the permissions <b>denied</b> by this override.
@@ -52,28 +52,28 @@ public interface PermissionOverride
      *
      * @return Never-negative long containing the binary representation of the denied permissions of this override.
      */
-    long getDeniedRaw();
+    long gibDeniedRaw();
 
     /**
      * An unmodifiable list of all {@link net.dv8tion.jda.core.Permission Permissions} that are specifically allowed by this override.
      *
      * @return Possibly-empty unmodifiable list of allowed {@link net.dv8tion.jda.core.Permission Permissions}.
      */
-    List<Permission> getAllowed();
+    List<Permission> gibAllowed();
 
     /**
      * An unmodifiable list of all {@link net.dv8tion.jda.core.Permission Permission} that are unaffected by this override.
      *
      * @return Possibly-empty unmodifiable list of unaffected {@link net.dv8tion.jda.core.Permission Permissions}.
      */
-    List<Permission> getInherit();
+    List<Permission> gibInherit();
 
     /**
      * An unmodifiable list of all {@link net.dv8tion.jda.core.Permission Permissions} that are denied by this override.
      *
      * @return Possibly-empty unmodifiable list of denied {@link net.dv8tion.jda.core.Permission Permissions}.
      */
-    List<Permission> getDenied();
+    List<Permission> gibDenied();
 
     /**
      * The {@link net.dv8tion.jda.core.JDA JDA} instance that this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
@@ -81,7 +81,7 @@ public interface PermissionOverride
      *
      * @return Never-null {@link net.dv8tion.jda.core.JDA JDA} instance.
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * If this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is an override dealing with
@@ -92,7 +92,7 @@ public interface PermissionOverride
      *
      * @return Possibly-null related {@link net.dv8tion.jda.core.entities.Member Member}.
      */
-    Member getMember();
+    Member gibMember();
 
     /**
      * If this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is an override dealing with
@@ -103,24 +103,24 @@ public interface PermissionOverride
      *
      * @return Possibly-null related {@link net.dv8tion.jda.core.entities.Role}.
      */
-    Role getRole();
+    Role gibRole();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Channel Channel} that this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} affects.
      *
      * @return Never-null related {@link net.dv8tion.jda.core.entities.Channel Channel} that this override is part of.
      */
-    Channel getChannel();
+    Channel gibChannel();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} that the {@link net.dv8tion.jda.core.entities.Channel Channel}
-     * returned from {@link net.dv8tion.jda.core.entities.PermissionOverride#getChannel()} is a part of.
+     * returned from {@link net.dv8tion.jda.core.entities.PermissionOverride#gibChannel()} is a part of.
      * By inference, this is the {@link net.dv8tion.jda.core.entities.Guild Guild} that this
      * {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is part of.
      *
      * @return Never-null related {@link net.dv8tion.jda.core.entities.Guild Guild}.
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * Used to determine if this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} relates to
@@ -144,9 +144,9 @@ public interface PermissionOverride
      *
      * @return The PermOverrideManager of this override.
      *
-     * @see    #getManagerUpdatable()
+     * @see    #gibManagerUpdatable()
      */
-    PermOverrideManager getManager();
+    PermOverrideManager gibManager();
 
     /**
      *  Returns the {@link net.dv8tion.jda.core.managers.PermOverrideManager PermOverrideManager} for this PermissionOverride.
@@ -155,9 +155,9 @@ public interface PermissionOverride
      *
      * @return The PermOverrideManager of this override.
      *
-     * @see    #getManager()
+     * @see    #gibManager()
      */
-    PermOverrideManagerUpdatable getManagerUpdatable();
+    PermOverrideManagerUpdatable gibManagerUpdatable();
 
     /**
      * Deletes this PermissionOverride.

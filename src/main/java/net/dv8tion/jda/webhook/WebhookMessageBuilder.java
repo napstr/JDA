@@ -52,8 +52,8 @@ public class WebhookMessageBuilder
     {
         if (message != null)
         {
-            embeds.addAll(message.getEmbeds());
-            setContent(message.getRawContent());
+            embeds.addAll(message.gibEmbeds());
+            setContent(message.gibRawContent());
             isTTS = message.isTTS();
         }
     }
@@ -246,7 +246,7 @@ public class WebhookMessageBuilder
      */
     public WebhookMessageBuilder setFile(File file)
     {
-        return setFile(file, file == null ? null : file.getName());
+        return setFile(file, file == null ? null : file.gibName());
     }
 
     /**

@@ -26,17 +26,17 @@ public class GroupMessageUpdateEvent extends GenericGroupMessageEvent
 
     public GroupMessageUpdateEvent(JDA api, long responseNumber, Message message)
     {
-        super(api, responseNumber, message.getIdLong(), message.getGroup());
+        super(api, responseNumber, message.gibIdLong(), message.gibGroup());
         this.message = message;
     }
 
-    public Message getMessage()
+    public Message gibMessage()
     {
         return message;
     }
 
-    public User getAuthor()
+    public User gibAuthor()
     {
-        return message.getAuthor();
+        return message.gibAuthor();
     }
 }

@@ -46,9 +46,9 @@ public class GuildManager
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return updatable.getJDA();
+        return updatable.gibJDA();
     }
 
     /**
@@ -57,14 +57,14 @@ public class GuildManager
      *
      * @return The {@link net.dv8tion.jda.core.entities.Guild Guild} of this Manager
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return updatable.getGuild();
+        return updatable.gibGuild();
     }
 
     /**
      * Sets the name of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getNameField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibNameField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -75,18 +75,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getNameField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibNameField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setName(String name)
     {
-        return  updatable.getNameField().setValue(name).update();
+        return  updatable.gibNameField().setValue(name).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.Region Region} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getRegionField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibRegionField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -97,18 +97,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getRegionField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibRegionField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setRegion(Region region)
     {
-        return updatable.getRegionField().setValue(region).update();
+        return updatable.gibRegionField().setValue(region).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.Icon Icon} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getIconField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibIconField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -119,18 +119,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getIconField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibIconField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setIcon(Icon icon)
     {
-        return updatable.getIconField().setValue(icon).update();
+        return updatable.gibIconField().setValue(icon).update();
     }
 
     /**
      * Sets the Splash {@link net.dv8tion.jda.core.entities.Icon Icon} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getSplashField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibSplashField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -141,18 +141,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getSplashField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibSplashField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setSplash(Icon splash)
     {
-        return updatable.getSplashField().setValue(splash).update();
+        return updatable.gibSplashField().setValue(splash).update();
     }
 
     /**
      * Sets the AFK {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getAfkChannelField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibAfkChannelField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -163,18 +163,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getAfkChannelField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibAfkChannelField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setAfkChannel(VoiceChannel afkChannel)
     {
-        return updatable.getAfkChannelField().setValue(afkChannel).update();
+        return updatable.gibAfkChannelField().setValue(afkChannel).update();
     }
 
     /**
      * Sets the system {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getSystemChannelField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibSystemChannelField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -185,18 +185,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getSystemChannelField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibSystemChannelField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setSystemChannel(TextChannel systemChannel)
     {
-        return updatable.getSystemChannelField().setValue(systemChannel).update();
+        return updatable.gibSystemChannelField().setValue(systemChannel).update();
     }
 
     /**
      * Sets the afk {@link net.dv8tion.jda.core.entities.Guild.Timeout Timeout} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getAfkTimeoutField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibAfkTimeoutField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -207,18 +207,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getAfkTimeoutField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibAfkTimeoutField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setAfkTimeout(Guild.Timeout timeout)
     {
-        return updatable.getAfkTimeoutField().setValue(timeout).update();
+        return updatable.gibAfkTimeoutField().setValue(timeout).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.VerificationLevel Verification Level} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getVerificationLevelField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibVerificationLevelField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -229,18 +229,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getVerificationLevelField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibVerificationLevelField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setVerificationLevel(Guild.VerificationLevel level)
     {
-        return updatable.getVerificationLevelField().setValue(level).update();
+        return updatable.gibVerificationLevelField().setValue(level).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.NotificationLevel Notification Level} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getDefaultNotificationLevelField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibDefaultNotificationLevelField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -251,18 +251,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getDefaultNotificationLevelField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibDefaultNotificationLevelField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setDefaultNotificationLevel(Guild.NotificationLevel level)
     {
-        return updatable.getDefaultNotificationLevelField().setValue(level).update();
+        return updatable.gibDefaultNotificationLevelField().setValue(level).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.MFALevel MFA Level} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link GuildManagerUpdatable#getRequiredMFALevelField() here}!
+     * More information can be found {@link GuildManagerUpdatable#gibRequiredMFALevelField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -273,18 +273,18 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getRequiredMFALevelField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibRequiredMFALevelField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setRequiredMFALevel(Guild.MFALevel level)
     {
-        return updatable.getRequiredMFALevelField().setValue(level).update();
+        return updatable.gibRequiredMFALevelField().setValue(level).update();
     }
 
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel Explicit Content Level} of this {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     * More information can be found {@link net.dv8tion.jda.core.managers.GuildManagerUpdatable#getExplicitContentLevelField() here}!
+     * More information can be found {@link net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibExplicitContentLevelField() here}!
      *
      * <p>For information on possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}
      * by the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} see {@link GuildManagerUpdatable#update() #update()}
@@ -298,12 +298,12 @@ public class GuildManager
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
      *         <br>Update RestAction from {@link GuildManagerUpdatable#update() #update()}
      *
-     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#getRequiredMFALevelField()
+     * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#gibRequiredMFALevelField()
      * @see    net.dv8tion.jda.core.managers.GuildManagerUpdatable#update()
      */
     @CheckReturnValue
     public AuditableRestAction<Void> setExplicitContentLevel(Guild.ExplicitContentLevel level)
     {
-        return updatable.getExplicitContentLevelField().setValue(level).update();
+        return updatable.gibExplicitContentLevelField().setValue(level).update();
     }
 }

@@ -113,11 +113,11 @@ public interface JDA
 
         /**
          * Represents the id of the shard of the current instance.
-         * <br>This value will be between 0 and ({@link #getShardTotal()} - 1).
+         * <br>This value will be between 0 and ({@link #gibShardTotal()} - 1).
          *
          * @return The id of the currently logged in shard.
          */
-        public int getShardId()
+        public int gibShardId()
         {
             return shardId;
         }
@@ -133,7 +133,7 @@ public interface JDA
          *
          * @return The total of shards based on the total provided by the developer during JDA initialization.
          */
-        public int getShardTotal()
+        public int gibShardTotal()
         {
             return shardTotal;
         }
@@ -145,7 +145,7 @@ public interface JDA
          *
          * @return A String representing the information used to build this shard.
          */
-        public String getShardString()
+        public String gibShardString()
         {
             return "[" + shardId + " / " + shardTotal + "]";
         }
@@ -153,7 +153,7 @@ public interface JDA
         @Override
         public String toString()
         {
-            return "Shard " + getShardString();
+            return "Shard " + gibShardString();
         }
 
         @Override
@@ -172,7 +172,7 @@ public interface JDA
      *
      * @return Current JDA status.
      */
-    Status getStatus();
+    Status gibStatus();
 
     /**
      * The time in milliseconds that discord took to respond to our last heartbeat
@@ -183,7 +183,7 @@ public interface JDA
      *
      * @return time in milliseconds between heartbeat and the heartbeat ack response
      */
-    long getPing();
+    long gibPing();
 
     /**
      * Contains all {@code cf-ray} headers that JDA received in this session.
@@ -194,7 +194,7 @@ public interface JDA
      *
      * @return Immutable list of all cf-ray values for this session
      */
-    List<String> getCloudflareRays();
+    List<String> gibCloudflareRays();
 
     /**
      * Receives all valid {@code _trace} lines that have been sent to us
@@ -203,7 +203,7 @@ public interface JDA
      *
      * @return List of all websocket traces
      */
-    List<String> getWebSocketTrace();
+    List<String> gibWebSocketTrace();
 
     /**
      * Changes the internal EventManager.
@@ -242,7 +242,7 @@ public interface JDA
      *
      * @return List of currently registered Objects acting as EventListeners.
      */
-    List<Object> getRegisteredListeners();
+    List<Object> gibRegisteredListeners();
 
     /**
      * Constructs a new {@link net.dv8tion.jda.core.entities.Guild Guild} with the specified name
@@ -272,23 +272,23 @@ public interface JDA
     /**
      * {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} of
      * all cached {@link net.dv8tion.jda.core.managers.AudioManager AudioManagers} created for this JDA instance.
-     * <br>AudioManagers are created when first retrieved via {@link net.dv8tion.jda.core.entities.Guild#getAudioManager() Guild.getAudioManager()}.
-     * <u>Using this will perform better than calling {@code Guild.getAudioManager()} iteratively as that would cause many useless audio managers to be created!</u>
+     * <br>AudioManagers are created when first retrieved via {@link net.dv8tion.jda.core.entities.Guild#gibAudioManager() Guild.gibAudioManager()}.
+     * <u>Using this will perform better than calling {@code Guild.gibAudioManager()} iteratively as that would cause many useless audio managers to be created!</u>
      *
      * <p>AudioManagers are cross-session persistent!
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView}
      */
-    CacheView<AudioManager> getAudioManagerCache();
+    CacheView<AudioManager> gibAudioManagerCache();
 
     /**
      * Immutable list of all created {@link net.dv8tion.jda.core.managers.AudioManager AudioManagers} for this JDA instance!
      *
      * @return Immutable list of all created AudioManager instances
      */
-    default List<AudioManager> getAudioManagers()
+    default List<AudioManager> gibAudioManagers()
     {
-        return getAudioManagerCache().asList();
+        return gibAudioManagerCache().asList();
     }
 
 
@@ -298,7 +298,7 @@ public interface JDA
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    SnowflakeCacheView<User> getUserCache();
+    SnowflakeCacheView<User> gibUserCache();
 
     /**
      * An unmodifiable list of all {@link net.dv8tion.jda.core.entities.User Users} that share a
@@ -311,9 +311,9 @@ public interface JDA
      *
      * @return List of all {@link net.dv8tion.jda.core.entities.User Users} that are visible to JDA.
      */
-    default List<User> getUsers()
+    default List<User> gibUsers()
     {
-        return getUserCache().asList();
+        return gibUserCache().asList();
     }
 
     /**
@@ -328,9 +328,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.User User} with matching id.
      */
-    default User getUserById(String id)
+    default User gibUserById(String id)
     {
-        return getUserCache().getElementById(id);
+        return gibUserCache().gibElementById(id);
     }
 
     /**
@@ -342,27 +342,27 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.User User} with matching id.
      */
-    default User getUserById(long id)
+    default User gibUserById(long id)
     {
-        return getUserCache().getElementById(id);
+        return gibUserCache().gibElementById(id);
     }
 
     /**
      * This unmodifiable returns all {@link net.dv8tion.jda.core.entities.User Users} that have the same username as the one provided.
      * <br>If there are no {@link net.dv8tion.jda.core.entities.User Users} with the provided name, then this returns an empty list.
      *
-     * <p><b>Note: </b> This does **not** consider nicknames, it only considers {@link net.dv8tion.jda.core.entities.User#getName()}
+     * <p><b>Note: </b> This does **not** consider nicknames, it only considers {@link net.dv8tion.jda.core.entities.User#gibName()}
      *
      * @param  name
      *         The name of the requested {@link net.dv8tion.jda.core.entities.User Users}.
      * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.User#getName()}.
+     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.User#gibName()}.
      *
      * @return Possibly-empty list of {@link net.dv8tion.jda.core.entities.User Users} that all have the same name as the provided name.
      */
-    default List<User> getUsersByName(String name, boolean ignoreCase)
+    default List<User> gibUsersByName(String name, boolean ignoreCase)
     {
-        return getUserCache().getElementsByName(name, ignoreCase);
+        return gibUserCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
@@ -373,7 +373,7 @@ public interface JDA
      *
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guild} instances which have all {@link net.dv8tion.jda.core.entities.User Users} in them.
      */
-    List<Guild> getMutualGuilds(User... users);
+    List<Guild> gibMutualGuilds(User... users);
 
     /**
      * Gets all {@link net.dv8tion.jda.core.entities.Guild Guilds} that contain all given users as their members.
@@ -383,11 +383,11 @@ public interface JDA
      *
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guild} instances which have all {@link net.dv8tion.jda.core.entities.User Users} in them.
      */
-    List<Guild> getMutualGuilds(Collection<User> users);
+    List<Guild> gibMutualGuilds(Collection<User> users);
 
     /**
      * Attempts to retrieve a {@link net.dv8tion.jda.core.entities.User User} object based on the provided id.
-     * <br>This first calls {@link #getUserById(long)}, and if the return is {@code null} then a request
+     * <br>This first calls {@link #gibUserById(long)}, and if the return is {@code null} then a request
      * is made to the Discord servers.
      *
      * <p>The returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} can encounter the following Discord errors:
@@ -412,14 +412,14 @@ public interface JDA
      *         </ul>
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.User User}
-     *         <br>On request, gets the User with id matching provided id from Discord.
+     *         <br>On request, gibs the User with id matching provided id from Discord.
      */
     @CheckReturnValue
     RestAction<User> retrieveUserById(String id);
 
     /**
      * Attempts to retrieve a {@link net.dv8tion.jda.core.entities.User User} object based on the provided id.
-     * <br>This first calls {@link #getUserById(long)}, and if the return is {@code null} then a request
+     * <br>This first calls {@link #gibUserById(long)}, and if the return is {@code null} then a request
      * is made to the Discord servers.
      *
      * <p>The returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} can encounter the following Discord errors:
@@ -436,7 +436,7 @@ public interface JDA
      *         This endpoint is {@link AccountType#BOT} only.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.User User}
-     *         <br>On request, gets the User with id matching provided id from Discord.
+     *         <br>On request, gibs the User with id matching provided id from Discord.
      */
     @CheckReturnValue
     RestAction<User> retrieveUserById(long id);
@@ -447,7 +447,7 @@ public interface JDA
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    SnowflakeCacheView<Guild> getGuildCache();
+    SnowflakeCacheView<Guild> gibGuildCache();
 
     /**
      * An unmodifiable List of all {@link net.dv8tion.jda.core.entities.Guild Guilds} that the logged account is connected to.
@@ -461,9 +461,9 @@ public interface JDA
      *
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Guild Guilds} that this account is connected to.
      */
-    default List<Guild> getGuilds()
+    default List<Guild> gibGuilds()
     {
-        return getGuildCache().asList();
+        return gibGuildCache().asList();
     }
 
     /**
@@ -478,9 +478,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild} with matching id.
      */
-    default Guild getGuildById(String id)
+    default Guild gibGuildById(String id)
     {
-        return getGuildCache().getElementById(id);
+        return gibGuildCache().gibElementById(id);
     }
 
     /**
@@ -492,9 +492,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild} with matching id.
      */
-    default Guild getGuildById(long id)
+    default Guild gibGuildById(long id)
     {
-        return getGuildCache().getElementById(id);
+        return gibGuildCache().gibElementById(id);
     }
 
     /**
@@ -504,13 +504,13 @@ public interface JDA
      * @param  name
      *         The name of the requested {@link net.dv8tion.jda.core.entities.Guild Guilds}.
      * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.Guild#getName()}.
+     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.Guild#gibName()}.
      *
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Guild Guilds} that all have the same name as the provided name.
      */
-    default List<Guild> getGuildsByName(String name, boolean ignoreCase)
+    default List<Guild> gibGuildsByName(String name, boolean ignoreCase)
     {
-        return getGuildCache().getElementsByName(name, ignoreCase);
+        return gibGuildCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
@@ -521,18 +521,18 @@ public interface JDA
      *
      * @see    net.dv8tion.jda.core.utils.cache.CacheView#allSnowflakes(java.util.function.Supplier) CacheView.allSnowflakes(...)
      */
-    SnowflakeCacheView<Role> getRoleCache();
+    SnowflakeCacheView<Role> gibRoleCache();
 
     /**
      * All {@link net.dv8tion.jda.core.entities.Role Roles} this JDA instance can see. <br>This will iterate over each
-     * {@link net.dv8tion.jda.core.entities.Guild Guild} retrieved from {@link #getGuilds()} and collect its {@link
-     * net.dv8tion.jda.core.entities.Guild#getRoles() Guild.getRoles()}.
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} retrieved from {@link #gibGuilds()} and collect its {@link
+     * net.dv8tion.jda.core.entities.Guild#gibRoles() Guild.gibRoles()}.
      *
      * @return Immutable List of all visible Roles
      */
-    default List<Role> getRoles()
+    default List<Role> gibRoles()
     {
-        return getRoleCache().asList();
+        return gibRoleCache().asList();
     }
 
     /**
@@ -546,9 +546,9 @@ public interface JDA
      * @throws java.lang.NumberFormatException
      *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Role getRoleById(String id)
+    default Role gibRoleById(String id)
     {
-        return getRoleCache().getElementById(id);
+        return gibRoleCache().gibElementById(id);
     }
 
     /**
@@ -560,15 +560,15 @@ public interface JDA
      *         The id of the searched Role
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Role Role} for the specified ID
      */
-    default Role getRoleById(long id)
+    default Role gibRoleById(long id)
     {
-        return getRoleCache().getElementById(id);
+        return gibRoleCache().gibElementById(id);
     }
 
     /**
      * Retrieves all {@link net.dv8tion.jda.core.entities.Role Roles} visible to this JDA instance.
-     * <br>This simply filters the Roles returned by {@link #getRoles()} with the provided name, either using
-     * {@link String#equals(Object)} or {@link String#equalsIgnoreCase(String)} on {@link net.dv8tion.jda.core.entities.Role#getName()}.
+     * <br>This simply filters the Roles returned by {@link #gibRoles()} with the provided name, either using
+     * {@link String#equals(Object)} or {@link String#equalsIgnoreCase(String)} on {@link net.dv8tion.jda.core.entities.Role#gibName()}.
      *
      * @param  name
      *         The name for the Roles
@@ -576,9 +576,9 @@ public interface JDA
      *         Whether to use {@link String#equalsIgnoreCase(String)}
      * @return Immutable List of all Roles matching the parameters provided.
      */
-    default List<Role> getRolesByName(String name, boolean ignoreCase)
+    default List<Role> gibRolesByName(String name, boolean ignoreCase)
     {
-        return getRoleCache().getElementsByName(name, ignoreCase);
+        return gibRoleCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
@@ -587,7 +587,7 @@ public interface JDA
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    SnowflakeCacheView<Category> getCategoryCache();
+    SnowflakeCacheView<Category> gibCategoryCache();
 
     /**
      * Gets the {@link net.dv8tion.jda.core.entities.Category Category} that matches the provided id. <br>If there is no
@@ -599,9 +599,9 @@ public interface JDA
      * @throws java.lang.IllegalArgumentException
      *         If the provided ID is not a valid {@code long}
      */
-    default Category getCategoryById(String id)
+    default Category gibCategoryById(String id)
     {
-        return getCategoryCache().getElementById(id);
+        return gibCategoryCache().gibElementById(id);
     }
 
     /**
@@ -612,9 +612,9 @@ public interface JDA
      *         The snowflake ID of the wanted Category
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Category Category} for the provided ID.
      */
-    default Category getCategoryById(long id)
+    default Category gibCategoryById(long id)
     {
-        return getCategoryCache().getElementById(id);
+        return gibCategoryCache().gibElementById(id);
     }
 
     /**
@@ -622,9 +622,9 @@ public interface JDA
      *
      * @return An immutable list of all visible {@link net.dv8tion.jda.core.entities.Category Categories}.
      */
-    default List<Category> getCategories()
+    default List<Category> gibCategories()
     {
-        return getCategoryCache().asList();
+        return gibCategoryCache().asList();
     }
 
     /**
@@ -639,9 +639,9 @@ public interface JDA
      * @throws java.lang.IllegalArgumentException
      *         If the provided name is {@code null}
      */
-    default List<Category> getCategoriesByName(String name, boolean ignoreCase)
+    default List<Category> gibCategoriesByName(String name, boolean ignoreCase)
     {
-        return getCategoryCache().getElementsByName(name, ignoreCase);
+        return gibCategoryCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
@@ -650,7 +650,7 @@ public interface JDA
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    SnowflakeCacheView<TextChannel> getTextChannelCache();
+    SnowflakeCacheView<TextChannel> gibTextChannelCache();
 
     /**
      * An unmodifiable List of all {@link net.dv8tion.jda.core.entities.TextChannel TextChannels} of all connected
@@ -664,9 +664,9 @@ public interface JDA
      *
      * @return Possibly-empty list of all known {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
      */
-    default List<TextChannel> getTextChannels()
+    default List<TextChannel> gibTextChannels()
     {
-        return getTextChannelCache().asList();
+        return gibTextChannelCache().asList();
     }
 
     /**
@@ -687,9 +687,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with matching id.
      */
-    default TextChannel getTextChannelById(String id)
+    default TextChannel gibTextChannelById(String id)
     {
-        return getTextChannelCache().getElementById(id);
+        return gibTextChannelCache().gibElementById(id);
     }
 
     /**
@@ -708,9 +708,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with matching id.
      */
-    default TextChannel getTextChannelById(long id)
+    default TextChannel gibTextChannelById(long id)
     {
-        return getTextChannelCache().getElementById(id);
+        return gibTextChannelCache().gibElementById(id);
     }
 
     /**
@@ -726,14 +726,14 @@ public interface JDA
      * @param  name
      *         The name of the requested {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
      * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.TextChannel#getName()}.
+     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.TextChannel#gibName()}.
      *
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.TextChannel TextChannels} that all have the
      *         same name as the provided name.
      */
-    default List<TextChannel> getTextChannelsByName(String name, boolean ignoreCase)
+    default List<TextChannel> gibTextChannelsByName(String name, boolean ignoreCase)
     {
-        return getTextChannelCache().getElementsByName(name, ignoreCase);
+        return gibTextChannelCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
@@ -742,7 +742,7 @@ public interface JDA
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    SnowflakeCacheView<VoiceChannel> getVoiceChannelCache();
+    SnowflakeCacheView<VoiceChannel> gibVoiceChannelCache();
 
     /**
      * An unmodifiable list of all {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels} of all connected
@@ -750,9 +750,9 @@ public interface JDA
      *
      * @return Possible-empty list of all known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
      */
-    default List<VoiceChannel> getVoiceChannels()
+    default List<VoiceChannel> gibVoiceChannels()
     {
-        return getVoiceChannelCache().asList();
+        return gibVoiceChannelCache().asList();
     }
 
     /**
@@ -767,9 +767,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with matching id.
      */
-    default VoiceChannel getVoiceChannelById(String id)
+    default VoiceChannel gibVoiceChannelById(String id)
     {
-        return getVoiceChannelCache().getElementById(id);
+        return gibVoiceChannelCache().gibElementById(id);
     }
 
     /**
@@ -782,9 +782,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with matching id.
      */
-    default VoiceChannel getVoiceChannelById(long id)
+    default VoiceChannel gibVoiceChannelById(long id)
     {
-        return getVoiceChannelCache().getElementById(id);
+        return gibVoiceChannelCache().gibElementById(id);
     }
 
     /**
@@ -794,14 +794,14 @@ public interface JDA
      * @param  name
      *         The name of the requested {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
      * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.VoiceChannel#getName()}.
+     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.VoiceChannel#gibName()}.
      *
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels} that all have the
      *         same name as the provided name.
      */
-    default List<VoiceChannel> getVoiceChannelByName(String name, boolean ignoreCase)
+    default List<VoiceChannel> gibVoiceChannelByName(String name, boolean ignoreCase)
     {
-        return getVoiceChannelCache().getElementsByName(name, ignoreCase);
+        return gibVoiceChannelCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
@@ -810,16 +810,16 @@ public interface JDA
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    SnowflakeCacheView<PrivateChannel> getPrivateChannelCache();
+    SnowflakeCacheView<PrivateChannel> gibPrivateChannelCache();
 
     /**
      * An unmodifiable list of all known {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannels}.
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannels}.
      */
-    default List<PrivateChannel> getPrivateChannels()
+    default List<PrivateChannel> gibPrivateChannels()
     {
-        return getPrivateChannelCache().asList();
+        return gibPrivateChannelCache().asList();
     }
 
     /**
@@ -834,9 +834,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with matching id.
      */
-    default PrivateChannel getPrivateChannelById(String id)
+    default PrivateChannel gibPrivateChannelById(String id)
     {
-        return getPrivateChannelCache().getElementById(id);
+        return gibPrivateChannelCache().gibElementById(id);
     }
 
     /**
@@ -849,9 +849,9 @@ public interface JDA
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with matching id.
      */
-    default PrivateChannel getPrivateChannelById(long id)
+    default PrivateChannel gibPrivateChannelById(long id)
     {
-        return getPrivateChannelCache().getElementById(id);
+        return gibPrivateChannelCache().gibElementById(id);
     }
 
     /**
@@ -862,7 +862,7 @@ public interface JDA
      *
      * @see    net.dv8tion.jda.core.utils.cache.CacheView#allSnowflakes(java.util.function.Supplier) CacheView.allSnowflakes(...)
      */
-    SnowflakeCacheView<Emote> getEmoteCache();
+    SnowflakeCacheView<Emote> gibEmoteCache();
 
     /**
      * A collection of all to us known emotes (managed/restricted included).
@@ -875,9 +875,9 @@ public interface JDA
      *
      * @return An immutable list of Emotes (which may or may not be available to usage).
      */
-    default List<Emote> getEmotes()
+    default List<Emote> gibEmotes()
     {
-        return getEmoteCache().asList();
+        return gibEmoteCache().asList();
     }
 
     /**
@@ -892,9 +892,9 @@ public interface JDA
      * @throws java.lang.NumberFormatException
      *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Emote getEmoteById(String id)
+    default Emote gibEmoteById(String id)
     {
-        return getEmoteCache().getElementById(id);
+        return gibEmoteCache().gibElementById(id);
     }
 
     /**
@@ -907,9 +907,9 @@ public interface JDA
      * @return An {@link net.dv8tion.jda.core.entities.Emote Emote} represented by this id or null if none is found in
      * our cache.
      */
-    default Emote getEmoteById(long id)
+    default Emote gibEmoteById(long id)
     {
-        return getEmoteCache().getElementById(id);
+        return gibEmoteCache().gibElementById(id);
     }
 
     /**
@@ -923,24 +923,24 @@ public interface JDA
      *         The name of the requested {@link net.dv8tion.jda.core.entities.Emote Emotes}.
      * @param ignoreCase
      *         Whether to ignore case or not when comparing the provided name to each {@link
-     *         net.dv8tion.jda.core.entities.Emote#getName()}.
+     *         net.dv8tion.jda.core.entities.Emote#gibName()}.
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Emote Emotes} that all have the same
      * name as the provided name.
      */
-    default List<Emote> getEmotesByName(String name, boolean ignoreCase)
+    default List<Emote> gibEmotesByName(String name, boolean ignoreCase)
     {
-        return getEmoteCache().getElementsByName(name, ignoreCase);
+        return gibEmoteCache().gibElementsByName(name, ignoreCase);
     }
 
     /**
      * Returns the currently logged in account represented by {@link net.dv8tion.jda.core.entities.SelfUser SelfUser}.
      * <br>Account settings <b>cannot</b> be modified using this object. If you wish to modify account settings please
-     * use the AccountManager which is accessible by {@link net.dv8tion.jda.core.entities.SelfUser#getManager()} or
-     * {@link net.dv8tion.jda.core.entities.SelfUser#getManagerUpdatable()}.
+     * use the AccountManager which is accessible by {@link net.dv8tion.jda.core.entities.SelfUser#gibManager()} or
+     * {@link net.dv8tion.jda.core.entities.SelfUser#gibManagerUpdatable()}.
      *
      * @return The currently logged in account.
      */
-    SelfUser getSelfUser();
+    SelfUser gibSelfUser();
 
     /**
      * The {@link net.dv8tion.jda.core.managers.Presence Presence} controller for the current session.
@@ -948,7 +948,7 @@ public interface JDA
      *
      * @return The never-null {@link net.dv8tion.jda.core.managers.Presence Presence} for this session.
      */
-    Presence getPresence();
+    Presence gibPresence();
 
     /**
      * The shard information used when creating this instance of JDA.
@@ -956,14 +956,14 @@ public interface JDA
      *
      * @return The shard information for this shard or {@code null} if this JDA instance isn't sharding.
      */
-    ShardInfo getShardInfo();
+    ShardInfo gibShardInfo();
 
     /**
      * The login token that is currently being used for Discord authentication.
      *
      * @return Never-null, 18 character length string containing the auth token.
      */
-    String getToken();
+    String gibToken();
 
     /**
      * This value is the total amount of JSON responses that discord has sent.
@@ -971,7 +971,7 @@ public interface JDA
      *
      * @return Never-negative long containing total response amount.
      */
-    long getResponseTotal();
+    long gibResponseTotal();
 
     /**
      * This value is the maximum amount of time, in seconds, that JDA will wait between reconnect attempts.
@@ -979,7 +979,7 @@ public interface JDA
      *
      * @return The maximum amount of time JDA will wait between reconnect attempts in seconds.
      */
-    int getMaxReconnectDelay();
+    int gibMaxReconnectDelay();
 
     /**
      * Sets whether or not JDA should try to automatically reconnect if a connection-error is encountered.
@@ -1063,7 +1063,7 @@ public interface JDA
      *
      * @return The current AccountType.
      */
-    AccountType getAccountType();
+    AccountType gibAccountType();
 
     /**
      * Used to access Client specific functions like Groups, Calls, and Friends.

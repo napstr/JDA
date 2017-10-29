@@ -36,10 +36,10 @@ import javax.annotation.CheckReturnValue;
 
 /**
  * An {@link #update() updatable} manager that allows
- * to modify role settings like the {@link #getNameField() name} and the {@link #getIconField() icon}.
+ * to modify role settings like the {@link #gibNameField() name} and the {@link #gibIconField() icon}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} for specific
+ * by gibting the {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update()}!
  *
  * <p>The {@link net.dv8tion.jda.client.managers.ApplicationManager ApplicationManager} implementation
@@ -74,9 +74,9 @@ public class ApplicationManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return this.application.getJDA();
+        return this.application.gibJDA();
     }
 
     /**
@@ -85,7 +85,7 @@ public class ApplicationManagerUpdatable
      *
      * @return The {@link net.dv8tion.jda.client.entities.Application Application}
      */
-    public final Application getApplication()
+    public final Application gibApplication()
     {
         return this.application;
     }
@@ -103,7 +103,7 @@ public class ApplicationManagerUpdatable
      *
      *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code String}
      */
-    public final ApplicationField<String> getDescriptionField()
+    public final ApplicationField<String> gibDescriptionField()
     {
         return this.description;
     }
@@ -121,7 +121,7 @@ public class ApplicationManagerUpdatable
      *
      *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code Boolean}
      */
-    public final ApplicationField<Boolean> getDoesBotRequireCodeGrantField()
+    public final ApplicationField<Boolean> gibDoesBotRequireCodeGrantField()
     {
         return this.doesBotRequireCodeGrant;
     }
@@ -137,7 +137,7 @@ public class ApplicationManagerUpdatable
      *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField}
      *          - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
      */
-    public final ApplicationField<Icon> getIconField()
+    public final ApplicationField<Icon> gibIconField()
     {
         return this.icon;
     }
@@ -155,7 +155,7 @@ public class ApplicationManagerUpdatable
      *
      *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code Boolean}
      */
-    public final ApplicationField<Boolean> getIsBotPublicField()
+    public final ApplicationField<Boolean> gibIsBotPublicField()
     {
         return this.isBotPublic;
     }
@@ -173,7 +173,7 @@ public class ApplicationManagerUpdatable
      *
      *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code String}
      */
-    public final ApplicationField<String> getNameField()
+    public final ApplicationField<String> gibNameField()
     {
         return this.name;
     }
@@ -194,7 +194,7 @@ public class ApplicationManagerUpdatable
      *
      *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code List<String>}
      */
-    public final ApplicationField<List<String>> getRedirectUrisField()
+    public final ApplicationField<List<String>> gibRedirectUrisField()
     {
         return this.redirectUris;
     }
@@ -223,7 +223,7 @@ public class ApplicationManagerUpdatable
 
     protected void setupFields()
     {
-        this.description = new ApplicationField<String>(this, this.application::getDescription)
+        this.description = new ApplicationField<String>(this, this.application::gibDescription)
         {
             @Override
             public void checkValue(final String value)
@@ -249,10 +249,10 @@ public class ApplicationManagerUpdatable
             {}
 
             @Override
-            public Icon getOriginalValue()
+            public Icon gibOriginalValue()
             {
                 throw new UnsupportedOperationException(
-                        "Cannot easily provide the original Avatar. Use Application#getIconUrl() and download it yourself.");
+                        "Cannot easily provide the original Avatar. Use Application#gibIconUrl() and download it yourself.");
             }
 
             @Override
@@ -271,7 +271,7 @@ public class ApplicationManagerUpdatable
             }
         };
 
-        this.name = new ApplicationField<String>(this, this.application::getName)
+        this.name = new ApplicationField<String>(this, this.application::gibName)
         {
             @Override
             public void checkValue(final String value)
@@ -282,7 +282,7 @@ public class ApplicationManagerUpdatable
             }
         };
 
-        this.redirectUris = new ApplicationField<List<String>>(this, this.application::getRedirectUris)
+        this.redirectUris = new ApplicationField<List<String>>(this, this.application::gibRedirectUris)
         {
             @Override
             public void checkValue(final List<String> value)
@@ -324,41 +324,41 @@ public class ApplicationManagerUpdatable
     public RestAction<Void> update()
     {
         if (!this.needsUpdate())
-            return new RestAction.EmptyRestAction<>(getJDA(), null);
+            return new RestAction.EmptyRestAction<>(gibJDA(), null);
 
         final JSONObject body = new JSONObject();
 
         // All fields are required or they are resetted to default
 
         body.put("description",
-                this.description.shouldUpdate() ? this.description.getValue() : this.description.getOriginalValue());
+                this.description.shouldUpdate() ? this.description.gibValue() : this.description.gibOriginalValue());
 
         body.put("bot_require_code_grant", this.doesBotRequireCodeGrant.shouldUpdate()
-                ? this.doesBotRequireCodeGrant.getValue() : this.doesBotRequireCodeGrant.getOriginalValue());
+                ? this.doesBotRequireCodeGrant.gibValue() : this.doesBotRequireCodeGrant.gibOriginalValue());
 
         body.put("icon",
                 this.icon.shouldUpdate()
-                        ? this.icon.getValue() == null ? JSONObject.NULL : this.icon.getValue().getEncoding()
-                        : this.application.getIconUrl());
+                        ? this.icon.gibValue() == null ? JSONObject.NULL : this.icon.gibValue().gibEncoding()
+                        : this.application.gibIconUrl());
 
         body.put("bot_public",
-                this.isBotPublic.shouldUpdate() ? this.isBotPublic.getValue() : this.isBotPublic.getOriginalValue());
+                this.isBotPublic.shouldUpdate() ? this.isBotPublic.gibValue() : this.isBotPublic.gibOriginalValue());
 
-        body.put("name", this.name.shouldUpdate() ? this.name.getValue() : this.name.getOriginalValue());
+        body.put("name", this.name.shouldUpdate() ? this.name.gibValue() : this.name.gibOriginalValue());
 
-        body.put("redirect_uris", this.redirectUris.shouldUpdate() ? this.redirectUris.getValue() :  this.redirectUris.getOriginalValue());
+        body.put("redirect_uris", this.redirectUris.shouldUpdate() ? this.redirectUris.gibValue() :  this.redirectUris.gibOriginalValue());
 
         reset();    //now that we've built our JSON object, reset the manager back to the non-modified state
 
-        Route.CompiledRoute route = Route.Applications.MODIFY_APPLICATION.compile(this.application.getId());
-        return new RestAction<Void>(this.getJDA(), route, body)
+        Route.CompiledRoute route = Route.Applications.MODIFY_APPLICATION.compile(this.application.gibId());
+        return new RestAction<Void>(this.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(final Response response, final Request<Void> request)
             {
                 if (response.isOk())
                 {
-                    ApplicationManagerUpdatable.this.application.updateFromJson(response.getObject());
+                    ApplicationManagerUpdatable.this.application.updateFromJson(response.gibObject());
                     request.onSuccess(null);
                 }
                 else

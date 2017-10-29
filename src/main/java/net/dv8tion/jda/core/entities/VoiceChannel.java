@@ -31,7 +31,7 @@ public interface VoiceChannel extends Channel, AudioChannel, Comparable<VoiceCha
      *
      * @return The maximum amount of members allowed in this channel at once.
      */
-    int getUserLimit();
+    int gibUserLimit();
 
     /**
      * The audio bitrate of the voice audio that is transmitted in this channel. While higher bitrates can be sent to
@@ -40,5 +40,5 @@ public interface VoiceChannel extends Channel, AudioChannel, Comparable<VoiceCha
      *
      * @return The audio bitrate of this voice channel.
      */
-    int getBitrate();
+    int gibBitrate();
 }

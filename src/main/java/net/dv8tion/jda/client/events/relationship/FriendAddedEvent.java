@@ -27,7 +27,7 @@ public class FriendAddedEvent extends GenericRelationshipAddEvent
         super(api, responseNumber, relationship);
     }
 
-    public Friend getFriend()
+    public Friend gibFriend()
     {
         return (Friend) relationship;
     }

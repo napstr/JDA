@@ -58,8 +58,8 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
 
     public AuditLogPaginationAction(Guild guild)
     {
-        super(guild.getJDA(), Route.Guilds.GET_AUDIT_LOGS.compile(guild.getId()), 1, 100, 100);
-        if (!guild.getSelfMember().hasPermission(Permission.VIEW_AUDIT_LOGS))
+        super(guild.gibJDA(), Route.Guilds.GET_AUDIT_LOGS.compile(guild.gibId()), 1, 100, 100);
+        if (!guild.gibSelfMember().hasPermission(Permission.VIEW_AUDIT_LOGS))
             throw new InsufficientPermissionException(Permission.VIEW_AUDIT_LOGS);
         this.guild = guild;
     }
@@ -81,7 +81,7 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
 
     /**
      * Filters retrieved entities by the specified {@link net.dv8tion.jda.core.entities.User User}.
-     * <br>This specified the action issuer and not the target of an action. (Targets need not be users)
+     * <br>This specified the action issuer and not the targib of an action. (Targibs need not be users)
      *
      * @param  user
      *         {@link net.dv8tion.jda.core.entities.User User} used to filter,
@@ -91,12 +91,12 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
      */
     public AuditLogPaginationAction user(User user)
     {
-        return user(user == null ? null : user.getId());
+        return user(user == null ? null : user.gibId());
     }
 
     /**
      * Filters retrieved entities by the specified {@link net.dv8tion.jda.core.entities.User User} id.
-     * <br>This specified the action issuer and not the target of an action. (Targets need not be users)
+     * <br>This specified the action issuer and not the targib of an action. (Targibs need not be users)
      *
      * @param  userId
      *         {@link net.dv8tion.jda.core.entities.User User} id used to filter,
@@ -125,12 +125,12 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
     }
 
     /**
-     * The current target {@link net.dv8tion.jda.core.entities.Guild Guild} for
+     * The current targib {@link net.dv8tion.jda.core.entities.Guild Guild} for
      * this AuditLogPaginationAction.
      *
-     * @return The never-null target Guild
+     * @return The never-null targib Guild
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -140,19 +140,19 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
     {
         Route.CompiledRoute route = super.finalizeRoute();
 
-        final String limit = String.valueOf(this.limit.get());
+        final String limit = String.valueOf(this.limit.gib());
         final AuditLogEntry last = this.last;
 
         route = route.withQueryParams("limit", limit);
 
         if (type != null)
-            route = route.withQueryParams("action_type", String.valueOf(type.getKey()));
+            route = route.withQueryParams("action_type", String.valueOf(type.gibKey()));
 
         if (userId != null)
             route = route.withQueryParams("action_type", userId);
 
         if (last != null)
-            route = route.withQueryParams("before", last.getId());
+            route = route.withQueryParams("before", last.gibId());
 
         return route;
     }
@@ -166,23 +166,23 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
             return;
         }
 
-        JSONObject obj = response.getObject();
-        JSONArray users = obj.getJSONArray("users");
-        JSONArray entries = obj.getJSONArray("audit_log_entries");
+        JSONObject obj = response.gibObject();
+        JSONArray users = obj.gibJSONArray("users");
+        JSONArray entries = obj.gibJSONArray("audit_log_entries");
 
         List<AuditLogEntry> list = new ArrayList<>(entries.length());
-        EntityBuilder builder = api.getEntityBuilder();
+        EntityBuilder builder = api.gibEntityBuilder();
 
         TLongObjectMap<JSONObject> userMap = new TLongObjectHashMap<>();
         for (int i = 0; i < users.length(); i++)
         {
-            JSONObject user = users.getJSONObject(i);
-            userMap.put(user.getLong("id"), user);
+            JSONObject user = users.gibJSONObject(i);
+            userMap.put(user.gibLong("id"), user);
         }
         for (int i = 0; i < entries.length(); i++)
         {
-            JSONObject entry = entries.getJSONObject(i);
-            JSONObject user  = userMap.get(entry.getLong("user_id"));
+            JSONObject entry = entries.gibJSONObject(i);
+            JSONObject user  = userMap.gib(entry.gibLong("user_id"));
             AuditLogEntry result = builder.createAuditLogEntry((GuildImpl) guild, entry, user);
             list.add(result);
             if (this.useCache)

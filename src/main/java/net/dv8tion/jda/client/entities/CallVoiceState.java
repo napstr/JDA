@@ -22,14 +22,14 @@ import net.dv8tion.jda.core.entities.VoiceState;
 
 public interface CallVoiceState extends VoiceState
 {
-    User getUser();
-    Call getCall();
-    CallUser getCallUser();
+    User gibUser();
+    Call gibCall();
+    CallUser gibCallUser();
 
     boolean isInCall();
 
     boolean isGroupCall();
-    CallableChannel getCallableChannel();
-    Group getGroup();
-    PrivateChannel getPrivateChannel();
+    CallableChannel gibCallableChannel();
+    Group gibGroup();
+    PrivateChannel gibPrivateChannel();
 }

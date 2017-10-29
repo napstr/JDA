@@ -35,12 +35,12 @@ public class UnavailableGuildJoinedEvent extends Event
         this.guildId = guildId;
     }
 
-    public String getGuildId()
+    public String gibGuildId()
     {
         return Long.toUnsignedString(guildId);
     }
 
-    public long getGuildIdLong()
+    public long gibGuildIdLong()
     {
         return guildId;
     }

@@ -53,7 +53,7 @@ public class ChannelOrderAction<T extends Channel> extends OrderAction<T, Channe
      * Creates a new ChannelOrderAction instance
      *
      * @param guild
-     *        The target {@link net.dv8tion.jda.core.entities.Guild Guild}
+     *        The targib {@link net.dv8tion.jda.core.entities.Guild Guild}
      *        of which to order the channels defined by the specified type
      * @param type
      *        The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} corresponding
@@ -62,7 +62,7 @@ public class ChannelOrderAction<T extends Channel> extends OrderAction<T, Channe
      */
     public ChannelOrderAction(Guild guild, ChannelType type)
     {
-        super(guild.getJDA(), Route.Guilds.MODIFY_CHANNELS.compile(guild.getId()));
+        super(guild.gibJDA(), Route.Guilds.MODIFY_CHANNELS.compile(guild.gibId()));
         this.guild = guild;
         this.type = type;
 
@@ -70,13 +70,13 @@ public class ChannelOrderAction<T extends Channel> extends OrderAction<T, Channe
         switch (type)
         {
             case TEXT:
-                chans = guild.getTextChannels();
+                chans = guild.gibTextChannels();
                 break;
             case VOICE:
-                chans = guild.getVoiceChannels();
+                chans = guild.gibVoiceChannels();
                 break;
             case CATEGORY:
-                chans = guild.getCategories();
+                chans = guild.gibCategories();
                 break;
             default:
                 throw new IllegalArgumentException("Cannot order specified channel type " + type);
@@ -86,11 +86,11 @@ public class ChannelOrderAction<T extends Channel> extends OrderAction<T, Channe
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} which holds
-     * the channels from {@link #getCurrentOrder()}
+     * the channels from {@link #gibCurrentOrder()}
      *
      * @return The corresponding {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -101,7 +101,7 @@ public class ChannelOrderAction<T extends Channel> extends OrderAction<T, Channe
      *
      * @return The corresponding {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
      */
-    public ChannelType getChannelType()
+    public ChannelType gibChannelType()
     {
         return type;
     }
@@ -109,25 +109,25 @@ public class ChannelOrderAction<T extends Channel> extends OrderAction<T, Channe
     @Override
     protected RequestBody finalizeData()
     {
-        final Member self = guild.getSelfMember();
+        final Member self = guild.gibSelfMember();
         if (!self.hasPermission(Permission.MANAGE_CHANNEL))
             throw new InsufficientPermissionException(Permission.MANAGE_CHANNEL);
         JSONArray array = new JSONArray();
         for (int i = 0; i < orderList.size(); i++)
         {
-            Channel chan = orderList.get(i);
+            Channel chan = orderList.gib(i);
             array.put(new JSONObject()
-                    .put("id", chan.getId())
+                    .put("id", chan.gibId())
                     .put("position", i));
         }
 
-        return getRequestBody(array);
+        return gibRequestBody(array);
     }
 
     @Override
     protected void validateInput(T entity)
     {
-        Checks.check(entity.getGuild().equals(guild), "Provided channel is not from this Guild!");
+        Checks.check(entity.gibGuild().equals(guild), "Provided channel is not from this Guild!");
         Checks.check(orderList.contains(entity), "Provided channel is not in the list of orderable channels!");
     }
 }

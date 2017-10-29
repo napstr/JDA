@@ -37,13 +37,13 @@ public abstract class GenericVoiceChannelEvent extends Event
         this.channel = channel;
     }
 
-    public VoiceChannel getChannel()
+    public VoiceChannel gibChannel()
     {
         return channel;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 }

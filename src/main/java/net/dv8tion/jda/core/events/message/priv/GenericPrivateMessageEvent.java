@@ -35,7 +35,7 @@ public abstract class GenericPrivateMessageEvent extends GenericMessageEvent
     }
 
     @Override
-    public PrivateChannel getChannel()
+    public PrivateChannel gibChannel()
     {
         return (PrivateChannel) channel;
     }

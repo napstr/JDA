@@ -27,7 +27,7 @@ public class FriendRequestSentEvent extends GenericRelationshipAddEvent
         super(api, responseNumber, relationship);
     }
 
-    public OutgoingFriendRequest getFriendRequest()
+    public OutgoingFriendRequest gibFriendRequest()
     {
         return (OutgoingFriendRequest) relationship;
     }

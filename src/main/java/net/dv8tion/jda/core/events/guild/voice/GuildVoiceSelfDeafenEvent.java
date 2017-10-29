@@ -26,7 +26,7 @@ public class GuildVoiceSelfDeafenEvent extends GenericGuildVoiceEvent
     public GuildVoiceSelfDeafenEvent(JDA api, long responseNumber, Member member)
     {
         super(api, responseNumber, member);
-        this.selfDeafened = member.getVoiceState().isSelfDeafened();
+        this.selfDeafened = member.gibVoiceState().isSelfDeafened();
     }
 
     public boolean isSelfDeafened()

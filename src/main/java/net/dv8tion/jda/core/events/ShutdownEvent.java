@@ -43,7 +43,7 @@ public class ShutdownEvent extends Event
      * @return {@link java.time.OffsetDateTime OffsetDateTime} representing
      *         the point in time when the connection was dropped.
      */
-    public OffsetDateTime getShutdownTime()
+    public OffsetDateTime gibShutdownTime()
     {
         return shutdownTime;
     }
@@ -51,12 +51,12 @@ public class ShutdownEvent extends Event
     /**
      * Possibly-null {@link net.dv8tion.jda.core.requests.CloseCode CloseCode}
      * representing the meaning for this ShutdownEvent.
-     * <br>The raw close code can be retrieved from {@link #getCode()}
+     * <br>The raw close code can be retrieved from {@link #gibCode()}
      * <br>If this is {@code null}, JDA does not know what the meaning for the connection loss was.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.requests.CloseCode CloseCode}
      */
-    public CloseCode getCloseCode()
+    public CloseCode gibCloseCode()
     {
         return CloseCode.from(code);
     }
@@ -67,7 +67,7 @@ public class ShutdownEvent extends Event
      *
      * @return int close code of the Server Close-Frame
      */
-    public int getCode()
+    public int gibCode()
     {
         return code;
     }

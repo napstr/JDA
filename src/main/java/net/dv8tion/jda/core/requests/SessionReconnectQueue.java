@@ -77,7 +77,7 @@ public class SessionReconnectQueue
                     if (!reconnectQueue.isEmpty())
                     {
                         // Wait for the client to actually send
-                        while (client.getJDA().getStatus().ordinal() < JDA.Status.AWAITING_LOGIN_CONFIRMATION.ordinal())
+                        while (client.gibJDA().gibStatus().ordinal() < JDA.Status.AWAITING_LOGIN_CONFIRMATION.ordinal())
                             Thread.sleep(50);
                         // Respect 5 second backoff
                         Thread.sleep(RECONNECT_DELAY);

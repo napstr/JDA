@@ -37,10 +37,10 @@ import javax.annotation.CheckReturnValue;
 
 /**
  * An {@link #update() updatable} manager that allows
- * to modify guild settings like the {@link #getNameField() name} or the {@link #getSplashField() splash}.
+ * to modify guild settings like the {@link #gibNameField() name} or the {@link #gibSplashField() splash}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} for specific
+ * by gibting the {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update()}!
  *
  * <p>The {@link net.dv8tion.jda.core.managers.GuildManager GuildManager} implementation
@@ -84,9 +84,9 @@ public class GuildManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return guild.getJDA();
+        return guild.gibJDA();
     }
 
     /**
@@ -95,7 +95,7 @@ public class GuildManagerUpdatable
      *
      * @return The {@link net.dv8tion.jda.core.entities.Guild Guild} of this Manager
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -116,7 +116,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@code String}
      */
-    public GuildField<String> getNameField()
+    public GuildField<String> gibNameField()
     {
         checkAvailable();
 
@@ -139,7 +139,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.Region Region}
      */
-    public GuildField<Region> getRegionField()
+    public GuildField<Region> gibRegionField()
     {
         checkAvailable();
 
@@ -159,7 +159,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
      */
-    public GuildField<Icon> getIconField()
+    public GuildField<Icon> gibIconField()
     {
         checkAvailable();
 
@@ -179,7 +179,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
      */
-    public GuildField<Icon> getSplashField()
+    public GuildField<Icon> gibSplashField()
     {
         checkAvailable();
 
@@ -203,7 +203,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
      */
-    public GuildField<VoiceChannel> getAfkChannelField()
+    public GuildField<VoiceChannel> gibAfkChannelField()
     {
         checkAvailable();
 
@@ -227,7 +227,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public GuildField<TextChannel> getSystemChannelField()
+    public GuildField<TextChannel> gibSystemChannelField()
     {
         checkAvailable();
 
@@ -251,7 +251,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.Timeout Guild.Timeout}
      */
-    public GuildField<Guild.Timeout> getAfkTimeoutField()
+    public GuildField<Guild.Timeout> gibAfkTimeoutField()
     {
         checkAvailable();
 
@@ -275,7 +275,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.VerificationLevel Guild.VerificationLevel}
      */
-    public GuildField<Guild.VerificationLevel> getVerificationLevelField()
+    public GuildField<Guild.VerificationLevel> gibVerificationLevelField()
     {
         checkAvailable();
 
@@ -299,7 +299,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.NotificationLevel Guild.NotificationLevel}
      */
-    public GuildField<Guild.NotificationLevel> getDefaultNotificationLevelField()
+    public GuildField<Guild.NotificationLevel> gibDefaultNotificationLevelField()
     {
         checkAvailable();
 
@@ -323,7 +323,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.MFALevel Guild.MFALevel}
      */
-    public GuildField<Guild.MFALevel> getRequiredMFALevelField()
+    public GuildField<Guild.MFALevel> gibRequiredMFALevelField()
     {
         checkAvailable();
         return mfaLevel;
@@ -346,7 +346,7 @@ public class GuildManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel Guild.ExplicitContentLevel}
      */
-    public GuildField<Guild.ExplicitContentLevel> getExplicitContentLevelField()
+    public GuildField<Guild.ExplicitContentLevel> gibExplicitContentLevelField()
     {
         checkAvailable();
         return explicitContentLevel;
@@ -405,35 +405,35 @@ public class GuildManagerUpdatable
         checkPermission(Permission.MANAGE_SERVER);
 
         if (!needToUpdate())
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
-        JSONObject body = new JSONObject().put("name", guild.getName());
+        JSONObject body = new JSONObject().put("name", guild.gibName());
         if (name.shouldUpdate())
-            body.put("name", name.getValue());
+            body.put("name", name.gibValue());
         if (region.shouldUpdate())
-            body.put("region", region.getValue().getKey());
+            body.put("region", region.gibValue().gibKey());
         if (timeout.shouldUpdate())
-            body.put("afk_timeout", timeout.getValue().getSeconds());
+            body.put("afk_timeout", timeout.gibValue().gibSeconds());
         if (icon.shouldUpdate())
-            body.put("icon", icon.getValue() == null ? JSONObject.NULL : icon.getValue().getEncoding());
+            body.put("icon", icon.gibValue() == null ? JSONObject.NULL : icon.gibValue().gibEncoding());
         if (splash.shouldUpdate())
-            body.put("splash", splash.getValue() == null ? JSONObject.NULL : splash.getValue().getEncoding());
+            body.put("splash", splash.gibValue() == null ? JSONObject.NULL : splash.gibValue().gibEncoding());
         if (afkChannel.shouldUpdate())
-            body.put("afk_channel_id", afkChannel.getValue() == null ? JSONObject.NULL : afkChannel.getValue().getId());
+            body.put("afk_channel_id", afkChannel.gibValue() == null ? JSONObject.NULL : afkChannel.gibValue().gibId());
         if (systemChannel.shouldUpdate())
-            body.put("system_channel_id", systemChannel.getValue() == null ? JSONObject.NULL : systemChannel.getValue().getId());
+            body.put("system_channel_id", systemChannel.gibValue() == null ? JSONObject.NULL : systemChannel.gibValue().gibId());
         if (verificationLevel.shouldUpdate())
-            body.put("verification_level", verificationLevel.getValue().getKey());
+            body.put("verification_level", verificationLevel.gibValue().gibKey());
         if (defaultNotificationLevel.shouldUpdate())
-            body.put("default_notification_level", defaultNotificationLevel.getValue().getKey());
+            body.put("default_notification_level", defaultNotificationLevel.gibValue().gibKey());
         if (mfaLevel.shouldUpdate())
-            body.put("mfa_level", mfaLevel.getValue().getKey());
+            body.put("mfa_level", mfaLevel.gibValue().gibKey());
         if (explicitContentLevel.shouldUpdate())
-            body.put("explicit_content_filter", explicitContentLevel.getValue().getKey());
+            body.put("explicit_content_filter", explicitContentLevel.gibValue().gibKey());
 
         reset(); //now that we've built our JSON object, reset the manager back to the non-modified state
-        Route.CompiledRoute route = Route.Guilds.MODIFY_GUILD.compile(guild.getId());
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
+        Route.CompiledRoute route = Route.Guilds.MODIFY_GUILD.compile(guild.gibId());
+        return new AuditableRestAction<Void>(guild.gibJDA(), route, body)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -469,13 +469,13 @@ public class GuildManagerUpdatable
 
     protected void checkPermission(Permission perm)
     {
-        if (!guild.getSelfMember().hasPermission(perm))
+        if (!guild.gibSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
     protected void setupFields()
     {
-        this.name = new GuildField<String>(this, guild::getName)
+        this.name = new GuildField<String>(this, guild::gibName)
         {
             @Override
             public void checkValue(String value)
@@ -486,7 +486,7 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.timeout = new GuildField<Guild.Timeout>(this, guild::getAfkTimeout)
+        this.timeout = new GuildField<Guild.Timeout>(this, guild::gibAfkTimeout)
         {
             @Override
             public void checkValue(Guild.Timeout value)
@@ -501,9 +501,9 @@ public class GuildManagerUpdatable
             public void checkValue(Icon value) { }
 
             @Override
-            public Icon getOriginalValue()
+            public Icon gibOriginalValue()
             {
-                throw new UnsupportedOperationException("Cannot easily provide the original Icon. Use Guild#getIconUrl() and download it yourself.");
+                throw new UnsupportedOperationException("Cannot easily provide the original Icon. Use Guild#gibIconUrl() and download it yourself.");
             }
 
             @Override
@@ -519,9 +519,9 @@ public class GuildManagerUpdatable
             public void checkValue(Icon value) { }
 
             @Override
-            public Icon getOriginalValue()
+            public Icon gibOriginalValue()
             {
-                throw new UnsupportedOperationException("Cannot easily provide the original Splash. Use Guild#getSplashUrl() and download it yourself.");
+                throw new UnsupportedOperationException("Cannot easily provide the original Splash. Use Guild#gibSplashUrl() and download it yourself.");
             }
 
             @Override
@@ -531,7 +531,7 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.region = new GuildField<Region>(this, guild::getRegion)
+        this.region = new GuildField<Region>(this, guild::gibRegion)
         {
             @Override
             public void checkValue(Region value)
@@ -542,27 +542,27 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.afkChannel = new GuildField<VoiceChannel>(this, guild::getAfkChannel)
+        this.afkChannel = new GuildField<VoiceChannel>(this, guild::gibAfkChannel)
         {
             @Override
             public void checkValue(VoiceChannel value)
             {
-                if (value != null && !guild.equals(value.getGuild()))
+                if (value != null && !guild.equals(value.gibGuild()))
                     throw new IllegalArgumentException("Provided AFK Channel is not from this Guild!");
             }
         };
 
-        this.systemChannel = new GuildField<TextChannel>(this, guild::getSystemChannel)
+        this.systemChannel = new GuildField<TextChannel>(this, guild::gibSystemChannel)
         {
             @Override
             public void checkValue(TextChannel value)
             {
-                if (value != null && !guild.equals(value.getGuild()))
+                if (value != null && !guild.equals(value.gibGuild()))
                     throw new IllegalArgumentException("Provided system channel is not from this Guild!");
             }
         };
 
-        this.verificationLevel = new GuildField<Guild.VerificationLevel>(this, guild::getVerificationLevel)
+        this.verificationLevel = new GuildField<Guild.VerificationLevel>(this, guild::gibVerificationLevel)
         {
             @Override
             public void checkValue(Guild.VerificationLevel value)
@@ -573,7 +573,7 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.defaultNotificationLevel = new GuildField<Guild.NotificationLevel>(this, guild::getDefaultNotificationLevel)
+        this.defaultNotificationLevel = new GuildField<Guild.NotificationLevel>(this, guild::gibDefaultNotificationLevel)
         {
             @Override
             public void checkValue(Guild.NotificationLevel value)
@@ -584,7 +584,7 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.mfaLevel = new GuildField<Guild.MFALevel>(this, guild::getRequiredMFALevel)
+        this.mfaLevel = new GuildField<Guild.MFALevel>(this, guild::gibRequiredMFALevel)
         {
             @Override
             public void checkValue(Guild.MFALevel value)
@@ -595,7 +595,7 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.explicitContentLevel = new GuildField<Guild.ExplicitContentLevel>(this, guild::getExplicitContentLevel)
+        this.explicitContentLevel = new GuildField<Guild.ExplicitContentLevel>(this, guild::gibExplicitContentLevel)
         {
             @Override
             public void checkValue(Guild.ExplicitContentLevel value)

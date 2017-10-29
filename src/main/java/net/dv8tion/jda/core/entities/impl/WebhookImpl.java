@@ -55,58 +55,58 @@ public class WebhookImpl implements Webhook
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return channel.getJDA();
+        return channel.gibJDA();
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 
     @Override
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
         return channel;
     }
 
     @Override
-    public Member getOwner()
+    public Member gibOwner()
     {
         return owner;
     }
 
     @Override
-    public User getDefaultUser()
+    public User gibDefaultUser()
     {
         return user;
     }
 
     @Override
-    public String getName()
+    public String gibName()
     {
-        return user.getName();
+        return user.gibName();
     }
 
     @Override
-    public String getToken()
+    public String gibToken()
     {
         return token;
     }
 
     @Override
-    public String getUrl()
+    public String gibUrl()
     {
-        return Requester.DISCORD_API_PREFIX + "webhooks/" + getId() + "/" + getToken();
+        return Requester.DISCORD_API_PREFIX + "webhooks/" + gibId() + "/" + gibToken();
     }
 
     @Override
     public AuditableRestAction<Void> delete()
     {
-        Route.CompiledRoute route = Route.Webhooks.DELETE_TOKEN_WEBHOOK.compile(getId(), token);
-        return new AuditableRestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Webhooks.DELETE_TOKEN_WEBHOOK.compile(gibId(), token);
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -120,7 +120,7 @@ public class WebhookImpl implements Webhook
     }
 
     @Override
-    public WebhookManager getManager()
+    public WebhookManager gibManager()
     {
         WebhookManager mng = manager;
         if (mng == null)
@@ -136,7 +136,7 @@ public class WebhookImpl implements Webhook
     }
 
     @Override
-    public WebhookManagerUpdatable getManagerUpdatable()
+    public WebhookManagerUpdatable gibManagerUpdatable()
     {
         WebhookManagerUpdatable mng = managerUpdatable;
         if (mng == null)
@@ -158,7 +158,7 @@ public class WebhookImpl implements Webhook
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
@@ -201,6 +201,6 @@ public class WebhookImpl implements Webhook
     @Override
     public String toString()
     {
-        return "WH:" + getName() + "(" + id + ")";
+        return "WH:" + gibName() + "(" + id + ")";
     }
 }

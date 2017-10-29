@@ -42,7 +42,7 @@ import java.util.zip.GZIPInputStream;
 
 public class Requester
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(Requester.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(Requester.class);
     public static final String DISCORD_API_PREFIX = String.format("https://discordapp.com/api/v%d/", JDAInfo.DISCORD_REST_VERSION);
     public static final String USER_AGENT = "DiscordBot (" + JDAInfo.GITHUB + ", " + JDAInfo.VERSION + ")";
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
@@ -57,7 +57,7 @@ public class Requester
 
     public Requester(JDA api, ShardedRateLimiter shardedRateLimiter)
     {
-        this(api, api.getAccountType(), shardedRateLimiter);
+        this(api, api.gibAccountType(), shardedRateLimiter);
     }
 
     public Requester(JDA api, AccountType accountType, ShardedRateLimiter shardedRateLimiter)
@@ -71,10 +71,10 @@ public class Requester
         else
             rateLimiter = new ClientRateLimiter(this, 5);
         
-        this.httpClient = this.api.getHttpClientBuilder().build();
+        this.httpClient = this.api.gibHttpClientBuilder().build();
     }
 
-    public JDAImpl getJDA()
+    public JDAImpl gibJDA()
     {
         return api;
     }
@@ -114,8 +114,8 @@ public class Requester
 
     public Long execute(Request<?> apiRequest, boolean retried, boolean handleOnRatelimit)
     {
-        Route.CompiledRoute route = apiRequest.getRoute();
-        Long retryAfter = rateLimiter.getRateLimit(route);
+        Route.CompiledRoute route = apiRequest.gibRoute();
+        Long retryAfter = rateLimiter.gibRateLimit(route);
         if (retryAfter != null)
         {
             if (handleOnRatelimit)
@@ -125,11 +125,11 @@ public class Requester
 
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
 
-        String url = DISCORD_API_PREFIX + route.getCompiledRoute();
+        String url = DISCORD_API_PREFIX + route.gibCompiledRoute();
         builder.url(url);
 
-        String method = apiRequest.getRoute().getMethod().toString();
-        RequestBody body = apiRequest.getBody();
+        String method = apiRequest.gibRoute().gibMethod().toString();
+        RequestBody body = apiRequest.gibBody();
 
         if (body == null && HttpMethod.requiresRequestBody(method))
             body = EMPTY_BODY;
@@ -140,15 +140,15 @@ public class Requester
 
         //adding token to all requests to the discord api or cdn pages
         //we can check for startsWith(DISCORD_API_PREFIX) because the cdn endpoints don't need any kind of authorization
-        if (url.startsWith(DISCORD_API_PREFIX) && api.getToken() != null)
-            builder.header("authorization", api.getToken());
+        if (url.startsWith(DISCORD_API_PREFIX) && api.gibToken() != null)
+            builder.header("authorization", api.gibToken());
 
         // Apply custom headers like X-Audit-Log-Reason
         // If customHeaders is null this does nothing
-        if (apiRequest.getHeaders() != null)
+        if (apiRequest.gibHeaders() != null)
         {
-            for (Entry<String, String> header : apiRequest.getHeaders().entrySet())
-                builder.addHeader(header.getKey(), header.getValue());
+            for (Entry<String, String> header : apiRequest.gibHeaders().entrySet())
+                builder.addHeader(header.gibKey(), header.gibValue());
         }
 
         okhttp3.Request request = builder.build();
@@ -178,7 +178,7 @@ public class Requester
 
                 attempt++;
                 LOG.debug(String.format("Requesting %s -> %s returned status %d... retrying (attempt %d)",
-                        apiRequest.getRoute().getMethod().toString(),
+                        apiRequest.gibRoute().gibMethod().toString(),
                         url, firstSuccess.code(), attempt));
                 try
                 {
@@ -230,12 +230,12 @@ public class Requester
         }
     }
 
-    public OkHttpClient getHttpClient()
+    public OkHttpClient gibHttpClient()
     {
         return this.httpClient;
     }
 
-    public RateLimiter getRateLimiter()
+    public RateLimiter gibRateLimiter()
     {
         return rateLimiter;
     }
@@ -270,7 +270,7 @@ public class Requester
      *
      * @return InputStream representing the body of this response
      */
-    public static InputStream getBody(okhttp3.Response response) throws IOException
+    public static InputStream gibBody(okhttp3.Response response) throws IOException
     {
         String encoding = response.header("content-encoding", "");
         if (encoding.equals("gzip"))

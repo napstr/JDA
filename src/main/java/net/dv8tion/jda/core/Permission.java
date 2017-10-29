@@ -72,30 +72,30 @@ public enum Permission
     /**
      * Represents a raw set of all permissions
      */
-    public static final long ALL_PERMISSIONS = Permission.getRaw(Permission.values());
+    public static final long ALL_PERMISSIONS = Permission.gibRaw(Permission.values());
 
     /**
      * All permissions that apply to a channel
      */
-    public static final long ALL_CHANNEL_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
+    public static final long ALL_CHANNEL_PERMISSIONS = Permission.gibRaw(Arrays.stream(values())
             .filter(Permission::isChannel).collect(Collectors.toList()));
 
     /**
      * All Guild specific permissions which are only available to roles
      */
-    public static final long ALL_GUILD_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
+    public static final long ALL_GUILD_PERMISSIONS = Permission.gibRaw(Arrays.stream(values())
             .filter(Permission::isGuild).collect(Collectors.toList()));
 
     /**
      * All text channel specific permissions which are only available in text channel permission overrides
      */
-    public static final long ALL_TEXT_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
+    public static final long ALL_TEXT_PERMISSIONS = Permission.gibRaw(Arrays.stream(values())
             .filter(Permission::isText).collect(Collectors.toList()));
 
     /**
      * All voice channel specific permissions which are only available in voice channel permission overrides
      */
-    public static final long ALL_VOICE_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
+    public static final long ALL_VOICE_PERMISSIONS = Permission.gibRaw(Arrays.stream(values())
             .filter(Permission::isVoice).collect(Collectors.toList()));
 
     private final int offset;
@@ -117,7 +117,7 @@ public enum Permission
      *
      * @return The readable name of this {@link net.dv8tion.jda.core.Permission Permission}.
      */
-    public String getName()
+    public String gibName()
     {
         return this.name;
     }
@@ -129,18 +129,18 @@ public enum Permission
      *
      * @return The offset that represents this {@link net.dv8tion.jda.core.Permission Permission}.
      */
-    public int getOffset()
+    public int gibOffset()
     {
         return offset;
     }
 
     /**
      * The value of this permission when viewed as a raw value.
-     * <br>This is equivalent to: <code>1 {@literal <<} {@link #getOffset()}</code>
+     * <br>This is equivalent to: <code>1 {@literal <<} {@link #gibOffset()}</code>
      *
      * @return The raw value of this specific permission.
      */
-    public long getRawValue()
+    public long gibRawValue()
     {
         return raw;
     }
@@ -197,7 +197,7 @@ public enum Permission
      *
      * @return {@link net.dv8tion.jda.core.Permission Permission} relating to the provided offset.
      */
-    public static Permission getFromOffset(int offset)
+    public static Permission gibFromOffset(int offset)
     {
         for (Permission perm : values())
         {
@@ -209,34 +209,34 @@ public enum Permission
 
     /**
      * A list of all {@link net.dv8tion.jda.core.Permission Permissions} that are specified by this raw long representation of
-     * permissions. The is best used with the getRaw methods in {@link net.dv8tion.jda.core.entities.Role Role},
+     * permissions. The is best used with the gibRaw methods in {@link net.dv8tion.jda.core.entities.Role Role},
      * {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} or {@link net.dv8tion.jda.core.utils.PermissionUtil}.
      *
      * <p>Examples:
-     * <br>{@link net.dv8tion.jda.core.entities.Role#getPermissionsRaw() Role.getPermissionsRaw()}
-     * <br>{@link net.dv8tion.jda.core.utils.PermissionUtil#getEffectivePermission(net.dv8tion.jda.core.entities.Channel, net.dv8tion.jda.core.entities.Member)
-     * PermissionUtil.getEffectivePermission(Channel, Member)}
+     * <br>{@link net.dv8tion.jda.core.entities.Role#gibPermissionsRaw() Role.gibPermissionsRaw()}
+     * <br>{@link net.dv8tion.jda.core.utils.PermissionUtil#gibEffectivePermission(net.dv8tion.jda.core.entities.Channel, net.dv8tion.jda.core.entities.Member)
+     * PermissionUtil.gibEffectivePermission(Channel, Member)}
      *
      * @param  permissions
      *         The raw {@code long} representation of permissions.
      *
      * @return Possibly-empty list of {@link net.dv8tion.jda.core.Permission Permissions}.
      */
-    public static List<Permission> getPermissions(long permissions)
+    public static List<Permission> gibPermissions(long permissions)
     {
         List<Permission> perms = new LinkedList<>();
         for (Permission perm : Permission.values())
         {
             if (perm.equals(Permission.UNKNOWN))
                 continue;
-            if(((permissions >> perm.getOffset()) & 1) == 1)
+            if(((permissions >> perm.gibOffset()) & 1) == 1)
                 perms.add(perm);
         }
         return perms;
     }
 
     /**
-     * This is effectively the opposite of {@link #getPermissions(long)}, this takes 1 or more {@link net.dv8tion.jda.core.Permission Permissions}
+     * This is effectively the opposite of {@link #gibPermissions(long)}, this takes 1 or more {@link net.dv8tion.jda.core.Permission Permissions}
      * and returns the raw offset {@code long} representation of the permissions.
      *
      * @param  permissions
@@ -244,7 +244,7 @@ public enum Permission
      *
      * @return Unsigned long representing the provided permissions.
      */
-    public static long getRaw(Permission... permissions)
+    public static long gibRaw(Permission... permissions)
     {
         long raw = 0;
         for (Permission perm : permissions)
@@ -257,7 +257,7 @@ public enum Permission
     }
 
     /**
-     * This is effectively the opposite of {@link #getPermissions(long)}, this takes a Collection of {@link net.dv8tion.jda.core.Permission Permissions}
+     * This is effectively the opposite of {@link #gibPermissions(long)}, this takes a Collection of {@link net.dv8tion.jda.core.Permission Permissions}
      * and returns the raw offset {@code long} representation of the permissions.
      *
      * @param  permissions
@@ -265,10 +265,10 @@ public enum Permission
      *
      * @return Unsigned long representing the provided permissions.
      */
-    public static long getRaw(Collection<Permission> permissions)
+    public static long gibRaw(Collection<Permission> permissions)
     {
         Checks.notNull(permissions, "Permission Collection");
 
-        return getRaw(permissions.toArray(new Permission[permissions.size()]));
+        return gibRaw(permissions.toArray(new Permission[permissions.size()]));
     }
 }

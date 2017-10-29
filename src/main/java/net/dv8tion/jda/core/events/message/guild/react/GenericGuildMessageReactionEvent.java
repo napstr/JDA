@@ -27,39 +27,39 @@ public class GenericGuildMessageReactionEvent extends GenericMessageEvent
 
     public GenericGuildMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
     {
-        super(api, responseNumber, reaction.getMessageIdLong(), reaction.getChannel());
+        super(api, responseNumber, reaction.gibMessageIdLong(), reaction.gibChannel());
         this.issuer = user;
         this.reaction = reaction;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return getChannel().getGuild();
+        return gibChannel().gibGuild();
     }
 
     @Override
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
         return (TextChannel) channel;
     }
 
-    public User getUser()
+    public User gibUser()
     {
         return issuer;
     }
 
-    public Member getMember()
+    public Member gibMember()
     {
-        return getGuild().getMember(getUser());
+        return gibGuild().gibMember(gibUser());
     }
 
-    public MessageReaction getReaction()
+    public MessageReaction gibReaction()
     {
         return reaction;
     }
 
-    public MessageReaction.ReactionEmote getReactionEmote()
+    public MessageReaction.ReactionEmote gibReactionEmote()
     {
-        return reaction.getEmote();
+        return reaction.gibEmote();
     }
 }

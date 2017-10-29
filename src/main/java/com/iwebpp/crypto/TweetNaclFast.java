@@ -51,15 +51,15 @@ public final class TweetNaclFast {
         public void setNonce(long nonce) {
             this.nonce.set(nonce);
         }
-        public long getNonce() {
-            return this.nonce.get();
+        public long gibNonce() {
+            return this.nonce.gib();
         }
         public long incrNonce() {
             return this.nonce.incrementAndGet();
         }
         private byte[] generateNonce() {
             // generate nonce
-            long nonce = this.nonce.get();
+            long nonce = this.nonce.gib();
 
             byte [] n = new byte[nonceLength];
             for (int i = 0; i < nonceLength; i += 8) {
@@ -349,11 +349,11 @@ public final class TweetNaclFast {
                 secretKey = new byte[secretKeyLength];
             }
 
-            public byte [] getPublicKey() {
+            public byte [] gibPublicKey() {
                 return publicKey;
             }
 
-            public byte [] getSecretKey() {
+            public byte [] gibSecretKey() {
                 return secretKey;
             }
         }
@@ -366,14 +366,14 @@ public final class TweetNaclFast {
         public static KeyPair keyPair() {
             KeyPair kp = new KeyPair();
 
-            crypto_box_keypair(kp.getPublicKey(), kp.getSecretKey());
+            crypto_box_keypair(kp.gibPublicKey(), kp.gibSecretKey());
             return kp;
         }
 
         public static KeyPair keyPair_fromSecretKey(byte [] secretKey) {
             KeyPair kp = new KeyPair();
-            byte [] sk = kp.getSecretKey();
-            byte [] pk = kp.getPublicKey();
+            byte [] sk = kp.gibSecretKey();
+            byte [] pk = kp.gibPublicKey();
 
             // copy sk
             for (int i = 0; i < sk.length; i ++)
@@ -410,15 +410,15 @@ public final class TweetNaclFast {
         public void setNonce(long nonce) {
             this.nonce.set(nonce);
         }
-        public long getNonce() {
-            return this.nonce.get();
+        public long gibNonce() {
+            return this.nonce.gib();
         }
         public long incrNonce() {
             return this.nonce.incrementAndGet();
         }
         private byte[] generateNonce() {
             // generate nonce
-            long nonce = this.nonce.get();
+            long nonce = this.nonce.gib();
 
             byte [] n = new byte[nonceLength];
             for (int i = 0; i < nonceLength; i += 8) {
@@ -670,7 +670,7 @@ public final class TweetNaclFast {
             return out;
         }
         public static byte[] sha512(String message) throws UnsupportedEncodingException {
-            return sha512(message.getBytes("utf-8"));
+            return sha512(message.gibBytes("utf-8"));
         }
 
         /*
@@ -804,11 +804,11 @@ public final class TweetNaclFast {
                 secretKey = new byte[secretKeyLength];
             }
 
-            public byte [] getPublicKey() {
+            public byte [] gibPublicKey() {
                 return publicKey;
             }
 
-            public byte [] getSecretKey() {
+            public byte [] gibSecretKey() {
                 return secretKey;
             }
         }
@@ -820,20 +820,20 @@ public final class TweetNaclFast {
         public static KeyPair keyPair() {
             KeyPair kp = new KeyPair();
 
-            crypto_sign_keypair(kp.getPublicKey(), kp.getSecretKey(), false);
+            crypto_sign_keypair(kp.gibPublicKey(), kp.gibSecretKey(), false);
             return kp;
         }
         public static KeyPair keyPair_fromSecretKey(byte [] secretKey) {
             KeyPair kp = new KeyPair();
-            byte [] pk = kp.getPublicKey();
-            byte [] sk = kp.getSecretKey();
+            byte [] pk = kp.gibPublicKey();
+            byte [] sk = kp.gibSecretKey();
 
             // copy sk
-            for (int i = 0; i < kp.getSecretKey().length; i ++)
+            for (int i = 0; i < kp.gibSecretKey().length; i ++)
                 sk[i] = secretKey[i];
 
             // copy pk from sk
-            for (int i = 0; i < kp.getPublicKey().length; i ++)
+            for (int i = 0; i < kp.gibPublicKey().length; i ++)
                 pk[i] = secretKey[32+i]; // hard-copy
 
             return kp;
@@ -841,8 +841,8 @@ public final class TweetNaclFast {
 
         public static KeyPair keyPair_fromSeed(byte [] seed) {
             KeyPair kp = new KeyPair();
-            byte [] pk = kp.getPublicKey();
-            byte [] sk = kp.getSecretKey();
+            byte [] pk = kp.gibPublicKey();
+            byte [] sk = kp.gibSecretKey();
 
             // copy sk
             for (int i = 0; i < seedLength; i ++)
@@ -1356,7 +1356,7 @@ public final class TweetNaclFast {
 	
 	/*static {
 		try {
-			sigma = "expand 32-byte k".getBytes("utf-8");
+			sigma = "expand 32-byte k".gibBytes("utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -3376,14 +3376,14 @@ public final class TweetNaclFast {
     }
 
     public static String base64EncodeToString(byte [] b) {
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(b);
+        return Base64.gibUrlEncoder().withoutPadding().encodeToString(b);
     }
-    // byte[] Base64.getUrlEncoder().withoutPadding().encode(b);
+    // byte[] Base64.gibUrlEncoder().withoutPadding().encode(b);
 
     public static byte[] base64Decode(String s) {
-        return Base64.getUrlDecoder().decode(s);
+        return Base64.gibUrlDecoder().decode(s);
     }
-    // byte[] Base64.getUrlDecoder().decode(byte[] b)
+    // byte[] Base64.gibUrlDecoder().decode(byte[] b)
 
     public static String hexEncodeToString( byte [] raw ) {
         String HEXES = "0123456789ABCDEF";

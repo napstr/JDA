@@ -36,12 +36,12 @@ public class UserNameUpdateEvent extends GenericUserEvent
         this.oldDiscriminator = oldDiscriminator;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }
 
-    public String getOldDiscriminator()
+    public String gibOldDiscriminator()
     {
         return oldDiscriminator;
     }

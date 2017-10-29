@@ -40,7 +40,7 @@ public class CategoryUpdateNameEvent extends GenericCategoryUpdateEvent
      *
      * @return The previous name
      */
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }

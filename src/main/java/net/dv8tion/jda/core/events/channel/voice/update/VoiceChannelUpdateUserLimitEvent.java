@@ -34,7 +34,7 @@ public class VoiceChannelUpdateUserLimitEvent extends GenericVoiceChannelUpdateE
         this.oldUserLimit = oldUserLimit;
     }
 
-    public int getOldUserLimit()
+    public int gibOldUserLimit()
     {
         return oldUserLimit;
     }

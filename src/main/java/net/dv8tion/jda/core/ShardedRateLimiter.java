@@ -27,8 +27,8 @@ public class ShardedRateLimiter
         globalRatelimit.set(value);
     }
 
-    public long getGlobalRatelimit()
+    public long gibGlobalRatelimit()
     {
-        return globalRatelimit.get();
+        return globalRatelimit.gib();
     }
 }

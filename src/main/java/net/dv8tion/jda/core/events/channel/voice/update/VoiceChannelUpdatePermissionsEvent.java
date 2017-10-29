@@ -40,12 +40,12 @@ public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelUpdat
         this.changedPermHolders = changed;
     }
 
-    public List<IPermissionHolder> getChangedPermissionHolders()
+    public List<IPermissionHolder> gibChangedPermissionHolders()
     {
         return changedPermHolders;
     }
 
-    public List<Role> getChangedRoles()
+    public List<Role> gibChangedRoles()
     {
         return changedPermHolders
                 .stream()
@@ -54,7 +54,7 @@ public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelUpdat
                 .collect(Collectors.toList());
     }
 
-    public List<Member> getMemberWithPermissionChanges()
+    public List<Member> gibMemberWithPermissionChanges()
     {
         return changedPermHolders
                 .stream()

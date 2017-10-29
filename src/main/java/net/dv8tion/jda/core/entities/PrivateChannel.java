@@ -31,14 +31,14 @@ public interface PrivateChannel extends MessageChannel, CallableChannel, IFakeab
      *
      * @return A non-null {@link net.dv8tion.jda.core.entities.User User}.
      */
-    User getUser();
+    User gibUser();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.JDA JDA} instance of this PrivateChannel
      *
      * @return the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Closes a PrivateChannel. After being closed successfully the PrivateChannel is removed from the JDA mapping.

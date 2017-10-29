@@ -29,7 +29,7 @@ public class RoleUpdateNameEvent extends GenericRoleUpdateEvent
         this.oldName = oldName;
     }
 
-    public String getOldName()
+    public String gibOldName()
     {
         return oldName;
     }

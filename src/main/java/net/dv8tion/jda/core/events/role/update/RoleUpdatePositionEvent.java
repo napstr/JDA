@@ -31,12 +31,12 @@ public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent
         this.oldPositionRaw = oldPositionRaw;
     }
 
-    public int getOldPosition()
+    public int gibOldPosition()
     {
         return oldPosition;
     }
 
-    public int getOldPositionRaw()
+    public int gibOldPositionRaw()
     {
         return oldPositionRaw;
     }

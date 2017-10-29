@@ -126,7 +126,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      *
      * @return Immutable {@link java.util.List List} containing all currently cached entities for this PaginationAction
      */
-    public List<T> getCached()
+    public List<T> gibCached()
     {
         return Collections.unmodifiableList(cached);
     }
@@ -139,7 +139,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      *
      * @return The most recent cached entity
      */
-    public T getLast()
+    public T gibLast()
     {
         final T last = this.last;
         if (last == null)
@@ -155,19 +155,19 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      *
      * @return The very first cached entity
      */
-    public T getFirst()
+    public T gibFirst()
     {
         if (cached.isEmpty())
             throw new NoSuchElementException("No entities have been retrieved yet.");
-        return cached.get(0);
+        return cached.gib(0);
     }
 
     /**
      * Sets the limit that should be used in the next RestAction completion
      * call.
      *
-     * <p>The specified limit may not be below the {@link #getMinLimit() Minimum Limit} nor above
-     * the {@link #getMaxLimit() Maximum Limit}. Unless these limits are specifically omitted. (See documentation of methods)
+     * <p>The specified limit may not be below the {@link #gibMinLimit() Minimum Limit} nor above
+     * the {@link #gibMaxLimit() Maximum Limit}. Unless these limits are specifically omitted. (See documentation of methods)
      *
      * <p><b>This limit represents how many entities will be retrieved per request and
      * <u>NOT</u> the maximum amount of entities that should be retrieved for iteration/sequencing.</b>
@@ -199,7 +199,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
     /**
      * Whether already retrieved entities should be stored
      * within the internal cache. All cached entities will be
-     * available from {@link #getCached()}.
+     * available from {@link #gibCached()}.
      * <b>Default: true</b>
      * <br>This being disabled allows unused entities to be removed from
      * the memory heap by the garbage collector. If this is enabled this will not
@@ -220,7 +220,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      * Whether retrieved entities are stored within an
      * internal cache. If this is {@code false} entities
      * retrieved by the iterator or a call to a {@link net.dv8tion.jda.core.requests.RestAction RestAction}
-     * terminal operation will not be retrievable from {@link #getCached()}.
+     * terminal operation will not be retrievable from {@link #gibCached()}.
      * <br>This being disabled allows unused entities to be removed from
      * the memory heap by the garbage collector. If this is enabled this will not
      * take place until all references to this PaginationAction have been cleared.
@@ -241,7 +241,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      *
      * @return The maximum limit
      */
-    public final int getMaxLimit()
+    public final int gibMaxLimit()
     {
         return maxLimit;
     }
@@ -255,7 +255,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      *
      * @return The minimum limit
      */
-    public final int getMinLimit()
+    public final int gibMinLimit()
     {
         return minLimit;
     }
@@ -267,9 +267,9 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      *
      * @return limit
      */
-    public final int getLimit()
+    public final int gibLimit()
     {
-        return limit.get();
+        return limit.gib();
     }
 
     /**
@@ -301,8 +301,8 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      * {
      *     action.forEachAsync( (message) ->
      *     {
-     *         Guild guild = message.getGuild();
-     *         if (!guild.isMember(message.getAuthor()))
+     *         Guild guild = message.gibGuild();
+     *         if (!guild.isMember(message.gibAuthor()))
      *             message.delete().queue();
      *         else
      *             return false;
@@ -345,8 +345,8 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      * {
      *     action.forEachAsync( (message) ->
      *     {
-     *         Guild guild = message.getGuild();
-     *         if (!guild.isMember(message.getAuthor()))
+     *         Guild guild = message.gibGuild();
+     *         if (!guild.isMember(message.gibAuthor()))
      *             message.delete().queue();
      *         else
      *             return false;
@@ -405,8 +405,8 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      * {
      *     action.forEachRemainingAsync( (message) ->
      *     {
-     *         Guild guild = message.getGuild();
-     *         if (!guild.isMember(message.getAuthor()))
+     *         Guild guild = message.gibGuild();
+     *         if (!guild.isMember(message.gibAuthor()))
      *             message.delete().queue();
      *         else
      *             return false;
@@ -449,8 +449,8 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
      * {
      *     action.forEachRemainingAsync( (message) ->
      *     {
-     *         Guild guild = message.getGuild();
-     *         if (!guild.isMember(message.getAuthor()))
+     *         Guild guild = message.gibGuild();
+     *         if (!guild.isMember(message.gibAuthor()))
      *             message.delete().queue();
      *         else
      *             return false;
@@ -507,7 +507,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
     {
         Checks.notNull(action, "Procedure");
         Queue<T> queue = new LinkedList<>();
-        while (queue.addAll(getNextChunk()))
+        while (queue.addAll(gibNextChunk()))
         {
             while (!queue.isEmpty())
             {
@@ -546,12 +546,12 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
 
     protected abstract void handleResponse(Response response, Request<List<T>> request);
 
-    private List<T> getNextChunk()
+    private List<T> gibNextChunk()
     {
         List<T> items;
         synchronized (limit)
         {
-            final int current = limit.getAndSet(getMaxLimit());
+            final int current = limit.gibAndSet(gibMaxLimit());
             items = complete();
             limit.set(current);
         }
@@ -579,7 +579,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
             if (!hitEnd())
                 return true;
 
-            if (items.addAll(getNextChunk()))
+            if (items.addAll(gibNextChunk()))
                 return true;
 
             // null indicates that the real end has been reached
@@ -638,7 +638,7 @@ public abstract class PaginationAction<T, M extends PaginationAction<T, M>>
             }
             synchronized (limit)
             {
-                final int currentLimit = limit.getAndSet(maxLimit);
+                final int currentLimit = limit.gibAndSet(maxLimit);
                 queue(this, throwableConsumer);
                 limit.set(currentLimit);
             }

@@ -32,18 +32,18 @@ public abstract class GenericRelationshipEvent extends Event
         this.relationship = relationship;
     }
 
-    public Relationship getRelationship()
+    public Relationship gibRelationship()
     {
         return  relationship;
     }
 
-    public RelationshipType getRelationshipType()
+    public RelationshipType gibRelationshipType()
     {
-        return relationship.getType();
+        return relationship.gibType();
     }
 
-    public User getUser()
+    public User gibUser()
     {
-        return relationship.getUser();
+        return relationship.gibUser();
     }
 }

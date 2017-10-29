@@ -35,13 +35,13 @@ public class EmoteUpdateRolesEvent extends GenericEmoteUpdateEvent
         this.oldRoles = Collections.unmodifiableList(new LinkedList<>(oldRoles));
     }
 
-    public List<Role> getOldRoles()
+    public List<Role> gibOldRoles()
     {
         return oldRoles;
     }
 
-    public List<Role> getNewRoles()
+    public List<Role> gibNewRoles()
     {
-        return emote.getRoles();
+        return emote.gibRoles();
     }
 }

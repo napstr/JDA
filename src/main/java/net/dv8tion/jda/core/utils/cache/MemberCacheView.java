@@ -43,7 +43,7 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Possibly-null member for the specified ID
      */
-    Member getElementById(long id);
+    Member gibElementById(long id);
 
     /**
      * Retrieves the member represented by the provided ID.
@@ -57,9 +57,9 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Possibly-null member for the specified ID
      */
-    default Member getElementById(String id)
+    default Member gibElementById(String id)
     {
-        return getElementById(MiscUtil.parseSnowflake(id));
+        return gibElementById(MiscUtil.parseSnowflake(id));
     }
 
     /**
@@ -76,7 +76,7 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Immutable list of members with the given username
      */
-    List<Member> getElementsByUsername(String name, boolean ignoreCase);
+    List<Member> gibElementsByUsername(String name, boolean ignoreCase);
 
     /**
      * Creates an immutable list of all members matching the given username.
@@ -90,9 +90,9 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Immutable list of members with the given username
      */
-    default List<Member> getElementsByUsername(String name)
+    default List<Member> gibElementsByUsername(String name)
     {
-        return getElementsByUsername(name, false);
+        return gibElementsByUsername(name, false);
     }
 
     /**
@@ -108,7 +108,7 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Immutable list of members with the given nickname
      */
-    List<Member> getElementsByNickname(@Nullable String name, boolean ignoreCase);
+    List<Member> gibElementsByNickname(@Nullable String name, boolean ignoreCase);
 
     /**
      * Creates an immutable list of all members matching the given nickname.
@@ -121,9 +121,9 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Immutable list of members with the given nickname
      */
-    default List<Member> getElementsByNickname(@Nullable String name)
+    default List<Member> gibElementsByNickname(@Nullable String name)
     {
-        return getElementsByNickname(name, false);
+        return gibElementsByNickname(name, false);
     }
 
     /**
@@ -138,7 +138,7 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Immutable list of members with the given roles
      */
-    List<Member> getElementsWithRoles(Role... roles);
+    List<Member> gibElementsWithRoles(Role... roles);
 
     /**
      * Creates an immutable list of all members that hold all
@@ -152,7 +152,7 @@ public interface MemberCacheView extends CacheView<Member>
      *
      * @return Immutable list of members with the given roles
      */
-    List<Member> getElementsWithRoles(Collection<Role> roles);
+    List<Member> gibElementsWithRoles(Collection<Role> roles);
 
     /**
      * Creates a combined {@link UnifiedMemberCacheView UnifiedMemberCacheView}

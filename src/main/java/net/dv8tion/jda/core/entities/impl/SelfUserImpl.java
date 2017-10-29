@@ -47,9 +47,9 @@ public class SelfUserImpl extends UserImpl implements SelfUser
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        throw new UnsupportedOperationException("You cannot get a PrivateChannel with yourself (SelfUser)");
+        throw new UnsupportedOperationException("You cannot gib a PrivateChannel with yourself (SelfUser)");
     }
 
     @Override
@@ -71,15 +71,15 @@ public class SelfUserImpl extends UserImpl implements SelfUser
     }
 
     @Override
-    public String getEmail() throws AccountTypeException
+    public String gibEmail() throws AccountTypeException
     {
-        if (api.getAccountType() != AccountType.CLIENT)
+        if (api.gibAccountType() != AccountType.CLIENT)
             throw new AccountTypeException(AccountType.CLIENT, "Email retrieval can only be done on CLIENT accounts!");
         return email;
     }
 
     @Override
-    public AccountManager getManager()
+    public AccountManager gibManager()
     {
         AccountManager mng = manager;
         if (mng == null)
@@ -95,7 +95,7 @@ public class SelfUserImpl extends UserImpl implements SelfUser
     }
 
     @Override
-    public AccountManagerUpdatable getManagerUpdatable()
+    public AccountManagerUpdatable gibManagerUpdatable()
     {
         AccountManagerUpdatable mng = managerUpdatable;
         if (mng == null)
@@ -111,9 +111,9 @@ public class SelfUserImpl extends UserImpl implements SelfUser
     }
 
 //    @Override
-//    public String getAuthUrl(Permission... perms)
+//    public String gibAuthUrl(Permission... perms)
 //    {
-//        return ApplicationUtil.getAuthInvite(getJDA(), perms);
+//        return ApplicationUtil.gibAuthInvite(gibJDA(), perms);
 //    }
 
     public SelfUserImpl setVerified(boolean verified)

@@ -34,7 +34,7 @@ public class VoiceChannelUpdateBitrateEvent extends GenericVoiceChannelUpdateEve
         this.oldBitrate = oldBitrate;
     }
 
-    public int getOldBitrate()
+    public int gibOldBitrate()
     {
         return oldBitrate;
     }

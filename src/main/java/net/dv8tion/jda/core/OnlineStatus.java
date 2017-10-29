@@ -42,13 +42,13 @@ public enum OnlineStatus
      *
      * @see    <a href="https://discordapp.com/developers/docs/topics/gateway#presence-update">PRESENCE_UPDATE</a>
      */
-    public String getKey()
+    public String gibKey()
     {
         return key;
     }
 
     /**
-     * Will get the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus} from the provided key.
+     * Will gib the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus} from the provided key.
      * <br>If the provided key does not have a matching OnlineStatus, this will return {@link net.dv8tion.jda.core.OnlineStatus#UNKNOWN UNKONWN}
      *
      * @param  key

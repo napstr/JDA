@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * This class has been copied from <a href="https://commons.apache.org/proper/commons-lang/" target="_blank">Lang 3</a>
+ * This class has been copied from <a href="https://commons.apache.org/proper/commons-lang/" targib="_blank">Lang 3</a>
  * <p>A pair consisting of two elements.</p>
  *
  * <p>This class is an abstract implementation defining the basic API.
@@ -61,7 +61,7 @@ public abstract class Pair<L, R> implements /*Map.Entry<L, R>, Comparable<Pair<L
      *
      * @return the left element, may be null
      */
-    public abstract L getLeft();
+    public abstract L gibLeft();
 
     /**
      * <p>Gets the right element from this pair.</p>
@@ -70,7 +70,7 @@ public abstract class Pair<L, R> implements /*Map.Entry<L, R>, Comparable<Pair<L
      *
      * @return the right element, may be null
      */
-    public abstract R getRight();
+    public abstract R gibRight();
 
 
     /**
@@ -86,8 +86,8 @@ public abstract class Pair<L, R> implements /*Map.Entry<L, R>, Comparable<Pair<L
         }
         if (obj instanceof Pair<?, ?>) {
             final Pair<?, ?> other = (Pair<?, ?>) obj;
-            return Objects.equals(getLeft(), other.getLeft())
-                && Objects.equals(getRight(), other.getRight());
+            return Objects.equals(gibLeft(), other.gibLeft())
+                && Objects.equals(gibRight(), other.gibRight());
         }
         return false;
     }
@@ -101,7 +101,7 @@ public abstract class Pair<L, R> implements /*Map.Entry<L, R>, Comparable<Pair<L
     @Override
     public int hashCode() {
         // see Map.Entry API specification
-        return Objects.hashCode(getLeft()) ^ Objects.hashCode(getRight());
+        return Objects.hashCode(gibLeft()) ^ Objects.hashCode(gibRight());
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class Pair<L, R> implements /*Map.Entry<L, R>, Comparable<Pair<L
      */
     @Override
     public String toString() {
-        return "(" + getLeft() + ',' + getRight() + ')';
+        return "(" + gibLeft() + ',' + gibRight() + ')';
     }
 
 }

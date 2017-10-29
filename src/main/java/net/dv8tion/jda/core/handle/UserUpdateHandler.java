@@ -34,33 +34,33 @@ public class UserUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        SelfUserImpl self = (SelfUserImpl) api.getSelfUser();
+        SelfUserImpl self = (SelfUserImpl) api.gibSelfUser();
 
-        String name = content.getString("username");
-        String discriminator = content.getString("discriminator");
-        String avatarId = !content.isNull("avatar") ? content.getString("avatar") : null;
-        Boolean verified = content.has("verified") ? content.getBoolean("verified") : null;
-        Boolean mfaEnabled = content.has("mfa_enabled") ? content.getBoolean("mfa_enabled") : null;
+        String name = content.gibString("username");
+        String discriminator = content.gibString("discriminator");
+        String avatarId = !content.isNull("avatar") ? content.gibString("avatar") : null;
+        Boolean verified = content.has("verified") ? content.gibBoolean("verified") : null;
+        Boolean mfaEnabled = content.has("mfa_enabled") ? content.gibBoolean("mfa_enabled") : null;
 
         //Client only
-        String email = !content.isNull("email") ? content.getString("email") : null;
+        String email = !content.isNull("email") ? content.gibString("email") : null;
 
-        if (!Objects.equals(name, self.getName()) || !Objects.equals(discriminator, self.getDiscriminator()))
+        if (!Objects.equals(name, self.gibName()) || !Objects.equals(discriminator, self.gibDiscriminator()))
         {
-            String oldName = self.getName();
-            String oldDiscriminator = self.getDiscriminator();
+            String oldName = self.gibName();
+            String oldDiscriminator = self.gibDiscriminator();
             self.setName(name);
             self.setDiscriminator(discriminator);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new SelfUpdateNameEvent(
                             api, responseNumber,
                             oldName, oldDiscriminator));
         }
-        if (!Objects.equals(avatarId, self.getAvatarId()))
+        if (!Objects.equals(avatarId, self.gibAvatarId()))
         {
-            String oldAvatarId = self.getAvatarId();
+            String oldAvatarId = self.gibAvatarId();
             self.setAvatarId(avatarId);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new SelfUpdateAvatarEvent(
                             api, responseNumber,
                             oldAvatarId));
@@ -69,7 +69,7 @@ public class UserUpdateHandler extends SocketHandler
         {
             boolean wasVerified = self.isVerified();
             self.setVerified(verified);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new SelfUpdateVerifiedEvent(
                             api, responseNumber,
                             wasVerified));
@@ -78,16 +78,16 @@ public class UserUpdateHandler extends SocketHandler
         {
             boolean wasMfaEnabled = self.isMfaEnabled();
             self.setMfaEnabled(mfaEnabled);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new SelfUpdateMFAEvent(
                             api, responseNumber,
                             wasMfaEnabled));
         }
-        if (api.getAccountType() == AccountType.CLIENT && !Objects.equals(email, self.getEmail()))
+        if (api.gibAccountType() == AccountType.CLIENT && !Objects.equals(email, self.gibEmail()))
         {
-            String oldEmail = self.getEmail();
+            String oldEmail = self.gibEmail();
             self.setEmail(email);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new SelfUpdateEmailEvent(
                             api, responseNumber,
                             oldEmail));

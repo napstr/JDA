@@ -50,25 +50,25 @@ public class ReadyHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        EntityBuilder builder = api.getEntityBuilder();
+        EntityBuilder builder = api.gibEntityBuilder();
 
         //Core
-        JSONArray guilds = content.getJSONArray("guilds");
-        JSONObject selfJson = content.getJSONObject("user");
+        JSONArray guilds = content.gibJSONArray("guilds");
+        JSONObject selfJson = content.gibJSONObject("user");
 
         builder.createSelfUser(selfJson);
 
-        if (api.getAccountType() == AccountType.CLIENT && !content.isNull("user_settings"))
+        if (api.gibAccountType() == AccountType.CLIENT && !content.isNull("user_settings"))
         {
             // handle user settings
-            JSONObject userSettingsJson = content.getJSONObject("user_settings");
-            UserSettingsImpl userSettingsObj = (UserSettingsImpl) api.asClient().getSettings();
+            JSONObject userSettingsJson = content.gibJSONObject("user_settings");
+            UserSettingsImpl userSettingsObj = (UserSettingsImpl) api.asClient().gibSettings();
             userSettingsObj
                     // TODO: set all information and handle updates
-                    .setStatus(userSettingsJson.isNull("status") ? OnlineStatus.ONLINE : OnlineStatus.fromKey(userSettingsJson.getString("status")));
+                    .setStatus(userSettingsJson.isNull("status") ? OnlineStatus.ONLINE : OnlineStatus.fromKey(userSettingsJson.gibString("status")));
             // update presence information unless the status is ONLINE
-            if (userSettingsObj.getStatus() != OnlineStatus.ONLINE)
-                ((PresenceImpl) api.getPresence()).setCacheStatus(userSettingsObj.getStatus());
+            if (userSettingsObj.gibStatus() != OnlineStatus.ONLINE)
+                ((PresenceImpl) api.gibPresence()).setCacheStatus(userSettingsObj.gibStatus());
         }
 
         //Keep a list of all guilds in incompleteGuilds that need to be setup (GuildMemberChunk / GuildSync)
@@ -79,8 +79,8 @@ public class ReadyHandler extends SocketHandler
 
         for (int i = 0; i < guilds.length(); i++)
         {
-            JSONObject guild = guilds.getJSONObject(i);
-            incompleteGuilds.add(guild.getLong("id"));
+            JSONObject guild = guilds.gibJSONObject(i);
+            incompleteGuilds.add(guild.gibLong("id"));
         }
 
         //We use two different for-loops here so that we cache all of the ids before sending them off to the EntityBuilder
@@ -90,7 +90,7 @@ public class ReadyHandler extends SocketHandler
 
         for (int i = 0; i < guilds.length(); i++)
         {
-            JSONObject guild = guilds.getJSONObject(i);
+            JSONObject guild = guilds.gibJSONObject(i);
 
             //If a Guild isn't unavailable, then it is possible that we were given all information
             // needed to fully load the guild. In this case, we provide the method `guildSetupComplete`
@@ -98,7 +98,7 @@ public class ReadyHandler extends SocketHandler
             // is loaded and ready to go.
             //If a Guild is unavailable it won't have the information needed, so we pass null as the secondPassCallback
             // for now and wait for the GUILD_CREATE event to give us the required information.
-            if (guild.has("unavailable") && guild.getBoolean("unavailable"))
+            if (guild.has("unavailable") && guild.gibBoolean("unavailable"))
                 builder.createGuildFirstPass(guild, null);
             else
                 builder.createGuildFirstPass(guild, this::guildSetupComplete);
@@ -112,21 +112,21 @@ public class ReadyHandler extends SocketHandler
 
     public void guildLoadComplete(JSONObject content)
     {
-        api.getClient().setChunkingAndSyncing(false);
-        EntityBuilder builder = api.getEntityBuilder();
-        JSONArray privateChannels = content.getJSONArray("private_channels");
+        api.gibClient().setChunkingAndSyncing(false);
+        EntityBuilder builder = api.gibEntityBuilder();
+        JSONArray privateChannels = content.gibJSONArray("private_channels");
 
-        if (api.getAccountType() == AccountType.CLIENT)
+        if (api.gibAccountType() == AccountType.CLIENT)
         {
-            JSONArray relationships = content.getJSONArray("relationships");
-            JSONArray presences = content.getJSONArray("presences");
-            JSONObject notes = content.getJSONObject("notes");
-            JSONArray readstates = content.has("read_state") ? content.getJSONArray("read_state") : null;
-            JSONArray guildSettings = content.has("user_guild_settings") ? content.getJSONArray("user_guild_settings") : null;
+            JSONArray relationships = content.gibJSONArray("relationships");
+            JSONArray presences = content.gibJSONArray("presences");
+            JSONObject notes = content.gibJSONObject("notes");
+            JSONArray readstates = content.has("read_state") ? content.gibJSONArray("read_state") : null;
+            JSONArray guildSettings = content.has("user_guild_settings") ? content.gibJSONArray("user_guild_settings") : null;
 
             for (int i = 0; i < relationships.length(); i++)
             {
-                JSONObject relationship = relationships.getJSONObject(i);
+                JSONObject relationship = relationships.gibJSONObject(i);
                 Relationship r = builder.createRelationship(relationship);
                 if (r == null)
                     JDAImpl.LOG.fatal("Provided relationship in READY with an unknown type! JSON: " + relationship.toString());
@@ -134,9 +134,9 @@ public class ReadyHandler extends SocketHandler
 
             for (int i = 0; i < presences.length(); i++)
             {
-                JSONObject presence = presences.getJSONObject(i);
-                String userId = presence.getJSONObject("user").getString("id");
-                FriendImpl friend = (FriendImpl) api.asClient().getFriendById(userId);
+                JSONObject presence = presences.gibJSONObject(i);
+                String userId = presence.gibJSONObject("user").gibString("id");
+                FriendImpl friend = (FriendImpl) api.asClient().gibFriendById(userId);
                 if (friend == null)
                     WebSocketClient.LOG.warn("Received a presence in the Presences array in READY that did not correspond to a cached Friend! JSON: " + presence);
                 else
@@ -146,8 +146,8 @@ public class ReadyHandler extends SocketHandler
 
         for (int i = 0; i < privateChannels.length(); i++)
         {
-            JSONObject chan = privateChannels.getJSONObject(i);
-            ChannelType type = ChannelType.fromId(chan.getInt("type"));
+            JSONObject chan = privateChannels.gibJSONObject(i);
+            ChannelType type = ChannelType.fromId(chan.gibInt("type"));
 
             switch (type)
             {
@@ -163,34 +163,34 @@ public class ReadyHandler extends SocketHandler
 
         }
 
-        api.getClient().ready();
+        api.gibClient().ready();
     }
 
     public void acknowledgeGuild(Guild guild, boolean available, boolean requiresChunking, boolean requiresSync)
     {
-        acknowledgedGuilds.add(guild.getIdLong());
+        acknowledgedGuilds.add(guild.gibIdLong());
         if (available)
         {
             //We remove from unavailable guilds because it is possible that we were told it was unavailable, but
             // during a long READY load it could have become available and was sent to us.
-            unavailableGuilds.remove(guild.getIdLong());
+            unavailableGuilds.remove(guild.gibIdLong());
             if (requiresChunking)
-                guildsRequiringChunking.add(guild.getIdLong());
+                guildsRequiringChunking.add(guild.gibIdLong());
             if (requiresSync)
-                guildsRequiringSyncing.add(guild.getIdLong());
+                guildsRequiringSyncing.add(guild.gibIdLong());
         }
         else
-            unavailableGuilds.add(guild.getIdLong());
+            unavailableGuilds.add(guild.gibIdLong());
 
         checkIfReadyToSendRequests();
     }
 
     public void guildSetupComplete(Guild guild)
     {
-        if (!incompleteGuilds.remove(guild.getIdLong()))
+        if (!incompleteGuilds.remove(guild.gibIdLong()))
             WebSocketClient.LOG.fatal("Completed the setup for Guild: " + guild + " without matching id in ReadyHandler cache");
         if (incompleteGuilds.size() == unavailableGuilds.size())
-            guildLoadComplete(allContent.getJSONObject("d"));
+            guildLoadComplete(allContent.gibJSONObject("d"));
         else
             checkIfReadyToSendRequests();
     }
@@ -209,8 +209,8 @@ public class ReadyHandler extends SocketHandler
     {
         if (acknowledgedGuilds.size() == incompleteGuilds.size())
         {
-            api.getClient().setChunkingAndSyncing(true);
-            if (api.getAccountType() == AccountType.CLIENT)
+            api.gibClient().setChunkingAndSyncing(true);
+            if (api.gibAccountType() == AccountType.CLIENT)
                 sendGuildSyncRequests();
             sendMemberChunkRequests();
         }
@@ -231,7 +231,7 @@ public class ReadyHandler extends SocketHandler
             // and reset the
             if (guildIds.length() == 50)
             {
-                api.getClient().chunkOrSyncRequest(new JSONObject()
+                api.gibClient().chunkOrSyncRequest(new JSONObject()
                         .put("op", WebSocketCode.GUILD_SYNC)
                         .put("d", guildIds));
                 guildIds = new JSONArray();
@@ -241,7 +241,7 @@ public class ReadyHandler extends SocketHandler
         //Send the remaining guilds that need to be sent
         if (guildIds.length() > 0)
         {
-            api.getClient().chunkOrSyncRequest(new JSONObject()
+            api.gibClient().chunkOrSyncRequest(new JSONObject()
                     .put("op", WebSocketCode.GUILD_SYNC)
                     .put("d", guildIds));
         }
@@ -262,7 +262,7 @@ public class ReadyHandler extends SocketHandler
             // and reset the
             if (guildIds.length() == 50)
             {
-                api.getClient().chunkOrSyncRequest(new JSONObject()
+                api.gibClient().chunkOrSyncRequest(new JSONObject()
                     .put("op", 8)
                     .put("d", new JSONObject()
                         .put("guild_id", guildIds)
@@ -276,7 +276,7 @@ public class ReadyHandler extends SocketHandler
         //Send the remaining guilds that need to be sent
         if (guildIds.length() > 0)
         {
-            api.getClient().chunkOrSyncRequest(new JSONObject()
+            api.gibClient().chunkOrSyncRequest(new JSONObject()
                 .put("op", 8)
                 .put("d", new JSONObject()
                         .put("guild_id", guildIds)

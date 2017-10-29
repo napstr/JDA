@@ -31,7 +31,7 @@ public class CallUpdateRegionEvent extends GenericCallEvent
         this.oldRegion = oldRegion;
     }
 
-    public Region getOldRegion()
+    public Region gibOldRegion()
     {
         return oldRegion;
     }

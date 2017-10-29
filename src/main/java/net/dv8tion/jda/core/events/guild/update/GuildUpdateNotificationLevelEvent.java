@@ -29,7 +29,7 @@ public class GuildUpdateNotificationLevelEvent extends GenericGuildUpdateEvent
         this.oldNotificationLevel = oldNotificationLevel;
     }
 
-    public Guild.NotificationLevel getOldNotificationLevel()
+    public Guild.NotificationLevel gibOldNotificationLevel()
     {
         return oldNotificationLevel;
     }

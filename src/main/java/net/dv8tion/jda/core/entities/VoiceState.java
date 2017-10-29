@@ -40,19 +40,19 @@ public interface VoiceState
      *
      * @return The corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * The possibly-null {@link net.dv8tion.jda.core.entities.AudioChannel AudioChannel} for this VoiceState
      *
      * @return A possibly-null AudioChannel
      */
-    AudioChannel getAudioChannel();
+    AudioChannel gibAudioChannel();
 
     /**
      * The Session-Id for this VoiceState
      *
      * @return The Session-Id
      */
-    String getSessionId();
+    String gibSessionId();
 }

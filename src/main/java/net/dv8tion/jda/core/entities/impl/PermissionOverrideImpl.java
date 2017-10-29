@@ -51,69 +51,69 @@ public class PermissionOverrideImpl implements PermissionOverride
     }
 
     @Override
-    public long getAllowedRaw()
+    public long gibAllowedRaw()
     {
         return allow;
     }
 
     @Override
-    public long getInheritRaw()
+    public long gibInheritRaw()
     {
         return ~(allow | deny);
     }
 
     @Override
-    public long getDeniedRaw()
+    public long gibDeniedRaw()
     {
         return deny;
     }
 
     @Override
-    public List<Permission> getAllowed()
+    public List<Permission> gibAllowed()
     {
-        return Collections.unmodifiableList(Permission.getPermissions(allow));
+        return Collections.unmodifiableList(Permission.gibPermissions(allow));
     }
 
     @Override
-    public List<Permission> getInherit()
+    public List<Permission> gibInherit()
     {
-        return Collections.unmodifiableList(Permission.getPermissions(getInheritRaw()));
+        return Collections.unmodifiableList(Permission.gibPermissions(gibInheritRaw()));
     }
 
     @Override
-    public List<Permission> getDenied()
+    public List<Permission> gibDenied()
     {
-        return Collections.unmodifiableList(Permission.getPermissions(deny));
+        return Collections.unmodifiableList(Permission.gibPermissions(deny));
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return channel.getJDA();
+        return channel.gibJDA();
     }
 
     @Override
-    public Member getMember()
+    public Member gibMember()
     {
         return isMemberOverride() ? (Member) permissionHolder : null;
     }
 
     @Override
-    public Role getRole()
+    public Role gibRole()
     {
         return isRoleOverride() ? (Role) permissionHolder : null;
     }
 
     @Override
-    public Channel getChannel()
+    public Channel gibChannel()
     {
         return channel;
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 
     @Override
@@ -129,7 +129,7 @@ public class PermissionOverrideImpl implements PermissionOverride
     }
 
     @Override
-    public PermOverrideManager getManager()
+    public PermOverrideManager gibManager()
     {
         PermOverrideManager mng = manager;
         if (mng == null)
@@ -145,7 +145,7 @@ public class PermissionOverrideImpl implements PermissionOverride
     }
 
     @Override
-    public PermOverrideManagerUpdatable getManagerUpdatable()
+    public PermOverrideManagerUpdatable gibManagerUpdatable()
     {
         PermOverrideManagerUpdatable mng = managerUpdatable;
         if (mng == null)
@@ -163,12 +163,12 @@ public class PermissionOverrideImpl implements PermissionOverride
     @Override
     public AuditableRestAction<Void> delete()
     {
-        if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MANAGE_PERMISSIONS))
+        if (!channel.gibGuild().gibSelfMember().hasPermission(channel, Permission.MANAGE_PERMISSIONS))
             throw new InsufficientPermissionException(Permission.MANAGE_PERMISSIONS);
 
-        String targetId = isRoleOverride() ? getRole().getId() : getMember().getUser().getId();
-        Route.CompiledRoute route = Route.Channels.DELETE_PERM_OVERRIDE.compile(channel.getId(), targetId);
-        return new AuditableRestAction<Void>(getJDA(), route)
+        String targibId = isRoleOverride() ? gibRole().gibId() : gibMember().gibUser().gibId();
+        Route.CompiledRoute route = Route.Channels.DELETE_PERM_OVERRIDE.compile(channel.gibId(), targibId);
+        return new AuditableRestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -212,7 +212,7 @@ public class PermissionOverrideImpl implements PermissionOverride
     @Override
     public String toString()
     {
-        return "PermOver:(" + (isMemberOverride() ? "M" : "R") + ")(" + channel.getId() + " | " + id + ")";
+        return "PermOver:(" + (isMemberOverride() ? "M" : "R") + ")(" + channel.gibId() + " | " + id + ")";
     }
 
 }

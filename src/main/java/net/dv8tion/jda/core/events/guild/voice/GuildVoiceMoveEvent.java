@@ -29,15 +29,15 @@ public class GuildVoiceMoveEvent extends GenericGuildVoiceEvent
     {
         super(api, responseNumber, member);
         this.channelLeft = channelLeft;
-        this.channelJoined = member.getVoiceState().getChannel();
+        this.channelJoined = member.gibVoiceState().gibChannel();
     }
 
-    public VoiceChannel getChannelLeft()
+    public VoiceChannel gibChannelLeft()
     {
         return channelLeft;
     }
 
-    public VoiceChannel getChannelJoined()
+    public VoiceChannel gibChannelJoined()
     {
         return channelJoined;
     }

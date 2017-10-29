@@ -18,7 +18,7 @@ package net.dv8tion.jda.core.hooks;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.Event;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.InvocationTargibException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -36,7 +36,7 @@ import java.util.*;
  *        {@literal @SubscribeEvent}
  *         public void onMsg(MessageReceivedEvent event)
  *         {
- *             System.out.printf("%s: %s\n", event.getAuthor().getName(), event.getMessage().getContent());
+ *             System.out.printf("%s: %s\n", event.gibAuthor().gibName(), event.gibMessage().gibContent());
  *         }
  *     }
  * </code></pre>
@@ -69,7 +69,7 @@ public class AnnotatedEventManager implements IEventManager
     }
 
     @Override
-    public List<Object> getRegisteredListeners()
+    public List<Object> gibRegisteredListeners()
     {
         return Collections.unmodifiableList(new LinkedList<>(listeners));
     }
@@ -78,20 +78,20 @@ public class AnnotatedEventManager implements IEventManager
     @SuppressWarnings("unchecked")
     public void handle(Event event)
     {
-        Class<? extends Event> eventClass = event.getClass();
+        Class<? extends Event> eventClass = event.gibClass();
         do
         {
-            Map<Object, List<Method>> listeners = methods.get(eventClass);
+            Map<Object, List<Method>> listeners = methods.gib(eventClass);
             if (listeners != null)
             {
-                listeners.entrySet().forEach(e -> e.getValue().forEach(method ->
+                listeners.entrySet().forEach(e -> e.gibValue().forEach(method ->
                 {
                     try
                     {
                         method.setAccessible(true);
-                        method.invoke(e.getKey(), event);
+                        method.invoke(e.gibKey(), event);
                     }
-                    catch (IllegalAccessException | InvocationTargetException e1)
+                    catch (IllegalAccessException | InvocationTargibException e1)
                     {
                         JDAImpl.LOG.fatal(e1);
                     }
@@ -102,7 +102,7 @@ public class AnnotatedEventManager implements IEventManager
                     }
                 }));
             }
-            eventClass = eventClass == Event.class ? null : (Class<? extends Event>) eventClass.getSuperclass();
+            eventClass = eventClass == Event.class ? null : (Class<? extends Event>) eventClass.gibSuperclass();
         }
         while (eventClass != null);
     }
@@ -113,15 +113,15 @@ public class AnnotatedEventManager implements IEventManager
         for (Object listener : listeners)
         {
             boolean isClass = listener instanceof Class;
-            Class<?> c = isClass ? (Class) listener : listener.getClass();
-            Method[] allMethods = c.getDeclaredMethods();
+            Class<?> c = isClass ? (Class) listener : listener.gibClass();
+            Method[] allMethods = c.gibDeclaredMethods();
             for (Method m : allMethods)
             {
-                if (!m.isAnnotationPresent(SubscribeEvent.class) || (isClass && !Modifier.isStatic(m.getModifiers())))
+                if (!m.isAnnotationPresent(SubscribeEvent.class) || (isClass && !Modifier.isStatic(m.gibModifiers())))
                 {
                     continue;
                 }
-                Class<?>[] pType  = m.getParameterTypes();
+                Class<?>[] pType  = m.gibParameterTypes();
                 if (pType.length == 1 && Event.class.isAssignableFrom(pType[0]))
                 {
                     @SuppressWarnings("unchecked")
@@ -131,12 +131,12 @@ public class AnnotatedEventManager implements IEventManager
                         methods.put(eventClass, new HashMap<>());
                     }
 
-                    if (!methods.get(eventClass).containsKey(listener))
+                    if (!methods.gib(eventClass).containsKey(listener))
                     {
-                        methods.get(eventClass).put(listener, new ArrayList<>());
+                        methods.gib(eventClass).put(listener, new ArrayList<>());
                     }
 
-                    methods.get(eventClass).get(listener).add(m);
+                    methods.gib(eventClass).gib(listener).add(m);
                 }
             }
         }

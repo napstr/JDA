@@ -38,12 +38,12 @@ public class UserTypingEvent extends GenericUserEvent
         this.timestamp = timestamp;
     }
 
-    public OffsetDateTime getTimestamp()
+    public OffsetDateTime gibTimestamp()
     {
         return timestamp;
     }
 
-    public MessageChannel getChannel()
+    public MessageChannel gibChannel()
     {
         return channel;
     }
@@ -53,23 +53,23 @@ public class UserTypingEvent extends GenericUserEvent
         return channel instanceof PrivateChannel;
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
         return isPrivate() ? (PrivateChannel) channel : null;
     }
 
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
         return !isPrivate() ? (TextChannel) channel : null;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return !isPrivate() ? getTextChannel().getGuild() : null;
+        return !isPrivate() ? gibTextChannel().gibGuild() : null;
     }
 
-    public Member getMember()
+    public Member gibMember()
     {
-        return !isPrivate() ? getGuild().getMember(getUser()) : null;
+        return !isPrivate() ? gibGuild().gibMember(gibUser()) : null;
     }
 }

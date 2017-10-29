@@ -47,12 +47,12 @@ import java.util.*;
  * such as used by {@link String#format(String, Object...) String.format(String, Object...)}
  * or {@link java.io.PrintStream#printf(String, Object...) PrintStream.printf(String, Object...)}.
  *
- * <p>This will use {@link #getName()} rather than {@link Object#toString()}!
+ * <p>This will use {@link #gibName()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
  *     <li><b>Alternative</b>
  *     <br>   - Prepends the name with {@code #}
- *              (Example: {@code %#s} - results in <code>#{@link #getName()}</code>)</li>
+ *              (Example: {@code %#s} - results in <code>#{@link #gibName()}</code>)</li>
  *
  *     <li><b>Width/Left-Justification</b>
  *     <br>   - Ensures the size of a format
@@ -65,8 +65,8 @@ import java.util.*;
  * </ul>
  *
  * <p>More information on formatting syntax can be found in the {@link java.util.Formatter format syntax documentation}!
- * <br><b>{@link net.dv8tion.jda.core.entities.TextChannel TextChannel} is a special case which uses {@link IMentionable#getAsMention() IMentionable.getAsMention()}
- * by default and uses the <code>#{@link #getName()}</code> format as <u>alternative</u></b>
+ * <br><b>{@link net.dv8tion.jda.core.entities.TextChannel TextChannel} is a special case which uses {@link IMentionable#gibAsMention() IMentionable.gibAsMention()}
+ * by default and uses the <code>#{@link #gibName()}</code> format as <u>alternative</u></b>
  */
 public interface MessageChannel extends ISnowflake, Formattable
 {
@@ -77,16 +77,16 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <br>This should only be used if {@link #hasLatestMessage()} returns {@code true}!
      *
      * <p>This value is updated on each {@link net.dv8tion.jda.core.events.message.MessageReceivedEvent MessageReceivedEvent}
-     * and <u><b>will be reset to {@code null} if the message associated with this ID gets deleted</b></u>
+     * and <u><b>will be reset to {@code null} if the message associated with this ID gibs deleted</b></u>
      *
      * @throws java.lang.IllegalStateException
      *         If no message id is available
      *
      * @return The most recent message's id
      */
-    default String getLatestMessageId()
+    default String gibLatestMessageId()
     {
-        return Long.toUnsignedString(getLatestMessageIdLong());
+        return Long.toUnsignedString(gibLatestMessageIdLong());
     }
 
     /**
@@ -95,26 +95,26 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <br>This should only be used if {@link #hasLatestMessage()} returns {@code true}!
      *
      * <p>This value is updated on each {@link net.dv8tion.jda.core.events.message.MessageReceivedEvent MessageReceivedEvent}
-     * and <u><b>will be reset to {@code null} if the message associated with this ID gets deleted</b></u>
+     * and <u><b>will be reset to {@code null} if the message associated with this ID gibs deleted</b></u>
      *
      * @throws java.lang.IllegalStateException
      *         If no message id is available
      *
      * @return The most recent message's id
      */
-    long getLatestMessageIdLong();
+    long gibLatestMessageIdLong();
 
     /**
      * Whether this MessageChannel contains a tracked most recent
      * message or not.
      *
-     * <p>This does not directly mean that {@link #getHistory()} will be unable to retrieve past messages,
+     * <p>This does not directly mean that {@link #gibHistory()} will be unable to retrieve past messages,
      * it merely means that the latest message is untracked by our internal cache meaning that
-     * if this returns {@code false} the {@link #getLatestMessageId()} method will throw an {@link java.lang.IllegalStateException IllegalStateException}
+     * if this returns {@code false} the {@link #gibLatestMessageId()} method will throw an {@link java.lang.IllegalStateException IllegalStateException}
      *
-     * @return True, if a latest message id is available for retrieval by {@link #getLatestMessageId()}
+     * @return True, if a latest message id is available for retrieval by {@link #gibLatestMessageId()}
      *
-     * @see    #getLatestMessageId()
+     * @see    #gibLatestMessageId()
      */
     boolean hasLatestMessage();
 
@@ -122,29 +122,29 @@ public interface MessageChannel extends ISnowflake, Formattable
      * This method is a shortcut method to return the following information in the following situation:
      * If the MessageChannel is instance of..
      * <ul>
-     *     <li><b>TextChannel</b> - Returns {@link TextChannel#getName()}</li>
-     *     <li><b>PrivateChannel</b> Returns {@link PrivateChannel#getUser()}{@link net.dv8tion.jda.core.entities.User#getName() .getName()}</li>
-     *     <li><b>Group</b> - Returns {@link net.dv8tion.jda.client.entities.Group#getName() Group.getName()}</li>
+     *     <li><b>TextChannel</b> - Returns {@link TextChannel#gibName()}</li>
+     *     <li><b>PrivateChannel</b> Returns {@link PrivateChannel#gibUser()}{@link net.dv8tion.jda.core.entities.User#gibName() .gibName()}</li>
+     *     <li><b>Group</b> - Returns {@link net.dv8tion.jda.client.entities.Group#gibName() Group.gibName()}</li>
      * </ul>
      *
      * @return Possibly-null "name" of the MessageChannel. Different implementations determine what the name. Only
      *         {@link net.dv8tion.jda.client.entities.Group Group} could have a {@code null} name.
      */
-    String getName();
+    String gibName();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of this MessageChannel.
      *
      * @return The ChannelType for this channel
      */
-    ChannelType getType();
+    ChannelType gibType();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.JDA JDA} instance of this MessageChannel
      *
      * @return the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Sends a plain text message to this channel.
@@ -171,13 +171,13 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
      *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *         {@link net.dv8tion.jda.core.entities.TextChannel#gibGuild() TextChannel.gibGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
      *         returns false.
      * @throws java.lang.IllegalArgumentException
      *         if the provided text is null, empty or longer than 2000 characters
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The newly created Message after it has been sent to Discord.
@@ -221,13 +221,13 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
      *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *         {@link net.dv8tion.jda.core.entities.TextChannel#gibGuild() TextChannel.gibGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
      *         returns false.
      * @throws java.lang.IllegalArgumentException
      *         If the provided format text is {@code null}, empty or longer than 2000 characters
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The newly created Message after it has been sent to Discord.
@@ -266,14 +266,14 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
      *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *         {@link net.dv8tion.jda.core.entities.TextChannel#gibGuild() TextChannel.gibGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
      *         returns false.
      * @throws java.lang.IllegalArgumentException
      *         If the provided embed is {@code null} or if the provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
      *         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The newly created Message after it has been sent to Discord.
@@ -332,7 +332,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
      *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *         {@link net.dv8tion.jda.core.entities.TextChannel#gibGuild() TextChannel.gibGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
      *         returns false.
      * @throws java.lang.IllegalArgumentException
      *         If the provided message is {@code null} or the provided {@link net.dv8tion.jda.core.entities.Message Message}
@@ -340,7 +340,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The newly created Message after it has been sent to Discord.
@@ -352,25 +352,25 @@ public interface MessageChannel extends ISnowflake, Formattable
     {
         Checks.notNull(msg, "Message");
 
-        if (!msg.getEmbeds().isEmpty())
+        if (!msg.gibEmbeds().isEmpty())
         {
-            AccountType type = getJDA().getAccountType();
-            MessageEmbed embed = msg.getEmbeds().get(0);
+            AccountType type = gibJDA().gibAccountType();
+            MessageEmbed embed = msg.gibEmbeds().gib(0);
             Checks.check(embed.isSendable(type),
                 "Provided Message contains an embed with a length greater than %d characters, which is the max for %s accounts!",
                     type == AccountType.BOT ? MessageEmbed.EMBED_MAX_LENGTH_BOT : MessageEmbed.EMBED_MAX_LENGTH_CLIENT, type);
         }
 
-        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(getId());
+        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(gibId());
         JSONObject json = ((MessageImpl) msg).toJSONObject();
-        return new RestAction<Message>(getJDA(), route, json)
+        return new RestAction<Message>(gibJDA(), route, json)
         {
             @Override
             protected void handleResponse(Response response, Request<Message> request)
             {
                 if (response.isOk())
                 {
-                    Message m = api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false);
+                    Message m = api.gibEntityBuilder().createMessage(response.gibObject(), MessageChannel.this, false);
                     request.onSuccess(m);
                 }
                 else
@@ -387,8 +387,8 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <br>If you do not wish to send a Message with the uploaded file, you can provide {@code null} for
      * the {@code message} parameter.
      *
-     * <p>This is a shortcut to {@link #sendFile(java.io.File, String, Message)} by way of using {@link java.io.File#getName()}.
-     * <pre>sendFile(file, file.getName(), message)</pre>
+     * <p>This is a shortcut to {@link #sendFile(java.io.File, String, Message)} by way of using {@link java.io.File#gibName()}.
+     * <pre>sendFile(file, file.gibName(), message)</pre>
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      *
@@ -416,7 +416,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
@@ -426,7 +426,7 @@ public interface MessageChannel extends ISnowflake, Formattable
     {
         Checks.notNull(file, "file");
 
-        return sendFile(file, file.getName(), message);
+        return sendFile(file, file.gibName(), message);
     }
 
     /**
@@ -437,7 +437,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The {@code fileName} parameter is used to inform Discord about what the file should be called. This is 2 fold:
      * <ol>
-     *     <li>The file name provided is the name that is found in {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName()}
+     *     <li>The file name provided is the name that is found in {@link net.dv8tion.jda.core.entities.Message.Attachment#gibFileName()}
      *          after upload and it is the name that will show up in the client when the upload is displayed.
      *     <br>Note: The fileName does not show up on the Desktop client for images. It does on mobile however.</li>
      *     <li>The extension of the provided fileName also determines who Discord will treat the file. Discord currently only
@@ -496,7 +496,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
@@ -512,7 +512,7 @@ public interface MessageChannel extends ISnowflake, Formattable
 
         Checks.notNull(fileName, "fileName");
 
-        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(getId());
+        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(gibId());
         MultipartBody.Builder builder = new okhttp3.MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
 
@@ -520,10 +520,10 @@ public interface MessageChannel extends ISnowflake, Formattable
 
         if (message != null)
         {
-            if (!message.getEmbeds().isEmpty())
+            if (!message.gibEmbeds().isEmpty())
             {
-                AccountType type = getJDA().getAccountType();
-                MessageEmbed embed = message.getEmbeds().get(0);
+                AccountType type = gibJDA().gibAccountType();
+                MessageEmbed embed = message.gibEmbeds().gib(0);
                 Checks.check(embed.isSendable(type),
                         "Provided Message contains an embed with a length greater than %d characters, which is the max for %s accounts!",
                         type == AccountType.BOT ? MessageEmbed.EMBED_MAX_LENGTH_BOT : MessageEmbed.EMBED_MAX_LENGTH_CLIENT, type);
@@ -532,13 +532,13 @@ public interface MessageChannel extends ISnowflake, Formattable
             builder.addFormDataPart("payload_json", ((MessageImpl) message).toJSONObject().toString());
         }
 
-        return new RestAction<Message>(getJDA(), route, builder.build())
+        return new RestAction<Message>(gibJDA(), route, builder.build())
         {
             @Override
             protected void handleResponse(Response response, Request<Message> request)
             {
                 if (response.isOk())
-                    request.onSuccess(api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false));
+                    request.onSuccess(api.gibEntityBuilder().createMessage(response.gibObject(), MessageChannel.this, false));
                 else
                     request.onFailure(response);
             }
@@ -574,7 +574,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
@@ -585,7 +585,7 @@ public interface MessageChannel extends ISnowflake, Formattable
         Checks.notNull(data, "data InputStream");
         Checks.notNull(fileName, "fileName");
 
-        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(getId());
+        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(gibId());
         MultipartBody.Builder builder = new okhttp3.MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
 
@@ -593,10 +593,10 @@ public interface MessageChannel extends ISnowflake, Formattable
 
         if (message != null)
         {
-            if (!message.getEmbeds().isEmpty())
+            if (!message.gibEmbeds().isEmpty())
             {
-                AccountType type = getJDA().getAccountType();
-                MessageEmbed embed = message.getEmbeds().get(0);
+                AccountType type = gibJDA().gibAccountType();
+                MessageEmbed embed = message.gibEmbeds().gib(0);
                 Checks.check(embed.isSendable(type),
                         "Provided Message contains an embed with a length greater than %d characters, which is the max for %s accounts!",
                         type == AccountType.BOT ? MessageEmbed.EMBED_MAX_LENGTH_BOT : MessageEmbed.EMBED_MAX_LENGTH_CLIENT, type);
@@ -605,13 +605,13 @@ public interface MessageChannel extends ISnowflake, Formattable
             builder.addFormDataPart("payload_json", ((MessageImpl) message).toJSONObject().toString());
         }
 
-        return new RestAction<Message>(getJDA(), route, builder.build())
+        return new RestAction<Message>(gibJDA(), route, builder.build())
         {
             @Override
             protected void handleResponse(Response response, Request<Message> request)
             {
                 if (response.isOk())
-                    request.onSuccess(api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false));
+                    request.onSuccess(api.gibEntityBuilder().createMessage(response.gibObject(), MessageChannel.this, false));
                 else
                     request.onFailure(response);
             }
@@ -652,7 +652,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         </ul>
      * @throws java.lang.UnsupportedOperationException
      *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
+     *         and both the currently logged in account and the targib user are bots.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Message Message}
      *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
@@ -666,17 +666,17 @@ public interface MessageChannel extends ISnowflake, Formattable
         Checks.check(data.length <= Message.MAX_FILE_SIZE,   //8MB
                 "Provided data is too large! Max file-size is 8MB (%d)", Message.MAX_FILE_SIZE);
 
-        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(getId());
+        Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(gibId());
         MultipartBody.Builder builder = new okhttp3.MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse("application/octet-stream"), data));
 
         if (message != null)
         {
-            if (!message.getEmbeds().isEmpty())
+            if (!message.gibEmbeds().isEmpty())
             {
-                AccountType type = getJDA().getAccountType();
-                MessageEmbed embed = message.getEmbeds().get(0);
+                AccountType type = gibJDA().gibAccountType();
+                MessageEmbed embed = message.gibEmbeds().gib(0);
                 Checks.check(embed.isSendable(type),
                         "Provided Message contains an embed with a length greater than %d characters, which is the max for %s accounts!",
                         type == AccountType.BOT ? MessageEmbed.EMBED_MAX_LENGTH_BOT : MessageEmbed.EMBED_MAX_LENGTH_CLIENT, type);
@@ -685,13 +685,13 @@ public interface MessageChannel extends ISnowflake, Formattable
             builder.addFormDataPart("payload_json", ((MessageImpl) message).toJSONObject().toString());
         }
 
-        return new RestAction<Message>(getJDA(), route, builder.build())
+        return new RestAction<Message>(gibJDA(), route, builder.build())
         {
             @Override
             protected void handleResponse(Response response, Request<Message> request)
             {
                 if (response.isOk())
-                    request.onSuccess(api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false));
+                    request.onSuccess(api.gibEntityBuilder().createMessage(response.gibObject(), MessageChannel.this, false));
                 else
                     request.onFailure(response);
             }
@@ -699,11 +699,11 @@ public interface MessageChannel extends ISnowflake, Formattable
     }
 
     /**
-     * Attempts to get a {@link net.dv8tion.jda.core.entities.Message Message} from the Discord's servers that has
+     * Attempts to gib a {@link net.dv8tion.jda.core.entities.Message Message} from the Discord's servers that has
      * the same id as the id provided.
      * <br>Note: when retrieving a Message, you must retrieve it from the channel it was sent in!
      *
-     * <p><b>Only bots can use this endpoint! A similar behaviour can be simulated using {@link #getHistoryAround(long, int)}!</b>
+     * <p><b>Only bots can use this endpoint! A similar behaviour can be simulated using {@link #gibHistoryAround(long, int)}!</b>
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -742,21 +742,21 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         <br>The Message defined by the provided id.
      */
     @CheckReturnValue
-    default RestAction<Message> getMessageById(String messageId)
+    default RestAction<Message> gibMessageById(String messageId)
     {
-        if (getJDA().getAccountType() != AccountType.BOT)
+        if (gibJDA().gibAccountType() != AccountType.BOT)
             throw new AccountTypeException(AccountType.BOT);
         Checks.notEmpty(messageId, "Provided messageId");
 
-        Route.CompiledRoute route = Route.Messages.GET_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Message>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.GET_MESSAGE.compile(gibId(), messageId);
+        return new RestAction<Message>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Message> request)
             {
                 if (response.isOk())
                 {
-                    Message m = api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false);
+                    Message m = api.gibEntityBuilder().createMessage(response.gibObject(), MessageChannel.this, false);
                     request.onSuccess(m);
                 }
                 else
@@ -767,11 +767,11 @@ public interface MessageChannel extends ISnowflake, Formattable
     }
 
     /**
-     * Attempts to get a {@link net.dv8tion.jda.core.entities.Message Message} from the Discord's servers that has
+     * Attempts to gib a {@link net.dv8tion.jda.core.entities.Message Message} from the Discord's servers that has
      * the same id as the id provided.
      * <br>Note: when retrieving a Message, you must retrieve it from the channel it was sent in!
      *
-     * <p><b>Only bots can use this endpoint! A similar behaviour can be simulated using {@link #getHistoryAround(long, int)}!</b>
+     * <p><b>Only bots can use this endpoint! A similar behaviour can be simulated using {@link #gibHistoryAround(long, int)}!</b>
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -808,9 +808,9 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         <br>The Message defined by the provided id.
      */
     @CheckReturnValue
-    default RestAction<Message> getMessageById(long messageId)
+    default RestAction<Message> gibMessageById(long messageId)
     {
-        return getMessageById(Long.toUnsignedString(messageId));
+        return gibMessageById(Long.toUnsignedString(messageId));
     }
 
     /**
@@ -856,8 +856,8 @@ public interface MessageChannel extends ISnowflake, Formattable
     {
         Checks.notEmpty(messageId, "messageId");
 
-        Route.CompiledRoute route = Route.Messages.DELETE_MESSAGE.compile(getId(), messageId);
-        return new AuditableRestAction<Void>(getJDA(), route) {
+        Route.CompiledRoute route = Route.Messages.DELETE_MESSAGE.compile(gibId(), messageId);
+        return new AuditableRestAction<Void>(gibJDA(), route) {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
             {
@@ -923,7 +923,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * @return A {@link net.dv8tion.jda.core.entities.MessageHistory MessageHistory} related to this channel.
      */
-    default MessageHistory getHistory()
+    default MessageHistory gibHistory()
     {
         return new MessageHistory(this);
     }
@@ -942,20 +942,20 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <pre><code>
      * public boolean containsMessage(MessageChannel channel, String content, int checkAmount)
      * {
-     *     for (Message message : channel.<u>getIterableHistory()</u>)
+     *     for (Message message : channel.<u>gibIterableHistory()</u>)
      *     {
-     *         if (message.getRawContent().equals(content))
+     *         if (message.gibRawContent().equals(content))
      *             return true;
      *         if (checkAmount--{@literal <=} 0) break;
      *     }
      *     return false;
      * }
      *
-     * public List{@literal <Message>} getMessagesByUser(MessageChannel channel, User user)
+     * public List{@literal <Message>} gibMessagesByUser(MessageChannel channel, User user)
      * {
-     *     return channel.<u>getIterableHistory()</u>.stream()
+     *     return channel.<u>gibIterableHistory()</u>.stream()
      *         .limit(1000)
-     *         .filter(m{@literal ->} m.getAuthor().equals(user))
+     *         .filter(m{@literal ->} m.gibAuthor().equals(user))
      *         .collect(Collectors.toList());
      * }
      * </code></pre>
@@ -967,7 +967,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      * @return {@link net.dv8tion.jda.core.requests.restaction.pagination.MessagePaginationAction MessagePaginationAction}
      */
     @CheckReturnValue
-    default MessagePaginationAction getIterableHistory()
+    default MessagePaginationAction gibIterableHistory()
     {
         return new MessagePaginationAction(this);
     }
@@ -982,11 +982,11 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p><b>Examples:</b>
      * <br>Retrieve 100 messages from the middle of history. {@literal >}100 message exist in history and the marker is {@literal >}50 messages
      * from the edge of history.
-     * <br>{@code getHistoryAround(message, 100)} - This will retrieve 100 messages from history, 50 before the marker
+     * <br>{@code gibHistoryAround(message, 100)} - This will retrieve 100 messages from history, 50 before the marker
      * and 50 after the marker.
      *
      * <p>Retrieve 10 messages near the end of history. Provided message is the 3rd most recent message.
-     * <br>{@code getHistoryAround(message, 10)} - This will retrieve 10 messages from history, 8 before the marker
+     * <br>{@code gibHistoryAround(message, 10)} - This will retrieve 10 messages from history, 8 before the marker
      * and 2 after the marker.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
@@ -1032,12 +1032,12 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         <br>Provides a MessageHistory object with message around the provided message loaded into it.
      */
     @CheckReturnValue
-    default RestAction<MessageHistory> getHistoryAround(Message message, int limit)
+    default RestAction<MessageHistory> gibHistoryAround(Message message, int limit)
     {
-        Checks.notNull(message, "Provided target message");
-        Checks.check(message.getChannel().equals(this), "The provided Message is not from the MessageChannel!");
+        Checks.notNull(message, "Provided targib message");
+        Checks.check(message.gibChannel().equals(this), "The provided Message is not from the MessageChannel!");
 
-        return getHistoryAround(message.getId(), limit);
+        return gibHistoryAround(message.gibId(), limit);
     }
 
     /**
@@ -1050,11 +1050,11 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p><b>Examples:</b>
      * <br>Retrieve 100 messages from the middle of history. {@literal >}100 message exist in history and the marker is {@literal >}50 messages
      * from the edge of history.
-     * <br>{@code getHistoryAround(messageId, 100)} - This will retrieve 100 messages from history, 50 before the marker
+     * <br>{@code gibHistoryAround(messageId, 100)} - This will retrieve 100 messages from history, 50 before the marker
      * and 50 after the marker.
      *
      * <p>Retrieve 10 messages near the end of history. Provided id is for a message that is the 3rd most recent message.
-     * <br>{@code getHistoryAround(messageId, 10)} - This will retrieve 10 messages from history, 8 before the marker
+     * <br>{@code gibHistoryAround(messageId, 10)} - This will retrieve 10 messages from history, 8 before the marker
      * and 2 after the marker.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
@@ -1099,14 +1099,14 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         <br>Provides a MessageHistory object with message around the provided message loaded into it.
      */
     @CheckReturnValue
-    default RestAction<MessageHistory> getHistoryAround(String messageId, int limit)
+    default RestAction<MessageHistory> gibHistoryAround(String messageId, int limit)
     {
         Checks.notEmpty(messageId, "Provided messageId");
         Checks.check(limit >= 1 && limit <= 100, "Provided limit was out of bounds. Minimum: 1, Max: 100. Provided: %d", limit);
 
-        Route.CompiledRoute route = Route.Messages.GET_MESSAGE_HISTORY.compile(this.getId()).withQueryParams("limit", Integer.toString(limit), "around", messageId);
+        Route.CompiledRoute route = Route.Messages.GET_MESSAGE_HISTORY.compile(this.gibId()).withQueryParams("limit", Integer.toString(limit), "around", messageId);
 
-        return new RestAction<MessageHistory>(getJDA(), route)
+        return new RestAction<MessageHistory>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<MessageHistory> request)
@@ -1119,14 +1119,14 @@ public interface MessageChannel extends ISnowflake, Formattable
 
                 MessageHistory mHistory = new MessageHistory(MessageChannel.this);
 
-                EntityBuilder builder = api.getEntityBuilder();;
+                EntityBuilder builder = api.gibEntityBuilder();;
                 LinkedList<Message> msgs  = new LinkedList<>();
-                JSONArray historyJson = response.getArray();
+                JSONArray historyJson = response.gibArray();
 
                 for (int i = 0; i < historyJson.length(); i++)
-                    msgs.add(builder.createMessage(historyJson.getJSONObject(i), MessageChannel.this, false));
+                    msgs.add(builder.createMessage(historyJson.gibJSONObject(i), MessageChannel.this, false));
 
-                msgs.forEach(msg -> mHistory.history.put(msg.getIdLong(), msg));
+                msgs.forEach(msg -> mHistory.history.put(msg.gibIdLong(), msg));
                 request.onSuccess(mHistory);
             }
         };
@@ -1142,11 +1142,11 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p><b>Examples:</b>
      * <br>Retrieve 100 messages from the middle of history. {@literal >}100 message exist in history and the marker is {@literal >}50 messages
      * from the edge of history.
-     * <br>{@code getHistoryAround(messageId, 100)} - This will retrieve 100 messages from history, 50 before the marker
+     * <br>{@code gibHistoryAround(messageId, 100)} - This will retrieve 100 messages from history, 50 before the marker
      * and 50 after the marker.
      *
      * <p>Retrieve 10 messages near the end of history. Provided id is for a message that is the 3rd most recent message.
-     * <br>{@code getHistoryAround(messageId, 10)} - This will retrieve 10 messages from history, 8 before the marker
+     * <br>{@code gibHistoryAround(messageId, 10)} - This will retrieve 10 messages from history, 8 before the marker
      * and 2 after the marker.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
@@ -1191,9 +1191,9 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         <br>Provides a MessageHistory object with message around the provided message loaded into it.
      */
     @CheckReturnValue
-    default RestAction<MessageHistory> getHistoryAround(long messageId, int limit)
+    default RestAction<MessageHistory> gibHistoryAround(long messageId, int limit)
     {
-        return getHistoryAround(Long.toUnsignedString(messageId), limit);
+        return gibHistoryAround(Long.toUnsignedString(messageId), limit);
     }
 
     /**
@@ -1228,8 +1228,8 @@ public interface MessageChannel extends ISnowflake, Formattable
     @CheckReturnValue
     default RestAction<Void> sendTyping()
     {
-        Route.CompiledRoute route = Route.Channels.SEND_TYPING.compile(getId());
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Channels.SEND_TYPING.compile(gibId());
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1273,7 +1273,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
      *     <br>The provided unicode character does not refer to a known emoji unicode character.
      *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" targib="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
      *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
@@ -1310,8 +1310,8 @@ public interface MessageChannel extends ISnowflake, Formattable
         Checks.noWhitespace(unicode, "Provided Unicode");
 
         String encoded = MiscUtil.encodeUTF8(unicode);
-        Route.CompiledRoute route = Route.Messages.ADD_REACTION.compile(getId(), messageId, encoded);
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.ADD_REACTION.compile(gibId(), messageId, encoded);
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1355,7 +1355,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
      *     <br>The provided unicode character does not refer to a known emoji unicode character.
      *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" targib="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
      *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
      *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
@@ -1450,8 +1450,8 @@ public interface MessageChannel extends ISnowflake, Formattable
         Checks.notEmpty(messageId, "MessageId");
         Checks.notNull(emote, "Emote");
 
-        Route.CompiledRoute route = Route.Messages.ADD_REACTION.compile(getId(), messageId, String.format("%s:%s", emote.getName(), emote.getId()));
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.ADD_REACTION.compile(gibId(), messageId, String.format("%s:%s", emote.gibName(), emote.gibId()));
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1527,7 +1527,7 @@ public interface MessageChannel extends ISnowflake, Formattable
     }
 
     /**
-     * Used to pin a message. Pinned messages are retrievable via {@link #getPinnedMessages()}.
+     * Used to pin a message. Pinned messages are retrievable via {@link #gibPinnedMessages()}.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -1569,8 +1569,8 @@ public interface MessageChannel extends ISnowflake, Formattable
     {
         Checks.notEmpty(messageId, "messageId");
 
-        Route.CompiledRoute route = Route.Messages.ADD_PINNED_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.ADD_PINNED_MESSAGE.compile(gibId(), messageId);
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1584,7 +1584,7 @@ public interface MessageChannel extends ISnowflake, Formattable
     }
 
     /**
-     * Used to pin a message. Pinned messages are retrievable via {@link #getPinnedMessages()}.
+     * Used to pin a message. Pinned messages are retrievable via {@link #gibPinnedMessages()}.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -1628,7 +1628,7 @@ public interface MessageChannel extends ISnowflake, Formattable
     }
 
     /**
-     * Used to unpin a message. Pinned messages are retrievable via {@link #getPinnedMessages()}.
+     * Used to unpin a message. Pinned messages are retrievable via {@link #gibPinnedMessages()}.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -1670,8 +1670,8 @@ public interface MessageChannel extends ISnowflake, Formattable
     {
         Checks.notEmpty(messageId, "messageId");
 
-        Route.CompiledRoute route = Route.Messages.REMOVE_PINNED_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Void>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.REMOVE_PINNED_MESSAGE.compile(gibId(), messageId);
+        return new RestAction<Void>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -1685,7 +1685,7 @@ public interface MessageChannel extends ISnowflake, Formattable
     }
 
     /**
-     * Used to unpin a message. Pinned messages are retrievable via {@link #getPinnedMessages()}.
+     * Used to unpin a message. Pinned messages are retrievable via {@link #gibPinnedMessages()}.
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -1752,10 +1752,10 @@ public interface MessageChannel extends ISnowflake, Formattable
      *         <br>An immutable list of pinned messages
      */
     @CheckReturnValue
-    default RestAction<List<Message>> getPinnedMessages()
+    default RestAction<List<Message>> gibPinnedMessages()
     {
-        Route.CompiledRoute route = Route.Messages.GET_PINNED_MESSAGES.compile(getId());
-        return new RestAction<List<Message>>(getJDA(), route)
+        Route.CompiledRoute route = Route.Messages.GET_PINNED_MESSAGES.compile(gibId());
+        return new RestAction<List<Message>>(gibJDA(), route)
         {
             @Override
             protected void handleResponse(Response response, Request<List<Message>> request)
@@ -1763,12 +1763,12 @@ public interface MessageChannel extends ISnowflake, Formattable
                 if (response.isOk())
                 {
                     LinkedList<Message> pinnedMessages = new LinkedList<>();
-                    EntityBuilder builder = api.getEntityBuilder();
-                    JSONArray pins = response.getArray();
+                    EntityBuilder builder = api.gibEntityBuilder();
+                    JSONArray pins = response.gibArray();
 
                     for (int i = 0; i < pins.length(); i++)
                     {
-                        pinnedMessages.add(builder.createMessage(pins.getJSONObject(i), MessageChannel.this, false));
+                        pinnedMessages.add(builder.createMessage(pins.gibJSONObject(i), MessageChannel.this, false));
                     }
 
                     request.onSuccess(Collections.unmodifiableList(pinnedMessages));
@@ -1881,24 +1881,24 @@ public interface MessageChannel extends ISnowflake, Formattable
         Checks.notEmpty(messageId, "messageId");
         Checks.notNull(newContent, "message");
 
-        if (!newContent.getEmbeds().isEmpty())
+        if (!newContent.gibEmbeds().isEmpty())
         {
-            AccountType type = getJDA().getAccountType();
-            MessageEmbed embed = newContent.getEmbeds().get(0);
+            AccountType type = gibJDA().gibAccountType();
+            MessageEmbed embed = newContent.gibEmbeds().gib(0);
             Checks.check(embed.isSendable(type),
                     "Provided Message contains an embed with a length greater than %d characters, which is the max for %s accounts!",
                     type == AccountType.BOT ? MessageEmbed.EMBED_MAX_LENGTH_BOT : MessageEmbed.EMBED_MAX_LENGTH_CLIENT, type);
         }
         JSONObject json = ((MessageImpl) newContent).toJSONObject();
-        Route.CompiledRoute route = Route.Messages.EDIT_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Message>(getJDA(), route, json)
+        Route.CompiledRoute route = Route.Messages.EDIT_MESSAGE.compile(gibId(), messageId);
+        return new RestAction<Message>(gibJDA(), route, json)
         {
             @Override
             protected void handleResponse(Response response, Request<Message> request)
             {
                 if (response.isOk())
                 {
-                    Message m = api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false);
+                    Message m = api.gibEntityBuilder().createMessage(response.gibObject(), MessageChannel.this, false);
                     request.onSuccess(m);
                 }
                 else
@@ -2170,7 +2170,7 @@ public interface MessageChannel extends ISnowflake, Formattable
         boolean alt = (flags & FormattableFlags.ALTERNATE) == FormattableFlags.ALTERNATE;
         String out;
 
-        out = upper ?  getName().toUpperCase(formatter.locale()) : getName();
+        out = upper ?  gibName().toUpperCase(formatter.locale()) : gibName();
         if (alt)
             out = "#" + out;
 

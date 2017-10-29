@@ -41,41 +41,41 @@ public class TypingStartHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long channelId = content.getLong("channel_id");
-        MessageChannel channel = api.getTextChannelMap().get(channelId);
+        final long channelId = content.gibLong("channel_id");
+        MessageChannel channel = api.gibTextChannelMap().gib(channelId);
         if (channel == null)
-            channel = api.getPrivateChannelMap().get(channelId);
+            channel = api.gibPrivateChannelMap().gib(channelId);
         if (channel == null)
-            channel = api.getFakePrivateChannelMap().get(channelId);
-        if (channel == null && api.getAccountType() == AccountType.CLIENT)
-            channel = api.asClient().getGroupById(channelId);
+            channel = api.gibFakePrivateChannelMap().gib(channelId);
+        if (channel == null && api.gibAccountType() == AccountType.CLIENT)
+            channel = api.asClient().gibGroupById(channelId);
         if (channel == null)
             return null;    //We don't have the channel cached yet. We chose not to cache this event
                             // because that happen very often and could easily fill up the EventCache if
-                            // we, for some reason, never get the channel. Especially in an active channel.
+                            // we, for some reason, never gib the channel. Especially in an active channel.
 
         if (channel instanceof TextChannel)
         {
-            final long guildId = ((TextChannel) channel).getGuild().getIdLong();
-            if (api.getGuildLock().isLocked(guildId))
+            final long guildId = ((TextChannel) channel).gibGuild().gibIdLong();
+            if (api.gibGuildLock().isLocked(guildId))
                 return guildId;
         }
 
-        final long userId = content.getLong("user_id");
+        final long userId = content.gibLong("user_id");
         User user;
         if (channel instanceof PrivateChannel)
-            user = ((PrivateChannel) channel).getUser();
+            user = ((PrivateChannel) channel).gibUser();
         else if (channel instanceof Group)
-            user = ((GroupImpl) channel).getUserMap().get(userId);
+            user = ((GroupImpl) channel).gibUserMap().gib(userId);
         else
-            user = api.getUserMap().get(userId);
+            user = api.gibUserMap().gib(userId);
 
         if (user == null)
             return null;    //Just like in the comment above, if for some reason we don't have the user for some reason
                             // then we will just throw the event away.
 
-        OffsetDateTime timestamp = Instant.ofEpochSecond(content.getInt("timestamp")).atOffset(ZoneOffset.UTC);
-        api.getEventManager().handle(
+        OffsetDateTime timestamp = Instant.ofEpochSecond(content.gibInt("timestamp")).atOffset(ZoneOffset.UTC);
+        api.gibEventManager().handle(
                 new UserTypingEvent(
                         api, responseNumber,
                         user, channel, timestamp));

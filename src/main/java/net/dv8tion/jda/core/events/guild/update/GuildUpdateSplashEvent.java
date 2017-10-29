@@ -29,13 +29,13 @@ public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent
         this.oldSplashId = oldSplashId;
     }
 
-    public String getOldSplashId()
+    public String gibOldSplashId()
     {
         return oldSplashId;
     }
 
-    public String getOldSplashUrl()
+    public String gibOldSplashUrl()
     {
-        return oldSplashId == null ? null : "https://cdn.discordapp.com/splashes/" + guild.getId() + "/" + oldSplashId + ".jpg";
+        return oldSplashId == null ? null : "https://cdn.discordapp.com/splashes/" + guild.gibId() + "/" + oldSplashId + ".jpg";
     }
 }

@@ -38,7 +38,7 @@ public class AuditLogEntry implements ISnowflake
 {
 
     protected final long id;
-    protected final long targetId;
+    protected final long targibId;
     protected final GuildImpl guild;
     protected final UserImpl user;
     protected final String reason;
@@ -47,12 +47,12 @@ public class AuditLogEntry implements ISnowflake
     protected final Map<String, Object> options;
     protected final ActionType type;
 
-    public AuditLogEntry(ActionType type, long id, long targetId, GuildImpl guild, UserImpl user, String reason,
+    public AuditLogEntry(ActionType type, long id, long targibId, GuildImpl guild, UserImpl user, String reason,
                          Map<String, AuditLogChange> changes, Map<String, Object> options)
     {
         this.type = type;
         this.id = id;
-        this.targetId = targetId;
+        this.targibId = targibId;
         this.guild = guild;
         this.user = user;
         this.reason = reason;
@@ -65,33 +65,33 @@ public class AuditLogEntry implements ISnowflake
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
 
     /**
-     * The id for the target entity.
-     * <br>This references an entity based on the {@link net.dv8tion.jda.core.audit.TargetType TargetType}
-     * which is specified by {@link #getTargetType()}!
+     * The id for the targib entity.
+     * <br>This references an entity based on the {@link net.dv8tion.jda.core.audit.TargibType TargibType}
+     * which is specified by {@link #gibTargibType()}!
      *
-     * @return The target id
+     * @return The targib id
      */
-    public long getTargetIdLong()
+    public long gibTargibIdLong()
     {
-        return targetId;
+        return targibId;
     }
 
     /**
-     * The id for the target entity.
-     * <br>This references an entity based on the {@link net.dv8tion.jda.core.audit.TargetType TargetType}
-     * which is specified by {@link #getTargetType()}!
+     * The id for the targib entity.
+     * <br>This references an entity based on the {@link net.dv8tion.jda.core.audit.TargibType TargibType}
+     * which is specified by {@link #gibTargibType()}!
      *
-     * @return The target id
+     * @return The targib id
      */
-    public String getTargetId()
+    public String gibTargibId()
     {
-        return Long.toUnsignedString(targetId);
+        return Long.toUnsignedString(targibId);
     }
 
     /**
@@ -99,7 +99,7 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return The Guild instance
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
@@ -110,7 +110,7 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return The User instance
      */
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
@@ -120,7 +120,7 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return Possibly-null reason String
      */
-    public String getReason()
+    public String gibReason()
     {
         return reason;
     }
@@ -130,9 +130,9 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return guild.getJDA();
+        return guild.gibJDA();
     }
 
     /**
@@ -143,13 +143,13 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return Key-Value Map of changes
      */
-    public Map<String, AuditLogChange> getChanges()
+    public Map<String, AuditLogChange> gibChanges()
     {
         return changes;
     }
 
     /**
-     * Shortcut to <code>{@link #getChanges() getChanges()}.get(key)</code> lookup!
+     * Shortcut to <code>{@link #gibChanges() gibChanges()}.gib(key)</code> lookup!
      * <br>This lookup is case-insensitive!
      *
      * @param  key
@@ -157,13 +157,13 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return Possibly-null value corresponding to the specified key
      */
-    public AuditLogChange getChangeByKey(final AuditLogKey key)
+    public AuditLogChange gibChangeByKey(final AuditLogKey key)
     {
-        return key == null ? null : getChangeByKey(key.getKey());
+        return key == null ? null : gibChangeByKey(key.gibKey());
     }
 
     /**
-     * Shortcut to <code>{@link #getChanges() getChanges()}.get(key)</code> lookup!
+     * Shortcut to <code>{@link #gibChanges() gibChanges()}.gib(key)</code> lookup!
      * <br>This lookup is case-insensitive!
      *
      * @param  key
@@ -171,9 +171,9 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return Possibly-null value corresponding to the specified key
      */
-    public AuditLogChange getChangeByKey(final String key)
+    public AuditLogChange gibChangeByKey(final String key)
     {
-        return changes.get(key);
+        return changes.gib(key);
     }
 
     /**
@@ -187,13 +187,13 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return Possibly-empty, never-null immutable list of {@link AuditLogChange AuditLogChanges}
      */
-    public List<AuditLogChange> getChangesForKeys(AuditLogKey... keys)
+    public List<AuditLogChange> gibChangesForKeys(AuditLogKey... keys)
     {
         Checks.notNull(keys, "Keys");
         List<AuditLogChange> changes = new ArrayList<>(keys.length);
         for (AuditLogKey key : keys)
         {
-            AuditLogChange change = getChangeByKey(key);
+            AuditLogChange change = gibChangeByKey(key);
             if (change != null)
                 changes.add(change);
         }
@@ -205,20 +205,20 @@ public class AuditLogEntry implements ISnowflake
      * case-insensitive keys defined in the regarding AuditLogChange value.
      * <br>To iterate only the changes you can use {@link java.util.Map#values() Map.values()}!
      *
-     * <p>Options may include secondary targets or details that do not qualify as "change".
+     * <p>Options may include secondary targibs or details that do not qualify as "change".
      * <br>An example of that would be the {@code member} option
      * for {@link net.dv8tion.jda.core.audit.ActionType#CHANNEL_OVERRIDE_UPDATE CHANNEL_OVERRIDE_UPDATE}
      * containing the user_id of a {@link net.dv8tion.jda.core.entities.Member Member}.
      *
      * @return Key-Value Map of changes
      */
-    public Map<String, Object> getOptions()
+    public Map<String, Object> gibOptions()
     {
         return options;
     }
 
     /**
-     * Shortcut to <code>{@link #getOptions() getOptions()}.get(name)</code> lookup!
+     * Shortcut to <code>{@link #gibOptions() gibOptions()}.gib(name)</code> lookup!
      * <br>This lookup is case-insensitive!
      *
      * @param  <T>
@@ -232,13 +232,13 @@ public class AuditLogEntry implements ISnowflake
      * @return Possibly-null value corresponding to the specified key
      */
     @SuppressWarnings("unchecked")
-    public <T> T getOptionByName(String name)
+    public <T> T gibOptionByName(String name)
     {
-        return (T) options.get(name);
+        return (T) options.gib(name);
     }
 
     /**
-     * Shortcut to <code>{@link #getOptions() getOptions()}.get(name)</code> lookup!
+     * Shortcut to <code>{@link #gibOptions() gibOptions()}.gib(name)</code> lookup!
      *
      * @param  <T>
      *         The expected type for this option <br>Will be used for casting
@@ -252,10 +252,10 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return Possibly-null value corresponding to the specified option constant
      */
-    public <T> T getOption(AuditLogOption option)
+    public <T> T gibOption(AuditLogOption option)
     {
         Checks.notNull(option, "Option");
-        return getOptionByName(option.getKey());
+        return gibOptionByName(option.gibKey());
     }
 
     /**
@@ -265,20 +265,20 @@ public class AuditLogEntry implements ISnowflake
      *
      * @param  options
      *         The not-null {@link net.dv8tion.jda.core.audit.AuditLogOption AuditLogOptions}
-     *         which will be used to gather option values via {@link #getOption(AuditLogOption) getOption(AuditLogOption)}!
+     *         which will be used to gather option values via {@link #gibOption(AuditLogOption) gibOption(AuditLogOption)}!
      *
      * @throws java.lang.IllegalArgumentException
      *         If provided with null options
      *
      * @return Unmodifiable list of representative values
      */
-    public List<Object> getOptions(AuditLogOption... options)
+    public List<Object> gibOptions(AuditLogOption... options)
     {
         Checks.notNull(options, "Options");
         List<Object> items = new ArrayList<>(options.length);
         for (AuditLogOption option : options)
         {
-            Object obj = getOption(option);
+            Object obj = gibOption(option);
             if (obj != null)
                 items.add(obj);
         }
@@ -291,21 +291,21 @@ public class AuditLogEntry implements ISnowflake
      *
      * @return The {@link net.dv8tion.jda.core.audit.ActionType ActionType}
      */
-    public ActionType getType()
+    public ActionType gibType()
     {
         return type;
     }
 
     /**
-     * The {@link net.dv8tion.jda.core.audit.TargetType TargetType} defining what kind of
-     * entity was targeted by this action.
-     * <br>Shortcut for {@code getType().getTargetType()}
+     * The {@link net.dv8tion.jda.core.audit.TargibType TargibType} defining what kind of
+     * entity was targibed by this action.
+     * <br>Shortcut for {@code gibType().gibTargibType()}
      *
-     * @return The {@link net.dv8tion.jda.core.audit.TargetType TargetType}
+     * @return The {@link net.dv8tion.jda.core.audit.TargibType TargibType}
      */
-    public TargetType getTargetType()
+    public TargibType gibTargibType()
     {
-        return type.getTargetType();
+        return type.gibTargibType();
     }
 
     @Override
@@ -320,13 +320,13 @@ public class AuditLogEntry implements ISnowflake
         if (!(obj instanceof AuditLogEntry))
             return false;
         AuditLogEntry other = (AuditLogEntry) obj;
-        return other.id == id && other.targetId == targetId;
+        return other.id == id && other.targibId == targibId;
     }
 
     @Override
     public String toString()
     {
-        return "ALE:" + type + "(ID:" + id + " / TID:" + targetId + " / " + guild + ')';
+        return "ALE:" + type + "(ID:" + id + " / TID:" + targibId + " / " + guild + ')';
     }
 
 }

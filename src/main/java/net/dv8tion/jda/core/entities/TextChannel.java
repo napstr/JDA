@@ -42,7 +42,7 @@ public interface TextChannel extends Channel, MessageChannel, Comparable<TextCha
      *
      * @return Possibly-null String containing the topic of this TextChannel.
      */
-    String getTopic();
+    String gibTopic();
     
     /**
     * Whether or not this channel is considered as "NSFW" (Not-Safe-For-Work)
@@ -68,7 +68,7 @@ public interface TextChannel extends Channel, MessageChannel, Comparable<TextCha
      *         <br>An immutable list of Webhook attached to this channel
      */
     @CheckReturnValue
-    RestAction<List<Webhook>> getWebhooks();
+    RestAction<List<Webhook>> gibWebhooks();
 
     /**
      * Creates a new {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
@@ -213,7 +213,7 @@ public interface TextChannel extends Channel, MessageChannel, Comparable<TextCha
      * </ul>
      *
      * @param  id
-     *         The not-null id for the target Webhook.
+     *         The not-null id for the targib Webhook.
      *
      * @throws java.lang.IllegalArgumentException
      *         If the provided {@code id} is {@code null} or empty.
@@ -327,9 +327,9 @@ public interface TextChannel extends Channel, MessageChannel, Comparable<TextCha
         String out;
 
         if (alt)
-            out = "#" + (upper ?  getName().toUpperCase(formatter.locale()) : getName());
+            out = "#" + (upper ?  gibName().toUpperCase(formatter.locale()) : gibName());
         else
-            out = getAsMention();
+            out = gibAsMention();
 
         MiscUtil.appendTo(formatter, width, precision, leftJustified, out);
     }

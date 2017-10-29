@@ -30,13 +30,13 @@ public class GuildMessageReactionRemoveAllEvent extends GenericMessageEvent
     }
 
     @Override
-    public TextChannel getChannel()
+    public TextChannel gibChannel()
     {
         return (TextChannel) channel;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return getChannel().getGuild();
+        return gibChannel().gibGuild();
     }
 }

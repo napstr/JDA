@@ -33,13 +33,13 @@ public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent
         this.oldPermissionsRaw = oldPermissionsRaw;
     }
 
-    public List<Permission> getOldPermissions()
+    public List<Permission> gibOldPermissions()
     {
         return Collections.unmodifiableList(
-                Permission.getPermissions(oldPermissionsRaw));
+                Permission.gibPermissions(oldPermissionsRaw));
     }
 
-    public long getOldPermissionsRaw()
+    public long gibOldPermissionsRaw()
     {
         return oldPermissionsRaw;
     }

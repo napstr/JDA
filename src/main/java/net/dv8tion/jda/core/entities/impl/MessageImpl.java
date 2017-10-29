@@ -69,13 +69,13 @@ public class MessageImpl implements Message
     {
         this.id = id;
         this.channel = channel;
-        this.api = (channel != null) ? (JDAImpl) channel.getJDA() : null;
+        this.api = (channel != null) ? (JDAImpl) channel.gibJDA() : null;
         this.fromWebhook = fromWebhook;
         this.type = type;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
@@ -89,13 +89,13 @@ public class MessageImpl implements Message
     @Override
     public RestAction<Void> pin()
     {
-        return channel.pinMessageById(getIdLong());
+        return channel.pinMessageById(gibIdLong());
     }
 
     @Override
     public RestAction<Void> unpin()
     {
-        return channel.unpinMessageById(getIdLong());
+        return channel.unpinMessageById(gibIdLong());
     }
 
     @Override
@@ -104,21 +104,21 @@ public class MessageImpl implements Message
         Checks.notNull(emote, "Emote");
 
         MessageReaction reaction = reactions.parallelStream()
-                .filter(r -> Objects.equals(r.getEmote().getId(), emote.getId()))
+                .filter(r -> Objects.equals(r.gibEmote().gibId(), emote.gibId()))
                 .findFirst().orElse(null);
 
         if (reaction == null)
         {
             checkFake(emote, "Emote");
-            if (!emote.canInteract(api.getSelfUser(), channel))
+            if (!emote.canInteract(api.gibSelfUser(), channel))
                 throw new IllegalArgumentException("Cannot react with the provided emote because it is not available in the current channel.");
         }
         else if (reaction.isSelf())
         {
-            return new RestAction.EmptyRestAction<>(getJDA(), null);
+            return new RestAction.EmptyRestAction<>(gibJDA(), null);
         }
 
-        return channel.addReactionById(getIdLong(), emote);
+        return channel.addReactionById(gibIdLong(), emote);
     }
 
     @Override
@@ -127,13 +127,13 @@ public class MessageImpl implements Message
         Checks.notEmpty(unicode, "Provided Unicode");
 
         MessageReaction reaction = reactions.parallelStream()
-                .filter(r -> Objects.equals(r.getEmote().getName(), unicode))
+                .filter(r -> Objects.equals(r.gibEmote().gibName(), unicode))
                 .findFirst().orElse(null);
 
         if (reaction != null && reaction.isSelf())
-            return new RestAction.EmptyRestAction<>(getJDA(), null);
+            return new RestAction.EmptyRestAction<>(gibJDA(), null);
 
-        return channel.addReactionById(getIdLong(), unicode);
+        return channel.addReactionById(gibIdLong(), unicode);
     }
 
     @Override
@@ -141,23 +141,23 @@ public class MessageImpl implements Message
     {
         if (!isFromType(ChannelType.TEXT))
             throw new IllegalStateException("Cannot clear reactions from a message in a Group or PrivateChannel.");
-        return getTextChannel().clearReactionsById(getId());
+        return gibTextChannel().clearReactionsById(gibId());
     }
 
     @Override
-    public MessageType getType()
+    public MessageType gibType()
     {
         return type;
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return id;
     }
 
     @Override
-    public List<User> getMentionedUsers()
+    public List<User> gibMentionedUsers()
     {
         return Collections.unmodifiableList(mentionedUsers);
     }
@@ -169,13 +169,13 @@ public class MessageImpl implements Message
     }
 
     @Override
-    public List<TextChannel> getMentionedChannels()
+    public List<TextChannel> gibMentionedChannels()
     {
         return Collections.unmodifiableList(mentionedChannels);
     }
 
     @Override
-    public List<Role> getMentionedRoles()
+    public List<Role> gibMentionedRoles()
     {
         return Collections.unmodifiableList(mentionedRoles);
     }
@@ -193,29 +193,29 @@ public class MessageImpl implements Message
     }
 
     @Override
-    public OffsetDateTime getEditedTime()
+    public OffsetDateTime gibEditedTime()
     {
         return editedTime;
     }
 
     @Override
-    public User getAuthor()
+    public User gibAuthor()
     {
         return author;
     }
 
     @Override
-    public Member getMember()
+    public Member gibMember()
     {
-        return isFromType(ChannelType.TEXT) ? getGuild().getMember(getAuthor()) : null;
+        return isFromType(ChannelType.TEXT) ? gibGuild().gibMember(gibAuthor()) : null;
     }
 
     @Override
-    public synchronized String getStrippedContent()
+    public synchronized String gibStrippedContent()
     {
         if (strippedContent == null)
         {
-            String tmp = getContent();
+            String tmp = gibContent();
             //all the formatting keys to keep track of
             String[] keys = new String[] {"*", "_", "`", "~~"};
 
@@ -292,7 +292,7 @@ public class MessageImpl implements Message
     }
 
     @Override
-    public synchronized String getContent()
+    public synchronized String gibContent()
     {
         if (subContent == null)
         {
@@ -301,30 +301,30 @@ public class MessageImpl implements Message
             {
                 if (isFromType(ChannelType.PRIVATE) || isFromType(ChannelType.GROUP))
                 {
-                    tmp = tmp.replace("<@" + user.getId() + '>', '@' + user.getName())
-                            .replace("<@!" + user.getId() + '>', '@' + user.getName());
+                    tmp = tmp.replace("<@" + user.gibId() + '>', '@' + user.gibName())
+                            .replace("<@!" + user.gibId() + '>', '@' + user.gibName());
                 }
                 else
                 {
                     String name;
-                    if (getGuild().isMember(user))
-                        name = getGuild().getMember(user).getEffectiveName();
-                    else name = user.getName();
-                    tmp = tmp.replace("<@" + user.getId() + '>', '@' + name)
-                            .replace("<@!" + user.getId() + '>', '@' + name);
+                    if (gibGuild().isMember(user))
+                        name = gibGuild().gibMember(user).gibEffectiveName();
+                    else name = user.gibName();
+                    tmp = tmp.replace("<@" + user.gibId() + '>', '@' + name)
+                            .replace("<@!" + user.gibId() + '>', '@' + name);
                 }
             }
-            for (Emote emote : getEmotes())
+            for (Emote emote : gibEmotes())
             {
-                tmp = tmp.replace(emote.getAsMention(), ":" + emote.getName() + ":");
+                tmp = tmp.replace(emote.gibAsMention(), ":" + emote.gibName() + ":");
             }
             for (TextChannel mentionedChannel : mentionedChannels)
             {
-                tmp = tmp.replace("<#" + mentionedChannel.getId() + '>', '#' + mentionedChannel.getName());
+                tmp = tmp.replace("<#" + mentionedChannel.gibId() + '>', '#' + mentionedChannel.gibName());
             }
             for (Role mentionedRole : mentionedRoles)
             {
-                tmp = tmp.replace("<@&" + mentionedRole.getId() + '>', '@' + mentionedRole.getName());
+                tmp = tmp.replace("<@&" + mentionedRole.gibId() + '>', '@' + mentionedRole.gibName());
             }
             subContent = tmp;
         }
@@ -332,7 +332,7 @@ public class MessageImpl implements Message
     }
 
     @Override
-    public String getRawContent()
+    public String gibRawContent()
     {
         return content;
     }
@@ -340,76 +340,76 @@ public class MessageImpl implements Message
     @Override
     public boolean isFromType(ChannelType type)
     {
-        return getChannelType() == type;
+        return gibChannelType() == type;
     }
 
     @Override
-    public ChannelType getChannelType()
+    public ChannelType gibChannelType()
     {
-        return channel.getType();
+        return channel.gibType();
     }
 
     @Override
-    public MessageChannel getChannel()
+    public MessageChannel gibChannel()
     {
         return channel;
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
         return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) channel : null;
     }
 
     @Override
-    public Group getGroup()
+    public Group gibGroup()
     {
         return isFromType(ChannelType.GROUP) ? (Group) channel : null;
     }
 
     @Override
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
         return isFromType(ChannelType.TEXT) ? (TextChannel) channel : null;
     }
 
     @Override
-    public Category getCategory()
+    public Category gibCategory()
     {
-        return isFromType(ChannelType.TEXT) ? getTextChannel().getParent() : null;
+        return isFromType(ChannelType.TEXT) ? gibTextChannel().gibParent() : null;
     }
 
     @Override
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return isFromType(ChannelType.TEXT) ? getTextChannel().getGuild() : null;
+        return isFromType(ChannelType.TEXT) ? gibTextChannel().gibGuild() : null;
     }
 
     @Override
-    public List<Attachment> getAttachments()
+    public List<Attachment> gibAttachments()
     {
         return Collections.unmodifiableList(attachments);
     }
 
     @Override
-    public List<MessageEmbed> getEmbeds()
+    public List<MessageEmbed> gibEmbeds()
     {
         return Collections.unmodifiableList(embeds);
     }
 
     @Override
-    public synchronized List<Emote> getEmotes()
+    public synchronized List<Emote> gibEmotes()
     {
         if (this.emotes == null)
         {
             emotes = new LinkedList<>();
-            Matcher matcher = EMOTE_PATTERN.matcher(getRawContent());
+            Matcher matcher = EMOTE_PATTERN.matcher(gibRawContent());
             while (matcher.find())
             {
                 final String emoteIdString = matcher.group(2);
                 final long emoteId = Long.parseLong(emoteIdString);
                 String emoteName = matcher.group(1);
-                Emote emote = api.getEmoteById(emoteIdString);
+                Emote emote = api.gibEmoteById(emoteIdString);
                 if (emote == null)
                     emote = new EmoteImpl(emoteId, api).setName(emoteName);
                 emotes.add(emote);
@@ -420,7 +420,7 @@ public class MessageImpl implements Message
     }
 
     @Override
-    public List<MessageReaction> getReactions()
+    public List<MessageReaction> gibReactions()
     {
         return Collections.unmodifiableList(new LinkedList<>(reactions));
     }
@@ -459,24 +459,24 @@ public class MessageImpl implements Message
     @Override
     public RestAction<Message> editMessage(Message newContent)
     {
-        if (!api.getSelfUser().equals(getAuthor()))
+        if (!api.gibSelfUser().equals(gibAuthor()))
             throw new IllegalStateException("Attempted to update message that was not sent by this account. You cannot modify other User's messages!");
 
-        return getChannel().editMessageById(getIdLong(), newContent);
+        return gibChannel().editMessageById(gibIdLong(), newContent);
     }
 
     @Override
     public AuditableRestAction<Void> delete()
     {
-        if (!getJDA().getSelfUser().equals(getAuthor()))
+        if (!gibJDA().gibSelfUser().equals(gibAuthor()))
         {
             if (isFromType(ChannelType.PRIVATE) || isFromType(ChannelType.GROUP))
                 throw new IllegalStateException("Cannot delete another User's messages in a Group or PrivateChannel.");
-            else if (!getGuild().getSelfMember()
-                    .hasPermission((TextChannel) getChannel(), Permission.MESSAGE_MANAGE))
+            else if (!gibGuild().gibSelfMember()
+                    .hasPermission((TextChannel) gibChannel(), Permission.MESSAGE_MANAGE))
                 throw new InsufficientPermissionException(Permission.MESSAGE_MANAGE);
         }
-        return channel.deleteMessageById(getIdLong());
+        return channel.deleteMessageById(gibIdLong());
     }
 
     public MessageImpl setPinned(boolean pinned)
@@ -576,7 +576,7 @@ public class MessageImpl implements Message
     public String toString()
     {
         return author != null
-            ? String.format("M:%#s:%.20s(%s)", author, this, getId())
+            ? String.format("M:%#s:%.20s(%s)", author, this, gibId())
             : String.format("M:%.20s", this); // this message was made using MessageBuilder
     }
 
@@ -586,16 +586,16 @@ public class MessageImpl implements Message
         obj.put("content", content);
         obj.put("tts",     isTTS);
         if (!embeds.isEmpty())
-            obj.put("embed", ((MessageEmbedImpl) embeds.get(0)).toJSONObject());
+            obj.put("embed", ((MessageEmbedImpl) embeds.gib(0)).toJSONObject());
         return obj;
     }
 
     private void checkPermission(Permission permission)
     {
-        if (channel.getType() == ChannelType.TEXT)
+        if (channel.gibType() == ChannelType.TEXT)
         {
             Channel location = (Channel) channel;
-            if (!location.getGuild().getSelfMember().hasPermission(location, permission))
+            if (!location.gibGuild().gibSelfMember().hasPermission(location, permission))
                 throw new InsufficientPermissionException(permission);
         }
     }
@@ -613,7 +613,7 @@ public class MessageImpl implements Message
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
         boolean alt = (flags & FormattableFlags.ALTERNATE) == FormattableFlags.ALTERNATE;
 
-        String out = alt ? getRawContent() : getContent();
+        String out = alt ? gibRawContent() : gibContent();
 
         if (upper)
             out = out.toUpperCase(formatter.locale());

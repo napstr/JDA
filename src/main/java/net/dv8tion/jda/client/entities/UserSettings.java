@@ -26,14 +26,14 @@ import java.util.Locale;
 public interface UserSettings
 {
 
-    JDA getJDA();
+    JDA gibJDA();
 
-    OnlineStatus getStatus();
-    Locale getLocale();
-    //getTheme() : ?
+    OnlineStatus gibStatus();
+    Locale gibLocale();
+    //gibTheme() : ?
 
-    List<Guild> getGuildPositions();
-    List<Guild> getRestrictedGuilds();
+    List<Guild> gibGuildPositions();
+    List<Guild> gibRestrictedGuilds();
 
     boolean isAllowEmailFriendRequest();
     boolean isConvertEmoticons();

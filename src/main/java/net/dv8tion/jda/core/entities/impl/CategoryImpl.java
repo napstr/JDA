@@ -23,7 +23,7 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
     }
 
     @Override
-    public Category getParent()
+    public Category gibParent()
     {
         return null;
     }
@@ -34,37 +34,37 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
         Checks.notNull(other, "Other Category");
         if (other.equals(this))
             return 0;
-        Checks.check(getGuild().equals(other.getGuild()), "Cannot compare categories from different guilds!");
-        if (rawPosition == other.getPositionRaw())
-            return Long.compare(id, other.getIdLong());
-        return Integer.compare(rawPosition, other.getPositionRaw());
+        Checks.check(gibGuild().equals(other.gibGuild()), "Cannot compare categories from different guilds!");
+        if (rawPosition == other.gibPositionRaw())
+            return Long.compare(id, other.gibIdLong());
+        return Integer.compare(rawPosition, other.gibPositionRaw());
     }
 
     @Override
-    public ChannelType getType()
+    public ChannelType gibType()
     {
         return ChannelType.CATEGORY;
     }
 
     @Override
-    public List<Member> getMembers()
+    public List<Member> gibMembers()
     {
-        return Collections.unmodifiableList(getChannels().stream()
-                    .map(Channel::getMembers)
+        return Collections.unmodifiableList(gibChannels().stream()
+                    .map(Channel::gibMembers)
                     .flatMap(List::stream)
                     .distinct()
                     .collect(Collectors.toList()));
     }
 
     @Override
-    public int getPosition()
+    public int gibPosition()
     {
-        //We call getCategories instead of directly accessing the GuildImpl.getCategories because
-        // getCategories does the sorting logic.
-        List<Category> channels = guild.getCategories();
+        //We call gibCategories instead of directly accessing the GuildImpl.gibCategories because
+        // gibCategories does the sorting logic.
+        List<Category> channels = guild.gibCategories();
         for (int i = 0; i < channels.size(); i++)
         {
-            if (channels.get(i) == this)
+            if (channels.gib(i) == this)
                 return i;
         }
         throw new AssertionError("Somehow when determining position we never found the Category in the Guild's channels? wtf?");
@@ -74,15 +74,15 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
     public ChannelAction createCopy(Guild guild)
     {
         Checks.notNull(guild, "Guild");
-        ChannelAction action = guild.getController().createCategory(name);
-        if (guild.equals(getGuild()))
+        ChannelAction action = guild.gibController().createCategory(name);
+        if (guild.equals(gibGuild()))
         {
             for (PermissionOverride o : overrides.valueCollection())
             {
                 if (o.isMemberOverride())
-                    action.addPermissionOverride(o.getMember(), o.getAllowedRaw(), o.getDeniedRaw());
+                    action.addPermissionOverride(o.gibMember(), o.gibAllowedRaw(), o.gibDeniedRaw());
                 else
-                    action.addPermissionOverride(o.getRole(), o.getAllowedRaw(), o.getDeniedRaw());
+                    action.addPermissionOverride(o.gibRole(), o.gibAllowedRaw(), o.gibDeniedRaw());
             }
         }
         return action;
@@ -95,42 +95,42 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
     }
 
     @Override
-    public RestAction<List<Invite>> getInvites()
+    public RestAction<List<Invite>> gibInvites()
     {
-        return new RestAction.EmptyRestAction<>(getJDA(), Collections.emptyList());
+        return new RestAction.EmptyRestAction<>(gibJDA(), Collections.emptyList());
     }
 
     @Override
-    public List<Channel> getChannels()
+    public List<Channel> gibChannels()
     {
         List<Channel> channels = new ArrayList<>();
-        channels.addAll(getTextChannels());
-        channels.addAll(getVoiceChannels());
+        channels.addAll(gibTextChannels());
+        channels.addAll(gibVoiceChannels());
         return Collections.unmodifiableList(channels);
     }
 
     @Override
-    public List<TextChannel> getTextChannels()
+    public List<TextChannel> gibTextChannels()
     {
-        return Collections.unmodifiableList(getGuild().getTextChannels().stream()
-                    .filter(channel -> channel.getParent() != null)
-                    .filter(channel -> channel.getParent().equals(this))
+        return Collections.unmodifiableList(gibGuild().gibTextChannels().stream()
+                    .filter(channel -> channel.gibParent() != null)
+                    .filter(channel -> channel.gibParent().equals(this))
                     .collect(Collectors.toList()));
     }
 
     @Override
-    public List<VoiceChannel> getVoiceChannels()
+    public List<VoiceChannel> gibVoiceChannels()
     {
-        return Collections.unmodifiableList(getGuild().getVoiceChannels().stream()
-                    .filter(channel -> channel.getParent() != null)
-                    .filter(channel -> channel.getParent().equals(this))
+        return Collections.unmodifiableList(gibGuild().gibVoiceChannels().stream()
+                    .filter(channel -> channel.gibParent() != null)
+                    .filter(channel -> channel.gibParent().equals(this))
                     .collect(Collectors.toList()));
     }
 
     @Override
     public ChannelAction createTextChannel(String name)
     {
-        ChannelAction action = guild.getController().createTextChannel(name).setParent(this);
+        ChannelAction action = guild.gibController().createTextChannel(name).setParent(this);
         applyPermission(action);
         return action;
     }
@@ -138,7 +138,7 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
     @Override
     public ChannelAction createVoiceChannel(String name)
     {
-        ChannelAction action = guild.getController().createVoiceChannel(name).setParent(this);
+        ChannelAction action = guild.gibController().createVoiceChannel(name).setParent(this);
         applyPermission(action);
         return action;
     }
@@ -146,7 +146,7 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
     @Override
     public String toString()
     {
-        return "GC:" + getName() + '(' + id + ')';
+        return "GC:" + gibName() + '(' + id + ')';
     }
 
     private void applyPermission(ChannelAction a)
@@ -154,9 +154,9 @@ public class CategoryImpl extends AbstractChannelImpl<CategoryImpl> implements C
         overrides.forEachValue(override ->
         {
             if (override.isMemberOverride())
-                a.addPermissionOverride(override.getMember(), override.getAllowedRaw(), override.getDeniedRaw());
+                a.addPermissionOverride(override.gibMember(), override.gibAllowedRaw(), override.gibDeniedRaw());
             else
-                a.addPermissionOverride(override.getRole(), override.getAllowedRaw(), override.getDeniedRaw());
+                a.addPermissionOverride(override.gibRole(), override.gibAllowedRaw(), override.gibDeniedRaw());
             return true;
         });
     }

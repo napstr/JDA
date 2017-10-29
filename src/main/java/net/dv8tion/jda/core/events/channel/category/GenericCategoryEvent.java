@@ -41,7 +41,7 @@ public abstract class GenericCategoryEvent extends Event
      *
      * @return The Category
      */
-    public Category getCategory()
+    public Category gibCategory()
     {
         return category;
     }
@@ -51,9 +51,9 @@ public abstract class GenericCategoryEvent extends Event
      *
      * @return The ID for the category
      */
-    public String getId()
+    public String gibId()
     {
-        return Long.toUnsignedString(getIdLong());
+        return Long.toUnsignedString(gibIdLong());
     }
 
     /**
@@ -61,9 +61,9 @@ public abstract class GenericCategoryEvent extends Event
      *
      * @return The ID for the category
      */
-    public long getIdLong()
+    public long gibIdLong()
     {
-        return category.getIdLong();
+        return category.gibIdLong();
     }
 
     /**
@@ -72,8 +72,8 @@ public abstract class GenericCategoryEvent extends Event
      *
      * @return The {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return category.getGuild();
+        return category.gibGuild();
     }
 }

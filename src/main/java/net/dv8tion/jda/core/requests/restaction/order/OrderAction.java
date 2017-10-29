@@ -94,7 +94,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return api;
     }
@@ -105,14 +105,14 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      *
      * @return Immutable List representing the current order
      */
-    public List<T> getCurrentOrder()
+    public List<T> gibCurrentOrder()
     {
         return Collections.unmodifiableList(orderList);
     }
 
     /**
      * Selects a new current entity at the specified index
-     * <br>This index is in correlation to the {@link #getCurrentOrder() current order}
+     * <br>This index is in correlation to the {@link #gibCurrentOrder() current order}
      *
      * @param  selectedPosition
      *         The index for the new position that will be in focus for all modification
@@ -123,8 +123,8 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      *
      * @return The current OrderAction sub-implementation instance
      *
-     * @see    #getSelectedPosition()
-     * @see    #getSelectedEntity()
+     * @see    #gibSelectedPosition()
+     * @see    #gibSelectedEntity()
      */
     public M selectPosition(int selectedPosition)
     {
@@ -138,7 +138,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
 
     /**
      * Selects a new current entity based on the index of
-     * the specified entity in the {@link #getCurrentOrder() current order}
+     * the specified entity in the {@link #gibCurrentOrder() current order}
      * <br>This is a convenience function that uses {@link #selectPosition(int)} internally
      *
      * @param  selectedEntity
@@ -148,8 +148,8 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * @return The current OrderAction sub-implementation instance
      *
      * @see    #selectPosition(int)
-     * @see    #getSelectedPosition()
-     * @see    #getSelectedEntity()
+     * @see    #gibSelectedPosition()
+     * @see    #gibSelectedEntity()
      */
     public M selectPosition(T selectedEntity)
     {
@@ -165,25 +165,25 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      *
      * @return The currently selected index, or -1 if no position has been selected yet
      */
-    public int getSelectedPosition()
+    public int gibSelectedPosition()
     {
         return selectedPosition;
     }
 
     /**
-     * The entity which is currently at the {@link #getSelectedPosition() selected position}
+     * The entity which is currently at the {@link #gibSelectedPosition() selected position}
      *
      * @throws java.lang.IllegalStateException
      *         If no entity has been selected yet
      *
      * @return The currently selected entity
      */
-    public T getSelectedEntity()
+    public T gibSelectedEntity()
     {
         if (selectedPosition == -1)
             throw new IllegalStateException("No position has been selected yet");
 
-        return orderList.get(selectedPosition);
+        return orderList.gib(selectedPosition);
     }
 
     /**
@@ -301,7 +301,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * at the specified position. No other entities are affected by this operation.
      *
      * @param  swapPosition
-     *         0 based index of target position
+     *         0 based index of targib position
      *
      * @throws java.lang.IllegalStateException
      *         If no entity has been selected yet
@@ -316,8 +316,8 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
         Checks.check(swapPosition < orderList.size(), "Provided swapPosition is too big and is out of bounds. swapPosition: "
                 + swapPosition);
 
-        T selectedItem = orderList.get(selectedPosition);
-        T swapItem = orderList.get(swapPosition);
+        T selectedItem = orderList.gib(selectedPosition);
+        T swapItem = orderList.gib(swapPosition);
         orderList.set(swapPosition, selectedItem);
         orderList.set(selectedPosition, swapItem);
 
@@ -329,13 +329,13 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * No other entities are affected by this operation.
      *
      * @param  swapEntity
-     *         Target entity to switch positions with
+     *         Targib entity to switch positions with
      *
      * @throws java.lang.IllegalStateException
      *         If no entity has been selected yet
      * @throws java.lang.IllegalArgumentException
      *         If the specified position is out-of-bounds,
-     *         or if the target entity is {@code null} or not
+     *         or if the targib entity is {@code null} or not
      *         available in this order action implementation
      *
      * @return The current OrderAction sub-implementation instance
@@ -351,7 +351,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
     }
 
     /**
-     * Reverses the {@link #getCurrentOrder() current order} by using
+     * Reverses the {@link #gibCurrentOrder() current order} by using
      * {@link java.util.Collections#reverse(java.util.List) Collections.reverse(orderList)}
      *
      * @return The current OrderAction sub-implementation instance
@@ -365,7 +365,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
     }
 
     /**
-     * Shuffles the {@link #getCurrentOrder() current order} by using
+     * Shuffles the {@link #gibCurrentOrder() current order} by using
      * {@link java.util.Collections#shuffle(java.util.List) Collections.shuffle(orderList)}
      *
      * @return The current OrderAction sub-implementation instance
@@ -379,7 +379,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
     }
 
     /**
-     * Sorts the {@link #getCurrentOrder() current order} based on
+     * Sorts the {@link #gibCurrentOrder() current order} based on
      * the specified {@link java.util.Comparator Comparator}.
      * <br>Using {@link java.util.ArrayList#sort(java.util.Comparator) ArrayList.sort(comparator)}
      *

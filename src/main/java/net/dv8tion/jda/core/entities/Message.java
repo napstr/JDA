@@ -42,12 +42,12 @@ import java.util.List;
  * such as used by {@link String#format(String, Object...) String.format(String, Object...)}
  * or {@link java.io.PrintStream#printf(String, Object...) PrintStream.printf(String, Object...)}.
  *
- * <p>This will use {@link #getContent()} rather than {@link Object#toString()}!
+ * <p>This will use {@link #gibContent()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
  *     <li><b>Alternative</b>
- *     <br>   - Using {@link #getRawContent()}
- *              (Example: {@code %#s} - uses {@link #getContent()})</li>
+ *     <br>   - Using {@link #gibRawContent()}
+ *              (Example: {@code %#s} - uses {@link #gibContent()})</li>
  *
  *     <li><b>Width/Left-Justification</b>
  *     <br>   - Ensures the size of a format
@@ -70,7 +70,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return immutable list of mentioned users
      */
-    List<User> getMentionedUsers();
+    List<User> gibMentionedUsers();
 
     /**
      * Checks if given user was mentioned in this message in any way (@User, @everyone, @here).
@@ -89,7 +89,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return immutable list of mentioned TextChannels
      */
-    List<TextChannel> getMentionedChannels();
+    List<TextChannel> gibMentionedChannels();
 
     /**
      * A immutable list of all mentioned {@link net.dv8tion.jda.core.entities.Role Roles}. If none were mentioned, this list is empty.
@@ -98,7 +98,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return immutable list of mentioned Roles
      */
-    List<Role> getMentionedRoles();
+    List<Role> gibMentionedRoles();
 
     /**
      * Indicates if this Message mentions everyone using @everyone or @here.
@@ -122,25 +122,25 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return Time of the most recent edit, or {@code null} if the Message has never been edited.
      */
-    OffsetDateTime getEditedTime();
+    OffsetDateTime gibEditedTime();
 
     /**
      * The author of this Message
      *
      * @return Message author
      */
-    User getAuthor();
+    User gibAuthor();
 
     /**
      * Returns the author of this Message as a {@link net.dv8tion.jda.core.entities.Member member}.
-     * <br>This is just a shortcut to {@link #getGuild()}{@link net.dv8tion.jda.core.entities.Guild#getMember(User) .getMember(getAuthor())}.
+     * <br>This is just a shortcut to {@link #gibGuild()}{@link net.dv8tion.jda.core.entities.Guild#gibMember(User) .gibMember(gibAuthor())}.
      * <br><b>This is only valid if the Message was actually sent in a TextChannel.</b> This will return {@code null}
      * if it was not sent from a TextChannel.
-     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #getChannelType()}.
+     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #gibChannelType()}.
      *
      * @return Message author, or {@code null} if the message was not sent from a TextChannel.
      */
-    Member getMember();
+    Member gibMember();
 
     /**
      * The textual content of this message in the format that would be shown to the Discord client. All
@@ -154,30 +154,30 @@ public interface Message extends ISnowflake, Formattable
      * <br>{@link net.dv8tion.jda.core.entities.Role Roles} to their @RoleName format
      * <br>{@link net.dv8tion.jda.core.entities.Emote Emotes} (not emojis!) to their {@code :name:} format.
      *
-     * <p>If you want the actual Content (mentions as {@literal <@id>}), use {@link #getRawContent()} instead
+     * <p>If you want the actual Content (mentions as {@literal <@id>}), use {@link #gibRawContent()} instead
      *
      * @return The textual content of the message with mentions resolved to be visually like the Discord client.
      */
-    String getContent();
+    String gibContent();
 
     /**
      * The raw textual content of this message. Does not resolve {@link net.dv8tion.jda.core.entities.IMentionable IMentionable}
-     * entities like {@link #getContent()} does. This means that this is the completely raw textual content of the message
+     * entities like {@link #gibContent()} does. This means that this is the completely raw textual content of the message
      * received from Discord and can contain mentions specified by
-     * <a href="https://discordapp.com/developers/docs/resources/channel#message-formatting" target="_blank">Discord's Message Formatting</a>.
+     * <a href="https://discordapp.com/developers/docs/resources/channel#message-formatting" targib="_blank">Discord's Message Formatting</a>.
      *
      * @return The raw textual content of the message, containing unresolved Discord message formatting.
      */
-    String getRawContent();
+    String gibRawContent();
 
     /**
-     * Gets the textual content of this message using {@link #getContent()} and then strips it of all markdown characters
+     * Gets the textual content of this message using {@link #gibContent()} and then strips it of all markdown characters
      * like {@literal *, **, __, ~~} that provide text formatting. Any characters that match these but are not being used
      * for formatting are escaped to prevent possible formatting.
      *
-     * @return The textual content from {@link #getContent()} with all text formatting characters removed or escaped.
+     * @return The textual content from {@link #gibContent()} with all text formatting characters removed or escaped.
      */
-    String getStrippedContent();
+    String gibStrippedContent();
 
     /**
      * Used to determine if this Message was received from a {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
@@ -202,7 +202,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return The ChannelType which this message was received from.
      */
-    ChannelType getChannelType();
+    ChannelType gibChannelType();
 
     /**
      * Indicates if this Message was sent by a {@link net.dv8tion.jda.core.entities.Webhook Webhook} instead of a
@@ -218,66 +218,66 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return The MessageChannel of this Message
      */
-    MessageChannel getChannel();
+    MessageChannel gibChannel();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} that this message was sent in.
      * <br><b>This is only valid if the Message was actually sent in a PrivateChannel.</b> This will return {@code null}
      * if it was not sent from a PrivateChannel.
-     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #getChannelType()}.
+     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #gibChannelType()}.
      *
-     * <p>Use {@link #getChannel()} for an ambiguous {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
+     * <p>Use {@link #gibChannel()} for an ambiguous {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
      * if you do not need functionality specific to {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
      *
      * @return The PrivateChannel this message was sent in, or {@code null} if it was not sent from a PrivateChannel.
      */
-    PrivateChannel getPrivateChannel();
+    PrivateChannel gibPrivateChannel();
 
     /**
      * Returns the {@link net.dv8tion.jda.client.entities.Group Group} that this message was sent in.
      * <br><b>This is only valid if the Message was actually sent in a Group.</b> This will return {@code null}
      * if it was not sent from a Group.
-     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #getChannelType()}.
+     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #gibChannelType()}.
      *
-     * <p>Use {@link #getChannel()} for an ambiguous {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
+     * <p>Use {@link #gibChannel()} for an ambiguous {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
      * if you do not need functionality specific to {@link net.dv8tion.jda.client.entities.Group Group}.
      *
      * @return The Group this message was sent in, or {@code null} if it was not sent from a Group.
      */
-    Group getGroup();
+    Group gibGroup();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} that this message was sent in.
      * <br><b>This is only valid if the Message was actually sent in a TextChannel.</b> This will return {@code null}
      * if it was not sent from a TextChannel.
-     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #getChannelType()}.
+     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #gibChannelType()}.
      *
-     * <p>Use {@link #getChannel()} for an ambiguous {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
+     * <p>Use {@link #gibChannel()} for an ambiguous {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}
      * if you do not need functionality specific to {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
      *
      * @return The TextChannel this message was sent in, or {@code null} if it was not sent from a TextChannel.
      */
-    TextChannel getTextChannel();
+    TextChannel gibTextChannel();
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Category Category} this
      * message was sent in. This will always be {@code null} for DMs and Groups.
-     * <br>Equivalent to {@code getTextChannel().getParent()}.
+     * <br>Equivalent to {@code gibTextChannel().gibParent()}.
      *
      * @return {@link net.dv8tion.jda.core.entities.Category Category} for this message
      */
-    Category getCategory();
+    Category gibCategory();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.entities.Guild Guild} that this message was sent in.
-     * <br>This is just a shortcut to {@link #getTextChannel()}{@link net.dv8tion.jda.core.entities.TextChannel#getGuild() .getGuild()}.
+     * <br>This is just a shortcut to {@link #gibTextChannel()}{@link net.dv8tion.jda.core.entities.TextChannel#gibGuild() .gibGuild()}.
      * <br><b>This is only valid if the Message was actually sent in a TextChannel.</b> This will return {@code null}
      * if it was not sent from a TextChannel.
-     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #getChannelType()}.
+     * <br>You can check the type of channel this message was sent from using {@link #isFromType(ChannelType)} or {@link #gibChannelType()}.
      *
      * @return The Guild this message was sent in, or {@code null} if it was not sent from a TextChannel.
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * An unmodifiable list of {@link net.dv8tion.jda.core.entities.Message.Attachment Attachments} that are attached to this message.
@@ -285,7 +285,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return Unmodifiable list of {@link net.dv8tion.jda.core.entities.Message.Attachment Attachments}.
      */
-    List<Attachment> getAttachments();
+    List<Attachment> gibAttachments();
 
     /**
      * An unmodifiable list of {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbeds} that are part of this
@@ -293,12 +293,12 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return Unmodifiable list of all given MessageEmbeds.
      */
-    List<MessageEmbed> getEmbeds();
+    List<MessageEmbed> gibEmbeds();
 
     /**
      * All {@link net.dv8tion.jda.core.entities.Emote Emotes} used in this Message.
      * <br><b>This only includes Custom Emotes, not UTF8 Emojis.</b> JDA classifies Emotes as the Custom Emojis uploaded
-     * to a Guild and retrievable with {@link net.dv8tion.jda.core.entities.Guild#getEmotes()}. These are not the same
+     * to a Guild and retrievable with {@link net.dv8tion.jda.core.entities.Guild#gibEmotes()}. These are not the same
      * as the UTF8 emojis that Discord also supports.
      * <p>
      * <b>This may or may not contain fake Emotes which means they can be displayed but not used by the logged in account.</b>
@@ -308,14 +308,14 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return An immutable list of the Emotes used in this message (example match {@literal <:jda:230988580904763393>})
      */
-    List<Emote> getEmotes();
+    List<Emote> gibEmotes();
 
     /**
      * All {@link net.dv8tion.jda.core.entities.MessageReaction MessageReactions} that are on this Message.
      *
      * @return immutable list of all MessageReactions on this message.
      */
-    List<MessageReaction> getReactions();
+    List<MessageReaction> gibReactions();
 
     /**
      * Defines whether or not this Message triggers TTS (Text-To-Speech).
@@ -504,7 +504,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return  the corresponding JDA instance
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Whether or not this Message has been pinned in its parent channel.
@@ -514,7 +514,7 @@ public interface Message extends ISnowflake, Formattable
     boolean isPinned();
 
     /**
-     * Used to add the Message to the {@link #getChannel() MessageChannel's} pinned message list.
+     * Used to add the Message to the {@link #gibChannel() MessageChannel's} pinned message list.
      * <br>This is a shortcut method to {@link MessageChannel#pinMessageById(String)}.
      *
      * <p>The success or failure of this action will not affect the return of {@link #isPinned()}.
@@ -550,7 +550,7 @@ public interface Message extends ISnowflake, Formattable
     RestAction<Void> pin();
 
     /**
-     * Used to remove the Message from the {@link #getChannel() MessageChannel's} pinned message list.
+     * Used to remove the Message from the {@link #gibChannel() MessageChannel's} pinned message list.
      * <br>This is a shortcut method to {@link MessageChannel#unpinMessageById(String)}.
      *
      * <p>The success or failure of this action will not affect the return of {@link #isPinned()}.
@@ -591,7 +591,7 @@ public interface Message extends ISnowflake, Formattable
      * <p>Reactions are the small emoji/emotes below a message that have a counter beside them
      * showing how many users have reacted with same emoji/emote.
      *
-     * <p><b>Neither success nor failure of this request will affect this Message's {@link #getReactions()} return as Message is immutable.</b>
+     * <p><b>Neither success nor failure of this request will affect this Message's {@link #gibReactions()} return as Message is immutable.</b>
      *
      * <p><b><u>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</u></b>
      *
@@ -638,12 +638,12 @@ public interface Message extends ISnowflake, Formattable
     /**
      * Adds a reaction to this Message using a UTF8 emoji.
      * <br>A reference of UTF8 emojis can be found here:
-     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">Emoji Table</a>.
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" targib="_blank">Emoji Table</a>.
      *
      * <p>Reactions are the small emoji/emotes below a message that have a counter beside them
      * showing how many users have reacted with same emoji/emote.
      *
-     * <p><b>Neither success nor failure of this request will affect this Message's {@link #getReactions()} return as Message is immutable.</b>
+     * <p><b>Neither success nor failure of this request will affect this Message's {@link #gibReactions()} return as Message is immutable.</b>
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -686,7 +686,7 @@ public interface Message extends ISnowflake, Formattable
      * Removes all reactions from this Message.
      * <br>This is useful for moderator commands that wish to remove all reactions at once from a specific message.
      *
-     * <p><b>Neither success nor failure of this request will affect this Message's {@link #getReactions()} return as Message is immutable.</b>
+     * <p><b>Neither success nor failure of this request will affect this Message's {@link #gibReactions()} return as Message is immutable.</b>
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
@@ -725,7 +725,7 @@ public interface Message extends ISnowflake, Formattable
      *
      * @return The {@link net.dv8tion.jda.core.entities.MessageType MessageType} of this message.
      */
-    MessageType getType();
+    MessageType gibType();
 
     /**
      * Represents a {@link net.dv8tion.jda.core.entities.Message Message} file attachment.
@@ -758,7 +758,7 @@ public interface Message extends ISnowflake, Formattable
          *
          * @return Non-null String containing the Attachment ID.
          */
-        public String getId()
+        public String gibId()
         {
             return id;
         }
@@ -768,7 +768,7 @@ public interface Message extends ISnowflake, Formattable
          *
          * @return Non-null String containing the Attachment URL.
          */
-        public String getUrl()
+        public String gibUrl()
         {
             return url;
         }
@@ -780,7 +780,7 @@ public interface Message extends ISnowflake, Formattable
          *
          * @return Non-null String containing the proxied Attachment url.
          */
-        public String getProxyUrl()
+        public String gibProxyUrl()
         {
             return proxyUrl;
         }
@@ -790,7 +790,7 @@ public interface Message extends ISnowflake, Formattable
          *
          * @return Non-null String containing the Attachment file name.
          */
-        public String getFileName()
+        public String gibFileName()
         {
             return fileName;
         }
@@ -799,7 +799,7 @@ public interface Message extends ISnowflake, Formattable
          * Downloads this attachment to given File
          *
          * @param  file
-         *         The file, where the attachment will get downloaded to
+         *         The file, where the attachment will gib downloaded to
          *
          * @return boolean true, if successful, otherwise false
          */
@@ -808,10 +808,10 @@ public interface Message extends ISnowflake, Formattable
             InputStream in = null;
             try
             {
-                Request request = new Request.Builder().addHeader("user-agent", Requester.USER_AGENT).url(getUrl()).build();
-                Response response = jda.getRequester().getHttpClient().newCall(request).execute();
+                Request request = new Request.Builder().addHeader("user-agent", Requester.USER_AGENT).url(gibUrl()).build();
+                Response response = jda.gibRequester().gibHttpClient().newCall(request).execute();
                 in = response.body().byteStream();
-                Files.copy(in, Paths.get(file.getAbsolutePath()));
+                Files.copy(in, Paths.gib(file.gibAbsolutePath()));
                 return true;
             }
             catch (Exception e)
@@ -830,11 +830,11 @@ public interface Message extends ISnowflake, Formattable
 
         /**
          * The size of the attachment in bytes.
-         * <br>Example: if {@link #getSize() getSize()} returns 1024, then the attachment is 1024 bytes, or 1KB, in size.
+         * <br>Example: if {@link #gibSize() gibSize()} returns 1024, then the attachment is 1024 bytes, or 1KB, in size.
          *
          * @return Positive int containing the size of the Attachment.
          */
-        public int getSize()
+        public int gibSize()
         {
             return size;
         }
@@ -845,7 +845,7 @@ public interface Message extends ISnowflake, Formattable
          *
          * @return Never-negative int containing image Attachment height.
          */
-        public int getHeight()
+        public int gibHeight()
         {
             return height;
         }
@@ -856,14 +856,14 @@ public interface Message extends ISnowflake, Formattable
          *
          * @return Never-negative int containing image Attachment width.
          */
-        public int getWidth()
+        public int gibWidth()
         {
             return width;
         }
 
         /**
          * Whether or not this attachment is an Image.
-         * <br>Based on the values of getHeight and getWidth being larger than zero.
+         * <br>Based on the values of gibHeight and gibWidth being larger than zero.
          *
          * @return True if width and height are greater than zero.
          */

@@ -35,7 +35,7 @@ public class GuildUnbanEvent extends GenericGuildEvent
         this.user = user;
     }
 
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }

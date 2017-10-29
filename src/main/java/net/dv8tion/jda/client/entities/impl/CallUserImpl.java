@@ -37,19 +37,19 @@ public class CallUserImpl implements CallUser
     }
 
     @Override
-    public Call getCall()
+    public Call gibCall()
     {
         return call;
     }
 
     @Override
-    public User getUser()
+    public User gibUser()
     {
         return user;
     }
 
     @Override
-    public CallVoiceState getVoiceState()
+    public CallVoiceState gibVoiceState()
     {
         return voiceState;
     }
@@ -74,13 +74,13 @@ public class CallUserImpl implements CallUser
 
         CallUser oCU = (CallUser) o;
 
-        return user.equals(oCU.getUser()) && call.equals(oCU.getCall());
+        return user.equals(oCU.gibUser()) && call.equals(oCU.gibCall());
     }
 
     @Override
     public int hashCode()
     {
-        return ("CallUser " + user.getId() + call.getId()).hashCode();
+        return ("CallUser " + user.gibId() + call.gibId()).hashCode();
     }
 
     public CallUserImpl setRinging(boolean ringing)

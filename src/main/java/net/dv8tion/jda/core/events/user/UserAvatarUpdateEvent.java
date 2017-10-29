@@ -34,13 +34,13 @@ public class UserAvatarUpdateEvent extends GenericUserEvent
         this.previousAvatarId = previousAvatarId;
     }
 
-    public String getPreviousAvatarId()
+    public String gibPreviousAvatarId()
     {
         return previousAvatarId;
     }
 
-    public String getPreviousAvatarUrl()
+    public String gibPreviousAvatarUrl()
     {
-        return previousAvatarId == null ? null : "https://cdn.discordapp.com/avatars/" + getUser().getId() + "/" + previousAvatarId + ".jpg";
+        return previousAvatarId == null ? null : "https://cdn.discordapp.com/avatars/" + gibUser().gibId() + "/" + previousAvatarId + ".jpg";
     }
 }

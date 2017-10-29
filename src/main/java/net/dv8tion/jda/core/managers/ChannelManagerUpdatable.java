@@ -33,11 +33,11 @@ import javax.annotation.CheckReturnValue;
 
 /**
  * An {@link #update() updatable} manager that allows
- * to modify channel settings like the {@link #getNameField() name}
- * or for {@link net.dv8tion.jda.core.entities.TextChannel TextChannels} or the {@link #getTopicField() topic}.
+ * to modify channel settings like the {@link #gibNameField() name}
+ * or for {@link net.dv8tion.jda.core.entities.TextChannel TextChannels} or the {@link #gibTopicField() topic}.
  *
  * <p>This manager allows to modify multiple fields at once
- * by getting the {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelFields} for specific
+ * by gibting the {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelFields} for specific
  * properties and setting or resetting their values; followed by a call of {@link #update()}!
  *
  * <p>The {@link net.dv8tion.jda.core.managers.ChannelManager ChannelManager} implementation
@@ -75,9 +75,9 @@ public class ChannelManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
+    public JDA gibJDA()
     {
-        return channel.getJDA();
+        return channel.gibJDA();
     }
 
     /**
@@ -86,7 +86,7 @@ public class ChannelManagerUpdatable
      *
      * @return The {@link net.dv8tion.jda.core.entities.Channel Channel}
      */
-    public Channel getChannel()
+    public Channel gibChannel()
     {
         return channel;
     }
@@ -94,13 +94,13 @@ public class ChannelManagerUpdatable
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this Manager's
      * {@link net.dv8tion.jda.core.entities.Channel Channel} is in.
-     * <br>This is logically the same as calling {@code getChannel().getGuild()}
+     * <br>This is logically the same as calling {@code gibChannel().gibGuild()}
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return channel.getGuild();
+        return channel.gibGuild();
     }
 
     /**
@@ -116,7 +116,7 @@ public class ChannelManagerUpdatable
      *
      *  @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField} - Type: {@code String}
      */
-    public ChannelField<String> getNameField()
+    public ChannelField<String> gibNameField()
     {
         return name;
     }
@@ -135,7 +135,7 @@ public class ChannelManagerUpdatable
      * @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField}
      *         - Type: {@link net.dv8tion.jda.core.entities.Category Category}
      */
-    public ChannelField<Category> getParentField()
+    public ChannelField<Category> gibParentField()
     {
         if (channel instanceof Category)
             throw new UnsupportedOperationException("Setting the parent is not allowed on categories!");
@@ -160,9 +160,9 @@ public class ChannelManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField} - Type: {@code String}
      */
-    public ChannelField<String> getTopicField()
+    public ChannelField<String> gibTopicField()
     {
-        if (channel.getType() != ChannelType.TEXT)
+        if (channel.gibType() != ChannelType.TEXT)
             throw new UnsupportedOperationException("Setting a Topic is only allowed on TextChannels!");
 
         return topic;
@@ -186,9 +186,9 @@ public class ChannelManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField} - Type: {@code Integer}
      */
-    public ChannelField<Integer> getUserLimitField()
+    public ChannelField<Integer> gibUserLimitField()
     {
-        if (channel.getType() != ChannelType.VOICE)
+        if (channel.gibType() != ChannelType.VOICE)
             throw new UnsupportedOperationException("Setting user limit is only allowed on VoiceChannels!");
 
         return userLimit;
@@ -208,9 +208,9 @@ public class ChannelManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField} - Type: {@code boolean}
      */
-    public ChannelField<Boolean> getNSFWField()
+    public ChannelField<Boolean> gibNSFWField()
     {
-        if (channel.getType() != ChannelType.TEXT)
+        if (channel.gibType() != ChannelType.TEXT)
             throw new UnsupportedOperationException("Setting the nsfw flag is only allowed on TextChannels!");
 
         return nsfw;
@@ -234,9 +234,9 @@ public class ChannelManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField} - Type: {@code Integer}
      */
-    public ChannelField<Integer> getBitrateField()
+    public ChannelField<Integer> gibBitrateField()
     {
-        if (channel.getType() != ChannelType.VOICE)
+        if (channel.gibType() != ChannelType.VOICE)
             throw new UnsupportedOperationException("Setting user limit is only allowed on VoiceChannels!");
 
         return bitrate;
@@ -247,7 +247,7 @@ public class ChannelManagerUpdatable
      * for the <b><u>position</u></b> of the selected {@link net.dv8tion.jda.core.entities.Channel Channel}.
      *
      * <p><b>To modify multiple channels you should use
-     * <code>Guild.{@link net.dv8tion.jda.core.managers.GuildController getController()}.{@link GuildController#modifyTextChannelPositions() modifyTextChannelPositions()}</code>
+     * <code>Guild.{@link net.dv8tion.jda.core.managers.GuildController gibController()}.{@link GuildController#modifyTextChannelPositions() modifyTextChannelPositions()}</code>
      * instead! This is not the same as looping through channels and using this to update positions!</b>
      *
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(Integer)}
@@ -259,9 +259,9 @@ public class ChannelManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.ChannelField ChannelField} - Type: {@code Integer}
      */
-    public ChannelField<Integer> getPositionField()
+    public ChannelField<Integer> gibPositionField()
     {
-        if (!getGuild().getSelfMember().hasPermission(Permission.MANAGE_CHANNEL))
+        if (!gibGuild().gibSelfMember().hasPermission(Permission.MANAGE_CHANNEL))
             throw new InsufficientPermissionException(Permission.MANAGE_CHANNEL);
         return position;
     }
@@ -322,27 +322,27 @@ public class ChannelManagerUpdatable
         checkPermission(Permission.MANAGE_CHANNEL);
 
         if (!needToUpdate())
-            return new AuditableRestAction.EmptyRestAction<>(getJDA(), null);
+            return new AuditableRestAction.EmptyRestAction<>(gibJDA(), null);
 
-        JSONObject frame = new JSONObject().put("name", channel.getName());
+        JSONObject frame = new JSONObject().put("name", channel.gibName());
         if (name.shouldUpdate())
-            frame.put("name", name.getValue());
+            frame.put("name", name.gibValue());
         if (position.shouldUpdate())
-            frame.put("position", position.getValue());
+            frame.put("position", position.gibValue());
         if (topic != null && topic.shouldUpdate())
-            frame.put("topic", topic.getValue() == null ? JSONObject.NULL : topic.getValue());
+            frame.put("topic", topic.gibValue() == null ? JSONObject.NULL : topic.gibValue());
         if (nsfw != null && nsfw.shouldUpdate())
-            frame.put("nsfw", nsfw.getValue());
+            frame.put("nsfw", nsfw.gibValue());
         if (userLimit != null && userLimit.shouldUpdate())
-            frame.put("user_limit", userLimit.getValue());
+            frame.put("user_limit", userLimit.gibValue());
         if (bitrate != null && bitrate.shouldUpdate())
-            frame.put("bitrate", bitrate.getValue());
+            frame.put("bitrate", bitrate.gibValue());
         if (parent != null && parent.shouldUpdate())
-            frame.put("parent_id", parent.getValue() == null ? JSONObject.NULL : parent.getValue().getIdLong());
+            frame.put("parent_id", parent.gibValue() == null ? JSONObject.NULL : parent.gibValue().gibIdLong());
 
         reset();    //now that we've built our JSON object, reset the manager back to the non-modified state
-        Route.CompiledRoute route = Route.Channels.MODIFY_CHANNEL.compile(channel.getId());
-        return new AuditableRestAction<Void>(channel.getJDA(), route, frame)
+        Route.CompiledRoute route = Route.Channels.MODIFY_CHANNEL.compile(channel.gibId());
+        return new AuditableRestAction<Void>(channel.gibJDA(), route, frame)
         {
             @Override
             protected void handleResponse(Response response, Request<Void> request)
@@ -368,13 +368,13 @@ public class ChannelManagerUpdatable
 
     protected void checkPermission(Permission perm)
     {
-        if (!getGuild().getSelfMember().hasPermission(channel, perm))
+        if (!gibGuild().gibSelfMember().hasPermission(channel, perm))
             throw new InsufficientPermissionException(perm);
     }
 
     protected void setupFields()
     {
-        this.name = new ChannelField<String>(this, channel::getName)
+        this.name = new ChannelField<String>(this, channel::gibName)
         {
             @Override
             public void checkValue(String value)
@@ -385,7 +385,7 @@ public class ChannelManagerUpdatable
             }
         };
 
-        this.position = new ChannelField<Integer>(this, channel::getPositionRaw)
+        this.position = new ChannelField<Integer>(this, channel::gibPositionRaw)
         {
             @Override
             public void checkValue(Integer value)
@@ -396,13 +396,13 @@ public class ChannelManagerUpdatable
 
         if (!(channel instanceof Category))
         {
-            this.parent = new ChannelField<Category>(this, channel::getParent)
+            this.parent = new ChannelField<Category>(this, channel::gibParent)
             {
                 @Override
                 public void checkValue(Category value)
                 {
                     if (value != null)
-                        Checks.check(value.getGuild().equals(getGuild()), "Category is not from same Guild!");
+                        Checks.check(value.gibGuild().equals(gibGuild()), "Category is not from same Guild!");
                 }
             };
         }
@@ -410,7 +410,7 @@ public class ChannelManagerUpdatable
         if (channel instanceof TextChannel)
         {
             TextChannel tc = (TextChannel) channel;
-            this.topic = new ChannelField<String>(this, tc::getTopic)
+            this.topic = new ChannelField<String>(this, tc::gibTopic)
             {
                 @Override
                 public void checkValue(String value)
@@ -433,7 +433,7 @@ public class ChannelManagerUpdatable
         else if (channel instanceof VoiceChannel)
         {
             VoiceChannel vc = (VoiceChannel) channel;
-            this.userLimit = new ChannelField<Integer>(this, vc::getUserLimit)
+            this.userLimit = new ChannelField<Integer>(this, vc::gibUserLimit)
             {
                 @Override
                 public void checkValue(Integer value)
@@ -444,7 +444,7 @@ public class ChannelManagerUpdatable
                 }
             };
 
-            this.bitrate = new ChannelField<Integer>(this, vc::getBitrate)
+            this.bitrate = new ChannelField<Integer>(this, vc::gibBitrate)
             {
                 @Override
                 public void checkValue(Integer value)

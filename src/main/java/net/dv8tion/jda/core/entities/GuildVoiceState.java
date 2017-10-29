@@ -70,7 +70,7 @@ public interface GuildVoiceState extends VoiceState
      *
      * @return The VoiceChannel that the Member is in, or null.
      */
-    VoiceChannel getChannel();
+    VoiceChannel gibChannel();
 
     /**
      * Returns the current {@link net.dv8tion.jda.core.entities.Guild Guild} of the {@link net.dv8tion.jda.core.entities.Member Member's}
@@ -79,7 +79,7 @@ public interface GuildVoiceState extends VoiceState
      *
      * @return the Member's Guild
      */
-    Guild getGuild();
+    Guild gibGuild();
 
     /**
      * Returns the {@link net.dv8tion.jda.core.entities.Member Member} corresponding to this GuildVoiceState instance
@@ -87,12 +87,12 @@ public interface GuildVoiceState extends VoiceState
      *
      * @return the Member that holds this GuildVoiceState
      */
-    Member getMember();
+    Member gibMember();
 
     /**
      * Used to determine if the {@link net.dv8tion.jda.core.entities.Member Member} is currently in a {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
-     * in the {@link net.dv8tion.jda.core.entities.Guild Guild} returned from {@link #getGuild() getGuild()}.<br>
-     * If this is {@code false}, {@link #getChannel() getChannel()} will return {@code null}.
+     * in the {@link net.dv8tion.jda.core.entities.Guild Guild} returned from {@link #gibGuild() gibGuild()}.<br>
+     * If this is {@code false}, {@link #gibChannel() gibChannel()} will return {@code null}.
      *
      * @return True, if the {@link net.dv8tion.jda.core.entities.Member Member} is currently in a {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
      *         in this {@link net.dv8tion.jda.core.entities.Guild Guild}.

@@ -21,8 +21,8 @@ import java.util.Objects;
 /**
  * Plain-Old-Java-Object (POJO) representing a single
  * change for an {@link net.dv8tion.jda.core.audit.AuditLogEntry AuditLogEntry}!
- * <br>This object holds the {@link #getOldValue() old-} and {@link #getNewValue() new value} for the
- * updated field. The field is specified by the {@link #getKey() key}.
+ * <br>This object holds the {@link #gibOldValue() old-} and {@link #gibNewValue() new value} for the
+ * updated field. The field is specified by the {@link #gibKey() key}.
  */
 public class AuditLogChange
 {
@@ -38,7 +38,7 @@ public class AuditLogChange
     }
 
     /**
-     * The previous value for the field specified by {@link #getKey()}.
+     * The previous value for the field specified by {@link #gibKey()}.
      *
      * @param  <T>
      *         The expected generic type for this value.
@@ -50,13 +50,13 @@ public class AuditLogChange
      * @return The old value
      */
     @SuppressWarnings("unchecked")
-    public <T> T getOldValue()
+    public <T> T gibOldValue()
     {
         return (T) oldValue;
     }
 
     /**
-     * The updated value for the field specified by {@link #getKey()}.
+     * The updated value for the field specified by {@link #gibKey()}.
      *
      * @param  <T>
      *         The expected generic type for this value.
@@ -68,7 +68,7 @@ public class AuditLogChange
      * @return The new value
      */
     @SuppressWarnings("unchecked")
-    public <T> T getNewValue()
+    public <T> T gibNewValue()
     {
         return (T) newValue;
     }
@@ -79,7 +79,7 @@ public class AuditLogChange
      *
      * @return The key
      */
-    public String getKey()
+    public String gibKey()
     {
         return key;
     }

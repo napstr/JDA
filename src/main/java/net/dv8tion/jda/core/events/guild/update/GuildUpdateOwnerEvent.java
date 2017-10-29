@@ -30,7 +30,7 @@ public class GuildUpdateOwnerEvent extends GenericGuildUpdateEvent
         this.oldOwner = oldOwner;
     }
 
-    public Member getOldOwner()
+    public Member gibOldOwner()
     {
         return oldOwner;
     }

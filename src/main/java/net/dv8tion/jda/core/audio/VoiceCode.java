@@ -69,12 +69,12 @@ public final class VoiceCode
             return UNKNOWN;
         }
 
-        public int getCode()
+        public int gibCode()
         {
             return code;
         }
 
-        public String getMeaning()
+        public String gibMeaning()
         {
             return meaning;
         }

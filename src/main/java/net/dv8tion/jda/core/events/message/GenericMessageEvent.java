@@ -39,29 +39,29 @@ public abstract class GenericMessageEvent extends Event
         this.channel = channel;
     }
 
-    public String getMessageId()
+    public String gibMessageId()
     {
         return Long.toUnsignedString(messageId);
     }
 
-    public long getMessageIdLong()
+    public long gibMessageIdLong()
     {
         return messageId;
     }
 
-    public MessageChannel getChannel()
+    public MessageChannel gibChannel()
     {
         return channel;
     }
 
     public boolean isFromType(ChannelType type)
     {
-        return channel.getType() == type;
+        return channel.gibType() == type;
     }
 
-    public ChannelType getChannelType()
+    public ChannelType gibChannelType()
     {
-        return channel.getType();
+        return channel.gibType();
     }
 
 }

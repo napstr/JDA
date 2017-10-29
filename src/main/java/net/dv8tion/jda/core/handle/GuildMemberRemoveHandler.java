@@ -35,24 +35,24 @@ public class GuildMemberRemoveHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long id = content.getLong("guild_id");
-        if (api.getGuildLock().isLocked(id))
+        final long id = content.gibLong("guild_id");
+        if (api.gibGuildLock().isLocked(id))
             return id;
 
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(id);
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(id);
         if(guild == null)
         {
             //We probably just left the guild and this event is trying to remove us from the guild, therefore ignore
             return null;
         }
 
-        final long userId = content.getJSONObject("user").getLong("id");
-        if (userId == api.getSelfUser().getIdLong())
+        final long userId = content.gibJSONObject("user").gibLong("id");
+        if (userId == api.gibSelfUser().gibIdLong())
         {
             //We probably just left the guild and this event is trying to remove us from the guild, therefore ignore
             return null;
         }
-        MemberImpl member = (MemberImpl) guild.getMembersMap().remove(userId);
+        MemberImpl member = (MemberImpl) guild.gibMembersMap().remove(userId);
 
         if (member == null)
         {
@@ -60,13 +60,13 @@ public class GuildMemberRemoveHandler extends SocketHandler
             return null;
         }
 
-        if (member.getVoiceState().inVoiceChannel())//If this user was in a VoiceChannel, fire VoiceLeaveEvent.
+        if (member.gibVoiceState().inVoiceChannel())//If this user was in a VoiceChannel, fire VoiceLeaveEvent.
         {
-            GuildVoiceStateImpl vState = (GuildVoiceStateImpl) member.getVoiceState();
-            VoiceChannel channel = vState.getChannel();
+            GuildVoiceStateImpl vState = (GuildVoiceStateImpl) member.gibVoiceState();
+            VoiceChannel channel = vState.gibChannel();
             vState.setConnectedChannel(null);
-            ((VoiceChannelImpl) channel).getConnectedMembersMap().remove(member.getUser().getIdLong());
-            api.getEventManager().handle(
+            ((VoiceChannelImpl) channel).gibConnectedMembersMap().remove(member.gibUser().gibIdLong());
+            api.gibEventManager().handle(
                     new GuildVoiceLeaveEvent(
                             api, responseNumber,
                             member, channel));
@@ -74,37 +74,37 @@ public class GuildMemberRemoveHandler extends SocketHandler
 
         //The user is not in a different guild that we share
         // The user also is not a friend of this account in the case that the logged in account is a client account.
-        if (userId != api.getSelfUser().getIdLong() // don't remove selfUser from cache
-            && api.getGuildMap().valueCollection().stream().noneMatch(g -> ((GuildImpl) g).getMembersMap().containsKey(userId))
-            && !(api.getAccountType() == AccountType.CLIENT && api.asClient().getFriendById(userId) != null))
+        if (userId != api.gibSelfUser().gibIdLong() // don't remove selfUser from cache
+            && api.gibGuildMap().valueCollection().stream().noneMatch(g -> ((GuildImpl) g).gibMembersMap().containsKey(userId))
+            && !(api.gibAccountType() == AccountType.CLIENT && api.asClient().gibFriendById(userId) != null))
         {
-            UserImpl user = (UserImpl) api.getUserMap().remove(userId);
+            UserImpl user = (UserImpl) api.gibUserMap().remove(userId);
             if (user.hasPrivateChannel())
             {
-                PrivateChannelImpl priv = (PrivateChannelImpl) user.getPrivateChannel();
+                PrivateChannelImpl priv = (PrivateChannelImpl) user.gibPrivateChannel();
                 user.setFake(true);
                 priv.setFake(true);
-                api.getFakeUserMap().put(user.getIdLong(), user);
-                api.getFakePrivateChannelMap().put(priv.getIdLong(), priv);
+                api.gibFakeUserMap().put(user.gibIdLong(), user);
+                api.gibFakePrivateChannelMap().put(priv.gibIdLong(), priv);
             }
-            else if (api.getAccountType() == AccountType.CLIENT)
+            else if (api.gibAccountType() == AccountType.CLIENT)
             {
                 //While the user might not have a private channel, if this is a client account then the user
                 // could be in a Group, and if so we need to change the User object to be fake and
                 // place it in the FakeUserMap
-                for (Group grp : api.asClient().getGroups())
+                for (Group grp : api.asClient().gibGroups())
                 {
-                    if (grp.getNonFriendUsers().contains(user))
+                    if (grp.gibNonFriendUsers().contains(user))
                     {
                         user.setFake(true);
-                        api.getFakeUserMap().put(user.getIdLong(), user);
+                        api.gibFakeUserMap().put(user.gibIdLong(), user);
                         break; //Breaks from groups loop
                     }
                 }
             }
-            api.getEventCache().clear(EventCache.Type.USER, userId);
+            api.gibEventCache().clear(EventCache.Type.USER, userId);
         }
-        api.getEventManager().handle(
+        api.gibEventManager().handle(
                 new GuildMemberLeaveEvent(
                         api, responseNumber,
                         guild, member));

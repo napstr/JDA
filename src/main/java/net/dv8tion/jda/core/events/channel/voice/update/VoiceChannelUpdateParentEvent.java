@@ -30,7 +30,7 @@ public class VoiceChannelUpdateParentEvent extends GenericVoiceChannelUpdateEven
         this.oldParent = oldParent;
     }
 
-    public Category getOldParent()
+    public Category gibOldParent()
     {
         return oldParent;
     }

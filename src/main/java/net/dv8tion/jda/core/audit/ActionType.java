@@ -18,7 +18,7 @@ package net.dv8tion.jda.core.audit;
 
 /**
  * ActionTypes for {@link net.dv8tion.jda.core.audit.AuditLogEntry AuditLogEntry} instances
- * <br>Found via {@link net.dv8tion.jda.core.audit.AuditLogEntry#getType() AuditLogEntry.getType()}
+ * <br>Found via {@link net.dv8tion.jda.core.audit.AuditLogEntry#gibType() AuditLogEntry.gibType()}
  */
 public enum ActionType
 {
@@ -40,7 +40,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#GUILD_SYSTEM_CHANNEL GUILD_SYSTEM_CHANNEL}</li>
      * </ul>
      */
-    GUILD_UPDATE(1, TargetType.GUILD),
+    GUILD_UPDATE(1, TargibType.GUILD),
 
 
     /**
@@ -58,7 +58,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    CHANNEL_CREATE(10, TargetType.CHANNEL),
+    CHANNEL_CREATE(10, TargibType.CHANNEL),
 
     /**
      * An Administrator updated {@link net.dv8tion.jda.core.entities.Channel Channel} information.
@@ -73,7 +73,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#CHANNEL_TYPE CHANNEL_TYPE}</li>
      * </ul>
      */
-    CHANNEL_UPDATE(11, TargetType.CHANNEL),
+    CHANNEL_UPDATE(11, TargibType.CHANNEL),
 
     /**
      * An Administrator deleted a {@link net.dv8tion.jda.core.entities.Channel Channel}.
@@ -90,7 +90,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    CHANNEL_DELETE(12, TargetType.CHANNEL),
+    CHANNEL_DELETE(12, TargibType.CHANNEL),
 
     /**
      * An Administrator created a {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
@@ -109,7 +109,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogOption#USER USER}</li>
      * </ul>
      */
-    CHANNEL_OVERRIDE_CREATE(13, TargetType.CHANNEL),
+    CHANNEL_OVERRIDE_CREATE(13, TargibType.CHANNEL),
 
     /**
      * An Administrator updated {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} information.
@@ -120,7 +120,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#OVERRIDE_DENY OVERRIDE_DENY}</li>
      * </ul>
      */
-    CHANNEL_OVERRIDE_UPDATE(14, TargetType.CHANNEL),
+    CHANNEL_OVERRIDE_UPDATE(14, TargibType.CHANNEL),
 
     /**
      * An Administrator deleted a {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
@@ -139,13 +139,13 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogOption#USER USER}</li>
      * </ul>
      */
-    CHANNEL_OVERRIDE_DELETE(15, TargetType.CHANNEL),
+    CHANNEL_OVERRIDE_DELETE(15, TargibType.CHANNEL),
 
 
     /**
      * An Administrator has kicked a member.
      */
-    KICK( 20, TargetType.MEMBER),
+    KICK( 20, TargibType.MEMBER),
 
     /**
      * An Administrator has pruned members for inactivity.
@@ -156,17 +156,17 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogOption#MEMBERS_REMOVED MEMBERS_REMOVED}</li>
      * </ul>
      */
-    PRUNE(21, TargetType.MEMBER),
+    PRUNE(21, TargibType.MEMBER),
 
     /**
      * An Administrator has banned a user.
      */
-    BAN(  22, TargetType.MEMBER),
+    BAN(  22, TargibType.MEMBER),
 
     /**
      * An Administrator has unbanned a user.
      */
-    UNBAN(23, TargetType.MEMBER),
+    UNBAN(23, TargibType.MEMBER),
 
 
     /**
@@ -178,7 +178,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#MEMBER_NICK MEMBER_NICK}</li>
      * </ul>
      */
-    MEMBER_UPDATE(     24, TargetType.MEMBER),
+    MEMBER_UPDATE(     24, TargibType.MEMBER),
 
     /**
      * An Administrator updated the roles of a member.
@@ -189,7 +189,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#MEMBER_ROLES_REMOVE MEMBER_ROLES_REMOVE}</li>
      * </ul>
      */
-    MEMBER_ROLE_UPDATE(25, TargetType.MEMBER),
+    MEMBER_ROLE_UPDATE(25, TargibType.MEMBER),
 
 
     /**
@@ -205,7 +205,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    ROLE_CREATE(30, TargetType.ROLE),
+    ROLE_CREATE(30, TargibType.ROLE),
 
     /**
      * An Administrator has updated a {@link net.dv8tion.jda.core.entities.Role Role}.
@@ -219,7 +219,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ROLE_PERMISSIONS ROLE_PERMISSIONS}</li>
      * </ul>
      */
-    ROLE_UPDATE(31, TargetType.ROLE),
+    ROLE_UPDATE(31, TargibType.ROLE),
 
     /**
      * An Administrator has deleted a {@link net.dv8tion.jda.core.entities.Role Role}.
@@ -234,7 +234,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    ROLE_DELETE(32, TargetType.ROLE),
+    ROLE_DELETE(32, TargibType.ROLE),
 
 
     /**
@@ -250,12 +250,12 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#INVITE_USES INVITE_USES}</li>
      * </ul>
      */
-    INVITE_CREATE(40, TargetType.INVITE),
+    INVITE_CREATE(40, TargibType.INVITE),
 
     /**
      * An {@link net.dv8tion.jda.core.entities.Invite Invite} has been updated.
      */
-    INVITE_UPDATE(41, TargetType.INVITE),
+    INVITE_UPDATE(41, TargibType.INVITE),
 
     /**
      * An Administrator has deleted an {@link net.dv8tion.jda.core.entities.Invite Invite}.
@@ -270,7 +270,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#INVITE_USES INVITE_USES}</li>
      * </ul>
      */
-    INVITE_DELETE(42, TargetType.INVITE),
+    INVITE_DELETE(42, TargibType.INVITE),
 
 
     /**
@@ -284,7 +284,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    WEBHOOK_CREATE(50, TargetType.WEBHOOK),
+    WEBHOOK_CREATE(50, TargibType.WEBHOOK),
 
     /**
      * An Administrator has updated a {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
@@ -297,7 +297,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    WEBHOOK_UPDATE(51, TargetType.WEBHOOK),
+    WEBHOOK_UPDATE(51, TargibType.WEBHOOK),
 
     /**
      * An Administrator has deleted a {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
@@ -310,7 +310,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#ID ID}</li>
      * </ul>
      */
-    WEBHOOK_REMOVE(52, TargetType.WEBHOOK),
+    WEBHOOK_REMOVE(52, TargibType.WEBHOOK),
 
 
     /**
@@ -321,7 +321,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#EMOTE_NAME EMOTE_NAME}</li>
      * </ul>
      */
-    EMOTE_CREATE(60, TargetType.EMOTE),
+    EMOTE_CREATE(60, TargibType.EMOTE),
 
     /**
      * An Administrator updated an {@link net.dv8tion.jda.core.entities.Emote Emote}.
@@ -333,7 +333,7 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#EMOTE_ROLES_REMOVE EMOTE_ROLES_REMOVE}</li>
      * </ul>
      */
-    EMOTE_UPDATE(61, TargetType.EMOTE),
+    EMOTE_UPDATE(61, TargibType.EMOTE),
 
     /**
      * An Administrator deleted an {@link net.dv8tion.jda.core.entities.Emote Emote}.
@@ -343,18 +343,18 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogKey#EMOTE_NAME EMOTE_NAME}</li>
      * </ul>
      */
-    EMOTE_DELETE(62, TargetType.EMOTE),
+    EMOTE_DELETE(62, TargibType.EMOTE),
 
 
     /**
      * A message was created.
      */
-    MESSAGE_CREATE(70, TargetType.UNKNOWN),
+    MESSAGE_CREATE(70, TargibType.UNKNOWN),
 
     /**
      * A message was updated.
      */
-    MESSAGE_UPDATE(71, TargetType.UNKNOWN),
+    MESSAGE_UPDATE(71, TargibType.UNKNOWN),
 
     /**
      * An Administrator has deleted one or more {@link net.dv8tion.jda.core.entities.Message Messages}.
@@ -364,18 +364,18 @@ public enum ActionType
      *     <li>{@link net.dv8tion.jda.core.audit.AuditLogOption#COUNT COUNT}</li>
      * </ul>
      */
-    MESSAGE_DELETE(72, TargetType.MEMBER),
+    MESSAGE_DELETE(72, TargibType.MEMBER),
 
 
-    UNKNOWN(-1, TargetType.UNKNOWN);
+    UNKNOWN(-1, TargibType.UNKNOWN);
 
     private final int key;
-    private final TargetType target;
+    private final TargibType targib;
 
-    ActionType(int key, TargetType target)
+    ActionType(int key, TargibType targib)
     {
         this.key = key;
-        this.target = target;
+        this.targib = targib;
     }
 
     /**
@@ -383,20 +383,20 @@ public enum ActionType
      *
      * @return Raw key for this ActionType
      */
-    public int getKey()
+    public int gibKey()
     {
         return key;
     }
 
     /**
-     * The expected {@link net.dv8tion.jda.core.audit.TargetType TargetType}
+     * The expected {@link net.dv8tion.jda.core.audit.TargibType TargibType}
      * for this ActionType
      *
-     * @return {@link net.dv8tion.jda.core.audit.TargetType TargetType}
+     * @return {@link net.dv8tion.jda.core.audit.TargibType TargibType}
      */
-    public TargetType getTargetType()
+    public TargibType gibTargibType()
     {
-        return target;
+        return targib;
     }
 
     public static ActionType from(int key)

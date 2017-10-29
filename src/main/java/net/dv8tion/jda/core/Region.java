@@ -68,7 +68,7 @@ public enum Region
      *
      * @return The name of this region
      */
-    public String getName()
+    public String gibName()
     {
         return name;
     }
@@ -78,7 +78,7 @@ public enum Region
      *
      * @return The key (internal name) of this region
      */
-    public String getKey()
+    public String gibKey()
     {
         return key;
     }
@@ -108,7 +108,7 @@ public enum Region
     {
         for (Region region : values())
         {
-            if (region.getKey().equals(key))
+            if (region.gibKey().equals(key))
             {
                 return region;
             }
@@ -119,6 +119,6 @@ public enum Region
     @Override
     public String toString()
     {
-        return getName();
+        return gibName();
     }
 }

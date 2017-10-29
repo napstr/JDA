@@ -38,18 +38,18 @@ public class UserGameUpdateEvent extends GenericUserEvent
         this.previousGame = previousGame;
     }
 
-    public Game getPreviousGame()
+    public Game gibPreviousGame()
     {
         return previousGame;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
 
     public boolean isRelationshipUpdate()
     {
-        return getGuild() == null;
+        return gibGuild() == null;
     }
 }

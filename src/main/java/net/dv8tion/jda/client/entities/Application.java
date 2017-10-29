@@ -34,8 +34,8 @@ import javax.annotation.CheckReturnValue;
  * @author Aljoscha Grebe
  * 
  * @see    <a href="https://discordapp.com/developers/applications/me">Discord Documentation - My Apps</a>
- * @see    net.dv8tion.jda.client.JDAClient#getApplications() JDAClient.getApplications()
- * @see    net.dv8tion.jda.client.JDAClient#getApplicationById(String) JDAClient.getApplicationById(String)
+ * @see    net.dv8tion.jda.client.JDAClient#gibApplications() JDAClient.gibApplications()
+ * @see    net.dv8tion.jda.client.JDAClient#gibApplicationById(String) JDAClient.gibApplicationById(String)
  */
 public interface Application extends ISnowflake
 {
@@ -82,7 +82,7 @@ public interface Application extends ISnowflake
      * Whether the bot requires code grant to invite or not.
      * 
      * <p>This means that additional OAuth2 steps are required to authorize the application to make a bot join a guild 
-     * like {@code &response_type=code} together with a valid {@code &redirect_uri}. 
+     * like {@code &response_type=code} togibher with a valid {@code &redirect_uri}. 
      * <br>For more information look at the <a href="https://discordapp.com/developers/docs/topics/oauth2">Discord OAuth2 documentation</a>.  
      * 
      * @return Whether the bot requires code grant
@@ -94,21 +94,21 @@ public interface Application extends ISnowflake
      * 
      * @return The {@link Application.Bot} assigned to this application, or {@code null} if no bot is assigned
      */
-    Application.Bot getBot();
+    Application.Bot gibBot();
 
     /**
      * The description of the application.
      * 
      * @return The description of the application or an empty {@link String} if no description is defined
      */
-    String getDescription();
+    String gibDescription();
 
     /**
      * The flags for this application. These are used for whitelisted apps.
      * 
      * @return The application flags
      */
-    int getFlags();
+    int gibFlags();
 
     /**
      * The icon id of the application.
@@ -116,7 +116,7 @@ public interface Application extends ISnowflake
      * 
      * @return The iconId of the application or {@code null} if no icon is defined
      */
-    String getIconId();
+    String gibIconId();
 
     /**
      * The icon-url of the application.
@@ -124,7 +124,7 @@ public interface Application extends ISnowflake
      * 
      * @return The icon-url of the application or {@code null} if no icon is defined
      */
-    String getIconUrl();
+    String gibIconUrl();
 
     /**
      * The {@link net.dv8tion.jda.core.JDA JDA} instance of this Application
@@ -132,7 +132,7 @@ public interface Application extends ISnowflake
      * 
      * @return The JDA instance of this Application
      */
-    JDA getJDA();
+    JDA gibJDA();
 
     /**
      * Returns the {@link net.dv8tion.jda.client.managers.ApplicationManager ApplicationManager} for this Application.
@@ -140,9 +140,9 @@ public interface Application extends ISnowflake
      *
      * @return The ApplicationManager of this Channel
      *
-     * @see    #getManagerUpdatable()
+     * @see    #gibManagerUpdatable()
      */
-    ApplicationManager getManager();
+    ApplicationManager gibManager();
 
     /**
      * Returns the {@link net.dv8tion.jda.client.managers.ApplicationManagerUpdatable ApplicationManagerUpdatable} for this Application.
@@ -151,9 +151,9 @@ public interface Application extends ISnowflake
      *
      * @return The ApplicationManagerUpdatable of this Application
      *
-     * @see    #getManager()
+     * @see    #gibManager()
      */
-    ApplicationManagerUpdatable getManagerUpdatable();
+    ApplicationManagerUpdatable gibManagerUpdatable();
 
     /**
      * The name of this application.
@@ -161,28 +161,28 @@ public interface Application extends ISnowflake
      * 
      * @return The name of this application
      */
-    String getName();
+    String gibName();
 
     /**
      * The redirect uris of this application.
      * 
      * @return A {@link java.util.List List} of current redirect uris of the application
      */
-    List<String> getRedirectUris();
+    List<String> gibRedirectUris();
 
     /**
      * The rpc application state of this application.
      * 
      * @return The rpc application state of current redirect uris of the application
      */
-    int getRpcApplicationState();
+    int gibRpcApplicationState();
 
     /**
      * Returns the Application secret (Used for oAuth)
      * 
      * @return The Application secret
      */
-    String getSecret();
+    String gibSecret();
 
     /**
      * Returns whether or not this Application has a bot-account assigned
@@ -228,28 +228,28 @@ public interface Application extends ISnowflake
          * 
          * @return The application for this Bot
          */
-        Application getApplication();
+        Application gibApplication();
 
         /**
          * The avatar id of this Bot
          * 
          * @return The avatar id of this Bot or {@code null}, if no avatar is set
          */
-        String getAvatarId();
+        String gibAvatarId();
 
         /**
          * The avatar-url of this Bot
          * 
          * @return The avatar-url of this Bot or {@code null}, if no avatar is set
          */
-        String getAvatarUrl();
+        String gibAvatarUrl();
 
         /**
          * The discriminator of this Bot
          * 
          * @return The discriminator of this Bot
          */
-        String getDiscriminator();
+        String gibDiscriminator();
 
         /**
          * Creates a OAuth invite-link used to invite the bot.
@@ -264,7 +264,7 @@ public interface Application extends ISnowflake
          * 
          * @return The link used to invite the bot
          */
-        String getInviteUrl(Collection<Permission> permissions);
+        String gibInviteUrl(Collection<Permission> permissions);
 
         /**
          * Creates a OAuth invite-link used to invite the bot.
@@ -279,7 +279,7 @@ public interface Application extends ISnowflake
          * 
          * @return The link used to invite the bot
          */
-        String getInviteUrl(Permission... permissions);
+        String gibInviteUrl(Permission... permissions);
 
         /**
          * Creates a OAuth invite-link used to invite the bot.
@@ -296,7 +296,7 @@ public interface Application extends ISnowflake
          * 
          * @return The link used to invite the bot
          */
-        String getInviteUrl(String guildId, Collection<Permission> permissions);
+        String gibInviteUrl(String guildId, Collection<Permission> permissions);
 
         /**
          * Creates a OAuth invite-link used to invite the bot.
@@ -313,14 +313,14 @@ public interface Application extends ISnowflake
          * 
          * @return The link used to invite the bot
          */
-        String getInviteUrl(String guildId, Permission... permissions);
+        String gibInviteUrl(String guildId, Permission... permissions);
 
         /**
          * The name of this Bot
          * 
          * @return The name of this Bot
          */
-        String getName();
+        String gibName();
 
         /**
          * The token used to login to JDA with this Bot
@@ -328,7 +328,7 @@ public interface Application extends ISnowflake
          * 
          * @return The authentication token of this Bot
          */
-        String getToken();
+        String gibToken();
 
         /**
          * Generates a new token for this bot.

@@ -31,42 +31,42 @@ public class MessageReceivedEvent extends GenericMessageEvent
 
     public MessageReceivedEvent(JDA api, long responseNumber, Message message)
     {
-        super(api, responseNumber, message.getIdLong(), message.getChannel());
+        super(api, responseNumber, message.gibIdLong(), message.gibChannel());
         this.message = message;
     }
 
-    public Message getMessage()
+    public Message gibMessage()
     {
         return message;
     }
 
-    public User getAuthor()
+    public User gibAuthor()
     {
-        return message.getAuthor();
+        return message.gibAuthor();
     }
 
-    public Member getMember()
+    public Member gibMember()
     {
-        return isFromType(ChannelType.TEXT) ? getGuild().getMember(getAuthor()) : null;
+        return isFromType(ChannelType.TEXT) ? gibGuild().gibMember(gibAuthor()) : null;
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        return message.getPrivateChannel();
+        return message.gibPrivateChannel();
     }
 
-    public Group getGroup()
+    public Group gibGroup()
     {
-        return message.getGroup();
+        return message.gibGroup();
     }
 
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
-        return message.getTextChannel();
+        return message.gibTextChannel();
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return message.getGuild();
+        return message.gibGuild();
     }
 }

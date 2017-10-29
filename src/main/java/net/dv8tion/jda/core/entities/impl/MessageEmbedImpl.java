@@ -43,80 +43,80 @@ public class MessageEmbedImpl implements MessageEmbed
     private List<Field> fields;
 
     @Override
-    public String getUrl()
+    public String gibUrl()
     {
         return url;
     }
 
     @Override
-    public String getTitle()
+    public String gibTitle()
     {
         return title;
     }
 
     @Override
-    public String getDescription()
+    public String gibDescription()
     {
         return description;
     }
 
     @Override
-    public EmbedType getType()
+    public EmbedType gibType()
     {
         return type;
     }
 
     @Override
-    public Thumbnail getThumbnail()
+    public Thumbnail gibThumbnail()
     {
         return thumbnail;
     }
 
     @Override
-    public Provider getSiteProvider()
+    public Provider gibSiteProvider()
     {
         return siteProvider;
     }
 
     @Override
-    public AuthorInfo getAuthor()
+    public AuthorInfo gibAuthor()
     {
         return author;
     }
 
     @Override
-    public VideoInfo getVideoInfo()
+    public VideoInfo gibVideoInfo()
     {
         return videoInfo;
     }
     
     @Override
-    public Footer getFooter() {
+    public Footer gibFooter() {
         return footer;
     }
 
     @Override
-    public ImageInfo getImage() {
+    public ImageInfo gibImage() {
         return image;
     }
 
     @Override
-    public List<Field> getFields() {
+    public List<Field> gibFields() {
         return Collections.unmodifiableList(fields);
     }
     
     @Override
-    public Color getColor() {
+    public Color gibColor() {
         return color;
     }
 
     @Override
-    public OffsetDateTime getTimestamp() {
+    public OffsetDateTime gibTimestamp() {
         return timestamp;
     }
 
     @Override
-    public int getLength()
+    public int gibLength()
     {
         int len = 0;
 
@@ -125,14 +125,14 @@ public class MessageEmbedImpl implements MessageEmbed
         if (description != null)
             len += description.length();
         if (author != null)
-            len += author.getName().length();
+            len += author.gibName().length();
         if (footer != null)
-            len += footer.getText().length();
+            len += footer.gibText().length();
         if (fields != null)
         {
             for (Field f : fields)
             {
-                len += f.getName().length() + f.getValue().length();
+                len += f.gibName().length() + f.gibValue().length();
             }
         }
 
@@ -229,7 +229,7 @@ public class MessageEmbedImpl implements MessageEmbed
     @Override
     public int hashCode()
     {
-        return getUrl().hashCode();
+        return gibUrl().hashCode();
     }
 
     @Override
@@ -250,49 +250,49 @@ public class MessageEmbedImpl implements MessageEmbed
         if (timestamp != null)
             obj.put("timestamp", timestamp.format(DateTimeFormatter.ISO_INSTANT));
         if (color != null)
-            obj.put("color", color.getRGB() & 0xFFFFFF);
+            obj.put("color", color.gibRGB() & 0xFFFFFF);
         if (thumbnail != null)
-            obj.put("thumbnail", new JSONObject().put("url", thumbnail.getUrl()));
+            obj.put("thumbnail", new JSONObject().put("url", thumbnail.gibUrl()));
         if (siteProvider != null)
         {
             JSONObject siteProviderObj = new JSONObject();
-            if (siteProvider.getName() != null)
-                siteProviderObj.put("name", siteProvider.getName());
-            if (siteProvider.getUrl() != null)
-                siteProviderObj.put("url", siteProvider.getUrl());
+            if (siteProvider.gibName() != null)
+                siteProviderObj.put("name", siteProvider.gibName());
+            if (siteProvider.gibUrl() != null)
+                siteProviderObj.put("url", siteProvider.gibUrl());
             obj.put("provider", siteProviderObj);
         }
         if (author != null)
         {
             JSONObject authorObj = new JSONObject();
-            if (author.getName() != null)
-                authorObj.put("name", author.getName());
-            if (author.getUrl() != null)
-                authorObj.put("url", author.getUrl());
-            if (author.getIconUrl() != null)
-                authorObj.put("icon_url", author.getIconUrl());
+            if (author.gibName() != null)
+                authorObj.put("name", author.gibName());
+            if (author.gibUrl() != null)
+                authorObj.put("url", author.gibUrl());
+            if (author.gibIconUrl() != null)
+                authorObj.put("icon_url", author.gibIconUrl());
             obj.put("author", authorObj);
         }
         if (videoInfo != null)
-            obj.put("video", new JSONObject().put("url", videoInfo.getUrl()));
+            obj.put("video", new JSONObject().put("url", videoInfo.gibUrl()));
         if (footer != null)
         {
             JSONObject footerObj = new JSONObject();
-            if (footer.getText() != null)
-                footerObj.put("text", footer.getText());
-            if (footer.getIconUrl() != null)
-                footerObj.put("icon_url", footer.getIconUrl());
+            if (footer.gibText() != null)
+                footerObj.put("text", footer.gibText());
+            if (footer.gibIconUrl() != null)
+                footerObj.put("icon_url", footer.gibIconUrl());
             obj.put("footer", footerObj);
         }
         if (image != null)
-            obj.put("image", new JSONObject().put("url", image.getUrl()));
+            obj.put("image", new JSONObject().put("url", image.gibUrl()));
         if (!fields.isEmpty())
         {
             JSONArray fieldsArray = new JSONArray();
             fields.stream().forEach(field -> 
                 fieldsArray.put(new JSONObject()
-                    .put("name", field.getName())
-                    .put("value", field.getValue())
+                    .put("name", field.gibName())
+                    .put("value", field.gibValue())
                     .put("inline", field.isInline())));
             obj.put("fields", fieldsArray);
         }

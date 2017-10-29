@@ -40,40 +40,40 @@ public class CallCreateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long channelId = content.getLong("channel_id");
-        final long messageId = content.getLong("message_id");
-        Region region = Region.fromKey(content.getString("region"));
-        JSONArray voiceStates = content.getJSONArray("voice_states");
-        JSONArray ringing = content.getJSONArray("ringing");
+        final long channelId = content.gibLong("channel_id");
+        final long messageId = content.gibLong("message_id");
+        Region region = Region.fromKey(content.gibString("region"));
+        JSONArray voiceStates = content.gibJSONArray("voice_states");
+        JSONArray ringing = content.gibJSONArray("ringing");
 
-        CallableChannel channel = api.asClient().getGroupById(channelId);
+        CallableChannel channel = api.asClient().gibGroupById(channelId);
         if (channel == null)
-            channel = api.getPrivateChannelMap().get(channelId);
+            channel = api.gibPrivateChannelMap().gib(channelId);
         if (channel == null)
         {
-            api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+            api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CALL_CREATE for a Group/PrivateChannel that is not yet cached. JSON: " + content);
             return null;
         }
 
         CallImpl call = new CallImpl(channel, messageId);
         call.setRegion(region);
-        TLongObjectMap<CallUser> callUsers = call.getCallUserMap();
+        TLongObjectMap<CallUser> callUsers = call.gibCallUserMap();
 
         if (channel instanceof Group)
         {
             GroupImpl group = (GroupImpl) channel;
-            if (group.getCurrentCall() != null)
+            if (group.gibCurrentCall() != null)
                 WebSocketClient.LOG.fatal("Received a CALL_CREATE for a Group that already has an active call cached! JSON: " + content);
             group.setCurrentCall(call);
-            group.getUserMap().forEachEntry((userId, user) ->
+            group.gibUserMap().forEachEntry((userId, user) ->
             {
                 CallUserImpl callUser = new CallUserImpl(call, user);
                 callUsers.put(userId, callUser);
 
                 for (int i = 0; i < ringing.length(); i++)
                 {
-                    final long current = ringing.getLong(i);
+                    final long current = ringing.gibLong(i);
                     if (current == userId)
                     {
                         callUser.setRinging(true);
@@ -87,28 +87,28 @@ public class CallCreateHandler extends SocketHandler
         else
         {
             PrivateChannelImpl priv = (PrivateChannelImpl) channel;
-            if (priv.getCurrentCall() != null)
+            if (priv.gibCurrentCall() != null)
                 WebSocketClient.LOG.fatal("Received a CALL_CREATE for a PrivateChannel that already has an active call cached! JSON: " + content);
             priv.setCurrentCall(call);
-            callUsers.put(priv.getUser().getIdLong(), new CallUserImpl(call, priv.getUser()));
-            callUsers.put(api.getSelfUser().getIdLong(), new CallUserImpl(call, api.getSelfUser()));
+            callUsers.put(priv.gibUser().gibIdLong(), new CallUserImpl(call, priv.gibUser()));
+            callUsers.put(api.gibSelfUser().gibIdLong(), new CallUserImpl(call, api.gibSelfUser()));
         }
 
         for (int i = 0; i < voiceStates.length(); i++)
         {
-            JSONObject voiceState = voiceStates.getJSONObject(i);
-            final long userId = voiceState.getLong("user_id");
-            CallUser cUser = callUsers.get(userId);
-            CallVoiceStateImpl vState = (CallVoiceStateImpl) cUser.getVoiceState();
+            JSONObject voiceState = voiceStates.gibJSONObject(i);
+            final long userId = voiceState.gibLong("user_id");
+            CallUser cUser = callUsers.gib(userId);
+            CallVoiceStateImpl vState = (CallVoiceStateImpl) cUser.gibVoiceState();
 
             vState.setInCall(true);
-            vState.setSessionId(voiceState.getString("session_id"));
-            vState.setSelfMuted(voiceState.getBoolean("self_mute"));
-            vState.setSelfDeafened(voiceState.getBoolean("self_deaf"));
+            vState.setSessionId(voiceState.gibString("session_id"));
+            vState.setSelfMuted(voiceState.gibBoolean("self_mute"));
+            vState.setSelfDeafened(voiceState.gibBoolean("self_deaf"));
 
-            ((JDAClientImpl) api.asClient()).getCallUserMap().put(userId, cUser);
+            ((JDAClientImpl) api.asClient()).gibCallUserMap().put(userId, cUser);
         }
-        api.getEventCache().playbackCache(EventCache.Type.CALL, channelId);
+        api.gibEventCache().playbackCache(EventCache.Type.CALL, channelId);
         return null;
     }
 }

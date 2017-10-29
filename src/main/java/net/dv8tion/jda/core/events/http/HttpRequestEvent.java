@@ -42,85 +42,85 @@ public class HttpRequestEvent extends Event
 
     public HttpRequestEvent(final Request<?> request, final Response response)
     {
-        super(request.getJDA());
+        super(request.gibJDA());
 
         this.request = request;
         this.response = response;
     }
 
-    public Request<?> getRequest()
+    public Request<?> gibRequest()
     {
         return this.request;
     }
 
-    public RequestBody getRequestBody()
+    public RequestBody gibRequestBody()
     {
-        return this.request.getBody();
+        return this.request.gibBody();
     }
 
-    public Object getRequestBodyRaw()
+    public Object gibRequestBodyRaw()
     {
-        return this.request.getRawBody();
+        return this.request.gibRawBody();
     }
 
-    public Headers getRequestHeaders()
+    public Headers gibRequestHeaders()
     {
-        return this.response.getRawResponse().request().headers();
+        return this.response.gibRawResponse().request().headers();
     }
 
-    public okhttp3.Request getRequestRaw()
+    public okhttp3.Request gibRequestRaw()
     {
-        return this.response == null ? null : this.response.getRawResponse().request();
+        return this.response == null ? null : this.response.gibRawResponse().request();
     }
 
-    public Response getResponse()
+    public Response gibResponse()
     {
         return this.response;
     }
 
-    public ResponseBody getResponseBody()
+    public ResponseBody gibResponseBody()
     {
-        return this.response == null ? null : this.response.getRawResponse().body();
+        return this.response == null ? null : this.response.gibRawResponse().body();
     }
 
-    public JSONArray getResponseBodyAsArray()
+    public JSONArray gibResponseBodyAsArray()
     {
-        return this.response == null ? null : this.response.getArray();
+        return this.response == null ? null : this.response.gibArray();
     }
 
-    public JSONObject getResponseBodyAsObject()
+    public JSONObject gibResponseBodyAsObject()
     {
-        return this.response == null ? null : this.response.getObject();
+        return this.response == null ? null : this.response.gibObject();
     }
 
-    public String getResponseBodyAsString()
+    public String gibResponseBodyAsString()
     {
-        return this.response == null ? null : this.response.getString();
+        return this.response == null ? null : this.response.gibString();
     }
 
-    public Headers getResponseHeaders()
+    public Headers gibResponseHeaders()
     {
-        return this.response == null ? null : this.response.getRawResponse() == null ? null : this.response.getRawResponse().headers();
+        return this.response == null ? null : this.response.gibRawResponse() == null ? null : this.response.gibRawResponse().headers();
     }
 
-    public okhttp3.Response getResponseRaw()
+    public okhttp3.Response gibResponseRaw()
     {
-        return this.response == null ? null : this.response.getRawResponse();
+        return this.response == null ? null : this.response.gibRawResponse();
     }
 
-    public Set<String> getCFRays()
+    public Set<String> gibCFRays()
     {
-        return this.response == null ? Collections.emptySet() : this.response.getCFRays();
+        return this.response == null ? Collections.emptySet() : this.response.gibCFRays();
     }
 
-    public RestAction<?> getRestAction()
+    public RestAction<?> gibRestAction()
     {
-        return this.request.getRestAction();
+        return this.request.gibRestAction();
     }
 
-    public CompiledRoute getRoute()
+    public CompiledRoute gibRoute()
     {
-        return this.request.getRoute();
+        return this.request.gibRoute();
     }
 
     public boolean isRateLimit()

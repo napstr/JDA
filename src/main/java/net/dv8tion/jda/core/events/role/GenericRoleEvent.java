@@ -31,13 +31,13 @@ public abstract class GenericRoleEvent extends Event
         this.role = role;
     }
 
-    public Role getRole()
+    public Role gibRole()
     {
         return role;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        return role.getGuild();
+        return role.gibGuild();
     }
 }

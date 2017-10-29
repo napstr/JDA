@@ -70,7 +70,7 @@ public class ChannelAction extends AuditableRestAction<Channel>
      */
     public ChannelAction(Route.CompiledRoute route, String name, Guild guild, ChannelType type)
     {
-        super(guild.getJDA(), route);
+        super(guild.gibJDA(), route);
         this.guild = guild;
         this.type = type;
         this.name = name;
@@ -115,7 +115,7 @@ public class ChannelAction extends AuditableRestAction<Channel>
     @CheckReturnValue
     public ChannelAction setParent(Category category)
     {
-        Checks.check(category == null || category.getGuild().equals(guild), "Category is not from same guild!");
+        Checks.check(category == null || category.gibGuild().equals(guild), "Category is not from same guild!");
         this.parent = category;
         return this;
     }
@@ -168,7 +168,7 @@ public class ChannelAction extends AuditableRestAction<Channel>
      * Adds a new Role-{@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * for the new Channel.
      *
-     * @param  target
+     * @param  targib
      *         The not-null {@link net.dv8tion.jda.core.entities.Role Role} or {@link net.dv8tion.jda.core.entities.Member Member} for the override
      * @param  allow
      *         The granted {@link net.dv8tion.jda.core.Permission Permissions} for the override or null
@@ -182,28 +182,28 @@ public class ChannelAction extends AuditableRestAction<Channel>
      * @return The current ChannelAction, for chaining convenience
      */
     @CheckReturnValue
-    public ChannelAction addPermissionOverride(IPermissionHolder target, Collection<Permission> allow, Collection<Permission> deny)
+    public ChannelAction addPermissionOverride(IPermissionHolder targib, Collection<Permission> allow, Collection<Permission> deny)
     {
         checkPermissions(allow);
         checkPermissions(deny);
-        final long allowRaw = allow != null ? Permission.getRaw(allow) : 0;
-        final long denyRaw = deny != null ? Permission.getRaw(deny) : 0;
+        final long allowRaw = allow != null ? Permission.gibRaw(allow) : 0;
+        final long denyRaw = deny != null ? Permission.gibRaw(deny) : 0;
 
-        return addPermissionOverride(target, allowRaw, denyRaw);
+        return addPermissionOverride(targib, allowRaw, denyRaw);
     }
 
     /**
      * Adds a new Role-{@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * for the new Channel.
      *
-     * @param  target
+     * @param  targib
      *         The not-null {@link net.dv8tion.jda.core.entities.Role Role} for the override
      * @param  allow
      *         The granted {@link net.dv8tion.jda.core.Permission Permissions} for the override
-     *         Use {@link net.dv8tion.jda.core.Permission#getRawValue()} to retrieve these Permissions.
+     *         Use {@link net.dv8tion.jda.core.Permission#gibRawValue()} to retrieve these Permissions.
      * @param  deny
      *         The denied {@link net.dv8tion.jda.core.Permission Permissions} for the override
-     *         Use {@link net.dv8tion.jda.core.Permission#getRawValue()} to retrieve these Permissions.
+     *         Use {@link net.dv8tion.jda.core.Permission#gibRawValue()} to retrieve these Permissions.
      *
      * @throws java.lang.IllegalArgumentException
      *         <ul>
@@ -214,30 +214,30 @@ public class ChannelAction extends AuditableRestAction<Channel>
      *
      * @return The current ChannelAction, for chaining convenience
      *
-     * @see    net.dv8tion.jda.core.Permission#getRawValue()
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection)
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...)
+     * @see    net.dv8tion.jda.core.Permission#gibRawValue()
+     * @see    net.dv8tion.jda.core.Permission#gibRaw(java.util.Collection)
+     * @see    net.dv8tion.jda.core.Permission#gibRaw(net.dv8tion.jda.core.Permission...)
      */
     @CheckReturnValue
-    public ChannelAction addPermissionOverride(IPermissionHolder target, long allow, long deny)
+    public ChannelAction addPermissionOverride(IPermissionHolder targib, long allow, long deny)
     {
-        Checks.notNull(target, "Override Role");
+        Checks.notNull(targib, "Override Role");
         Checks.notNegative(allow, "Granted permissions value");
         Checks.notNegative(deny, "Denied permissions value");
         Checks.check(allow <= Permission.ALL_PERMISSIONS, "Specified allow value may not be greater than a full permission set");
         Checks.check(deny <= Permission.ALL_PERMISSIONS,  "Specified deny value may not be greater than a full permission set");
-        Checks.check(target.getGuild().equals(guild), "Specified Role is not in the same Guild!");
+        Checks.check(targib.gibGuild().equals(guild), "Specified Role is not in the same Guild!");
 
-        if (target instanceof Role)
+        if (targib instanceof Role)
         {
-            Role r = (Role) target;
-            long id = r.getIdLong();
+            Role r = (Role) targib;
+            long id = r.gibIdLong();
             overrides.add(new PermOverrideData(PermOverrideData.ROLE_TYPE, id, allow, deny));
         }
         else
         {
-            Member m = (Member) target;
-            long id = m.getUser().getIdLong();
+            Member m = (Member) targib;
+            long id = m.gibUser().gibIdLong();
             overrides.add(new PermOverrideData(PermOverrideData.MEMBER_TYPE, id, allow, deny));
         }
         return this;
@@ -303,7 +303,7 @@ public class ChannelAction extends AuditableRestAction<Channel>
     {
         JSONObject object = new JSONObject();
         object.put("name", name);
-        object.put("type", type.getId());
+        object.put("type", type.gibId());
         object.put("permission_overwrites", new JSONArray(overrides));
         switch (type)
         {
@@ -320,9 +320,9 @@ public class ChannelAction extends AuditableRestAction<Channel>
                     object.put("nsfw", nsfw);
         }
         if (type != ChannelType.CATEGORY && parent != null)
-            object.put("parent_id", parent.getId());
+            object.put("parent_id", parent.gibId());
 
-        return getRequestBody(object);
+        return gibRequestBody(object);
     }
 
     @Override
@@ -334,18 +334,18 @@ public class ChannelAction extends AuditableRestAction<Channel>
             return;
         }
 
-        EntityBuilder builder = api.getEntityBuilder();;
+        EntityBuilder builder = api.gibEntityBuilder();;
         Channel channel;
         switch (type)
         {
             case VOICE:
-                channel = builder.createVoiceChannel(response.getObject(), guild.getIdLong());
+                channel = builder.createVoiceChannel(response.gibObject(), guild.gibIdLong());
                 break;
             case TEXT:
-                channel = builder.createTextChannel(response.getObject(), guild.getIdLong());
+                channel = builder.createTextChannel(response.gibObject(), guild.gibIdLong());
                 break;
             case CATEGORY:
-                channel = builder.createCategory(response.getObject(), guild.getIdLong());
+                channel = builder.createCategory(response.gibObject(), guild.gibIdLong());
                 break;
             default:
                 request.onFailure(new IllegalStateException("Created channel of unknown type!"));

@@ -71,9 +71,9 @@ public abstract class Field<T, M>
      *
      * @return The current value, null if no value has been set
      *
-     * @see    #getOriginalValue()
+     * @see    #gibOriginalValue()
      */
-    public T getValue()
+    public T gibValue()
     {
         return value;
     }
@@ -88,11 +88,11 @@ public abstract class Field<T, M>
      *
      * @return The original value for the underlying entity
      *
-     * @see    #getValue()
+     * @see    #gibValue()
      */
-    public T getOriginalValue()
+    public T gibOriginalValue()
     {
-        return originalValue.get();
+        return originalValue.gib();
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class Field<T, M>
      * <br>This will cause {@link #isSet()} to return {@code true}!
      *
      * <p>Values might be checked differently depending on the Field implementation.
-     * <br>The check criteria are specified in the field getter of the updatable manager.
+     * <br>The check criteria are specified in the field gibter of the updatable manager.
      *
      * @param  value
      *         The value that should be used by the update operation
@@ -142,7 +142,7 @@ public abstract class Field<T, M>
      */
     public boolean shouldUpdate()
     {
-        return isSet() && !equals(getOriginalValue());
+        return isSet() && !equals(gibOriginalValue());
     }
 
     /**
@@ -150,7 +150,7 @@ public abstract class Field<T, M>
      *
      * @return The Manager of this specific Field instance
      */
-    public M getManager()
+    public M gibManager()
     {
         return manager;
     }

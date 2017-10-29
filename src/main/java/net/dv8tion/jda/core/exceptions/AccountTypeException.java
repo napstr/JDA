@@ -20,7 +20,7 @@ import net.dv8tion.jda.core.AccountType;
 
 /**
  * Indicates that an operation is not possible unless the {@link net.dv8tion.jda.core.AccountType AccountType}
- * matches the one provided in {@link #getRequiredType()}
+ * matches the one provided in {@link #gibRequiredType()}
  */
 public class AccountTypeException extends RuntimeException
 {
@@ -56,7 +56,7 @@ public class AccountTypeException extends RuntimeException
      *
      * @return AccountType
      */
-    public AccountType getRequiredType()
+    public AccountType gibRequiredType()
     {
         return requiredType;
     }

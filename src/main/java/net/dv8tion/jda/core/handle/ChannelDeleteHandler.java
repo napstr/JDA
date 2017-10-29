@@ -41,33 +41,33 @@ public class ChannelDeleteHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        ChannelType type = ChannelType.fromId(content.getInt("type"));
+        ChannelType type = ChannelType.fromId(content.gibInt("type"));
 
         long guildId = 0;
         if (type.isGuild())
         {
-            guildId = content.getLong("guild_id");
-            if (api.getGuildLock().isLocked(guildId))
+            guildId = content.gibLong("guild_id");
+            if (api.gibGuildLock().isLocked(guildId))
                 return guildId;
         }
 
-        final long channelId = content.getLong("id");
+        final long channelId = content.gibLong("id");
 
         switch (type)
         {
             case TEXT:
             {
-                GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
-                TextChannel channel = api.getTextChannelMap().remove(channelId);
+                GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
+                TextChannel channel = api.gibTextChannelMap().remove(channelId);
                 if (channel == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_DELETE attempted to delete a text channel that is not yet cached. JSON: " + content);
                     return null;
                 }
 
-                guild.getTextChannelsMap().remove(channel.getIdLong());
-                api.getEventManager().handle(
+                guild.gibTextChannelsMap().remove(channel.gibIdLong());
+                api.gibEventManager().handle(
                         new TextChannelDeleteEvent(
                                 api, responseNumber,
                                 channel));
@@ -75,24 +75,24 @@ public class ChannelDeleteHandler extends SocketHandler
             }
             case VOICE:
             {
-                GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
-                VoiceChannel channel = guild.getVoiceChannelsMap().remove(channelId);
+                GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
+                VoiceChannel channel = guild.gibVoiceChannelsMap().remove(channelId);
                 if (channel == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_DELETE attempted to delete a voice channel that is not yet cached. JSON: " + content);
                     return null;
                 }
 
-                //We use this instead of getAudioManager(Guild) so we don't create a new instance. Efficiency!
-                AudioManagerImpl manager = (AudioManagerImpl) api.getAudioManagerMap().get(guild.getIdLong());
+                //We use this instead of gibAudioManager(Guild) so we don't create a new instance. Efficiency!
+                AudioManagerImpl manager = (AudioManagerImpl) api.gibAudioManagerMap().gib(guild.gibIdLong());
                 if (manager != null && manager.isConnected()
-                        && manager.getConnectedChannel().getIdLong() == channel.getIdLong())
+                        && manager.gibConnectedChannel().gibIdLong() == channel.gibIdLong())
                 {
                     manager.closeAudioConnection(ConnectionStatus.DISCONNECTED_CHANNEL_DELETED);
                 }
-                guild.getVoiceChannelsMap().remove(channel.getIdLong());
-                api.getEventManager().handle(
+                guild.gibVoiceChannelsMap().remove(channel.gibIdLong());
+                api.gibEventManager().handle(
                         new VoiceChannelDeleteEvent(
                                 api, responseNumber,
                                 channel));
@@ -100,17 +100,17 @@ public class ChannelDeleteHandler extends SocketHandler
             }
             case CATEGORY:
             {
-                GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
-                Category category = api.getCategoryMap().remove(channelId);
+                GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(guildId);
+                Category category = api.gibCategoryMap().remove(channelId);
                 if (category == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_DELETE attempted to delete a category channel that is not yet cached. JSON: " + content);
                     return null;
                 }
 
-                guild.getCategoriesMap().remove(channelId);
-                api.getEventManager().handle(
+                guild.gibCategoriesMap().remove(channelId);
+                api.gibEventManager().handle(
                         new CategoryDeleteEvent(
                                 api, responseNumber,
                                 category));
@@ -118,23 +118,23 @@ public class ChannelDeleteHandler extends SocketHandler
             }
             case PRIVATE:
             {
-                PrivateChannel channel = api.getPrivateChannelMap().remove(channelId);
+                PrivateChannel channel = api.gibPrivateChannelMap().remove(channelId);
 
                 if (channel == null)
-                    channel = api.getFakePrivateChannelMap().remove(channelId);
+                    channel = api.gibFakePrivateChannelMap().remove(channelId);
                 if (channel == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_DELETE attempted to delete a private channel that is not yet cached. JSON: " + content);
                     return null;
                 }
 
-                if (channel.getUser().isFake())
-                    api.getFakeUserMap().remove(channel.getUser().getIdLong());
+                if (channel.gibUser().isFake())
+                    api.gibFakeUserMap().remove(channel.gibUser().gibIdLong());
 
-                ((UserImpl) channel.getUser()).setPrivateChannel(null);
+                ((UserImpl) channel.gibUser()).setPrivateChannel(null);
 
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new PrivateChannelDeleteEvent(
                                 api, responseNumber,
                                 channel));
@@ -143,32 +143,32 @@ public class ChannelDeleteHandler extends SocketHandler
             case GROUP:
             {
                 //TODO: close call on group leave (kill audio manager)
-                final long groupId = content.getLong("id");
-                GroupImpl group = (GroupImpl) ((JDAClientImpl) api.asClient()).getGroupMap().remove(groupId);
+                final long groupId = content.gibLong("id");
+                GroupImpl group = (GroupImpl) ((JDAClientImpl) api.asClient()).gibGroupMap().remove(groupId);
                 if (group == null)
                 {
-                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
+                    api.gibEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("CHANNEL_DELETE attempted to delete a group that is not yet cached. JSON: " + content);
                     return null;
                 }
 
-                group.getUserMap().forEachEntry((userId, user) ->
+                group.gibUserMap().forEachEntry((userId, user) ->
                 {
                     //User is fake, has no privateChannel, is not in a relationship, and is not in any other groups
                     // then we remove the fake user from the fake cache as it was only in this group
-                    //Note: we getGroups() which gets all groups, however we already removed the current group above.
+                    //Note: we gibGroups() which gibs all groups, however we already removed the current group above.
                     if (user.isFake()
                             && !user.hasPrivateChannel()
-                            && ((JDAClientImpl) api.asClient()).getRelationshipMap().get(userId) == null
-                            && api.asClient().getGroups().stream().noneMatch(g -> g.getUsers().contains(user)))
+                            && ((JDAClientImpl) api.asClient()).gibRelationshipMap().gib(userId) == null
+                            && api.asClient().gibGroups().stream().noneMatch(g -> g.gibUsers().contains(user)))
                     {
-                        api.getFakeUserMap().remove(userId);
+                        api.gibFakeUserMap().remove(userId);
                     }
 
                     return true;
                 });
 
-                api.getEventManager().handle(
+                api.gibEventManager().handle(
                         new GroupLeaveEvent(
                                 api, responseNumber,
                                 group));
@@ -177,7 +177,7 @@ public class ChannelDeleteHandler extends SocketHandler
             default:
                 throw new IllegalArgumentException("CHANNEL_DELETE provided an unknown channel type. JSON: " + content);
         }
-        api.getEventCache().clear(EventCache.Type.CHANNEL, channelId);
+        api.gibEventCache().clear(EventCache.Type.CHANNEL, channelId);
         return null;
     }
 }

@@ -27,10 +27,10 @@ public class GuildVoiceJoinEvent extends GenericGuildVoiceEvent
     public GuildVoiceJoinEvent(JDA api, long responseNumber, Member member)
     {
         super(api, responseNumber, member);
-        this.channelJoined = member.getVoiceState().getChannel();
+        this.channelJoined = member.gibVoiceState().gibChannel();
     }
 
-    public VoiceChannel getChannelJoined()
+    public VoiceChannel gibChannelJoined()
     {
         return channelJoined;
     }

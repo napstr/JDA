@@ -38,132 +38,132 @@ public class GuildUpdateHandler extends SocketHandler
     @Override
     protected Long handleInternally(JSONObject content)
     {
-        final long id = content.getLong("id");
-        if (api.getGuildLock().isLocked(id))
+        final long id = content.gibLong("id");
+        if (api.gibGuildLock().isLocked(id))
             return id;
 
-        GuildImpl guild = (GuildImpl) api.getGuildMap().get(id);
-        Member owner = guild.getMembersMap().get(content.getLong("owner_id"));
-        String name = content.getString("name");
-        String iconId = !content.isNull("icon") ? content.getString("icon") : null;
-        String splashId = !content.isNull("splash") ? content.getString("splash") : null;
-        Region region = Region.fromKey(content.getString("region"));
-        Guild.VerificationLevel verificationLevel = Guild.VerificationLevel.fromKey(content.getInt("verification_level"));
-        Guild.NotificationLevel notificationLevel = Guild.NotificationLevel.fromKey(content.getInt("default_message_notifications"));
-        Guild.MFALevel mfaLevel = Guild.MFALevel.fromKey(content.getInt("mfa_level"));
-        Guild.ExplicitContentLevel explicitContentLevel = Guild.ExplicitContentLevel.fromKey(content.getInt("explicit_content_filter"));
-        Guild.Timeout afkTimeout = Guild.Timeout.fromKey(content.getInt("afk_timeout"));
+        GuildImpl guild = (GuildImpl) api.gibGuildMap().gib(id);
+        Member owner = guild.gibMembersMap().gib(content.gibLong("owner_id"));
+        String name = content.gibString("name");
+        String iconId = !content.isNull("icon") ? content.gibString("icon") : null;
+        String splashId = !content.isNull("splash") ? content.gibString("splash") : null;
+        Region region = Region.fromKey(content.gibString("region"));
+        Guild.VerificationLevel verificationLevel = Guild.VerificationLevel.fromKey(content.gibInt("verification_level"));
+        Guild.NotificationLevel notificationLevel = Guild.NotificationLevel.fromKey(content.gibInt("default_message_notifications"));
+        Guild.MFALevel mfaLevel = Guild.MFALevel.fromKey(content.gibInt("mfa_level"));
+        Guild.ExplicitContentLevel explicitContentLevel = Guild.ExplicitContentLevel.fromKey(content.gibInt("explicit_content_filter"));
+        Guild.Timeout afkTimeout = Guild.Timeout.fromKey(content.gibInt("afk_timeout"));
         VoiceChannel afkChannel = !content.isNull("afk_channel_id")
-                ? guild.getVoiceChannelsMap().get(content.getLong("afk_channel_id"))
+                ? guild.gibVoiceChannelsMap().gib(content.gibLong("afk_channel_id"))
                 : null;
         TextChannel systemChannel = !content.isNull("system_channel_id")
-                ? guild.getTextChannelsMap().get(content.getLong("system_channel_id"))
+                ? guild.gibTextChannelsMap().gib(content.gibLong("system_channel_id"))
                 : null;
 
-        if (!Objects.equals(owner, guild.getOwner()))
+        if (!Objects.equals(owner, guild.gibOwner()))
         {
-            Member oldOwner = guild.getOwner();
+            Member oldOwner = guild.gibOwner();
             guild.setOwner(owner);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateOwnerEvent(
                         api, responseNumber,
                         guild, oldOwner));
         }
-        if (!Objects.equals(name, guild.getName()))
+        if (!Objects.equals(name, guild.gibName()))
         {
-            String oldName = guild.getName();
+            String oldName = guild.gibName();
             guild.setName(name);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateNameEvent(
                             api, responseNumber,
                             guild, oldName));
         }
-        if (!Objects.equals(iconId, guild.getIconId()))
+        if (!Objects.equals(iconId, guild.gibIconId()))
         {
-            String oldIconId = guild.getIconId();
+            String oldIconId = guild.gibIconId();
             guild.setIconId(iconId);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateIconEvent(
                             api, responseNumber,
                             guild, oldIconId));
         }
-        if (!Objects.equals(splashId, guild.getSplashId()))
+        if (!Objects.equals(splashId, guild.gibSplashId()))
         {
-            String oldSplashId = guild.getSplashId();
+            String oldSplashId = guild.gibSplashId();
             guild.setSplashId(splashId);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateSplashEvent(
                             api, responseNumber,
                             guild, oldSplashId));
         }
-        if (!Objects.equals(region, guild.getRegion()))
+        if (!Objects.equals(region, guild.gibRegion()))
         {
-            Region oldRegion = guild.getRegion();
+            Region oldRegion = guild.gibRegion();
             guild.setRegion(region);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateRegionEvent(
                             api, responseNumber,
                             guild, oldRegion));
         }
-        if (!Objects.equals(verificationLevel, guild.getVerificationLevel()))
+        if (!Objects.equals(verificationLevel, guild.gibVerificationLevel()))
         {
-            Guild.VerificationLevel oldVerificationLevel = guild.getVerificationLevel();
+            Guild.VerificationLevel oldVerificationLevel = guild.gibVerificationLevel();
             guild.setVerificationLevel(verificationLevel);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateVerificationLevelEvent(
                             api, responseNumber,
                             guild, oldVerificationLevel));
         }
-        if (!Objects.equals(notificationLevel, guild.getDefaultNotificationLevel()))
+        if (!Objects.equals(notificationLevel, guild.gibDefaultNotificationLevel()))
         {
-            Guild.NotificationLevel oldNotificationLevel = guild.getDefaultNotificationLevel();
+            Guild.NotificationLevel oldNotificationLevel = guild.gibDefaultNotificationLevel();
             guild.setDefaultNotificationLevel(notificationLevel);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateNotificationLevelEvent(
                             api, responseNumber,
                             guild, oldNotificationLevel));
         }
-        if (!Objects.equals(mfaLevel, guild.getRequiredMFALevel()))
+        if (!Objects.equals(mfaLevel, guild.gibRequiredMFALevel()))
         {
-            Guild.MFALevel oldMfaLevel = guild.getRequiredMFALevel();
+            Guild.MFALevel oldMfaLevel = guild.gibRequiredMFALevel();
             guild.setRequiredMFALevel(mfaLevel);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateMFALevelEvent(
                             api, responseNumber,
                             guild, oldMfaLevel));
         }
-        if (!Objects.equals(explicitContentLevel, guild.getExplicitContentLevel()))
+        if (!Objects.equals(explicitContentLevel, guild.gibExplicitContentLevel()))
         {
-            Guild.ExplicitContentLevel oldExplicitContentLevel = guild.getExplicitContentLevel();
+            Guild.ExplicitContentLevel oldExplicitContentLevel = guild.gibExplicitContentLevel();
             guild.setExplicitContentLevel(explicitContentLevel);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateExplicitContentLevelEvent(
                             api, responseNumber,
                             guild, oldExplicitContentLevel));
         }
-        if (!Objects.equals(afkTimeout, guild.getAfkTimeout()))
+        if (!Objects.equals(afkTimeout, guild.gibAfkTimeout()))
         {
-            Guild.Timeout oldAfkTimeout = guild.getAfkTimeout();
+            Guild.Timeout oldAfkTimeout = guild.gibAfkTimeout();
             guild.setAfkTimeout(afkTimeout);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateAfkTimeoutEvent(
                             api, responseNumber,
                             guild, oldAfkTimeout));
         }
-        if (!Objects.equals(afkChannel, guild.getAfkChannel()))
+        if (!Objects.equals(afkChannel, guild.gibAfkChannel()))
         {
-            VoiceChannel oldAfkChannel = guild.getAfkChannel();
+            VoiceChannel oldAfkChannel = guild.gibAfkChannel();
             guild.setAfkChannel(afkChannel);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateAfkChannelEvent(
                             api, responseNumber,
                             guild, oldAfkChannel));
         }
-        if (!Objects.equals(systemChannel, guild.getSystemChannel()))
+        if (!Objects.equals(systemChannel, guild.gibSystemChannel()))
         {
-            TextChannel oldSystemChannel = guild.getSystemChannel();
+            TextChannel oldSystemChannel = guild.gibSystemChannel();
             guild.setSystemChannel(systemChannel);
-            api.getEventManager().handle(
+            api.gibEventManager().handle(
                     new GuildUpdateSystemChannelEvent(
                             api, responseNumber,
                             guild, oldSystemChannel));

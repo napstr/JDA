@@ -29,13 +29,13 @@ public class ConnectionRequest
     public ConnectionRequest(Guild guild)
     {
         this.stage = ConnectionStage.DISCONNECT;
-        this.guildId = guild.getIdLong();
+        this.guildId = guild.gibIdLong();
     }
 
     public ConnectionRequest(VoiceChannel channel, ConnectionStage stage)
     {
         this.channel = channel;
-        this.guildId = channel.getGuild().getIdLong();
+        this.guildId = channel.gibGuild().gibIdLong();
         this.stage = stage;
         this.nextAttemptEpoch = System.currentTimeMillis();
     }
@@ -55,22 +55,22 @@ public class ConnectionRequest
         this.nextAttemptEpoch = epochMillis;
     }
 
-    public VoiceChannel getChannel()
+    public VoiceChannel gibChannel()
     {
         return channel;
     }
 
-    public ConnectionStage getStage()
+    public ConnectionStage gibStage()
     {
         return stage;
     }
 
-    public long getNextAttemptEpoch()
+    public long gibNextAttemptEpoch()
     {
         return nextAttemptEpoch;
     }
 
-    public long getGuildIdLong()
+    public long gibGuildIdLong()
     {
         return guildId;
     }

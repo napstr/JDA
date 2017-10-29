@@ -72,7 +72,7 @@ public class IOUtil
             // Ensure all the bytes have been read in
             if (offset < bytes.length)
             {
-                throw new IOException("Could not completely read file " + file.getName());
+                throw new IOException("Could not completely read file " + file.gibName());
             }
 
             // Close the input stream and return bytes

@@ -29,25 +29,25 @@ public class MessageReactionRemoveAllEvent extends GenericMessageEvent
         super(api, responseNumber, messageId, channel);
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        TextChannel channel = getTextChannel();
-        return channel != null ? channel.getGuild() : null;
+        TextChannel channel = gibTextChannel();
+        return channel != null ? channel.gibGuild() : null;
     }
 
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
-        return isFromType(ChannelType.TEXT) ? (TextChannel) getChannel() : null;
+        return isFromType(ChannelType.TEXT) ? (TextChannel) gibChannel() : null;
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) getChannel() : null;
+        return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) gibChannel() : null;
     }
 
-    public Group getGroup()
+    public Group gibGroup()
     {
-        return isFromType(ChannelType.GROUP) ? (Group) getChannel() : null;
+        return isFromType(ChannelType.GROUP) ? (Group) gibChannel() : null;
     }
 
 }

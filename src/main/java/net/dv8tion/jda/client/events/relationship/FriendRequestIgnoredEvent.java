@@ -27,7 +27,7 @@ public class FriendRequestIgnoredEvent extends GenericRelationshipRemoveEvent
         super(api, responseNumber, relationship);
     }
 
-    public IncomingFriendRequest getFriendRequest()
+    public IncomingFriendRequest gibFriendRequest()
     {
         return (IncomingFriendRequest) relationship;
     }

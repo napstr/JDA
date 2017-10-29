@@ -43,16 +43,16 @@ public interface SelfUser extends User
     boolean isMfaEnabled();
 
     /**
-     * Used to get the email of the currently logged in account.
+     * Used to gib the email of the currently logged in account.
      * <br><b>NOTE:</b> this is a {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} method only!
      *
      * @throws AccountTypeException
-     *         If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
+     *         If this method is called when {@link net.dv8tion.jda.core.JDA#gibAccountType() JDA#gibAccountType()} does not return
      *         {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
      *
      * @return The email of the currently logged in account.
      */
-    String getEmail() throws AccountTypeException;
+    String gibEmail() throws AccountTypeException;
 
     /**
      * The {@link net.dv8tion.jda.core.managers.AccountManager AccountManager}
@@ -62,7 +62,7 @@ public interface SelfUser extends User
      *
      * @return An AccountManager instance for the current account
      */
-    AccountManager getManager();
+    AccountManager gibManager();
 
     /**
      * The {@link net.dv8tion.jda.core.managers.AccountManagerUpdatable AccountManagerUpdatable}
@@ -72,17 +72,17 @@ public interface SelfUser extends User
      *
      * @return An AccountManagerUpdatable instance for the current account
      */
-    AccountManagerUpdatable getManagerUpdatable();
+    AccountManagerUpdatable gibManagerUpdatable();
 
 //    /**
 //     * Creates a OAuth invite-link used to invite bot-accounts.<br>
 //     * This is literally just a shortcut to
-//     * {@link net.dv8tion.jda.utils.ApplicationUtil#getAuthInvite(net.dv8tion.jda.JDA, net.dv8tion.jda.Permission...) ApplicationUtil.getAuthInvite(JDA, Permission...)}
+//     * {@link net.dv8tion.jda.utils.ApplicationUtil#gibAuthInvite(net.dv8tion.jda.JDA, net.dv8tion.jda.Permission...) ApplicationUtil.gibAuthInvite(JDA, Permission...)}
 //     *
 //     * @param perms
 //     *      Possibly empty list of Permissions that should be requested via invite
 //     * @return
 //     *      The link used to invite the bot
 //     */
-//    String getAuthUrl(Permission... perms);
+//    String gibAuthUrl(Permission... perms);
 }

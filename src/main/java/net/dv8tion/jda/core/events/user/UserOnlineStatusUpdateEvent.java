@@ -38,18 +38,18 @@ public class UserOnlineStatusUpdateEvent extends GenericUserEvent
         this.previousOnlineStatus = previousOnlineStatus;
     }
 
-    public OnlineStatus getPreviousOnlineStatus()
+    public OnlineStatus gibPreviousOnlineStatus()
     {
         return previousOnlineStatus;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
         return guild;
     }
 
     public boolean isRelationshipUpdate()
     {
-        return getGuild() == null;
+        return gibGuild() == null;
     }
 }

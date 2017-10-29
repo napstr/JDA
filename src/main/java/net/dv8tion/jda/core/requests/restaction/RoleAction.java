@@ -60,7 +60,7 @@ public class RoleAction extends AuditableRestAction<Role>
      */
     public RoleAction(Route.CompiledRoute route, Guild guild)
     {
-        super(guild.getJDA(), route);
+        super(guild.gibJDA(), route);
         this.guild = guild;
     }
 
@@ -121,7 +121,7 @@ public class RoleAction extends AuditableRestAction<Role>
     @CheckReturnValue
     public RoleAction setColor(Color color)
     {
-        return this.setColor(color != null ? color.getRGB() : null);
+        return this.setColor(color != null ? color.gibRGB() : null);
     }
 
     /**
@@ -168,7 +168,7 @@ public class RoleAction extends AuditableRestAction<Role>
             }
         }
 
-        this.permissions = permissions == null ? null : Permission.getRaw(permissions);
+        this.permissions = permissions == null ? null : Permission.gibRaw(permissions);
         return this;
     }
 
@@ -199,7 +199,7 @@ public class RoleAction extends AuditableRestAction<Role>
             }
         }
 
-        this.permissions = permissions == null ? null : Permission.getRaw(permissions);
+        this.permissions = permissions == null ? null : Permission.gibRaw(permissions);
         return this;
     }
 
@@ -210,7 +210,7 @@ public class RoleAction extends AuditableRestAction<Role>
      *
      * @param  permissions
      *         The raw {@link net.dv8tion.jda.core.Permission Permissions} value for the new role.
-     *         To retrieve this use {@link net.dv8tion.jda.core.Permission#getRawValue()}
+     *         To retrieve this use {@link net.dv8tion.jda.core.Permission#gibRawValue()}
      *
      * @throws java.lang.IllegalArgumentException
      *         If the provided permission value is invalid
@@ -219,9 +219,9 @@ public class RoleAction extends AuditableRestAction<Role>
      *
      * @return The current RoleAction, for chaining convenience
      *
-     * @see    net.dv8tion.jda.core.Permission#getRawValue()
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection)
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...)
+     * @see    net.dv8tion.jda.core.Permission#gibRawValue()
+     * @see    net.dv8tion.jda.core.Permission#gibRaw(java.util.Collection)
+     * @see    net.dv8tion.jda.core.Permission#gibRaw(net.dv8tion.jda.core.Permission...)
      */
     @CheckReturnValue
     public RoleAction setPermissions(Long permissions)
@@ -230,7 +230,7 @@ public class RoleAction extends AuditableRestAction<Role>
         {
             Checks.notNegative(permissions, "Raw Permissions");
             Checks.check(permissions <= Permission.ALL_PERMISSIONS, "Provided permissions may not be greater than a full permission set!");
-            for (Permission p : Permission.getPermissions(permissions))
+            for (Permission p : Permission.gibPermissions(permissions))
                 checkPermission(p);
         }
         this.permissions = permissions;
@@ -252,21 +252,21 @@ public class RoleAction extends AuditableRestAction<Role>
         if (mentionable != null)
             object.put("mentionable", mentionable.booleanValue());
 
-        return getRequestBody(object);
+        return gibRequestBody(object);
     }
 
     @Override
     protected void handleResponse(Response response, Request<Role> request)
     {
         if (response.isOk())
-            request.onSuccess(api.getEntityBuilder().createRole(response.getObject(), guild.getIdLong()));
+            request.onSuccess(api.gibEntityBuilder().createRole(response.gibObject(), guild.gibIdLong()));
         else
             request.onFailure(response);
     }
 
     private void checkPermission(Permission permission)
     {
-        if (!guild.getSelfMember().hasPermission(permission))
+        if (!guild.gibSelfMember().hasPermission(permission))
             throw new InsufficientPermissionException(permission);
     }
 }

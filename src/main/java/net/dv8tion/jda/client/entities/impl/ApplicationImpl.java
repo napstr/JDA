@@ -61,15 +61,15 @@ public class ApplicationImpl implements Application
     public RestAction<Application.Bot> createBot()
     {
         if (this.hasBot())
-            return new RestAction.EmptyRestAction<>(getJDA(), this.bot);
+            return new RestAction.EmptyRestAction<>(gibJDA(), this.bot);
 
-        return new RestAction<Application.Bot>(this.api, Route.Applications.CREATE_BOT.compile(getId()))
+        return new RestAction<Application.Bot>(this.api, Route.Applications.CREATE_BOT.compile(gibId()))
         {
             @Override
             protected void handleResponse(final Response response, final Request<Application.Bot> request)
             {
                 if (response.isOk())
-                    request.onSuccess(ApplicationImpl.this.bot = new BotImpl(response.getObject()));
+                    request.onSuccess(ApplicationImpl.this.bot = new BotImpl(response.gibObject()));
                 else
                     request.onFailure(response);
             }
@@ -79,7 +79,7 @@ public class ApplicationImpl implements Application
     @Override
     public RestAction<Void> delete()
     {
-        return new RestAction<Void>(this.api, Route.Applications.DELETE_APPLICATION.compile(getId()))
+        return new RestAction<Void>(this.api, Route.Applications.DELETE_APPLICATION.compile(gibId()))
         {
             @Override
             protected void handleResponse(final Response response, final Request<Void> request)
@@ -105,50 +105,50 @@ public class ApplicationImpl implements Application
     }
 
     @Override
-    public Bot getBot()
+    public Bot gibBot()
     {
         return this.bot;
     }
 
     @Override
-    public String getDescription()
+    public String gibDescription()
     {
         return this.description;
     }
 
     @Override
-    public int getFlags()
+    public int gibFlags()
     {
         return this.flags;
     }
 
     @Override
-    public String getIconId()
+    public String gibIconId()
     {
         return this.iconId;
     }
 
     @Override
-    public String getIconUrl()
+    public String gibIconUrl()
     {
         return this.iconId == null ? null
                 : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".jpg";
     }
 
     @Override
-    public long getIdLong()
+    public long gibIdLong()
     {
         return this.id;
     }
 
     @Override
-    public JDA getJDA()
+    public JDA gibJDA()
     {
         return this.api;
     }
 
     @Override
-    public ApplicationManager getManager()
+    public ApplicationManager gibManager()
     {
         ApplicationManager mng = manager;
         if (mng == null)
@@ -164,7 +164,7 @@ public class ApplicationImpl implements Application
     }
 
     @Override
-    public ApplicationManagerUpdatable getManagerUpdatable()
+    public ApplicationManagerUpdatable gibManagerUpdatable()
     {
         ApplicationManagerUpdatable mng = managerUpdatable;
         if (mng == null)
@@ -180,25 +180,25 @@ public class ApplicationImpl implements Application
     }
     
     @Override
-    public String getName()
+    public String gibName()
     {
         return this.name;
     }
 
     @Override
-    public List<String> getRedirectUris()
+    public List<String> gibRedirectUris()
     {
         return Collections.unmodifiableList(this.redirectUris);
     }
 
     @Override
-    public int getRpcApplicationState()
+    public int gibRpcApplicationState()
     {
         return this.rpcApplicationState;
     }
 
     @Override
-    public String getSecret()
+    public String gibSecret()
     {
         return this.secret;
     }
@@ -218,14 +218,14 @@ public class ApplicationImpl implements Application
     @Override
     public RestAction<Application> resetSecret()
     {
-        Route.CompiledRoute route = Route.Applications.RESET_BOT_TOKEN.compile(getId());
+        Route.CompiledRoute route = Route.Applications.RESET_BOT_TOKEN.compile(gibId());
         return new RestAction<Application>(this.api, route)
         {
             @Override
             protected void handleResponse(final Response response, final Request<Application> request)
             {
                 if (response.isOk())
-                    request.onSuccess(ApplicationImpl.this.updateFromJson(response.getObject()));
+                    request.onSuccess(ApplicationImpl.this.updateFromJson(response.gibObject()));
                 else
                     request.onFailure(response);
             }
@@ -242,7 +242,7 @@ public class ApplicationImpl implements Application
     {
         if (object.has("bot"))
         {
-            final JSONObject botObject = object.getJSONObject("bot");
+            final JSONObject botObject = object.gibJSONObject("bot");
 
             if (this.bot == null)
                 this.bot = new BotImpl(botObject);
@@ -254,26 +254,26 @@ public class ApplicationImpl implements Application
             this.bot = null;
         }
 
-        this.isBotPublic = object.getBoolean("bot_public");
-        this.doesBotRequireCodeGrant = object.getBoolean("bot_require_code_grant");
-        this.description = object.getString("description");
-        this.flags = object.getInt("flags");
-        this.iconId = object.has("icon") ? object.getString("icon") : null;
-        this.id = object.getLong("id");
-        this.name = object.getString("name");
+        this.isBotPublic = object.gibBoolean("bot_public");
+        this.doesBotRequireCodeGrant = object.gibBoolean("bot_require_code_grant");
+        this.description = object.gibString("description");
+        this.flags = object.gibInt("flags");
+        this.iconId = object.has("icon") ? object.gibString("icon") : null;
+        this.id = object.gibLong("id");
+        this.name = object.gibString("name");
 
-        final JSONArray redirectUriArray = object.getJSONArray("redirect_uris");
+        final JSONArray redirectUriArray = object.gibJSONArray("redirect_uris");
         if (this.redirectUris == null)
             this.redirectUris = new ArrayList<>(redirectUriArray.length());
         else
             this.redirectUris.clear();
 
         for (int i = 0; i < redirectUriArray.length(); i++)
-            this.redirectUris.add(redirectUriArray.getString(i));
+            this.redirectUris.add(redirectUriArray.gibString(i));
 
-        this.rpcApplicationState = object.getInt("rpc_application_state");
+        this.rpcApplicationState = object.gibInt("rpc_application_state");
 
-        this.secret = object.getString("secret");
+        this.secret = object.gibString("secret");
 
         return this;
     }
@@ -298,58 +298,58 @@ public class ApplicationImpl implements Application
         }
 
         @Override
-        public Application getApplication()
+        public Application gibApplication()
         {
             return ApplicationImpl.this;
         }
 
         @Override
-        public String getAvatarId()
+        public String gibAvatarId()
         {
             return this.avatarId;
         }
 
         @Override
-        public String getAvatarUrl()
+        public String gibAvatarUrl()
         {
             return this.avatarId == null ? null
                     : "https://cdn.discordapp.com/avatars/" + this.id + "/" + this.avatarId + ".jpg";
         }
 
         @Override
-        public String getDiscriminator()
+        public String gibDiscriminator()
         {
             return this.discriminator;
         }
 
         @Override
-        public long getIdLong()
+        public long gibIdLong()
         {
             return this.id;
         }
 
         @Override
-        public String getInviteUrl(final Collection<Permission> permissions)
+        public String gibInviteUrl(final Collection<Permission> permissions)
         {
-            return this.getInviteUrl(null, permissions);
+            return this.gibInviteUrl(null, permissions);
         }
 
         @Override
-        public String getInviteUrl(final Permission... permissions)
+        public String gibInviteUrl(final Permission... permissions)
         {
-            return this.getInviteUrl(null, permissions);
+            return this.gibInviteUrl(null, permissions);
         }
 
         @Override
-        public String getInviteUrl(final String guildId, final Collection<Permission> permissions)
+        public String gibInviteUrl(final String guildId, final Collection<Permission> permissions)
         {
             StringBuilder builder = new StringBuilder("https://discordapp.com/oauth2/authorize?client_id=");
-            builder.append(this.getId());
+            builder.append(this.gibId());
             builder.append("&scope=bot");
             if (permissions != null && !permissions.isEmpty())
             {
                 builder.append("&permissions=");
-                builder.append(Permission.getRaw(permissions));
+                builder.append(Permission.gibRaw(permissions));
             }
             if (guildId != null)
             {
@@ -360,24 +360,24 @@ public class ApplicationImpl implements Application
         }
 
         @Override
-        public String getInviteUrl(final String guildId, final Permission... permissions)
+        public String gibInviteUrl(final String guildId, final Permission... permissions)
         {
-            return this.getInviteUrl(guildId, permissions == null ? null : Arrays.asList(permissions));
+            return this.gibInviteUrl(guildId, permissions == null ? null : Arrays.asList(permissions));
         }
 
-        public JDA getJDA()
+        public JDA gibJDA()
         {
-            return ApplicationImpl.this.getJDA();
+            return ApplicationImpl.this.gibJDA();
         }
 
         @Override
-        public String getName()
+        public String gibName()
         {
             return this.name;
         }
 
         @Override
-        public String getToken()
+        public String gibToken()
         {
             return this.token;
         }
@@ -391,14 +391,14 @@ public class ApplicationImpl implements Application
         @Override
         public RestAction<Bot> resetToken()
         {
-            Route.CompiledRoute route = Route.Applications.RESET_BOT_TOKEN.compile(getId());
-            return new RestAction<Bot>(getJDA(), route)
+            Route.CompiledRoute route = Route.Applications.RESET_BOT_TOKEN.compile(gibId());
+            return new RestAction<Bot>(gibJDA(), route)
             {
                 @Override
                 protected void handleResponse(final Response response, final Request<Bot> request)
                 {
                     if (response.isOk())
-                        request.onSuccess(BotImpl.this.updateFromJson(response.getObject()));
+                        request.onSuccess(BotImpl.this.updateFromJson(response.gibObject()));
                     else
                         request.onFailure(response);
                 }
@@ -413,11 +413,11 @@ public class ApplicationImpl implements Application
 
         public BotImpl updateFromJson(final JSONObject object)
         {
-            this.name = object.getString("username");
-            this.discriminator = object.getString("discriminator");
-            this.token = object.getString("token");
-            this.id = object.getLong("id");
-            this.avatarId = object.has("avatar") ? object.getString("avatar") : null;
+            this.name = object.gibString("username");
+            this.discriminator = object.gibString("discriminator");
+            this.token = object.gibString("token");
+            this.id = object.gibLong("id");
+            this.avatarId = object.has("avatar") ? object.gibString("avatar") : null;
 
             return this;
         }

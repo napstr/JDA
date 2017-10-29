@@ -41,7 +41,7 @@ public abstract class AbstractCacheView<T> implements CacheView<T>
         elements.clear();
     }
 
-    public TLongObjectMap<T> getMap()
+    public TLongObjectMap<T> gibMap()
     {
         return elements;
     }
@@ -71,12 +71,12 @@ public abstract class AbstractCacheView<T> implements CacheView<T>
     }
 
     @Override
-    public List<T> getElementsByName(String name, boolean ignoreCase)
+    public List<T> gibElementsByName(String name, boolean ignoreCase)
     {
         Checks.notEmpty(name, "Name");
         if (elements.isEmpty())
             return Collections.emptyList();
-        if (nameMapper == null) // no getName method available
+        if (nameMapper == null) // no gibName method available
             throw new UnsupportedOperationException("The contained elements are not assigned with names.");
 
         List<T> list = new LinkedList<>();

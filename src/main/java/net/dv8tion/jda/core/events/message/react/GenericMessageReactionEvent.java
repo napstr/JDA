@@ -28,50 +28,50 @@ public class GenericMessageReactionEvent extends GenericMessageEvent
 
     public GenericMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
     {
-        super(api, responseNumber, reaction.getMessageIdLong(), reaction.getChannel());
+        super(api, responseNumber, reaction.gibMessageIdLong(), reaction.gibChannel());
         this.issuer = user;
         this.reaction = reaction;
     }
 
-    public Guild getGuild()
+    public Guild gibGuild()
     {
-        TextChannel channel = getTextChannel();
-        return channel != null ? channel.getGuild() : null;
+        TextChannel channel = gibTextChannel();
+        return channel != null ? channel.gibGuild() : null;
     }
 
-    public TextChannel getTextChannel()
+    public TextChannel gibTextChannel()
     {
-        return isFromType(ChannelType.TEXT) ? (TextChannel) getChannel() : null;
+        return isFromType(ChannelType.TEXT) ? (TextChannel) gibChannel() : null;
     }
 
-    public PrivateChannel getPrivateChannel()
+    public PrivateChannel gibPrivateChannel()
     {
-        return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) getChannel() : null;
+        return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) gibChannel() : null;
     }
 
-    public Group getGroup()
+    public Group gibGroup()
     {
-        return isFromType(ChannelType.GROUP) ? (Group) getChannel() : null;
+        return isFromType(ChannelType.GROUP) ? (Group) gibChannel() : null;
     }
 
-    public User getUser()
+    public User gibUser()
     {
         return issuer;
     }
 
-    public Member getMember()
+    public Member gibMember()
     {
-        Guild guild = getGuild();
-        return guild != null ? guild.getMember(getUser()) : null;
+        Guild guild = gibGuild();
+        return guild != null ? guild.gibMember(gibUser()) : null;
     }
 
-    public MessageReaction getReaction()
+    public MessageReaction gibReaction()
     {
         return reaction;
     }
 
-    public MessageReaction.ReactionEmote getReactionEmote()
+    public MessageReaction.ReactionEmote gibReactionEmote()
     {
-        return reaction.getEmote();
+        return reaction.gibEmote();
     }
 }

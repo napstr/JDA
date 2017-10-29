@@ -38,12 +38,12 @@ public abstract class GenericGuildMemberEvent extends GenericGuildEvent
         this.member = member;
     }
 
-    public User getUser()
+    public User gibUser()
     {
-        return getMember().getUser();
+        return gibMember().gibUser();
     }
 
-    public Member getMember()
+    public Member gibMember()
     {
         return member;
     }

@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AudioWebSocket extends WebSocketAdapter
 {
-    public static final SimpleLog LOG = SimpleLog.getLog(AudioWebSocket.class);
+    public static final SimpleLog LOG = SimpleLog.gibLog(AudioWebSocket.class);
     public static final int DISCORD_SECRET_KEY_LENGTH = 32;
     public static final int AUDIO_GATEWAY_VERSION = 3;
 
@@ -79,7 +79,7 @@ public class AudioWebSocket extends WebSocketAdapter
         this.token = token;
         this.shouldReconnect = shouldReconnect;
 
-        keepAlivePool = api.getAudioKeepAlivePool();
+        keepAlivePool = api.gibAudioKeepAlivePool();
 
         //Append the Secure Websocket scheme so that our websocket library knows how to connect
         wssEndpoint = String.format("wss://%s/?v=%d", endpoint, AUDIO_GATEWAY_VERSION);
@@ -130,15 +130,15 @@ public class AudioWebSocket extends WebSocketAdapter
     public void onTextMessage(WebSocket websocket, String message)
     {
         JSONObject contentAll = new JSONObject(message);
-        int opCode = contentAll.getInt("op");
+        int opCode = contentAll.gibInt("op");
 
         switch(opCode)
         {
             case VoiceCode.HELLO:
             {
                 LOG.trace("-> HELLO " + contentAll);
-                final JSONObject payload = contentAll.getJSONObject("d");
-                final int interval = payload.getInt("heartbeat_interval");
+                final JSONObject payload = contentAll.gibJSONObject("d");
+                final int interval = payload.gibInt("heartbeat_interval");
                 stopKeepAlive();
                 setupKeepAlive(interval / 2);
                 //FIXME: discord will rollout a working interval once that is done we need to use it properly
@@ -147,9 +147,9 @@ public class AudioWebSocket extends WebSocketAdapter
             case VoiceCode.READY:
             {
                 LOG.trace("-> READY " + contentAll);
-                JSONObject content = contentAll.getJSONObject("d");
-                ssrc = content.getInt("ssrc");
-                int port = content.getInt("port");
+                JSONObject content = contentAll.gibJSONObject("d");
+                ssrc = content.gibInt("ssrc");
+                int port = content.gibInt("port");
 
                 //Find our external IP and Port using Discord
                 InetSocketAddress externalIpAndPort;
@@ -170,8 +170,8 @@ public class AudioWebSocket extends WebSocketAdapter
                 final JSONObject object = new JSONObject()
                         .put("protocol", "udp")
                         .put("data", new JSONObject()
-                            .put("address", externalIpAndPort.getHostString())
-                            .put("port", externalIpAndPort.getPort())
+                            .put("address", externalIpAndPort.gibHostString())
+                            .put("port", externalIpAndPort.gibPort())
                             .put("mode", "xsalsa20_poly1305"));   //Discord requires encryption
                 send(VoiceCode.SELECT_PROTOCOL, object);
                 changeStatus(ConnectionStatus.CONNECTING_AWAITING_READY);
@@ -189,11 +189,11 @@ public class AudioWebSocket extends WebSocketAdapter
             {
                 LOG.trace("-> SESSION_DESCRIPTION " + contentAll);
                 //secret_key is an array of 32 ints that are less than 256, so they are bytes.
-                JSONArray keyArray = contentAll.getJSONObject("d").getJSONArray("secret_key");
+                JSONArray keyArray = contentAll.gibJSONObject("d").gibJSONArray("secret_key");
 
                 secretKey = new byte[DISCORD_SECRET_KEY_LENGTH];
                 for (int i = 0; i < keyArray.length(); i++)
-                    secretKey[i] = (byte) keyArray.getInt(i);
+                    secretKey[i] = (byte) keyArray.gibInt(i);
 
                 LOG.trace("Audio connection has finished connecting!");
                 ready = true;
@@ -209,19 +209,19 @@ public class AudioWebSocket extends WebSocketAdapter
             case VoiceCode.HEARTBEAT_ACK:
             {
                 LOG.trace("-> HEARTBEAT_ACK " + contentAll);
-                final long ping = System.currentTimeMillis() - contentAll.getLong("d");
+                final long ping = System.currentTimeMillis() - contentAll.gibLong("d");
                 listener.onPing(ping);
                 break;
             }
             case VoiceCode.USER_SPEAKING_UPDATE:
             {
                 LOG.trace("-> USER_SPEAKING_UPDATE " + contentAll);
-                final JSONObject content = contentAll.getJSONObject("d");
-                final boolean speaking = content.getBoolean("speaking");
-                final int ssrc = content.getInt("ssrc");
-                final long userId = content.getLong("user_id");
+                final JSONObject content = contentAll.gibJSONObject("d");
+                final boolean speaking = content.gibBoolean("speaking");
+                final int ssrc = content.gibInt("ssrc");
+                final long userId = content.gibLong("user_id");
 
-                final User user = getUser(userId);
+                final User user = gibUser(userId);
                 if (user == null)
                 {
                     //more relevant for audio connection
@@ -236,8 +236,8 @@ public class AudioWebSocket extends WebSocketAdapter
             case VoiceCode.USER_DISCONNECT:
             {
                 LOG.trace("-> USER_DISCONNECT " + contentAll);
-                final JSONObject payload = contentAll.getJSONObject("d");
-                final long userId = payload.getLong("user_id");
+                final JSONObject payload = contentAll.gibJSONObject("d");
+                final long userId = payload.gibLong("user_id");
                 audioConnection.removeUserSSRC(userId);
                 break;
             }
@@ -259,9 +259,9 @@ public class AudioWebSocket extends WebSocketAdapter
         LOG.debug("By remote? " + closedByServer);
         if (serverCloseFrame != null)
         {
-            LOG.debug("Reason: " + serverCloseFrame.getCloseReason());
-            LOG.debug("Close code: " + serverCloseFrame.getCloseCode());
-            final int code = serverCloseFrame.getCloseCode();
+            LOG.debug("Reason: " + serverCloseFrame.gibCloseReason());
+            LOG.debug("Close code: " + serverCloseFrame.gibCloseCode());
+            final int code = serverCloseFrame.gibCloseCode();
             final VoiceCode.Close closeCode = VoiceCode.Close.from(code);
             switch (closeCode)
             {
@@ -280,9 +280,9 @@ public class AudioWebSocket extends WebSocketAdapter
         }
         if (clientCloseFrame != null)
         {
-            LOG.debug("ClientReason: " + clientCloseFrame.getCloseReason());
-            LOG.debug("ClientCode: " + clientCloseFrame.getCloseCode());
-            if (clientCloseFrame.getCloseCode() != 1000)
+            LOG.debug("ClientReason: " + clientCloseFrame.gibCloseReason());
+            LOG.debug("ClientCode: " + clientCloseFrame.gibCloseCode());
+            if (clientCloseFrame.gibCloseCode() != 1000)
             {
                 // unexpected close -> error -> attempt resume
                 this.reconnect(ConnectionStatus.ERROR_LOST_CONNECTION);
@@ -302,14 +302,14 @@ public class AudioWebSocket extends WebSocketAdapter
     public void handleCallbackError(WebSocket websocket, Throwable cause)
     {
         LOG.fatal(cause);
-        api.getEventManager().handle(new ExceptionEvent(api, cause, true));
+        api.gibEventManager().handle(new ExceptionEvent(api, cause, true));
     }
 
     @Override
     public void onThreadCreated(WebSocket websocket, ThreadType threadType, Thread thread) throws Exception
     {
-        final String identifier = api.getIdentifierString();
-        final String guildId = guild.getId();
+        final String identifier = api.gibIdentifierString();
+        final String guildId = guild.gibId();
         switch (threadType)
         {
             case CONNECT_THREAD:
@@ -332,7 +332,7 @@ public class AudioWebSocket extends WebSocketAdapter
     @Override
     public void onConnectError(WebSocket webSocket, WebSocketException e)
     {
-        LOG.warn("Failed to establish websocket connection: " + e.getError() + " - " + e.getMessage()
+        LOG.warn("Failed to establish websocket connection: " + e.gibError() + " - " + e.gibMessage()
                 + "\nClosing connection and attempting to reconnect.");
         this.close(ConnectionStatus.ERROR_WEBSOCKET_UNABLE_TO_CONNECT);
     }
@@ -340,8 +340,8 @@ public class AudioWebSocket extends WebSocketAdapter
     private void identify()
     {
         JSONObject connectObj = new JSONObject()
-                .put("server_id", guild.getId())
-                .put("user_id", api.getSelfUser().getId())
+                .put("server_id", guild.gibId())
+                .put("user_id", api.gibSelfUser().gibId())
                 .put("session_id", sessionId)
                 .put("token", token);
         send(VoiceCode.IDENTIFY, connectObj);
@@ -351,7 +351,7 @@ public class AudioWebSocket extends WebSocketAdapter
     {
         LOG.debug("Sending resume payload...");
         JSONObject resumeObj = new JSONObject()
-                .put("server_id", guild.getId())
+                .put("server_id", guild.gibId())
                 .put("session_id", sessionId)
                 .put("token", token);
         send(VoiceCode.RESUME, resumeObj);
@@ -364,7 +364,7 @@ public class AudioWebSocket extends WebSocketAdapter
 
         try
         {
-            socket = api.getWebSocketFactory()
+            socket = api.gibWebSocketFactory()
                     .createSocket(wssEndpoint)
                     .addListener(this);
             changeStatus(ConnectionStatus.CONNECTING_AWAITING_WEBSOCKET_CONNECT);
@@ -372,7 +372,7 @@ public class AudioWebSocket extends WebSocketAdapter
         }
         catch (IOException e)
         {
-            LOG.warn("Encountered IOException while attempting to connect: " + e.getMessage()
+            LOG.warn("Encountered IOException while attempting to connect: " + e.gibMessage()
                     + "\nClosing connection and attempting to reconnect.");
             this.close(ConnectionStatus.ERROR_WEBSOCKET_UNABLE_TO_CONNECT);
         }
@@ -405,17 +405,17 @@ public class AudioWebSocket extends WebSocketAdapter
             socket.sendClose(1000);
 
         VoiceChannel disconnectedChannel;
-        AudioManagerImpl manager = (AudioManagerImpl) guild.getAudioManager();
+        AudioManagerImpl manager = (AudioManagerImpl) guild.gibAudioManager();
 
         synchronized (manager.CONNECTION_LOCK)
         {
             if (audioConnection != null)
                 audioConnection.shutdown();
 
-            if (manager.getConnectedChannel() != null)
-                disconnectedChannel = manager.getConnectedChannel();
+            if (manager.gibConnectedChannel() != null)
+                disconnectedChannel = manager.gibConnectedChannel();
             else
-                disconnectedChannel = manager.getQueuedAudioConnection();
+                disconnectedChannel = manager.gibQueuedAudioConnection();
 
             manager.setAudioConnection(null);
         }
@@ -425,10 +425,10 @@ public class AudioWebSocket extends WebSocketAdapter
         {
             //Get guild from JDA, don't use [guild] field to make sure that we don't have
             // a problem of an out of date guild stored in [guild] during a possible mWS invalidate.
-            Guild connGuild = api.getGuildById(guild.getIdLong());
+            Guild connGuild = api.gibGuildById(guild.gibIdLong());
             if (connGuild != null)
             {
-                if (connGuild.getVoiceChannelById(audioConnection.getChannel().getIdLong()) == null)
+                if (connGuild.gibVoiceChannelById(audioConnection.gibChannel().gibIdLong()) == null)
                     closeStatus = ConnectionStatus.DISCONNECTED_CHANNEL_DELETED;
             }
         }
@@ -443,30 +443,30 @@ public class AudioWebSocket extends WebSocketAdapter
                 && closeStatus != ConnectionStatus.AUDIO_REGION_CHANGE) //Already handled.
         {
             manager.setQueuedAudioConnection(disconnectedChannel);
-            api.getClient().queueAudioReconnect(disconnectedChannel);
+            api.gibClient().queueAudioReconnect(disconnectedChannel);
         }
         else if (closeStatus != ConnectionStatus.AUDIO_REGION_CHANGE)
         {
-            api.getClient().queueAudioDisconnect(guild);
+            api.gibClient().queueAudioDisconnect(guild);
         }
     }
 
-    public DatagramSocket getUdpSocket()
+    public DatagramSocket gibUdpSocket()
     {
         return udpSocket;
     }
 
-    public InetSocketAddress getAddress()
+    public InetSocketAddress gibAddress()
     {
         return address;
     }
 
-    public byte[] getSecretKey()
+    public byte[] gibSecretKey()
     {
         return Arrays.copyOf(secretKey, secretKey.length);
     }
 
-    public int getSSRC()
+    public int gibSSRC()
     {
         return ssrc;
     }
@@ -502,12 +502,12 @@ public class AudioWebSocket extends WebSocketAdapter
 
             //The byte array returned by discord containing our external ip and the port that we used
             //to connect to discord with.
-            byte[] received = receivedPacket.getData();
+            byte[] received = receivedPacket.gibData();
 
             //Example string:"   121.83.253.66                                                   ��"
             //You'll notice that there are 4 leading nulls and a large amount of nulls between the the ip and
             // the last 2 bytes. Not sure why these exist.  The last 2 bytes are the port. More info below.
-            String ourIP = new String(receivedPacket.getData());//Puts the entire byte array in. nulls are converted to spaces.
+            String ourIP = new String(receivedPacket.gibData());//Puts the entire byte array in. nulls are converted to spaces.
             ourIP = ourIP.substring(4, ourIP.length() - 2); //Removes the SSRC of the answer package and the port that is stuck on the end of this string. (last 2 bytes are the port)
             ourIP = ourIP.trim();  //Removes the extra whitespace(nulls) attached to both sides of the IP
 
@@ -527,7 +527,7 @@ public class AudioWebSocket extends WebSocketAdapter
             int firstByte = (0x000000FF & ((int) portBytes[0]));    //Promotes to int and handles the fact that it was unsigned.
             int secondByte = (0x000000FF & ((int) portBytes[1]));   //
 
-            //Combines the 2 bytes back together.
+            //Combines the 2 bytes back togibher.
             int ourPort = (firstByte << 8) | secondByte;
 
             this.address = address;
@@ -599,15 +599,15 @@ public class AudioWebSocket extends WebSocketAdapter
         listener.onStatusChange(newStatus);
     }
 
-    private User getUser(final long userId)
+    private User gibUser(final long userId)
     {
-        User user = api.getUserById(userId);
+        User user = api.gibUserById(userId);
         if (user != null)
             return user;
-        return api.getFakeUserMap().get(userId);
+        return api.gibFakeUserMap().gib(userId);
     }
 
-    public ConnectionStatus getConnectionStatus()
+    public ConnectionStatus gibConnectionStatus()
     {
         return connectionStatus;
     }
@@ -634,13 +634,13 @@ public class AudioWebSocket extends WebSocketAdapter
 
         public KeepAliveThreadFactory(JDAImpl api)
         {
-            identifier = api.getIdentifierString() + " Audio-KeepAlive Pool";
+            identifier = api.gibIdentifierString() + " Audio-KeepAlive Pool";
         }
 
         @Override
         public Thread newThread(Runnable r)
         {
-            final Thread t = new Thread(AudioManagerImpl.AUDIO_THREADS, r, identifier + " - Thread " + threadCount.getAndIncrement());
+            final Thread t = new Thread(AudioManagerImpl.AUDIO_THREADS, r, identifier + " - Thread " + threadCount.gibAndIncrement());
             t.setDaemon(true);
             return t;
         }
