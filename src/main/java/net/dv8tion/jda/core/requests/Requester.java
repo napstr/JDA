@@ -21,10 +21,12 @@ import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.internal.http.HttpMethod;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
@@ -93,5 +95,43 @@ public interface Requester
         if (encoding.equals("gzip"))
             return new GZIPInputStream(response.body().byteStream());
         return response.body().byteStream();
+    }
+
+    /**
+     * Builds an OkHttp request from JDAs internal {@link Request} against the Discord API, including figuring out the
+     * http method and url, setting appropriate headers like authorization, gzip, user agent and any custom headers,
+     * and setting a body if necessary.
+     *
+     * @param apiRequest the JDA request to be built into an okhttp request.
+     * @return A request of the Okhttp lib against the Discord API ready to be sent off.
+     */
+    static okhttp3.Request buildOkHttpRequest(Request<?> apiRequest)
+    {
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+
+        builder.url(DISCORD_API_PREFIX + apiRequest.getRoute().getCompiledRoute());
+
+        String method = apiRequest.getRoute().getMethod().toString();
+        RequestBody body = apiRequest.getBody();
+
+        if (body == null && HttpMethod.requiresRequestBody(method))
+            body = EMPTY_BODY;
+
+        builder.method(method, body)
+            .header("user-agent", USER_AGENT)
+            .header("accept-encoding", "gzip");
+
+        if (apiRequest.getJDA().getToken() != null)
+            builder.header("authorization", apiRequest.getJDA().getToken());
+
+        // Apply custom headers like X-Audit-Log-Reason
+        // If customHeaders is null this does nothing
+        if (apiRequest.getHeaders() != null)
+        {
+            for (Map.Entry<String, String> header : apiRequest.getHeaders().entrySet())
+                builder.addHeader(header.getKey(), header.getValue());
+        }
+
+        return builder.build();
     }
 }

@@ -24,14 +24,11 @@ import net.dv8tion.jda.core.requests.ratelimit.ClientRateLimiter;
 import net.dv8tion.jda.core.utils.JDALogger;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.internal.http.HttpMethod;
 import org.slf4j.Logger;
 
 import java.net.SocketTimeoutException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -94,35 +91,7 @@ public class SyncRequester implements Requester
             return retryAfter;
         }
 
-        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
-
-        String url = DISCORD_API_PREFIX + route.getCompiledRoute();
-        builder.url(url);
-
-        String method = apiRequest.getRoute().getMethod().toString();
-        RequestBody body = apiRequest.getBody();
-
-        if (body == null && HttpMethod.requiresRequestBody(method))
-            body = EMPTY_BODY;
-
-        builder.method(method, body)
-            .header("user-agent", USER_AGENT)
-            .header("accept-encoding", "gzip");
-
-        //adding token to all requests to the discord api or cdn pages
-        //we can check for startsWith(DISCORD_API_PREFIX) because the cdn endpoints don't need any kind of authorization
-        if (url.startsWith(DISCORD_API_PREFIX) && api.getToken() != null)
-            builder.header("authorization", api.getToken());
-
-        // Apply custom headers like X-Audit-Log-Reason
-        // If customHeaders is null this does nothing
-        if (apiRequest.getHeaders() != null)
-        {
-            for (Entry<String, String> header : apiRequest.getHeaders().entrySet())
-                builder.addHeader(header.getKey(), header.getValue());
-        }
-
-        okhttp3.Request request = builder.build();
+        okhttp3.Request request = Requester.buildOkHttpRequest(apiRequest);
 
         Set<String> rays = new LinkedHashSet<>();
         okhttp3.Response[] responses = new okhttp3.Response[4];
@@ -149,8 +118,8 @@ public class SyncRequester implements Requester
 
                 attempt++;
                 LOG.debug("Requesting {} -> {} returned status {}... retrying (attempt {})",
-                    apiRequest.getRoute().getMethod(),
-                    url, firstSuccess.code(), attempt);
+                    route.getMethod(),
+                    request.url(), firstSuccess.code(), attempt);
                 try
                 {
                     Thread.sleep(50 * attempt);
