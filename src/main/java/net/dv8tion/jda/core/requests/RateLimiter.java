@@ -124,8 +124,8 @@ public abstract class RateLimiter
         {
             Thread t = new Thread(() ->
             {
-                if (requester.api.getContextMap() != null)
-                    MDC.setContextMap(requester.api.getContextMap());
+                if (requester.getJDA().getContextMap() != null)
+                    MDC.setContextMap(requester.getJDA().getContextMap());
                 r.run();
             }, identifier + " - Thread " + threadCount.getAndIncrement());
             t.setDaemon(true);

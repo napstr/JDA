@@ -124,7 +124,7 @@ public class JDAImpl implements JDA
             this.contextMap = null;
 
         this.presence = new PresenceImpl(this);
-        this.requester = new Requester(this);
+        this.requester = new SyncRequester(this);
         this.requester.setRetryOnTimeout(retryOnTimeout);
 
         this.jdaClient = accountType == AccountType.CLIENT ? new JDAClientImpl(this) : null;
@@ -258,12 +258,12 @@ public class JDAImpl implements JDA
         if (getAccountType() == AccountType.BOT)
         {
             token = token.substring("Bot ".length());
-            requester = new Requester(this, AccountType.CLIENT);
+            requester = new SyncRequester(this, AccountType.CLIENT);
         }
         else    //If we attempted to login as a Client, prepend the "Bot " prefix and set the Requester to be a Bot
         {
             token = "Bot " + token;
-            requester = new Requester(this, AccountType.BOT);
+            requester = new SyncRequester(this, AccountType.BOT);
         }
 
         userResponse = checkToken(login);

@@ -195,7 +195,7 @@ public class BotRateLimiter extends RateLimiter
             if (!bucket.getRoute().equals("gateway")
                     && !bucket.getRoute().equals("users/@me"))
             {
-                Requester.LOG.debug("Encountered issue with headers when updating a bucket\nRoute: {}\nHeaders: {}",
+                requester.getLog().debug("Encountered issue with headers when updating a bucket\nRoute: {}\nHeaders: {}",
                     bucket.getRoute(), headers);
             }
 
@@ -317,7 +317,7 @@ public class BotRateLimiter extends RateLimiter
                         }
                         catch (Throwable t)
                         {
-                            Requester.LOG.error("Requester system encountered an internal error", t);
+                            requester.getLog().error("Requester system encountered an internal error", t);
                             it.remove();
                             if (request != null)
                                 request.onFailure(t);
@@ -335,7 +335,7 @@ public class BotRateLimiter extends RateLimiter
                             }
                             catch (RejectedExecutionException e)
                             {
-                                Requester.LOG.debug("Caught RejectedExecutionException when re-queuing a ratelimited request. The requester is probably shutdown, thus, this can be ignored.");
+                                requester.getLog().debug("Caught RejectedExecutionException when re-queuing a ratelimited request. The requester is probably shutdown, thus, this can be ignored.");
                             }
                         }
                     }
@@ -343,7 +343,7 @@ public class BotRateLimiter extends RateLimiter
             }
             catch (Throwable err)
             {
-                Requester.LOG.error("Requester system encountered an internal error from beyond the synchronized execution blocks. NOT GOOD!", err);
+                requester.getLog().error("Requester system encountered an internal error from beyond the synchronized execution blocks. NOT GOOD!", err);
                 if (err instanceof Error)
                 {
                     JDAImpl api = requester.getJDA();
