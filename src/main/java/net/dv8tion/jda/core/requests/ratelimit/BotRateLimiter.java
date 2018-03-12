@@ -41,9 +41,9 @@ public class BotRateLimiter extends RateLimiter
 {
     protected volatile Long timeOffset = null;
 
-    public BotRateLimiter(Requester requester, int poolSize)
+    public BotRateLimiter(Requester requester, int poolSize, JDAImpl api)
     {
-        super(requester, poolSize);
+        super(requester, poolSize, api);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class BotRateLimiter extends RateLimiter
                 else
                 {
                     //If it is global, lock down the threads.
-                    requester.getJDA().getSessionController().setGlobalRatelimit(getNow() + retryAfter);
+                    api.getSessionController().setGlobalRatelimit(getNow() + retryAfter);
                 }
 
                 return retryAfter;
@@ -246,14 +246,14 @@ public class BotRateLimiter extends RateLimiter
 
         Long getRateLimit()
         {
-            long gCooldown = requester.getJDA().getSessionController().getGlobalRatelimit();
+            long gCooldown = api.getSessionController().getGlobalRatelimit();
             if (gCooldown > 0) //Are we on global cooldown?
             {
                 long now = getNow();
                 if (now > gCooldown)   //Verify that we should still be on cooldown.
                 {
                     //If we are done cooling down, reset the globalCooldown and continue.
-                    requester.getJDA().getSessionController().setGlobalRatelimit(Long.MIN_VALUE);
+                    api.getSessionController().setGlobalRatelimit(Long.MIN_VALUE);
                 }
                 else
                 {
@@ -346,7 +346,6 @@ public class BotRateLimiter extends RateLimiter
                 requester.getLog().error("Requester system encountered an internal error from beyond the synchronized execution blocks. NOT GOOD!", err);
                 if (err instanceof Error)
                 {
-                    JDAImpl api = requester.getJDA();
                     api.getEventManager().handle(new ExceptionEvent(api, err, true));
                 }
             }

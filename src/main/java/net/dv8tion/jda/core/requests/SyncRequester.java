@@ -55,9 +55,9 @@ public class SyncRequester implements Requester
 
         this.api = (JDAImpl) api;
         if (accountType == AccountType.BOT)
-            rateLimiter = new BotRateLimiter(this, 5);
+            rateLimiter = new BotRateLimiter(this, 5, this.api);
         else
-            rateLimiter = new ClientRateLimiter(this, 5);
+            rateLimiter = new ClientRateLimiter(this, 5, this.api);
 
         this.httpClient = this.api.getHttpClientBuilder().build();
     }
@@ -72,6 +72,18 @@ public class SyncRequester implements Requester
     public Logger getLog()
     {
         return LOG;
+    }
+
+    @Override
+    public <T> void request(Request<T> apiRequest)
+    {
+        if (rateLimiter.isShutdown)
+            throw new IllegalStateException("The Requester has been shutdown! No new requests can be requested!");
+
+        if (apiRequest.shouldQueue())
+            rateLimiter.queueRequest(apiRequest);
+        else
+            execute(apiRequest, true);
     }
 
     @Override
@@ -174,7 +186,6 @@ public class SyncRequester implements Requester
         return this.httpClient;
     }
 
-    @Override
     public RateLimiter getRateLimiter()
     {
         return rateLimiter;

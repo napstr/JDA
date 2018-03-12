@@ -38,9 +38,9 @@ public class ClientRateLimiter extends RateLimiter
 {
     volatile Long globalCooldown = null;
 
-    public ClientRateLimiter(Requester requester, int poolSize)
+    public ClientRateLimiter(Requester requester, int poolSize, JDAImpl api)
     {
-        super(requester, poolSize);
+        super(requester, poolSize, api);
     }
 
     @Override
@@ -242,7 +242,6 @@ public class ClientRateLimiter extends RateLimiter
                 requester.getLog().error("There was some exception in the ClientRateLimiter", err);
                 if (err instanceof Error)
                 {
-                    JDAImpl api = requester.getJDA();
                     api.getEventManager().handle(new ExceptionEvent(api, err, true));
                 }
             }

@@ -43,24 +43,13 @@ public interface Requester
 
     OkHttpClient getHttpClient();
 
-    RateLimiter getRateLimiter();
-
     void setRetryOnTimeout(boolean retryOnTimeout);
 
     void shutdown(long time, TimeUnit unit);
 
     void shutdownNow();
 
-    default <T> void request(Request<T> apiRequest)
-    {
-        if (getRateLimiter().isShutdown)
-            throw new IllegalStateException("The Requester has been shutdown! No new requests can be requested!");
-
-        if (apiRequest.shouldQueue())
-            getRateLimiter().queueRequest(apiRequest);
-        else
-            execute(apiRequest, true);
-    }
+    <T> void request(Request<T> apiRequest);
 
     default Long execute(Request<?> apiRequest)
     {

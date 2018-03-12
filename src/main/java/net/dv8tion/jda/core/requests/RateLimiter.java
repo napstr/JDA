@@ -32,15 +32,17 @@ public abstract class RateLimiter
     //Implementations of this class exist in the net.dv8tion.jda.core.requests.ratelimit package.
 
     protected final Requester requester;
+    protected final JDAImpl api;
     protected final ScheduledThreadPoolExecutor pool;
     protected volatile boolean isShutdown = false; 
     protected volatile ConcurrentHashMap<String, IBucket> buckets = new ConcurrentHashMap<>();
     protected volatile ConcurrentLinkedQueue<IBucket> submittedBuckets = new ConcurrentLinkedQueue<>();
 
-    protected RateLimiter(Requester requester, int poolSize)
+    protected RateLimiter(Requester requester, int poolSize, JDAImpl api)
     {
         this.requester = requester;
-        this.pool = new ScheduledThreadPoolExecutor(poolSize, new RateLimitThreadFactory(requester.getJDA()));
+        this.api = api;
+        this.pool = new ScheduledThreadPoolExecutor(poolSize, new RateLimitThreadFactory(api));
     }
 
     protected boolean isSkipped(Iterator<Request> it, Request request)
@@ -124,8 +126,8 @@ public abstract class RateLimiter
         {
             Thread t = new Thread(() ->
             {
-                if (requester.getJDA().getContextMap() != null)
-                    MDC.setContextMap(requester.getJDA().getContextMap());
+                if (api.getContextMap() != null)
+                    MDC.setContextMap(api.getContextMap());
                 r.run();
             }, identifier + " - Thread " + threadCount.getAndIncrement());
             t.setDaemon(true);
