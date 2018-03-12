@@ -84,6 +84,7 @@ public class JDAImpl implements JDA
     protected final EventCache eventCache = new EventCache();
     protected final GuildLock guildLock = new GuildLock(this);
     protected final Object akapLock = new Object();
+    protected final RequesterFactory requesterFactory;
 
     protected final SessionController sessionController;
 
@@ -105,7 +106,7 @@ public class JDAImpl implements JDA
 
     public JDAImpl(AccountType accountType, String token, SessionController controller, OkHttpClient.Builder httpClientBuilder, WebSocketFactory wsFactory,
                    boolean autoReconnect, boolean audioEnabled, boolean useShutdownHook, boolean bulkDeleteSplittingEnabled, boolean retryOnTimeout, boolean enableMDC,
-                   int corePoolSize, int maxReconnectDelay, ConcurrentMap<String, String> contextMap)
+                   int corePoolSize, int maxReconnectDelay, ConcurrentMap<String, String> contextMap, RequesterFactory requesterFactory)
     {
         this.accountType = accountType;
         this.setToken(token);
@@ -124,7 +125,8 @@ public class JDAImpl implements JDA
             this.contextMap = null;
 
         this.presence = new PresenceImpl(this);
-        this.requester = new SyncRequester(this);
+        this.requesterFactory = requesterFactory;
+        this.requester = requesterFactory.build(this, accountType);
         this.requester.setRetryOnTimeout(retryOnTimeout);
 
         this.jdaClient = accountType == AccountType.CLIENT ? new JDAClientImpl(this) : null;
@@ -258,12 +260,12 @@ public class JDAImpl implements JDA
         if (getAccountType() == AccountType.BOT)
         {
             token = token.substring("Bot ".length());
-            requester = new SyncRequester(this, AccountType.CLIENT);
+            requester = requesterFactory.build(this, AccountType.CLIENT);
         }
         else    //If we attempted to login as a Client, prepend the "Bot " prefix and set the Requester to be a Bot
         {
             token = "Bot " + token;
-            requester = new SyncRequester(this, AccountType.BOT);
+            requester = requesterFactory.build(this, AccountType.BOT);
         }
 
         userResponse = checkToken(login);

@@ -20,6 +20,7 @@ import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.hooks.IEventManager;
+import net.dv8tion.jda.core.requests.RequesterFactory;
 import net.dv8tion.jda.core.utils.Checks;
 import net.dv8tion.jda.core.utils.SessionController;
 import okhttp3.OkHttpClient;
@@ -70,6 +71,7 @@ public class DefaultShardManagerBuilder
     protected WebSocketFactory wsFactory = null;
     protected IAudioSendFactory audioSendFactory = null;
     protected ThreadFactory threadFactory = null;
+    protected RequesterFactory requesterFactory = null;
 
     /**
      * Creates a completely empty DefaultShardManagerBuilder.
@@ -788,6 +790,25 @@ public class DefaultShardManagerBuilder
         return this;
     }
 
+
+    /**
+     * Sets the {@link net.dv8tion.jda.core.requests.RequesterFactory RequesterFactory} that will be used to produce the
+     * Requesters used by the shards to execute REST actions. This can be used to plug in custom implementations of the
+     * {@link net.dv8tion.jda.core.requests.Requester} and {@link net.dv8tion.jda.core.requests.RateLimiter}.
+     *
+     * @param factory
+     *         The new {@link net.dv8tion.jda.core.requests.RequesterFactory RequesterFactory} to use.
+     *
+     * @return Returns the {@link net.dv8tion.jda.core.JDABuilder JDABuilder} instance. Useful for chaining.
+     *
+     * @see net.dv8tion.jda.core.requests.RequesterFactory RequesterFactory
+     */
+    public DefaultShardManagerBuilder setRequesterFactory(RequesterFactory factory)
+    {
+        this.requesterFactory = factory;
+        return this;
+    }
+
     /**
      * Builds a new {@link net.dv8tion.jda.bot.sharding.ShardManager ShardManager} instance and uses the provided token to start the login process.
      * <br>The login process runs in a different thread, so while this will return immediately, {@link net.dv8tion.jda.bot.sharding.ShardManager ShardManager} has not
@@ -813,7 +834,8 @@ public class DefaultShardManagerBuilder
             this.audioSendFactory, this.gameProvider, this.statusProvider,
             this.httpClientBuilder, this.wsFactory, this.threadFactory,
             this.maxReconnectDelay, this.corePoolSize, this.enableVoice, this.enableShutdownHook, this.enableBulkDeleteSplitting,
-            this.autoReconnect, this.idleProvider, this.retryOnTimeout, this.useShutdownNow, this.enableContext, this.contextProvider);
+            this.autoReconnect, this.idleProvider, this.retryOnTimeout, this.useShutdownNow, this.enableContext,
+            this.contextProvider, requesterFactory);
 
         manager.login();
 

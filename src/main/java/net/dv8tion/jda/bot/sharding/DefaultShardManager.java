@@ -27,6 +27,8 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.hooks.IEventManager;
 import net.dv8tion.jda.core.managers.impl.PresenceImpl;
+import net.dv8tion.jda.core.requests.RequesterFactory;
+import net.dv8tion.jda.core.requests.SyncRequester;
 import net.dv8tion.jda.core.utils.Checks;
 import net.dv8tion.jda.core.utils.JDALogger;
 import net.dv8tion.jda.core.utils.SessionController;
@@ -207,6 +209,11 @@ public class DefaultShardManager implements ShardManager
     protected boolean enableMDC;
 
     /**
+     * Produces Requesters for the shards
+     */
+    protected RequesterFactory requesterFactory;
+
+    /**
      * Creates a new DefaultShardManager instance.
      * @param  shardsTotal
      *         The total amount of shards or {@code -1} to retrieve the recommended amount from discord.
@@ -271,7 +278,8 @@ public class DefaultShardManager implements ShardManager
                                   final boolean enableShutdownHook, final boolean enableBulkDeleteSplitting,
                                   final boolean autoReconnect, final IntFunction<Boolean> idleProvider,
                                   final boolean retryOnTimeout, final boolean useShutdownNow,
-                                  final boolean enableMDC, final IntFunction<ConcurrentMap<String, String>> contextProvider)
+                                  final boolean enableMDC, final IntFunction<ConcurrentMap<String, String>> contextProvider,
+                                  final RequesterFactory requesterFactory)
     {
         this.shardsTotal = shardsTotal;
         this.listeners = listeners;
@@ -296,6 +304,7 @@ public class DefaultShardManager implements ShardManager
         this.useShutdownNow = useShutdownNow;
         this.contextProvider = contextProvider;
         this.enableMDC = enableMDC;
+        this.requesterFactory = requesterFactory == null ? SyncRequester::new : requesterFactory;
 
         synchronized (queue)
         {
@@ -569,7 +578,8 @@ public class DefaultShardManager implements ShardManager
     {
         final JDAImpl jda = new JDAImpl(AccountType.BOT, this.token, this.controller, this.httpClientBuilder, this.wsFactory,
             this.autoReconnect, this.enableVoice, false, this.enableBulkDeleteSplitting, this.retryOnTimeout, this.enableMDC,
-            this.corePoolSize, this.maxReconnectDelay, this.contextProvider == null || !this.enableMDC ? null : contextProvider.apply(shardId));
+            this.corePoolSize, this.maxReconnectDelay, this.contextProvider == null || !this.enableMDC ? null : contextProvider.apply(shardId),
+            this.requesterFactory);
 
         jda.asBot().setShardManager(this);
 

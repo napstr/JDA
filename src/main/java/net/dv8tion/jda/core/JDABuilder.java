@@ -23,6 +23,8 @@ import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.exceptions.AccountTypeException;
 import net.dv8tion.jda.core.hooks.IEventManager;
 import net.dv8tion.jda.core.managers.impl.PresenceImpl;
+import net.dv8tion.jda.core.requests.RequesterFactory;
+import net.dv8tion.jda.core.requests.SyncRequester;
 import net.dv8tion.jda.core.utils.Checks;
 import net.dv8tion.jda.core.utils.SessionController;
 import net.dv8tion.jda.core.utils.SessionControllerAdapter;
@@ -70,6 +72,7 @@ public class JDABuilder
     protected boolean autoReconnect = true;
     protected boolean idle = false;
     protected boolean requestTimeoutRetry = true;
+    protected RequesterFactory requesterFactory = null;
 
     /**
      * Creates a completely empty JDABuilder.
@@ -536,6 +539,25 @@ public class JDABuilder
     }
 
     /**
+     * Sets the {@link net.dv8tion.jda.core.requests.RequesterFactory RequesterFactory} for this JDABuilder instance,
+     * that will be used to produce the Requesters used by the shards to execute REST actions. This can be used to plug
+     * in custom implementations of the {@link net.dv8tion.jda.core.requests.Requester} and {@link
+     * net.dv8tion.jda.core.requests.RateLimiter}.
+     *
+     * @param requesterFactory
+     *         The {@link net.dv8tion.jda.core.requests.RequesterFactory RequesterFactory} to use
+     *
+     * @return The JDABuilder instance. Useful for chaining.
+     *
+     * @see net.dv8tion.jda.core.requests.RequesterFactory RequesterFactory
+     */
+    public JDABuilder setRequesterFactory(RequesterFactory requesterFactory)
+    {
+        this.requesterFactory = requesterFactory;
+        return this;
+    }
+
+    /**
      * Builds a new {@link net.dv8tion.jda.core.JDA} instance and uses the provided token to start the login process.
      * <br>The login process runs in a different thread, so while this will return immediately, {@link net.dv8tion.jda.core.JDA} has not
      * finished loading, thus many {@link net.dv8tion.jda.core.JDA} methods have the chance to return incorrect information.
@@ -563,8 +585,11 @@ public class JDABuilder
         if (controller == null && shardInfo != null)
             controller = new SessionControllerAdapter();
         
+        if (requesterFactory == null)
+            requesterFactory = SyncRequester::new;
+
         JDAImpl jda = new JDAImpl(accountType, token, controller, httpClientBuilder, wsFactory, autoReconnect, enableVoice, enableShutdownHook,
-                enableBulkDeleteSplitting, requestTimeoutRetry, enableContext, corePoolSize, maxReconnectDelay, contextMap);
+            enableBulkDeleteSplitting, requestTimeoutRetry, enableContext, corePoolSize, maxReconnectDelay, contextMap, requesterFactory);
 
         if (eventManager != null)
             jda.setEventManager(eventManager);
