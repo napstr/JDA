@@ -25,6 +25,8 @@ import net.dv8tion.jda.core.requests.Route;
 import net.dv8tion.jda.core.requests.Route.RateLimit;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +38,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ClientRateLimiter extends RateLimiter
 {
+    private static final Logger LOG = LoggerFactory.getLogger(BotRateLimiter.class);
+
     volatile Long globalCooldown = null;
 
     public ClientRateLimiter(Requester requester, int poolSize, JDAImpl api)
@@ -213,7 +217,7 @@ public class ClientRateLimiter extends RateLimiter
                         }
                         catch (Throwable t)
                         {
-                            requester.getLog().error("Error executing REST request", t);
+                            LOG.error("Error executing REST request", t);
                             it.remove();
                             if (request != null)
                                 request.onFailure(t);
@@ -231,7 +235,7 @@ public class ClientRateLimiter extends RateLimiter
                             }
                             catch (RejectedExecutionException e)
                             {
-                                requester.getLog().debug("Caught RejectedExecutionException when re-queuing a ratelimited request. The requester is probably shutdown, thus, this can be ignored.");
+                                LOG.debug("Caught RejectedExecutionException when re-queuing a ratelimited request. The requester is probably shutdown, thus, this can be ignored.");
                             }
                         }
                     }
@@ -239,7 +243,7 @@ public class ClientRateLimiter extends RateLimiter
             }
             catch (Throwable err)
             {
-                requester.getLog().error("There was some exception in the ClientRateLimiter", err);
+                LOG.error("There was some exception in the ClientRateLimiter", err);
                 if (err instanceof Error)
                 {
                     api.getEventManager().handle(new ExceptionEvent(api, err, true));

@@ -17,12 +17,10 @@
 package net.dv8tion.jda.core.requests;
 
 import net.dv8tion.jda.core.JDAInfo;
-import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpMethod;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +35,6 @@ public interface Requester
     MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     RequestBody EMPTY_BODY = RequestBody.create(null, new byte[]{});
 
-    JDAImpl getJDA();
-
-    Logger getLog();
-
     OkHttpClient getHttpClient();
 
     void setRetryOnTimeout(boolean retryOnTimeout);
@@ -51,21 +45,16 @@ public interface Requester
 
     <T> void request(Request<T> apiRequest);
 
-    default Long execute(Request<?> apiRequest)
-    {
-        return execute(apiRequest, false);
-    }
-
     /**
      * Used to execute a Request. Processes request related to provided bucket.
      *
      * @param apiRequest        The API request that needs to be sent
-     * @param handleOnRateLimit Whether to forward rate-limits, false if rate limit handling should take over
+     *
      * @return Non-null if the request was ratelimited. Returns a Long containing retry_after milliseconds until
      * the request can be made again. This could either be for the Per-Route ratelimit or the Global ratelimit.
      * <br>Check if globalCooldown is {@code null} to determine if it was Per-Route or Global.
      */
-    Long execute(Request<?> apiRequest, boolean handleOnRateLimit);
+    Long execute(Request<?> apiRequest);
 
     /**
      * Retrieves an {@link java.io.InputStream InputStream} for the provided {@link okhttp3.Response Response}.
@@ -94,7 +83,7 @@ public interface Requester
      * @param apiRequest the JDA request to be built into an okhttp request.
      * @return A request of the Okhttp lib against the Discord API ready to be sent off.
      */
-    static okhttp3.Request buildOkHttpRequest(Request<?> apiRequest)
+    default okhttp3.Request buildOkHttpRequest(Request<?> apiRequest)
     {
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
 

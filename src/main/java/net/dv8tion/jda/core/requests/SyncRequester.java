@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SyncRequester implements Requester
 {
-    public static final Logger LOG = JDALogger.getLog(SyncRequester.class);
+    private static final Logger LOG = JDALogger.getLog(SyncRequester.class);
 
     protected final JDAImpl api;
     private final RateLimiter rateLimiter;
@@ -63,18 +63,6 @@ public class SyncRequester implements Requester
     }
 
     @Override
-    public JDAImpl getJDA()
-    {
-        return api;
-    }
-
-    @Override
-    public Logger getLog()
-    {
-        return LOG;
-    }
-
-    @Override
     public <T> void request(Request<T> apiRequest)
     {
         if (rateLimiter.isShutdown)
@@ -87,6 +75,11 @@ public class SyncRequester implements Requester
     }
 
     @Override
+    public Long execute(Request<?> apiRequest)
+    {
+        return execute(apiRequest, false);
+    }
+
     public Long execute(Request<?> apiRequest, boolean handleOnRateLimit)
     {
         return execute(apiRequest, false, handleOnRateLimit);
@@ -103,7 +96,7 @@ public class SyncRequester implements Requester
             return retryAfter;
         }
 
-        okhttp3.Request request = Requester.buildOkHttpRequest(apiRequest);
+        okhttp3.Request request = buildOkHttpRequest(apiRequest);
 
         Set<String> rays = new LinkedHashSet<>();
         okhttp3.Response[] responses = new okhttp3.Response[4];
