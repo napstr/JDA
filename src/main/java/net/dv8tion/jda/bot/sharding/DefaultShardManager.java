@@ -39,6 +39,7 @@ import javax.security.auth.login.LoginException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 
 /**
@@ -207,11 +208,20 @@ public class DefaultShardManager implements ShardManager
     protected boolean enableMDC;
 
     /**
+     <<<<<<< HEAD
      * Whether to enable transport compression
      */
     protected boolean enableCompression;
 
     /**
+     ||||||| merged common ancestors
+     =======
+     * Optional provider for threadpool(s) of ratelimiters
+     */
+    protected Function<JDA, ScheduledThreadPoolExecutor> ratelimiterPool;
+
+    /**
+     >>>>>>> Allow plugging in custom ratelimiter pools
      * Creates a new DefaultShardManager instance.
      * @param  shardsTotal
      *         The total amount of shards or {@code -1} to retrieve the recommended amount from discord.
@@ -266,6 +276,8 @@ public class DefaultShardManager implements ShardManager
      *         The MDC context provider new JDA instances should use on startup
      * @param  enableCompression
      *         Whether to enable transport compression
+     * @param  ratelimiterPool
+     *         Optional provider for threadpool(s) of ratelimiters
      */
     protected DefaultShardManager(final int shardsTotal, final Collection<Integer> shardIds,
                                   final SessionController controller, final List<Object> listeners,
@@ -279,7 +291,7 @@ public class DefaultShardManager implements ShardManager
                                   final boolean autoReconnect, final IntFunction<Boolean> idleProvider,
                                   final boolean retryOnTimeout, final boolean useShutdownNow,
                                   final boolean enableMDC, final IntFunction<ConcurrentMap<String, String>> contextProvider,
-                                  final boolean enableCompression)
+                                  final boolean enableCompression, final Function<JDA, ScheduledThreadPoolExecutor> ratelimiterPool)
     {
         this.shardsTotal = shardsTotal;
         this.listeners = listeners;
@@ -305,6 +317,7 @@ public class DefaultShardManager implements ShardManager
         this.contextProvider = contextProvider;
         this.enableMDC = enableMDC;
         this.enableCompression = enableCompression;
+        this.ratelimiterPool = ratelimiterPool;
 
         synchronized (queue)
         {
@@ -315,8 +328,7 @@ public class DefaultShardManager implements ShardManager
                     this.shards = new ShardCacheViewImpl(shardsTotal);
                     for (int i = 0; i < this.shardsTotal; i++)
                         this.queue.add(i);
-                }
-                else
+                } else
                 {
                     this.shards = new ShardCacheViewImpl(shardIds.size());
                     shardIds.stream().distinct().sorted().forEach(this.queue::add);
@@ -578,7 +590,8 @@ public class DefaultShardManager implements ShardManager
     {
         final JDAImpl jda = new JDAImpl(AccountType.BOT, this.token, this.controller, this.httpClientBuilder, this.wsFactory,
             this.autoReconnect, this.enableVoice, false, this.enableBulkDeleteSplitting, this.retryOnTimeout, this.enableMDC,
-            this.corePoolSize, this.maxReconnectDelay, this.contextProvider == null || !this.enableMDC ? null : contextProvider.apply(shardId));
+            this.corePoolSize, this.maxReconnectDelay, this.contextProvider == null || !this.enableMDC ? null : contextProvider.apply(shardId),
+            this.ratelimiterPool);
 
         jda.asBot().setShardManager(this);
 
