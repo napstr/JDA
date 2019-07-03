@@ -16,10 +16,9 @@
 
 package net.dv8tion.jda.api.utils.data;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.type.CollectionType;
+import me.doubledutch.lazyjson.LazyArray;
+import me.doubledutch.lazyjson.LazyException;
+import me.doubledutch.lazyjson.LazyObject;
 import net.dv8tion.jda.api.exceptions.ParsingException;
 import org.jetbrains.annotations.Contract;
 import org.slf4j.Logger;
@@ -27,12 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * Represents a list of values used in communication with the Discord API.
@@ -44,24 +43,12 @@ import java.util.function.UnaryOperator;
  */
 public class DataArray implements Iterable<Object>
 {
-    private static final Logger log = LoggerFactory.getLogger(DataObject.class);
-    private static final ObjectMapper mapper;
-    private static final SimpleModule module;
-    private static final CollectionType listType;
+    private static final Logger log = LoggerFactory.getLogger(DataArray.class);
+    private static final LazyArray EMPTY = new LazyArray("[]");
 
-    static
-    {
-        mapper = new ObjectMapper();
-        module = new SimpleModule();
-        module.addAbstractTypeMapping(Map.class, HashMap.class);
-        module.addAbstractTypeMapping(List.class, ArrayList.class);
-        mapper.registerModule(module);
-        listType = mapper.getTypeFactory().constructRawCollectionType(ArrayList.class);
-    }
+    protected final LazyArray data;
 
-    protected final List<Object> data;
-
-    protected DataArray(List<Object> data)
+    protected DataArray(LazyArray data)
     {
         this.data = data;
     }
@@ -76,7 +63,7 @@ public class DataArray implements Iterable<Object>
     @Nonnull
     public static DataArray empty()
     {
-        return new DataArray(new ArrayList<>());
+        return new DataArray(EMPTY);
     }
 
     /**
@@ -110,9 +97,9 @@ public class DataArray implements Iterable<Object>
     {
         try
         {
-            return new DataArray(mapper.readValue(json, listType));
+            return new DataArray(new LazyArray(json));
         }
-        catch (IOException e)
+        catch (LazyException e)
         {
             throw new ParsingException(e);
         }
@@ -132,11 +119,13 @@ public class DataArray implements Iterable<Object>
     @Nonnull
     public static DataArray fromJson(@Nonnull InputStream json)
     {
-        try
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(json, StandardCharsets.UTF_8)))
         {
-            return new DataArray(mapper.readValue(json, listType));
+            //TODO this is bad so even if this method is mostly unused currently we should find a better way
+            String input = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return fromJson(input);
         }
-        catch (IOException e)
+        catch (IOException | LazyException e)
         {
             throw new ParsingException(e);
         }
@@ -156,11 +145,13 @@ public class DataArray implements Iterable<Object>
     @Nonnull
     public static DataArray fromJson(@Nonnull Reader json)
     {
-        try
+        try (BufferedReader reader = new BufferedReader(json))
         {
-            return new DataArray(mapper.readValue(json, listType));
+            //TODO this is bad so even if this method is mostly unused currently we should find a better way
+            String input = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return fromJson(input);
         }
-        catch (IOException e)
+        catch (IOException | LazyException e)
         {
             throw new ParsingException(e);
         }
@@ -176,7 +167,7 @@ public class DataArray implements Iterable<Object>
      */
     public boolean isNull(int index)
     {
-        return data.get(index) == null;
+        return data.isNull(index);
     }
 
     /**
@@ -193,7 +184,7 @@ public class DataArray implements Iterable<Object>
      */
     public boolean isType(int index, @Nonnull DataType type)
     {
-        return type.isType(data.get(index));
+        return type.isType(data.getType(index));
     }
 
     /**
@@ -203,7 +194,7 @@ public class DataArray implements Iterable<Object>
      */
     public int length()
     {
-        return data.size();
+        return data.length();
     }
 
     /**
@@ -213,7 +204,7 @@ public class DataArray implements Iterable<Object>
      */
     public boolean isEmpty()
     {
-        return data.isEmpty();
+        return data.length() == 0;
     }
 
     /**
@@ -228,15 +219,14 @@ public class DataArray implements Iterable<Object>
      * @return The resolved DataObject
      */
     @Nonnull
-    @SuppressWarnings("unchecked")
     public DataObject getObject(int index)
     {
-        Map<String, Object> child = null;
+        LazyObject child = null;
         try
         {
-            child = (Map<String, Object>) get(Map.class, index);
+            child = get(LazyObject.class, index);
         }
-        catch (ClassCastException ex)
+        catch (ClassCastException | LazyException ex)
         {
             log.error("Unable to extract child data", ex);
         }
@@ -257,15 +247,14 @@ public class DataArray implements Iterable<Object>
      * @return The resolved DataArray
      */
     @Nonnull
-    @SuppressWarnings("unchecked")
     public DataArray getArray(int index)
     {
-        List<Object> child = null;
+        LazyArray child = null;
         try
         {
-            child = (List<Object>) get(List.class, index);
+            child = get(LazyArray.class, index);
         }
-        catch (ClassCastException ex)
+        catch (ClassCastException | LazyException ex)
         {
             log.error("Unable to extract child data", ex);
         }
@@ -513,11 +502,11 @@ public class DataArray implements Iterable<Object>
     public DataArray add(@Nullable Object value)
     {
         if (value instanceof SerializableData)
-            data.add(((SerializableData) value).toData().data);
+            data.put(((SerializableData) value).toData().data);
         else if (value instanceof DataArray)
-            data.add(((DataArray) value).data);
+            data.put(((DataArray) value).data);
         else
-            data.add(value);
+            data.put(value);
         return this;
     }
 
@@ -547,28 +536,9 @@ public class DataArray implements Iterable<Object>
     @Nonnull
     public DataArray addAll(@Nonnull DataArray array)
     {
-        return addAll(array.data);
-    }
-
-    /**
-     * Inserts the specified value at the provided index.
-     *
-     * @param  index
-     *         The target index
-     * @param  value
-     *         The value to insert
-     *
-     * @return A DataArray with the value inserted at the specified index
-     */
-    @Nonnull
-    public DataArray insert(int index, @Nullable Object value)
-    {
-        if (value instanceof SerializableData)
-            data.add(index, ((SerializableData) value).toData().data);
-        else if (value instanceof DataArray)
-            data.add(index, ((DataArray) value).data);
-        else
-            data.add(index, value);
+        for (int i = 0; i < array.length(); i++) {
+            add(array.data.get(i));
+        }
         return this;
     }
 
@@ -587,43 +557,10 @@ public class DataArray implements Iterable<Object>
         return this;
     }
 
-    /**
-     * Removes the specified value.
-     *
-     * @param  value
-     *         The value to remove
-     *
-     * @return A DataArray with the value removed
-     */
-    @Nonnull
-    public DataArray remove(@Nullable Object value)
-    {
-        data.remove(value);
-        return this;
-    }
-
     @Override
     public String toString()
     {
-        try
-        {
-            return mapper.writeValueAsString(data);
-        }
-        catch (JsonProcessingException e)
-        {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    /**
-     * Converts this DataArray to a {@link java.util.List}.
-     *
-     * @return The resulting list
-     */
-    @Nonnull
-    public List<Object> toList()
-    {
-        return data;
+        return data.toString();
     }
 
     private ParsingException valueError(int index, String expectedType)
@@ -659,6 +596,40 @@ public class DataArray implements Iterable<Object>
     @Override
     public Iterator<Object> iterator()
     {
-        return data.iterator();
+        return new Iterator<Object>()
+        {
+            private int cursor = 0;
+            private int lastReturnedIndex = -1;
+
+
+            @Override
+            public boolean hasNext()
+            {
+                return cursor < data.length();
+            }
+
+            @Override
+            public Object next()
+            {
+                int i = cursor;
+                if (i >= data.length()) {
+                    throw new NoSuchElementException();
+                }
+                cursor = i + 1;
+                lastReturnedIndex = i;
+                return data.get(i);
+            }
+
+            @Override
+            public void remove()
+            {
+                if (lastReturnedIndex < 0) {
+                    throw new IllegalStateException();
+                }
+                DataArray.this.remove(lastReturnedIndex);
+                cursor = lastReturnedIndex;
+                lastReturnedIndex = -1;
+            }
+        };
     }
 }

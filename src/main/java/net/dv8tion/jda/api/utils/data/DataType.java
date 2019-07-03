@@ -16,6 +16,8 @@
 
 package net.dv8tion.jda.api.utils.data;
 
+import me.doubledutch.lazyjson.LazyType;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
@@ -74,6 +76,28 @@ public enum DataType
                 return value instanceof Map;
             case NULL:
                 return value == null;
+            default:
+                return false;
+        }
+    }
+
+    public boolean isType(LazyType type){
+        switch (this)
+        {
+            case INT:
+                return type == LazyType.INTEGER;
+            case FLOAT:
+                return type == LazyType.FLOAT;
+            case STRING:
+                return type == LazyType.STRING;
+            case BOOLEAN:
+                return type == LazyType.BOOLEAN;
+            case ARRAY:
+                return type == LazyType.ARRAY;
+            case OBJECT:
+                return type == LazyType.OBJECT;
+            case NULL:
+                return type == LazyType.NULL;
             default:
                 return false;
         }

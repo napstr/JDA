@@ -16,10 +16,9 @@
 
 package net.dv8tion.jda.api.utils.data;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.type.MapType;
+import me.doubledutch.lazyjson.LazyArray;
+import me.doubledutch.lazyjson.LazyException;
+import me.doubledutch.lazyjson.LazyObject;
 import net.dv8tion.jda.api.exceptions.ParsingException;
 import org.jetbrains.annotations.Contract;
 import org.slf4j.Logger;
@@ -27,12 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * Represents a map of values used in communication with the Discord API.
@@ -45,23 +44,11 @@ import java.util.function.UnaryOperator;
 public class DataObject implements SerializableData
 {
     private static final Logger log = LoggerFactory.getLogger(DataObject.class);
-    private static final ObjectMapper mapper;
-    private static final SimpleModule module;
-    private static final MapType mapType;
+    private static final LazyObject EMPTY = new LazyObject("{}");
 
-    static
-    {
-        mapper = new ObjectMapper();
-        module = new SimpleModule();
-        module.addAbstractTypeMapping(Map.class, HashMap.class);
-        module.addAbstractTypeMapping(List.class, ArrayList.class);
-        mapper.registerModule(module);
-        mapType = mapper.getTypeFactory().constructRawMapType(HashMap.class);
-    }
+    protected final LazyObject data;
 
-    protected final Map<String, Object> data;
-
-    protected DataObject(@Nonnull Map<String, Object> data)
+    protected DataObject(@Nonnull LazyObject data)
     {
         this.data = data;
     }
@@ -76,7 +63,7 @@ public class DataObject implements SerializableData
     @Nonnull
     public static DataObject empty()
     {
-        return new DataObject(new HashMap<>());
+        return new DataObject(EMPTY);
     }
 
     /**
@@ -95,10 +82,9 @@ public class DataObject implements SerializableData
     {
         try
         {
-            Map<String, Object> map = mapper.readValue(json, mapType);
-            return new DataObject(map);
+            return new DataObject(new LazyObject(json));
         }
-        catch (IOException ex)
+        catch (LazyException ex)
         {
             throw new ParsingException(ex);
         }
@@ -118,12 +104,13 @@ public class DataObject implements SerializableData
     @Nonnull
     public static DataObject fromJson(@Nonnull InputStream stream)
     {
-        try
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)))
         {
-            Map<String, Object> map = mapper.readValue(stream, mapType);
-            return new DataObject(map);
+            //TODO this is bad so even if this method is mostly unused currently we should find a better way
+            String input = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return fromJson(input);
         }
-        catch (IOException ex)
+        catch (IOException | LazyException ex)
         {
             throw new ParsingException(ex);
         }
@@ -143,12 +130,13 @@ public class DataObject implements SerializableData
     @Nonnull
     public static DataObject fromJson(@Nonnull Reader stream)
     {
-        try
+        try (BufferedReader reader = new BufferedReader(stream))
         {
-            Map<String, Object> map = mapper.readValue(stream, mapType);
-            return new DataObject(map);
+            //TODO this is bad so even if this method is mostly unused currently we should find a better way
+            String input = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return fromJson(input);
         }
-        catch (IOException ex)
+        catch (IOException | LazyException ex)
         {
             throw new ParsingException(ex);
         }
@@ -164,7 +152,7 @@ public class DataObject implements SerializableData
      */
     public boolean hasKey(@Nonnull String key)
     {
-        return data.containsKey(key);
+        return data.has(key);
     }
 
     /**
@@ -177,7 +165,7 @@ public class DataObject implements SerializableData
      */
     public boolean isNull(@Nonnull String key)
     {
-        return data.get(key) == null;
+        return data.isNull(key);
     }
 
     /**
@@ -194,7 +182,7 @@ public class DataObject implements SerializableData
      */
     public boolean isType(@Nonnull String key, @Nonnull DataType type)
     {
-        return type.isType(data.get(key));
+        return type.isType(data.getType(key));
     }
 
     /**
@@ -226,15 +214,14 @@ public class DataObject implements SerializableData
      * @return The resolved instance of DataObject for the key, wrapped in {@link java.util.Optional}
      */
     @Nonnull
-    @SuppressWarnings("unchecked")
     public Optional<DataObject> optObject(@Nonnull String key)
     {
-        Map<String, Object> child = null;
+        LazyObject child = null;
         try
         {
-            child = (Map<String, Object>) get(Map.class, key);
+            child = get(LazyObject.class, key);
         }
-        catch (ClassCastException ex)
+        catch (ClassCastException | LazyException ex)
         {
             log.error("Unable to extract child data", ex);
         }
@@ -270,15 +257,14 @@ public class DataObject implements SerializableData
      * @return The resolved instance of DataArray for the key, wrapped in {@link java.util.Optional}
      */
     @Nonnull
-    @SuppressWarnings("unchecked")
     public Optional<DataArray> optArray(@Nonnull String key)
     {
-        List<Object> child = null;
+        LazyArray child = null;
         try
         {
-            child = (List<Object>) get(List.class, key);
+            child = get(LazyArray.class, key);
         }
-        catch (ClassCastException ex)
+        catch (ClassCastException | LazyException ex)
         {
             log.error("Unable to extract child data", ex);
         }
@@ -572,7 +558,7 @@ public class DataObject implements SerializableData
     @Nonnull
     public DataObject putNull(@Nonnull String key)
     {
-        data.put(key, null);
+        data.put(key, LazyObject.NULL);
         return this;
     }
 
@@ -599,17 +585,6 @@ public class DataObject implements SerializableData
     }
 
     /**
-     * {@link java.util.Collection} of all values in this DataObject.
-     *
-     * @return {@link java.util.Collection} for all values
-     */
-    @Nonnull
-    public Collection<Object> values()
-    {
-        return data.values();
-    }
-
-    /**
      * {@link java.util.Set} of all keys in this DataObject.
      *
      * @return {@link Set} of keys
@@ -623,14 +598,7 @@ public class DataObject implements SerializableData
     @Override
     public String toString()
     {
-        try
-        {
-            return mapper.writeValueAsString(data);
-        }
-        catch (JsonProcessingException e)
-        {
-            throw new ParsingException(e);
-        }
+        return data.toString();
     }
 
     /**
@@ -641,7 +609,10 @@ public class DataObject implements SerializableData
     @Nonnull
     public Map<String, Object> toMap()
     {
-        return data;
+        //TODO should be lazily calculated and reused
+        HashMap<String, Object> map = new HashMap<>();
+        data.keys().forEachRemaining(key -> map.put(key, data.get(key)));
+        return map;
     }
 
     @Nonnull

@@ -85,7 +85,7 @@ dependencies {
     //General Utility
     implementation("org.apache.commons:commons-collections4:4.1")
     implementation("net.sf.trove4j:trove4j:3.0.3")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.9.8")
+    implementation("me.doubledutch:lazyjson:2.3.2")
 
     //Sets the dependencies for the examples
     configurations.asMap["examplesCompile"] = configurations["apiElements"]
